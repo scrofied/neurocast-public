@@ -1,0 +1,12 @@
+{
+  "script_file": "文案.md",
+  "audio": "voice.mp3",
+  "audio_timeline": "voice_asr.json",
+  "clip_timelines": { "talk.mp4": "talk_asr.json" },
+  "storyboard": "storyboard.json",
+  "title": "用 AI 挖出你身上的隐藏资产",
+  "seed": 7,
+  "skin": "violet",
+  "cta": "评论区留言 · 提示词模板发你",
+  "keywords": ["隐藏资产", "能力切片", "无情审计员", "隐形溢价", "排雷指南", "客观技能清单"]
+}

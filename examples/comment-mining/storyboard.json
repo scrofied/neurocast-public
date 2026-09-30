@@ -1,0 +1,279 @@
+{
+  "keywords": ["评论区", "痛点"],
+  "shots": [
+    {
+      "type": "talking-head-stage",
+      "data": {
+        "title": "从评论区挖掘爆款选题",
+        "kicker": "NEUROCAST · 真人口播",
+        "leftLabel": "观众视角",
+        "rightLabel": "逻辑拆解",
+        "shrinkAt": "关心$",
+        "opening": {
+          "type": "opening-comment-mining",
+          "at": 0,
+          "until": "关心$+0.25",
+          "data": { "lineAt": "自己", "hitAt": "重要", "lineEndAt": "题", "audAt": "观众", "rootAt": "根本", "notAt": "不关心" }
+        },
+        "left": [
+          { "type": "phone-feed", "at": "你自己", "data": { "mine": "我的深度干货", "mineNote": "我觉得超重要", "swipeAt": "划过去", "dwell": "停留 0.3 秒" } }
+        ],
+        "right": [
+          {
+            "type": "bullet-cards",
+            "at": "你自己",
+            "until": "在做生意",
+            "data": {
+              "items": [
+                { "text": "你觉得挺深刻", "tone": "good", "at": "深刻" },
+                { "text": "观众半秒都不停", "tone": "bad", "at": "半秒" },
+                { "text": "第一步就搞反了", "tone": "warn", "at": "搞反了" }
+              ]
+            }
+          },
+          { "type": "logic-flip", "at": "在做生意", "data": { "nodes": ["市场需求", "产品"], "steps": ["先有", "再做"], "note": "做生意的逻辑", "flipAt": "很多博主", "flipNote": "很多博主 · 倒过来了" } }
+        ]
+      }
+    },
+    {
+      "start": "自己先吭哧吭哧",
+      "type": "sword-forge",
+      "data": { "kicker": "闭门造车", "label": "削铁如泥", "labelAt": "削铁如泥", "streetAt": "满大街", "ask": "喂，你需不需要削铁啊？", "askAt": "喂", "reply": "……" }
+    },
+    { "start": "这不是瞎胡闹吗", "type": "punch-text", "data": { "text": "这不是瞎胡闹吗？", "emphasis": ["瞎胡闹"] } },
+    {
+      "start": "那有人就说了",
+      "type": "dialogue",
+      "data": {
+        "kicker": "有人就说了",
+        "them": "网友",
+        "me": "我",
+        "messages": [
+          { "who": "them", "text": "那我听你的", "at": "那我听你的" },
+          { "who": "them", "text": "我去看那些几百万播放的爆款视频", "at": "我去网上看", "media": { "title": "爆款视频", "views": "386万" } },
+          { "who": "them", "text": "我跟着大博主抄还不成吗？", "at": "我跟着大博主" },
+          { "who": "me", "text": "快拉倒吧。", "at": "快拉倒吧", "punch": true }
+        ]
+      }
+    },
+    {
+      "start": "大博主发一个视频能爆",
+      "type": "scale-gap",
+      "data": {
+        "kicker": "为什么抄不来",
+        "big": { "label": "大博主", "value": "几百万粉丝", "boosts": [{ "text": "粉丝基础盘", "at": "基础盘" }, { "text": "算法强力推流", "at": "强力推流" }] },
+        "small": { "label": "你的新号", "value": "几百粉丝", "at": "几百粉丝的新号", "verdict": "跟风模仿 · 没人推", "verdictAt": "跟风模仿" },
+        "ratio": "×10000"
+      }
+    },
+    {
+      "start": "平台连多看你一眼",
+      "type": "sink",
+      "data": { "kicker": "NO REACH", "post": "我模仿的爆款", "views": "播放 0", "label": "石沉大海", "dropAt": 0.3, "sinkAt": "石沉大海" }
+    },
+    {
+      "start": "真正能让你以小博大",
+      "type": "comment-wall",
+      "data": {
+        "kicker": "以小博大的秘密",
+        "video": { "title": "大博主的爆款视频", "views": "386万播放", "label": "秘密不在画面里" },
+        "focusAt": "画面里$",
+        "badge": "秘密在评论区",
+        "comments": [
+          { "text": "哈哈哈哈哈哈", "likes": "2.1w" },
+          { "text": "新手到底怎么起号？", "likes": "8.6k", "gold": true, "tag": "需求" },
+          { "text": "前排围观", "likes": "302" },
+          { "text": "剪辑太慢了有没有办法", "likes": "5.2k", "gold": true, "tag": "痛点" },
+          { "text": "[捂脸][捂脸]", "likes": "1.1k" },
+          { "text": "为什么我发了没流量", "likes": "9.9k", "gold": true, "tag": "痛点" },
+          { "text": "学到了学到了", "likes": "860" },
+          { "text": "有没有平价的替代？", "likes": "3.4k", "gold": true, "tag": "需求" }
+        ],
+        "handoff": { "text": "挖评论这件事 → 交给 AI", "at": "挖评论这件事" }
+      }
+    },
+    {
+      "start": "Skill Hub",
+      "type": "tool-card",
+      "data": {
+        "hub": "Skill Hub",
+        "tools": [
+          { "name": "Agent Browser", "icon": "browser", "downloads": 870000, "role": "给 AI 用的浏览器", "tags": ["扒评论"] },
+          { "name": "Data Analysis", "icon": "chart", "downloads": 96000, "role": "把评论洗干净", "tags": ["清洗"] },
+          { "name": "热点选题", "icon": "fire", "downloads": 92000, "role": "从痛点到成片", "tags": ["收尾"] }
+        ],
+        "total": { "value": "100万+", "label": "人下载", "at": "一百多万" },
+        "badges": [{ "text": "免密钥", "icon": "unlock", "at": "免密钥" }]
+      }
+    },
+    {
+      "start": "装到 WorkBuddy",
+      "type": "agents",
+      "data": { "kicker": "PLUG & PLAY", "title": "装进这些 AI 工具都能用", "center": "3 个 Skill", "agents": ["WorkBuddy", "豆包", "Codex"] }
+    },
+    {
+      "start": "第一个",
+      "type": "tool-card",
+      "data": {
+        "hub": "Skill Hub",
+        "focus": 0,
+        "tools": [
+          { "name": "Agent Browser", "icon": "browser", "downloads": 870000, "role": "给 AI 用的浏览器", "tags": ["扒评论"] },
+          { "name": "Data Analysis", "icon": "chart", "downloads": 96000, "role": "把评论洗干净", "tags": ["清洗"] },
+          { "name": "热点选题", "icon": "fire", "downloads": 92000, "role": "从痛点到成片", "tags": ["收尾"] }
+        ]
+      }
+    },
+    {
+      "start": "你给它一句命令",
+      "type": "chat-command",
+      "data": { "title": "一句命令", "app": "Agent Browser", "appIcon": "browser", "prompt": "把这个视频下面点赞最高的 500 条评论，全部导成文本", "typeAt": "把这个视频", "doneAt": "导成文本$" }
+    },
+    {
+      "start": "它自己打开页面",
+      "type": "browser-agent",
+      "data": {
+        "url": "douyin.com/video/7394…",
+        "target": 500,
+        "unit": "条评论",
+        "file": "评论.txt",
+        "steps": [{ "text": "自己打开页面", "at": "打开页面" }, { "text": "自己往下翻", "at": "往下翻" }, { "text": "自己存好", "at": "存好" }]
+      }
+    },
+    {
+      "start": "以前干这一趟",
+      "type": "before-after",
+      "data": {
+        "before": { "label": "以前", "icon": "tool", "items": [{ "text": "装采集插件", "at": "装采集插件" }, { "text": "学爬虫", "at": "学爬虫" }, { "text": "天天担心账号被封", "at": "担心账号被封" }] },
+        "after": { "label": "现在", "icon": "bot", "at": "现在你只说", "items": [{ "text": "只说一句话", "at": "一句话" }, { "text": "坐在旁边看它干活", "at": "坐在旁边" }] }
+      }
+    },
+    {
+      "start": "第二个",
+      "type": "tool-card",
+      "data": {
+        "hub": "Skill Hub",
+        "focus": 1,
+        "tools": [
+          { "name": "Agent Browser", "icon": "browser", "downloads": 870000, "role": "给 AI 用的浏览器", "tags": ["扒评论"] },
+          { "name": "Data Analysis", "icon": "chart", "downloads": 96000, "role": "它管洗：把评论洗干净", "tags": ["清洗"] },
+          { "name": "热点选题", "icon": "fire", "downloads": 92000, "role": "从痛点到成片", "tags": ["收尾"] }
+        ]
+      }
+    },
+    {
+      "start": "你把刚扒下来",
+      "type": "data-sieve",
+      "data": {
+        "kicker": "DATA ANALYSIS · 清洗",
+        "pool": "扒下来的评论",
+        "dumpAt": 0.3,
+        "chips": [
+          { "text": "哈哈哈哈哈", "kind": "noise" },
+          { "text": "新手怎么起号？", "kind": "real", "bin": 0 },
+          { "text": "[捂脸][捂脸]", "kind": "noise" },
+          { "text": "发了没流量", "kind": "real", "bin": 1 },
+          { "text": "笑死我了", "kind": "noise" },
+          { "text": "剪辑太耗时间", "kind": "real", "bin": 2 },
+          { "text": "绝绝子", "kind": "noise" },
+          { "text": "起号要多久", "kind": "real", "bin": 0 },
+          { "text": "666", "kind": "noise" },
+          { "text": "播放卡在 500", "kind": "real", "bin": 1 },
+          { "text": "前排", "kind": "noise" },
+          { "text": "不会写脚本", "kind": "real", "bin": 2 },
+          { "text": "[doge]", "kind": "noise" },
+          { "text": "为什么被限流", "kind": "real", "bin": 1 },
+          { "text": "蹲一个", "kind": "noise" }
+        ],
+        "bins": ["起号", "流量", "制作"],
+        "commands": [
+          { "text": "打哈哈 / 表情包 / 玩梗 → 全部剔掉", "at": "打哈哈" },
+          { "text": "真实提问 → 按卡点归类", "at": "真实的提问" },
+          { "text": "输出：抱怨最多、点赞最高的 3 个卡点", "at": "再告诉我" }
+        ],
+        "purgeAt": "全部剔掉",
+        "sortAt": "归类",
+        "pickAt": "三个卡点"
+      }
+    },
+    {
+      "start": "半分钟",
+      "type": "leaderboard",
+      "data": {
+        "kicker": "RESULT",
+        "board": "痛点排行榜",
+        "timer": "30 秒",
+        "items": [
+          { "label": "发了没流量", "value": 1286, "unit": "次抱怨", "note": "点赞 3.2w" },
+          { "label": "新手不会起号", "value": 954, "unit": "次抱怨", "note": "点赞 2.1w" },
+          { "label": "剪辑太耗时间", "value": 731, "unit": "次抱怨", "note": "点赞 1.6w" }
+        ],
+        "siftAt": "沙子沉下去"
+      }
+    },
+    {
+      "start": "第三个",
+      "type": "tool-card",
+      "data": {
+        "hub": "Skill Hub",
+        "focus": 2,
+        "tools": [
+          { "name": "Agent Browser", "icon": "browser", "downloads": 870000, "role": "给 AI 用的浏览器", "tags": ["扒评论"] },
+          { "name": "Data Analysis", "icon": "chart", "downloads": 96000, "role": "把评论洗干净", "tags": ["清洗"] },
+          { "name": "热点选题", "icon": "fire", "downloads": 92000, "role": "它管收尾：从痛点到成片", "tags": ["收尾"] }
+        ]
+      }
+    },
+    {
+      "start": "你把挑中的那个痛点",
+      "type": "topic-radar",
+      "data": {
+        "kicker": "热点选题 · 找角度",
+        "topic": "发了没流量",
+        "scanAt": "先看看",
+        "takes": [
+          { "text": "10 个涨粉技巧", "heat": "已有 3.2w 条" },
+          { "text": "算法机制揭秘", "heat": "已有 1.8w 条" },
+          { "text": "爆款标题公式", "heat": "已有 2.6w 条" },
+          { "text": "起号避坑指南", "heat": "已有 9k 条" },
+          { "text": "投流教程", "heat": "已有 1.1w 条" },
+          { "text": "蹭热点攻略", "heat": "已有 2w 条" }
+        ],
+        "pick": { "label": "还值得你署名的角度", "text": "新号 7 天真实起号记录", "at": "再挑出" }
+      }
+    },
+    {
+      "start": "然后把封面",
+      "type": "checklist",
+      "data": {
+        "kicker": "一条龙",
+        "items": [{ "text": "封面", "at": "封面" }, { "text": "正文", "at": "正文" }, { "text": "话题标签", "at": "话题标签" }, { "text": "分镜", "at": "分镜" }, { "text": "口播成片", "at": "口播成片" }],
+        "done": { "text": "一条全配齐", "at": "一条全配齐" }
+      }
+    },
+    {
+      "start": "早上挖到的痛点",
+      "type": "day-clock",
+      "data": { "from": { "label": "早上", "time": "08:00", "event": "挖到痛点", "at": "早上" }, "to": { "label": "晚饭前", "time": "18:00", "event": "发出去", "at": "发出去" } }
+    },
+    { "start": "你看", "type": "quote", "data": { "kicker": "// 说到底", "text": "做内容从来不是碰运气", "emphasis": ["不是碰运气"] } },
+    {
+      "start": "成千上万",
+      "type": "signal-map",
+      "data": { "count": { "value": 10000, "suffix": "+", "label": "个真实的人在求助" }, "signals": ["求新手教程", "为什么我没流量？", "有没有人教教我", "剪辑太难了", "起号卡住了", "怎么接第一个广告"] }
+    },
+    {
+      "start": "以前你得用手挖",
+      "type": "before-after",
+      "data": {
+        "before": { "label": "以前", "icon": "shovel", "items": [{ "text": "你得用手挖", "at": "用手挖" }] },
+        "after": { "label": "现在", "icon": "bot", "at": "现在让", "items": [{ "text": "AI 替你挖", "at": "替你挖" }] }
+      }
+    },
+    {
+      "start": "这三个 Skill 的安装清单",
+      "type": "outro",
+      "data": { "title": "3 个 Skill，帮你挖出爆款选题", "recap": ["Agent Browser · 扒评论", "Data Analysis · 洗评论", "热点选题 · 出成片"], "cta": "评论区留言 · 领安装清单" }
+    }
+  ]
+}

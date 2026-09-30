@@ -1,0 +1,224 @@
+{
+  "keywords": ["指甲刀", "三段式", "全量完整代码"],
+  "opening": {
+    "type": "opening-ai-tool-4steps",
+    "at": 0,
+    "until": "写",
+    "data": { "aiAt": "AI", "qAt": "还只是", "chip": "" }
+  },
+  "shots": [
+    {
+      "type": "untapped-potential",
+      "data": {
+        "machine": { "label": "AI · 印钞机", "icon": "bot", "at": "AI" },
+        "used": [{ "text": "写周报", "at": "周报" }, { "text": "润色文案", "at": "润色" }],
+        "usedPct": 5,
+        "potential": [{ "text": "做小工具" }, { "text": "做网站" }, { "text": "自动化" }, { "text": "核对数据" }, { "text": "批量处理" }],
+        "revealAt": "印钞机",
+        "verdict": "当打字机用",
+        "verdictAt": "打字机"
+      }
+    },
+    {
+      "start": "今天不讲任何代码语法",
+      "type": "flow",
+      "data": { "kicker": "零代码语法 · 小学生都能跑通", "title": "四步法", "steps": ["需求降维", "防崩脚手架", "单文件沙箱", "拖拽上线"] }
+    },
+    {
+      "start": "哪怕你是一个电脑小白",
+      "type": "day-clock",
+      "data": {
+        "title": "二十分钟 · 从小白到上线",
+        "from": { "label": "电脑小白", "time": "14:00", "event": "零基础", "at": "小白" },
+        "to": { "label": "二十分钟后", "time": "14:20", "event": "小软件上线", "at": "二十分钟" }
+      }
+    },
+    {
+      "start": "替你做出第一个",
+      "type": "checklist",
+      "data": {
+        "title": "你的第一个小软件",
+        "items": [
+          { "text": "能跑", "icon": "play", "at": "能跑" },
+          { "text": "能用", "icon": "check", "at": "能用" },
+          { "text": "能分享", "icon": "users", "at": "发给别人" }
+        ],
+        "done": { "text": "独立小软件", "at": "小软件" }
+      }
+    },
+    {
+      "start": "很多朋友让",
+      "type": "dialogue",
+      "data": {
+        "them": "新手朋友",
+        "messages": [
+          { "who": "them", "text": "AI 写的代码又卡死报错了…", "at": "卡死报错" },
+          { "who": "them", "text": "唉，我不是学编程的料", "at": "叹口气" },
+          { "who": "me", "text": "快拉倒吧！", "at": "快拉倒吧" },
+          { "who": "me", "text": "真不是你笨！", "at": "真不是你笨", "punch": true }
+        ]
+      }
+    },
+    {
+      "start": "在软件公司里",
+      "type": "versus",
+      "data": {
+        "title": "软件公司里的分工",
+        "left": { "label": "程序员", "points": ["只负责码字"] },
+        "right": { "label": "产品经理", "points": ["决定做什么", "决定产品"] }
+      }
+    },
+    {
+      "start": "现在 AI 把编码门槛",
+      "type": "agents",
+      "data": { "title": "你当产品经理 · AI 当程序员", "center": "你", "agents": ["AI 写界面", "AI 写逻辑", "AI 修报错", "AI 做测试"] }
+    },
+    {
+      "start": "第一步，需求降维",
+      "type": "scope-shrink",
+      "data": {
+        "kicker": "STEP 01 · 只做一把指甲刀",
+        "title": "第一步 · 需求降维",
+        "big": [{ "text": "商城", "at": "商城" }, { "text": "外卖平台", "at": "外卖平台" }],
+        "verdict": "找死",
+        "verdictAt": "找死",
+        "small": { "text": "一个微小痛点", "icon": "target", "at": "微小痛点" },
+        "examples": [{ "text": "批量改图片名", "icon": "image", "at": "图片名字" }, { "text": "核对表格金额", "icon": "chart", "at": "错乱金额" }],
+        "meterAt": "微小痛点$",
+        "meter": { "label": "一次跑通率", "from": 8, "to": 92 }
+      }
+    },
+    {
+      "start": "目标越小",
+      "type": "growth",
+      "data": {
+        "title": "目标越小 · 一次跑通率越高",
+        "points": [{ "label": "外卖平台", "value": 5 }, { "label": "商城", "value": 12 }, { "label": "小工具", "value": 55 }, { "label": "指甲刀", "value": 92 }],
+        "unit": "%"
+      }
+    },
+    {
+      "start": "第二步，搭建",
+      "type": "bullet-cards",
+      "data": {
+        "title": "第二步 · 三段式防崩脚手架",
+        "items": [
+          { "text": "防崩脚手架", "sub": "三段式提需求", "tone": "info", "icon": "layers", "at": "三段式" },
+          { "text": "随口瞎问", "sub": "“帮我做个软件”", "tone": "bad", "at": "随口瞎问", "strike": true },
+          { "text": "按三段写", "sub": "角色 · 规则 · 约束", "tone": "good", "at": "三段写" }
+        ]
+      }
+    },
+    {
+      "start": "第一段，定死角色",
+      "type": "chat-command",
+      "captions": true,
+      "data": {
+        "title": "三段式提需求",
+        "app": "AI 助手",
+        "lines": [{ "text": "角色：你是资深前端工程师", "at": "定死角色" }, { "text": "规则：输入 → 处理 → 输出", "at": "输入" }]
+      }
+    },
+    {
+      "start": "比如把表格拖进去",
+      "type": "assembly",
+      "data": { "title": "输入 → 处理 → 输出", "stations": ["拖入表格", "比对第二列", "标出差额"], "input": "两张表", "output": "差额清单" }
+    },
+    {
+      "start": "第三段，加上",
+      "type": "checklist",
+      "data": {
+        "title": "第三段 · 防御性约束",
+        "items": [
+          { "text": "本地完成", "icon": "lock", "at": "本地完成" },
+          { "text": "不卡死", "icon": "zap", "at": "卡死" },
+          { "text": "不报错", "icon": "check", "at": "报错" }
+        ],
+        "done": { "text": "防崩脚手架搭好", "at": "报错$+0.2" }
+      }
+    },
+    {
+      "start": "第三步，单文件",
+      "type": "before-after",
+      "data": {
+        "title": "第三步 · 单文件沙箱运行法",
+        "before": { "label": "配环境", "icon": "terminal", "items": [{ "text": "装 Node / Python", "at": "环境配置" }, { "text": "装一堆依赖" }, { "text": "路径报错" }] },
+        "after": { "label": "单文件", "icon": "doc", "at": "偷懒绝招", "items": [{ "text": "一个 HTML" }, { "text": "双击就跑" }] }
+      }
+    },
+    {
+      "start": "让 AI 拿结果",
+      "type": "chat-command",
+      "data": {
+        "title": "加上这句咒语",
+        "app": "AI 助手",
+        "prompt": "把所有样式和代码全部打包进一个单独的 HTML 文件，零本地依赖，双击浏览器直接跑。",
+        "typeAt": "所有样式",
+        "doneAt": "直接跑$",
+        "reply": "好的，已生成单文件 index.html",
+        "replyAt": "直接跑$"
+      }
+    },
+    {
+      "start": "生成完之后",
+      "type": "file-launch",
+      "data": {
+        "title": "新建记事本 · 改后缀 · 双击",
+        "from": "小工具.txt",
+        "to": "小工具.html",
+        "pasteAt": "贴进去",
+        "renameAt": "改成",
+        "openAt": "双击",
+        "appAt": "弹出",
+        "badge": "精美流畅的小工具"
+      }
+    },
+    {
+      "start": "如果发现报错",
+      "type": "bug-fix-loop",
+      "data": {
+        "title": "救命口诀",
+        "failAt": "点不动",
+        "devAt": "F12",
+        "errAt": "红色报错",
+        "sendAt": "甩给",
+        "promptAt": "请直接给出",
+        "promptDoneAt": "替换代码$",
+        "regenAt": "整份重新生成",
+        "replaceAt": "全选覆盖",
+        "fixedAt": "解决战斗"
+      }
+    },
+    {
+      "start": "第四步，拖拽",
+      "type": "drag-deploy",
+      "data": {
+        "title": "第四步 · 拖拽一键上线",
+        "dragAt": "直接拖进",
+        "dropAt": "虚线框",
+        "doneAt": "走完",
+        "urlAt": "专属网址",
+        "shareAt": "发到群里"
+      }
+    },
+    {
+      "start": "以前制造软件",
+      "type": "before-after",
+      "data": {
+        "title": "谁在造软件",
+        "before": { "label": "以前", "icon": "lock", "items": [{ "text": "程序员垄断", "at": "垄断" }] },
+        "after": { "label": "今天", "icon": "bot", "at": "今天", "items": [{ "text": "AI 包揽苦力", "at": "苦力" }] }
+      }
+    },
+    {
+      "start": "拉开差距",
+      "type": "quote",
+      "data": { "kicker": "拉开差距的是", "text": "谁能把想法变成解决问题的工具", "emphasis": ["想法", "工具"] }
+    },
+    {
+      "start": "你平时最想做",
+      "type": "outro",
+      "data": { "title": "你最想做什么小工具？", "recap": ["需求降维", "防崩脚手架", "单文件沙箱", "拖拽上线"], "cta": "评论区留言 · 帮你做" }
+    }
+  ]
+}

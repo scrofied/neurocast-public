@@ -1,0 +1,34 @@
+{
+  "name": "neurocast",
+  "version": "0.2.0",
+  "private": true,
+  "description": "文案 + 配音 -> 时间轴对齐的科技感动画讲解视频（Remotion 本地渲染）",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "make": "node scripts/make.mjs",
+    "beats": "node scripts/make.mjs --beats",
+    "plan": "node scripts/make.mjs --plan-only",
+    "stills": "node scripts/make.mjs --stills",
+    "preview": "node scripts/preview.mjs",
+    "catalog": "node scripts/catalog.mjs",
+    "gallery": "node scripts/gallery.mjs",
+    "sfx": "python scripts/gen_sfx.py"
+  },
+  "dependencies": {
+    "@react-three/fiber": "9.7.0",
+    "@remotion/bundler": "4.0.515",
+    "@remotion/cli": "4.0.515",
+    "@remotion/renderer": "4.0.515",
+    "@remotion/three": "4.0.515",
+    "@remotion/zod-types": "4.0.515",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "remotion": "4.0.515",
+    "three": "0.185.1",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "typescript": "7.0.2"
+  }
+}

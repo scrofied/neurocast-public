@@ -1,0 +1,12 @@
+{
+  "script_file": "文案.md",
+  "audio": "voice.mp3",
+  "audio_timeline": "voice_asr.json",
+  "clip_timelines": { "talk.mp4": "talk_asr.json" },
+  "storyboard": "storyboard.json",
+  "title": "从评论区挖掘爆款选题",
+  "seed": 42,
+  "skin": "aurora",
+  "cta": "评论区留言 · 领安装清单",
+  "keywords": ["评论区", "痛点", "免密钥", "Skill"]
+}

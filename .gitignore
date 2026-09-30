@@ -1,0 +1,14 @@
+node_modules/
+out/
+output/
+.cache/
+public/jobs/
+*.mp4
+*.m4a
+*.mp3
+*.onnx
+*.log
+.env
+.env.*
+.DS_Store
+*.local

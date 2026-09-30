@@ -1,0 +1,10 @@
+{
+  "meta": { "title": "sample", "seed": 1, "skin": "aurora", "font": "yahei", "world": "grid", "fps": 30, "width": 1920, "height": 1080, "mirror": false, "showCaptions": true },
+  "durationInFrames": 192,
+  "chapters": [{ "title": "示例", "start": 0, "end": 192 }],
+  "shots": [
+    { "id": "s0", "type": "hook", "variant": 0, "start": 0, "dur": 90, "chapter": 0, "text": "", "data": { "title": "一个人，就是一家公司", "sub": "AI 时代的超级个体" }, "transition": "fly" },
+    { "id": "s1", "type": "number", "variant": 0, "start": 90, "dur": 90, "chapter": 0, "text": "87%", "data": { "value": 87, "unit": "%", "label": "的重复工作可以交给 AI" }, "transition": "warp" }
+  ],
+  "captions": [{ "start": 0, "end": 90, "text": "一个人，就是一家公司" }]
+}

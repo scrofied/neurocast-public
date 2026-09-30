@@ -1,0 +1,119 @@
+import type { CompDef } from "./types";
+import { LOOKUP } from "./lookup";
+import { NeuralNet } from "./metaphor/NeuralNet";
+import { AgentSwarm } from "./metaphor/AgentSwarm";
+import { PromptChip } from "./metaphor/PromptChip";
+import { DataFunnel } from "./metaphor/DataFunnel";
+import { KnowledgeVault } from "./metaphor/KnowledgeVault";
+import { AssemblyLine } from "./metaphor/AssemblyLine";
+import { Flywheel } from "./metaphor/Flywheel";
+import { DominoChain } from "./metaphor/DominoChain";
+import { AssetDistill } from "./metaphor/AssetDistill";
+import { UntappedPotential } from "./metaphor/UntappedPotential";
+import { ScopeShrink } from "./metaphor/ScopeShrink";
+import { LaborTakeover } from "./metaphor/LaborTakeover";
+import { ParticleNumber } from "./info/ParticleNumber";
+import { CodeEditor } from "./info/CodeEditor";
+import { EnergyPipeline } from "./info/EnergyPipeline";
+import { Timeline } from "./info/Timeline";
+import { VersusClash } from "./info/VersusClash";
+import { GrowthCurve } from "./info/GrowthCurve";
+import { CardStack } from "./info/CardStack";
+import { BulletCards } from "./info/BulletCards";
+import { LogicFlip } from "./info/LogicFlip";
+import { ScaleGap } from "./info/ScaleGap";
+import { BeforeAfter } from "./info/BeforeAfter";
+import { Leaderboard } from "./info/Leaderboard";
+import { DayClock } from "./info/DayClock";
+import { ScreenDemo } from "./screen/ScreenDemo";
+import { BoardProof } from "./screen/BoardProof";
+import { PhoneFeed } from "./story/PhoneFeed";
+import { SwordForge } from "./story/SwordForge";
+import { Dialogue } from "./story/Dialogue";
+import { Sink } from "./story/Sink";
+import { CommentWall } from "./story/CommentWall";
+import { SignalMap } from "./story/SignalMap";
+import { Reframe } from "./story/Reframe";
+import { ToolCard } from "./product/ToolCard";
+import { ChatCommand } from "./product/ChatCommand";
+import { BrowserAgent } from "./product/BrowserAgent";
+import { DataSieve } from "./product/DataSieve";
+import { TopicRadar } from "./product/TopicRadar";
+import { Checklist } from "./product/Checklist";
+import { FileLaunch } from "./product/FileLaunch";
+import { BugFixLoop } from "./product/BugFixLoop";
+import { DragDeploy } from "./product/DragDeploy";
+import { Quote } from "./structure/Quote";
+import { PunchText } from "./structure/PunchText";
+import { ChapterCard } from "./structure/ChapterCard";
+import { Narration } from "./structure/Narration";
+import { Hook } from "./structure/Hook";
+import { Outro } from "./structure/Outro";
+import { TalkingHeadStage } from "./structure/TalkingHeadStage";
+import { OPENINGS } from "../openings";
+
+// The asset library. Every entry is one reusable animated component; add new ones here
+// (see SKILL.md · 扩展组件资产) and they become available to storyboards, the auto planner and the Gallery.
+export const REGISTRY: CompDef[] = [
+  // structure
+  Hook,
+  ChapterCard,
+  Narration,
+  Quote,
+  PunchText,
+  Outro,
+  TalkingHeadStage,
+  // info
+  ParticleNumber,
+  CodeEditor,
+  EnergyPipeline,
+  Timeline,
+  VersusClash,
+  GrowthCurve,
+  CardStack,
+  BulletCards,
+  LogicFlip,
+  ScaleGap,
+  BeforeAfter,
+  Leaderboard,
+  DayClock,
+  // metaphor
+  NeuralNet,
+  AgentSwarm,
+  PromptChip,
+  DataFunnel,
+  KnowledgeVault,
+  AssemblyLine,
+  Flywheel,
+  DominoChain,
+  AssetDistill,
+  UntappedPotential,
+  ScopeShrink,
+  LaborTakeover,
+  // story
+  PhoneFeed,
+  SwordForge,
+  Dialogue,
+  Sink,
+  CommentWall,
+  SignalMap,
+  Reframe,
+  // product
+  ToolCard,
+  ChatCommand,
+  BrowserAgent,
+  DataSieve,
+  TopicRadar,
+  Checklist,
+  FileLaunch,
+  BugFixLoop,
+  DragDeploy,
+  // screen
+  ScreenDemo,
+  BoardProof,
+  // per-script openings
+  ...OPENINGS,
+];
+
+export const BY_ID: Record<string, CompDef> = Object.fromEntries(REGISTRY.map((c) => [c.id, c]));
+for (const c of REGISTRY) LOOKUP[c.id] = c;
