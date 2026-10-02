@@ -1,0 +1,1946 @@
+{
+ "rules": {
+  "recentVideos": 3,
+  "minFresh": 3,
+  "maxHistory": 12
+ },
+ "videos": [
+  {
+   "id": "workbuddy必装的三大神级skill，附保姆级教程",
+   "title": "workbuddy必装的三大神级skill，附保姆级教程",
+   "date": "2026-09-27",
+   "file": "../../../../claude/neurocast/public/jobs/job_1790522375043/timeline.json",
+   "shots": 35,
+   "types": {
+    "hook": 1,
+    "chapter": 3,
+    "narration": 18,
+    "agents": 5,
+    "number": 1,
+    "quote": 5,
+    "cards": 2
+   }
+  },
+  {
+   "id": "如何做出爆款内容",
+   "title": "如何做出爆款内容",
+   "date": "2026-09-27",
+   "file": "../../../../claude/neurocast/public/jobs/job_1790531579334/timeline.json",
+   "shots": 59,
+   "types": {
+    "hook": 1,
+    "chapter": 2,
+    "quote": 24,
+    "narration": 25,
+    "agents": 3,
+    "number": 3,
+    "versus": 1
+   }
+  },
+  {
+   "id": "AI 是怎么替你干活的",
+   "title": "AI 是怎么替你干活的",
+   "date": "2026-09-28",
+   "file": "../../../../claude/neurocast/public/jobs/demo_20260928-043005/timeline.json",
+   "shots": 17,
+   "types": {
+    "hook": 1,
+    "chapter": 4,
+    "neural": 1,
+    "prompt": 1,
+    "number": 1,
+    "timeline": 1,
+    "cards": 1,
+    "quote": 1,
+    "flow": 1,
+    "screen": 1,
+    "vault": 1,
+    "narration": 1,
+    "code": 1,
+    "assembly": 1
+   }
+  },
+  {
+   "id": "从评论区挖掘爆款选题",
+   "title": "从评论区挖掘爆款选题",
+   "date": "2026-09-28",
+   "file": "examples/comment-mining/storyboard.json",
+   "shots": 25,
+   "types": {
+    "phone-feed": 1,
+    "bullet-cards": 1,
+    "logic-flip": 1,
+    "sword-forge": 1,
+    "punch-text": 1,
+    "dialogue": 1,
+    "scale-gap": 1,
+    "sink": 1,
+    "comment-wall": 1,
+    "tool-card": 4,
+    "agents": 1,
+    "chat-command": 1,
+    "browser-agent": 1,
+    "before-after": 2,
+    "data-sieve": 1,
+    "leaderboard": 1,
+    "topic-radar": 1,
+    "checklist": 1,
+    "day-clock": 1,
+    "quote": 1,
+    "signal-map": 1
+   }
+  },
+  {
+   "id": "20 分钟用 AI 做出你的第一个小软件",
+   "title": "20 分钟用 AI 做出你的第一个小软件",
+   "date": "2026-09-29",
+   "file": "examples/ai-tool-4steps/storyboard.json",
+   "shots": 20,
+   "types": {
+    "untapped-potential": 1,
+    "flow": 1,
+    "day-clock": 1,
+    "checklist": 2,
+    "dialogue": 1,
+    "versus": 1,
+    "agents": 1,
+    "scope-shrink": 1,
+    "growth": 1,
+    "bullet-cards": 1,
+    "chat-command": 2,
+    "assembly": 1,
+    "before-after": 2,
+    "file-launch": 1,
+    "bug-fix-loop": 1,
+    "drag-deploy": 1,
+    "quote": 1
+   }
+  },
+  {
+   "id": "别再让AI每次从零开始",
+   "title": "别再让AI每次从零开始",
+   "date": "2026-10-01",
+   "file": "public/jobs/input_20261001-214525/timeline.json",
+   "shots": 24,
+   "types": {
+    "screen": 4,
+    "quote": 2,
+    "blame-strike": 1,
+    "open-ledger": 1,
+    "carry-or-dig": 1,
+    "board-proof": 1,
+    "asset-distill": 1,
+    "step-rail": 1,
+    "bullet-cards": 1,
+    "checklist": 1,
+    "teardown-lens": 1,
+    "file-launch": 1,
+    "chat-command": 2,
+    "assembly": 1,
+    "before-after": 1,
+    "agents": 1,
+    "versus": 1,
+    "flywheel": 1,
+    "drag-deploy": 1
+   }
+  },
+  {
+   "id": "用 AI 挖出你身上的隐藏资产",
+   "title": "用 AI 挖出你身上的隐藏资产",
+   "date": "2026-10-02",
+   "file": "public/jobs/input_20261002-162324/timeline.json",
+   "shots": 25,
+   "types": {
+    "board-proof": 2,
+    "number": 3,
+    "scale-gap": 1,
+    "untapped-potential": 2,
+    "before-after": 2,
+    "punch-text": 3,
+    "prompt": 1,
+    "chat-command": 2,
+    "data-sieve": 1,
+    "signal-map": 1,
+    "bullet-cards": 1,
+    "comment-wall": 1,
+    "asset-distill": 1,
+    "dialogue": 1,
+    "flow": 1,
+    "reframe": 1,
+    "versus": 1
+   }
+  },
+  {
+   "id": "用Opus做AI剪辑=浪费90%成本",
+   "title": "用Opus做AI剪辑=浪费90%成本",
+   "date": "2026-10-02",
+   "file": "public/jobs/input_20261002-121511/timeline.json",
+   "shots": 27,
+   "types": {
+    "screen": 5,
+    "pit-trap": 1,
+    "open-ledger": 1,
+    "blame-strike": 1,
+    "before-after": 1,
+    "versus": 2,
+    "step-rail": 1,
+    "folder-save": 1,
+    "checklist": 3,
+    "ui-replica": 2,
+    "quote": 1,
+    "counter-example": 2,
+    "file-launch": 1,
+    "bullet-cards": 1,
+    "chat-command": 2,
+    "flywheel": 1,
+    "drag-deploy": 1
+   }
+  }
+ ],
+ "comps": {
+  "hook": {
+   "count": 3,
+   "videos": [
+    "workbuddy必装的三大神级skill，附保姆级教程",
+    "如何做出爆款内容",
+    "AI 是怎么替你干活的"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "workbuddy必装的三大神级skill，附保姆级教程",
+     "date": "2026-09-27",
+     "shots": [
+      "s0"
+     ],
+     "enters": []
+    },
+    {
+     "video": "如何做出爆款内容",
+     "date": "2026-09-27",
+     "shots": [
+      "s0"
+     ],
+     "enters": []
+    },
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s0"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "chapter": {
+   "count": 9,
+   "videos": [
+    "workbuddy必装的三大神级skill，附保姆级教程",
+    "如何做出爆款内容",
+    "AI 是怎么替你干活的"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "workbuddy必装的三大神级skill，附保姆级教程",
+     "date": "2026-09-27",
+     "shots": [
+      "s1",
+      "s14",
+      "s26"
+     ],
+     "enters": []
+    },
+    {
+     "video": "如何做出爆款内容",
+     "date": "2026-09-27",
+     "shots": [
+      "s1",
+      "s27"
+     ],
+     "enters": []
+    },
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s1",
+      "s5",
+      "s9",
+      "s13"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "narration": {
+   "count": 44,
+   "videos": [
+    "workbuddy必装的三大神级skill，附保姆级教程",
+    "如何做出爆款内容",
+    "AI 是怎么替你干活的"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "workbuddy必装的三大神级skill，附保姆级教程",
+     "date": "2026-09-27",
+     "shots": [
+      "s2",
+      "s3",
+      "s7",
+      "s9",
+      "s10",
+      "s12",
+      "s13",
+      "s15",
+      "s17",
+      "s18",
+      "s19",
+      "s21",
+      "s24",
+      "s25",
+      "s27",
+      "s29",
+      "s31",
+      "s33"
+     ],
+     "enters": []
+    },
+    {
+     "video": "如何做出爆款内容",
+     "date": "2026-09-27",
+     "shots": [
+      "s3",
+      "s5",
+      "s6",
+      "s8",
+      "s10",
+      "s12",
+      "s14",
+      "s16",
+      "s18",
+      "s22",
+      "s24",
+      "s26",
+      "s29",
+      "s32",
+      "s35",
+      "s37",
+      "s39",
+      "s41",
+      "s45",
+      "s47",
+      "s49",
+      "s51",
+      "s53",
+      "s55",
+      "s58"
+     ],
+     "enters": []
+    },
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s14"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "agents": {
+   "count": 11,
+   "videos": [
+    "workbuddy必装的三大神级skill，附保姆级教程",
+    "如何做出爆款内容",
+    "从评论区挖掘爆款选题",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始"
+   ],
+   "lastDate": "2026-10-01",
+   "history": [
+    {
+     "video": "workbuddy必装的三大神级skill，附保姆级教程",
+     "date": "2026-09-27",
+     "shots": [
+      "s4",
+      "s8",
+      "s11",
+      "s22",
+      "s32"
+     ],
+     "enters": []
+    },
+    {
+     "video": "如何做出爆款内容",
+     "date": "2026-09-27",
+     "shots": [
+      "s20",
+      "s30",
+      "s57"
+     ],
+     "enters": []
+    },
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s8"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s6"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "number": {
+   "count": 8,
+   "videos": [
+    "workbuddy必装的三大神级skill，附保姆级教程",
+    "如何做出爆款内容",
+    "AI 是怎么替你干活的",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "workbuddy必装的三大神级skill，附保姆级教程",
+     "date": "2026-09-27",
+     "shots": [
+      "s5"
+     ],
+     "enters": []
+    },
+    {
+     "video": "如何做出爆款内容",
+     "date": "2026-09-27",
+     "shots": [
+      "s23",
+      "s33",
+      "s43"
+     ],
+     "enters": []
+    },
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s4"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s1",
+      "s6",
+      "s21"
+     ],
+     "enters": [
+      "zoom-through",
+      "slam"
+     ]
+    }
+   ]
+  },
+  "quote": {
+   "count": 35,
+   "videos": [
+    "workbuddy必装的三大神级skill，附保姆级教程",
+    "如何做出爆款内容",
+    "AI 是怎么替你干活的",
+    "从评论区挖掘爆款选题",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "workbuddy必装的三大神级skill，附保姆级教程",
+     "date": "2026-09-27",
+     "shots": [
+      "s6",
+      "s16",
+      "s20",
+      "s28",
+      "s34"
+     ],
+     "enters": []
+    },
+    {
+     "video": "如何做出爆款内容",
+     "date": "2026-09-27",
+     "shots": [
+      "s2",
+      "s4",
+      "s7",
+      "s9",
+      "s11",
+      "s13",
+      "s15",
+      "s17",
+      "s19",
+      "s21",
+      "s25",
+      "s28",
+      "s31",
+      "s34",
+      "s36",
+      "s38",
+      "s40",
+      "s42",
+      "s44",
+      "s46",
+      "s48",
+      "s50",
+      "s52",
+      "s54"
+     ],
+     "enters": []
+    },
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s8"
+     ],
+     "enters": []
+    },
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s20"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s19"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s1",
+      "s9"
+     ],
+     "enters": [
+      "wipe",
+      "assemble"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "cards": {
+   "count": 3,
+   "videos": [
+    "workbuddy必装的三大神级skill，附保姆级教程",
+    "AI 是怎么替你干活的"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "workbuddy必装的三大神级skill，附保姆级教程",
+     "date": "2026-09-27",
+     "shots": [
+      "s23",
+      "s30"
+     ],
+     "enters": []
+    },
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s7"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "versus": {
+   "count": 6,
+   "videos": [
+    "如何做出爆款内容",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始",
+    "用 AI 挖出你身上的隐藏资产",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "如何做出爆款内容",
+     "date": "2026-09-27",
+     "shots": [
+      "s56"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s5"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s5",
+      "s22"
+     ],
+     "enters": [
+      "zoom-through",
+      "drop"
+     ]
+    }
+   ]
+  },
+  "neural": {
+   "count": 1,
+   "videos": [
+    "AI 是怎么替你干活的"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s2"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "prompt": {
+   "count": 2,
+   "videos": [
+    "AI 是怎么替你干活的",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s3"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "timeline": {
+   "count": 1,
+   "videos": [
+    "AI 是怎么替你干活的"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s6"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "flow": {
+   "count": 3,
+   "videos": [
+    "AI 是怎么替你干活的",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s10"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s1"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "screen": {
+   "count": 10,
+   "videos": [
+    "AI 是怎么替你干活的",
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s11"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s0",
+      "s4",
+      "s7",
+      "s21"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "zoom-through",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s0",
+      "s6",
+      "s7",
+      "s14",
+      "s23"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "zoom-through",
+      "drop",
+      "rise"
+     ]
+    }
+   ]
+  },
+  "vault": {
+   "count": 1,
+   "videos": [
+    "AI 是怎么替你干活的"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s12"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "code": {
+   "count": 1,
+   "videos": [
+    "AI 是怎么替你干活的"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s15"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "assembly": {
+   "count": 3,
+   "videos": [
+    "AI 是怎么替你干活的",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始"
+   ],
+   "lastDate": "2026-10-01",
+   "history": [
+    {
+     "video": "AI 是怎么替你干活的",
+     "date": "2026-09-28",
+     "shots": [
+      "s16"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s11"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "phone-feed": {
+   "count": 1,
+   "videos": [
+    "从评论区挖掘爆款选题"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s0.left"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "bullet-cards": {
+   "count": 5,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始",
+    "用 AI 挖出你身上的隐藏资产",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s0.right"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s9"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "logic-flip": {
+   "count": 1,
+   "videos": [
+    "从评论区挖掘爆款选题"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s0.right"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "sword-forge": {
+   "count": 1,
+   "videos": [
+    "从评论区挖掘爆款选题"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s1"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "punch-text": {
+   "count": 4,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s2"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s7",
+      "s9",
+      "s12"
+     ],
+     "enters": [
+      "drop",
+      "wipe",
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "dialogue": {
+   "count": 3,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s3"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s4"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "scale-gap": {
+   "count": 2,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s4"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    }
+   ]
+  },
+  "sink": {
+   "count": 1,
+   "videos": [
+    "从评论区挖掘爆款选题"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s5"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "comment-wall": {
+   "count": 2,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s6"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "tool-card": {
+   "count": 4,
+   "videos": [
+    "从评论区挖掘爆款选题"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s7",
+      "s9",
+      "s13",
+      "s16"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "chat-command": {
+   "count": 9,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始",
+    "用 AI 挖出你身上的隐藏资产",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s10"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s10",
+      "s14"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s15",
+      "s19"
+     ],
+     "enters": [
+      "zoom-through",
+      "drop"
+     ]
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s10",
+      "s13"
+     ],
+     "enters": [
+      "rise",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s20",
+      "s26"
+     ],
+     "enters": [
+      "zoom-through",
+      "drop"
+     ]
+    }
+   ]
+  },
+  "browser-agent": {
+   "count": 1,
+   "videos": [
+    "从评论区挖掘爆款选题"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s11"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "before-after": {
+   "count": 8,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始",
+    "用 AI 挖出你身上的隐藏资产",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s12",
+      "s22"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s13",
+      "s18"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s5",
+      "s22"
+     ],
+     "enters": [
+      "rise",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "data-sieve": {
+   "count": 2,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s14"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "leaderboard": {
+   "count": 1,
+   "videos": [
+    "从评论区挖掘爆款选题"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s15"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "topic-radar": {
+   "count": 1,
+   "videos": [
+    "从评论区挖掘爆款选题"
+   ],
+   "lastDate": "2026-09-28",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s17"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "checklist": {
+   "count": 7,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s18"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s3",
+      "s12"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s10",
+      "s17",
+      "s21"
+     ],
+     "enters": [
+      "zoom-through",
+      "drop",
+      "rise"
+     ]
+    }
+   ]
+  },
+  "day-clock": {
+   "count": 2,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "20 分钟用 AI 做出你的第一个小软件"
+   ],
+   "lastDate": "2026-09-29",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s19"
+     ],
+     "enters": []
+    },
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s2"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "signal-map": {
+   "count": 2,
+   "videos": [
+    "从评论区挖掘爆款选题",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "从评论区挖掘爆款选题",
+     "date": "2026-09-28",
+     "shots": [
+      "s21"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "untapped-potential": {
+   "count": 3,
+   "videos": [
+    "20 分钟用 AI 做出你的第一个小软件",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s0"
+     ],
+     "enters": []
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s4",
+      "s16"
+     ],
+     "enters": [
+      "assemble",
+      "drop"
+     ]
+    }
+   ]
+  },
+  "scope-shrink": {
+   "count": 1,
+   "videos": [
+    "20 分钟用 AI 做出你的第一个小软件"
+   ],
+   "lastDate": "2026-09-29",
+   "history": [
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s7"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "growth": {
+   "count": 1,
+   "videos": [
+    "20 分钟用 AI 做出你的第一个小软件"
+   ],
+   "lastDate": "2026-09-29",
+   "history": [
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s8"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "file-launch": {
+   "count": 3,
+   "videos": [
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s15"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "bug-fix-loop": {
+   "count": 1,
+   "videos": [
+    "20 分钟用 AI 做出你的第一个小软件"
+   ],
+   "lastDate": "2026-09-29",
+   "history": [
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s16"
+     ],
+     "enters": []
+    }
+   ]
+  },
+  "drag-deploy": {
+   "count": 3,
+   "videos": [
+    "20 分钟用 AI 做出你的第一个小软件",
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "20 分钟用 AI 做出你的第一个小软件",
+     "date": "2026-09-29",
+     "shots": [
+      "s17"
+     ],
+     "enters": []
+    },
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s23"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s25"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "board-proof": {
+   "count": 3,
+   "videos": [
+    "别再让AI每次从零开始",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s0",
+      "s2"
+     ],
+     "enters": [
+      "slam",
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "asset-distill": {
+   "count": 2,
+   "videos": [
+    "别再让AI每次从零开始",
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "reframe": {
+   "count": 1,
+   "videos": [
+    "用 AI 挖出你身上的隐藏资产"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "用 AI 挖出你身上的隐藏资产",
+     "date": "2026-10-02",
+     "shots": [
+      "s23"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "blame-strike": {
+   "count": 2,
+   "videos": [
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "open-ledger": {
+   "count": 2,
+   "videos": [
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "carry-or-dig": {
+   "count": 1,
+   "videos": [
+    "别再让AI每次从零开始"
+   ],
+   "lastDate": "2026-10-01",
+   "history": [
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "step-rail": {
+   "count": 2,
+   "videos": [
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    }
+   ]
+  },
+  "teardown-lens": {
+   "count": 1,
+   "videos": [
+    "别再让AI每次从零开始"
+   ],
+   "lastDate": "2026-10-01",
+   "history": [
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "drop"
+     ]
+    }
+   ]
+  },
+  "flywheel": {
+   "count": 2,
+   "videos": [
+    "别再让AI每次从零开始",
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "别再让AI每次从零开始",
+     "date": "2026-10-01",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "pit-trap": {
+   "count": 1,
+   "videos": [
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "drop"
+     ]
+    }
+   ]
+  },
+  "folder-save": {
+   "count": 1,
+   "videos": [
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "ui-replica": {
+   "count": 2,
+   "videos": [
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s11",
+      "s15"
+     ],
+     "enters": [
+      "drop",
+      "rise"
+     ]
+    }
+   ]
+  },
+  "counter-example": {
+   "count": 2,
+   "videos": [
+    "用Opus做AI剪辑=浪费90%成本"
+   ],
+   "lastDate": "2026-10-02",
+   "history": [
+    {
+     "video": "用Opus做AI剪辑=浪费90%成本",
+     "date": "2026-10-02",
+     "shots": [
+      "s13",
+      "s18"
+     ],
+     "enters": [
+      "slam",
+      "slide-l"
+     ]
+    }
+   ]
+  }
+ }
+}

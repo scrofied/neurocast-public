@@ -6,9 +6,13 @@ import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import { ENTER_KINDS, TRANSITIONS } from "./lib/motion.mjs";
 import { loadRegistry } from "./lib/registry-node.mjs";
+import { load as loadUsage, recent as recentOf, statsOf, usageNote, bodyComps, NON_BODY } from "./lib/usage.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const reg = await loadRegistry();
+const ledger = loadUsage();
+const recMap = recentOf(ledger);
+const uo = (id) => statsOf(id, { ledger, rec: recMap });
 
 const LAYER = { structure: "结构", info: "信息图", story: "叙事场景", product: "产品/工具演示", metaphor: "概念隐喻", screen: "截图录屏", overlay: "叠加", fx: "特效", opening: "专属开场（每条视频一个，不复用）" };
 const isCue = (k) => k === "at" || k === "until" || /[a-z]At$/.test(k);
@@ -58,6 +62,9 @@ const out = [
   "",
   `当前共 **${reg.list.length}** 个组件。写分镜时按「适用」选组件，按字段表填 data。`,
   "",
+  `**用量台账**（\`usage/library.json\`，已记 ${ledger.videos.length} 条片子）：正片组件 ${bodyComps(reg.list).length} 个，历史上过片 ${bodyComps(reg.list).filter((c) => !uo(c.id).fresh).length} 个，**从未上过片 ${bodyComps(reg.list).filter((c) => uo(c.id).fresh).length} 个**。`,
+  `查重用 \`node scripts/pick.mjs --recent\`／\`node scripts/usage.mjs report\`；只在没上过的组件里选：\`node scripts/pick.mjs --fresh "语义"\`。`,
+  "",
   "- **锚点**：类型写着「锚点」的字段（`at`、`until`、`xxxAt`）填台词里的原文片段，如 `\"at\": \"封面\"`，管线会换算成那个词说出口的帧；也可填秒数（相对本镜头开始）。`\"文字$\"` = 这几个字说完的时刻，`\"文字+0.3\"` = 往后偏 0.3 秒。",
   "- **可放侧栏**：能作为 `talking-head-stage` 的 `left/right` 小组件。",
   "- **自动隐藏字幕**：画面本身就显示了台词（对话、指令、冲击大字），默认不再叠底部字幕；分镜里写 `\"captions\": true` 可强制打开。",
@@ -84,6 +91,8 @@ const out = [
   "3. 吻合度低于 4.5 的，问一句：**现有组件里有没有一个能不改一字就表达它？** 没有 → 新增",
   "4. 新增后跑 `node scripts/catalog.mjs` 登记进本目录",
   "",
+  "**新增之前先查台账**：`node scripts/pick.mjs --fresh \"语义\"` 只在从未上过片的组件里找。库里闲置的资产比新增更便宜——先把它用上，确实表达不了才新建。",
+  "",
   "新增组件的质量要求：",
   "",
   "- **按叙事动作定义，不按题材**：不是「讲电商的组件」，而是「把琐碎经历提炼成可售卖的资产」。题材的东西无法复用。",
@@ -96,14 +105,37 @@ const out = [
   "",
   "## 速查",
   "",
-  "| id | 名称 | 动效 | 适用 |",
-  "|---|---|---|---|",
+  `> 「用量」来自跨片台账 \`usage/library.json\`（已记 ${ledger.videos.length} 条片子）。**★ = 从未上过片**，写分镜时优先从这些里挑；「近N条片用M次」= 刚用过，再用必须换 \`motion.enter\`。`,
+  "",
+  "| id | 名称 | 动效 | 用量 | 适用 |",
+  "|---|---|---|---|---|",
   ...reg.list.map(
-    (c) =>
-      `| \`${c.id}\` | ${c.name} | ${(c.motion ? c.motion.kind : "—").replace(/\|/g, "\\|")} | ${(c.use || c.tags.join("、") || "").replace(/\|/g, "\\|")} |`
+    (c) => {
+      const u = NON_BODY.has(c.id) || c.layer === "opening" ? null : uo(c.id);
+      const use = u ? (u.fresh ? "★ 从未上过片" : u.recentIn.length >= 2 ? `⚠ ${usageNote(u)}` : u.recentN ? `近1条片用${u.recentN}次` : usageNote(u)) : "—";
+      return `| \`${c.id}\` | ${c.name} | ${(c.motion ? c.motion.kind : "—").replace(/\|/g, "\\|")} | ${use} | ${(c.use || c.tags.join("、") || "").replace(/\|/g, "\\|")} |`;
+    }
   ),
   "",
 ];
+{
+  const never = bodyComps(reg.list).filter((c) => uo(c.id).fresh);
+  const heavy = bodyComps(reg.list).filter((c) => uo(c.id).recentIn.length >= 2).sort((a, b) => uo(b.id).recentN - uo(a.id).recentN);
+  const light = bodyComps(reg.list).filter((c) => !uo(c.id).fresh && !heavy.includes(c));
+  out.push("## 选型的两个方向", "");
+  out.push(`- **从未上过片（${never.length} / ${bodyComps(reg.list).length} 个）**：已经付过成本、却一次没回收的画面资产。`);
+  out.push(`- **近 ${ledger.rules.recentVideos} 条片里出现在 ≥2 条（${heavy.length} 个）**：${heavy.map((c) => `\`${c.id}\``).join("、") || "（无）"}——这些观众已经认得，要么换组件，要么新增。`);
+  out.push(`- 只在 1 条近片里出现过的还有 ${light.length} 个：可以用，但 \`motion.enter\` 换成这个组件没用过的那种。`);
+  out.push("");
+  const byLayer = {};
+  for (const c of never) (byLayer[c.layer] ??= []).push(c);
+  for (const [layer, list] of Object.entries(byLayer)) {
+    out.push(`### ${LAYER[layer] || layer}：从未上过片（${list.length}）`, "");
+    out.push("| id | 名称 | 动效 | 适用 |", "|---|---|---|---|");
+    for (const c of list) out.push(`| \`${c.id}\` | ${c.name} | ${(c.motion?.kind || "—").replace(/\|/g, "\\|")} | ${(c.use || c.tags.join("、") || "").replace(/\|/g, "\\|")} |`);
+    out.push("");
+  }
+}
 for (const [layer, list] of Object.entries(byLayer)) {
   out.push(`## ${LAYER[layer] || layer}`, "");
   for (const c of list) {

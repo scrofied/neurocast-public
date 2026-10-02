@@ -28,12 +28,12 @@ Windows 上如果 `node` 不在 PATH：`$env:Path = "$env:USERPROFILE\.workbuddy
 |---|---|---|
 | 1 准备 | 写 `input.json` + `文案.md`（写法见下） | |
 | 2 节拍表 | `node scripts/make.mjs input.json --beats` | `beats.md`：每句台词的真实时间、口播/配音分段、匹配率 |
-| 3 写分镜 | 读 `beats.md` + `CATALOG.md`，写 `storyboard.json` | |
+| 3 写分镜 | 读 `beats.md` + `CATALOG.md`，先看 `node scripts/pick.mjs --recent` 避开上几条片的老面孔，写 `storyboard.json` | |
 | 3.5 写开场 | 为这条视频新写 `src/openings/<日期-主题>/Opening.tsx`（见「专属开场」），`node scripts/openings.mjs sync` | 开场库 +1 |
-| 4 校验 | `node scripts/make.mjs input.json --plan-only` | 镜头表；锚点找不到、数据不合 schema 会逐条列出 |
+| 4 校验 | `node scripts/make.mjs input.json --plan-only` | 镜头表；锚点找不到、数据不合 schema、本片内重复、**跨片重复**都会逐条列出 |
 | 5 看静帧 | `node scripts/make.mjs input.json --stills` | `out/<名>_stills.jpg`：每个镜头一张，先看再渲染 |
-| 6 渲染 | `node scripts/make.mjs input.json --out 成片.mp4` | 2.5 分钟视频约 7 分钟 |
-| 7 补资产 | 某段现有组件表达不好 → 新建组件（见「扩展组件资产」） | 组件库越用越丰富 |
+| 6 渲染 | `node scripts/make.mjs input.json --out 成片.mp4` | 2.5 分钟视频约 7 分钟；成功后自动写用量台账 |
+| 7 补资产 | 某段现有组件表达不好 → 先 `pick.mjs --fresh` 在没上过的组件里找，找不到再新建（见「扩展组件资产」） | 组件库越用越丰富 |
 
 `beats.md` 里匹配率低于 90% 说明文案和配音对不上（配音不是按这份文案生成的），先把文案改成配音实际念的内容。
 
@@ -172,6 +172,15 @@ node scripts/openings.mjs status opening-comment-mining keep
 
 去 PPT 感（`--plan-only` 会警告）：纯文字镜头（narration / quote / punch-text / chapter / bullet-cards / cards / hook）不超过 20%，不能连续两个；同一组件不要紧挨着用两次。
 
+### 跨片重复：用量台账是硬规则，不是参考
+
+「每次都是那几个组件」是观众看出来的重复，单片内的检查抓不到——它发生在**片与片之间**。所以有一条持久记忆：`usage/library.json`（`node scripts/usage.mjs report` 看）。
+
+- **每条片子至少首次使用 3 个从未上过片的组件**（`rules.minFresh`）。`--plan-only` 会算给你看，不够就回去换 `--fresh` 池子里的。
+- **近 3 条片用过的组件**（`rules.recentVideos`）：出现在 ≥2 条近片的 → 换成语义接近的别的组件，或新增；只在 1 条近片用过的 → 可以用，但 `motion.enter` 必须换成这个组件没用过的入场语法（`pick.mjs` 的 ⚠ 标记和台账里的「入场已用 …」都会告诉你哪些用过了）。
+- 渲染成功后管线自动记账；`--plan-only` / `--stills` 不记账，`--dry-run` 全流程也不记账。调试老素材不想被记账/检查：`--no-usage-check`；想改片子身份：`--video 片名`。
+- 台账是资产不是负担：`usage/library.json` 要提交，换机器/重新 clone 后跨片记忆才还在。历史片第一次建库用 `node scripts/usage.mjs backfill <分镜或时间轴路径…>`。
+
 **入场语法：每条正片镜头都显式写 `motion.enter`。** 现在 84 个正片组件全部接了 `src/lib/enter.tsx`（252 处入场调用点），分镜写什么就用什么运动：`rise / slam / slide-l / slide-r / wipe / assemble / zoom-through / drop`，可配 `energy: 1|2|3`。
 
 ```json
@@ -252,8 +261,14 @@ node scripts/openings.mjs status opening-comment-mining keep
 | `--beats` | 只生成节拍表 `beats.md` |
 | `--plan-only` | 只分镜 + 校验，打印镜头表 |
 | `--stills` | 每个镜头渲一张静帧拼图 |
-| `--frames 0-900` | 只渲一段（配合 `--out`） |
+| `--frames 0-900` | 只渲一段（配合 `--out`）；试渲染，不写用量台账 |
+| `--video 片名` / `--dry-run` / `--no-usage-check` | 改台账里的片子身份 / 全流程但不落账 / 连跨片检查一起跳过 |
 | `--seed N` / `--no-sfx` / `--concurrency 16` / `--asr-model medium` | 换风格 / 关音效 / 并发 / 识别模型 |
+| `node scripts/pick.mjs "语义"` | 组件吻合度，带每行的用量标注 |
+| `node scripts/pick.mjs --storyboard <f>` | 逐镜体检：该新增组件的位置 + 本片首次使用组件数 |
+| `node scripts/pick.mjs --fresh ["语义"]` / `--recent [--n 3]` / `--avoid a,b` | 只在没上片的组件里选 / 看近几条片用了什么 / 排除指定组件 |
+| `node scripts/usage.mjs report / unused / list / recent` | 用量台账：覆盖率、高频、从未上片的池子 |
+| `node scripts/usage.mjs backfill [路径…]` / `record <timeline.json>` | 历史分镜回填建库 / 手工补记一条片子 |
 | `node scripts/preview.mjs <id>[,<id>]` | 组件静帧 QA |
 | `node scripts/catalog.mjs` | 重新生成 CATALOG.md |
 | `node scripts/openings.mjs sync / list / metric / status / preview` | 开场库：登记、看数据、录数据、保留/淘汰、出 5 秒预览 |
@@ -294,6 +309,8 @@ src/openings/tech.tsx       技术类通用开场模板（6 招）
 src/openings/templates/     按时长分组的预制开场（t01-t20.tsx）
 src/lib/cine/               开场电影感工具包（砸字、闪白、抖动、推镜头…）
 openings/library.json       开场库：钩子、手法、预览、数据、保留/淘汰
+usage/library.json          正片组件用量台账：每条片用了什么、入场用过哪几种
+scripts/usage.mjs           用量台账命令（backfill / report / unused / recent）
 scripts/openings.mjs        开场库命令
 src/engine/                 Video（音轨/镜头/字幕）、ShotFrame（转场）、Hud（字幕/章节）
 src/lib/                    theme / box / cue / sfx / icons / ui / anim

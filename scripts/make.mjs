@@ -1,5 +1,7 @@
 // NeuroCast: 文案 + 配音（+ 口播视频）-> 时间轴对齐 -> 分镜 -> 校验 -> mp4
 // usage: node scripts/make.mjs <input.json> [--out out/x.mp4] [--seed N] [--beats] [--plan-only]
+//        [--video 片名] 覆盖台账里的片子身份 · [--dry-run] 全流程但不写用量台账
+//        [--no-usage-check] 连跨片重复检查一起跳过（调试老素材时用）
 //                              [--frames 0-300] [--no-sfx] [--concurrency 12] [--asr-model small]
 import fs from "node:fs";
 import path from "node:path";
@@ -12,6 +14,7 @@ import { beatsMarkdown, planTimed, splitOpening, TimedError } from "./lib/timed.
 import { wordsOf } from "./lib/align.mjs";
 import { checkKindParity } from "./lib/motion.mjs";
 import { loadRegistry, validateShot } from "./lib/registry-node.mjs";
+import { load as loadUsage, shotsOf, record as recordUsage, crossVideoReport, statsOf, bodyComps } from "./lib/usage.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUB = path.join(ROOT, "public");
@@ -36,7 +39,7 @@ const warn = (m) => {
 };
 
 // ---------- args ----------
-const VALUED = new Set(["--out", "--seed", "--frames", "--concurrency", "--asr-model"]);
+const VALUED = new Set(["--out", "--seed", "--frames", "--concurrency", "--asr-model", "--video"]);
 const opt = {};
 let inputPath;
 const argv = process.argv.slice(2);
@@ -46,7 +49,7 @@ for (let i = 0; i < argv.length; i++) {
   else if (a.startsWith("--")) opt[a] = true;
   else if (!inputPath) inputPath = a;
 }
-if (!inputPath) fail("E_ARGS", "用法: node scripts/make.mjs <input.json> [--beats] [--plan-only] [--out 路径] [--seed N]");
+if (!inputPath) fail("E_ARGS", "用法: node scripts/make.mjs <input.json> [--beats] [--plan-only] [--out 路径] [--seed N] [--video 片名] [--dry-run] [--no-usage-check]");
 if (!fs.existsSync(inputPath)) fail("E_INPUT", `找不到输入文件 ${inputPath}`);
 
 const readText = (p) => fs.readFileSync(p, "utf8").replace(/^﻿/, "");
@@ -408,6 +411,38 @@ const varietyCheck = (tl, reg) => {
   }
 };
 
+// ---------- 跨片重复：正片组件用量台账（usage/library.json）----------
+// antiPpt / varietyCheck 只管这一条片子内部的重复；这一段管「上几条片你已经用过它了」，
+// 以及「这条片子有没有首次用上库里的新面孔」。台账只在真正出片成功后写入，
+// --plan-only / --stills 是草稿，不污染记忆。
+const crossVideoCheck = (tl, reg) => {
+  if (opt["--no-usage-check"]) return;
+  const ledger = loadUsage();
+  const rep = crossVideoReport(tl, { ledger, selfVideo: tl.meta?.title });
+  if (rep.videos < 2) return; // 台账里没几条历史片子，谈跨片重复没意义
+  const used = new Set(shotsOf(tl).map((r) => r.type));
+  for (const h of rep.heavy) {
+    // 替代建议按「台账里越少用过」排，优先推没上过片的
+    const alt = similarTo(reg, h.id, used)
+      .sort((a, b) => (ledger.comps[a]?.count || 0) - (ledger.comps[b]?.count || 0))
+      .map((id) => `${id}${ledger.comps[id]?.count > 0 ? "" : "（新）"}`);
+    warn(`跨片重复：${h.id} 近 ${rep.recentVideos} 条片里出现在 ${h.videos.length} 条（${h.videos.join(" / ")}），累计已上片 ${h.count} 次：${alt.length ? `换成 ${alt.join(" / ")}，或` : ""}新增一个能表达这镜语义的组件`);
+  }
+  if (rep.light.length) {
+    const detail = rep.light.map((l) => {
+      const e = statsOf(l.id, { ledger }).enters;
+      return `${l.id}${e.length ? `（入场已用 ${e.join("/")}）` : ""}`;
+    });
+    warn(`跨片重复（轻）：${detail.join("、")} 上一条片刚用过。要用可以，但 motion.enter 必须换一种没见过的`);
+  }
+  if (rep.fresh.length >= rep.minFresh) {
+    console.log(`  跨片：本片首次使用 ${rep.fresh.length} 个组件 ✓ ${rep.fresh.join(" ")}`);
+  } else {
+    const pool = bodyComps(reg.list).filter((c) => !(ledger.comps[c.id]?.count > 0));
+    warn(`跨片重复：本片首次使用的组件只有 ${rep.fresh.length} 个（要求 ≥${rep.minFresh}）。库里还有 ${pool.length} 个从未上过片的组件：node scripts/usage.mjs unused，或按这次分镜的语义新增`);
+  }
+};
+
 // component variant counts come from the registry (so new assets need no planner edit)
 let VARIANTS_ALL = { ...VARIANTS };
 
@@ -499,6 +534,7 @@ const main = async () => {
   console.log(`✓ 分镜完成：${tl.shots.length} 个镜头，${(tl.durationInFrames / FPS).toFixed(1)} 秒，${tl.chapters.length} 章${storyboardMode ? "（按 storyboard）" : "（自动）"}`);
   console.log(`  风格：皮肤 ${tl.meta.skin} · 世界 ${tl.meta.world} · 字体 ${tl.meta.font}${tl.meta.mirror ? " · 镜像" : ""} · seed ${tl.meta.seed}${tl.meta.sfx === false ? " · 无音效" : ""}`);
   console.log(`  画面分布：${Object.entries(counts).map(([k, v]) => `${k}×${v}`).join(" ")}`);
+  crossVideoCheck(tl, reg);
   if (opt["--plan-only"]) {
     const fmt = (f) => `${Math.floor(f / FPS / 60)}:${((f / FPS) % 60).toFixed(1).padStart(4, "0")}`;
     for (const s of tl.shots) console.log(`  ${s.id.padEnd(4)} ${fmt(s.start)} +${(s.dur / FPS).toFixed(1).padStart(4)}s  ${s.type.padEnd(19)} ${s.text.slice(0, 26)}`);
@@ -527,6 +563,10 @@ const main = async () => {
   console.log(`▶ 开始渲染 -> ${out}`);
   const r = spawnSync(process.execPath, rargs, { cwd: ROOT, stdio: "inherit" });
   if (r.status !== 0) fail("E_RENDER", `Remotion 渲染失败（退出码 ${r.status}），时间轴已保存在 ${tlPath}，可用 npm run studio 打开排查`);
+  // --frames 只渲了部分帧、--dry-run 明确不落账，都是试渲染，不进跨片记忆
+  const rec = opt["--frames"] || opt["--dry-run"] ? null : recordUsage(tl, { video: opt["--video"] || tl.meta?.title, file: path.join(jobDir, "timeline.json"), date: new Date().toISOString().slice(0, 10) });
+  if (rec?.video) console.log(`  用量台账：已记录「${rec.video.id}」（${rec.video.shots} 镜 / ${Object.keys(rec.video.types).length} 种组件）→ usage/library.json`);
+  else if (opt["--dry-run"]) console.log(`  用量台账：--dry-run，未写入（画面重复度按真实规则照常检查）`);
   console.log(`\n✓ 完成：${out}${warnings.length ? `（${warnings.length} 条警告，见上）` : ""}`);
 };
 
