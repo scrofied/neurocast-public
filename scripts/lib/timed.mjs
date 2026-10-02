@@ -3,6 +3,7 @@
 //           -> beats (sentences) -> shots (storyboard anchors, or auto detectors) -> cues -> captions
 import { alignText, audioTrimStart, captionLines, isPunct, sentenceSpans, spanTime } from "./align.mjs";
 import { DETECTORS, detectMetaphor, keywords, clean, short } from "./detect.mjs";
+import { autoEnterFor, validateMotion } from "./motion.mjs";
 import { sectionText } from "./script.mjs";
 
 const LEAD = 0.12; // visuals lead the voice a little
@@ -261,6 +262,7 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
     let cursor = 0;
     storyboard.shots.forEach((s, i) => {
       if (!s.type) throw new TimedError("E_STORYBOARD", `分镜第 ${i + 1} 条缺少 type`);
+      for (const issue of validateMotion(s.motion, `分镜第 ${i + 1} 条（${s.type}）`)) warn(issue);
       let g;
       if (s.beat) {
         const b = beats.find((x) => x.id === s.beat);
@@ -362,6 +364,8 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
   const TR = style.transitions;
   const shots = [];
   const lastVariant = {};
+  // type -> 该组件已出现次数：分镜没写 motion.enter 时，用它自动错开入场语法
+  const seenEnter = {};
   shotsT.forEach((s, i) => {
     const startSec = s.startSec;
     const endSec_ = i + 1 < shotsT.length ? shotsT[i + 1].startSec : endSec;
@@ -381,7 +385,8 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
       if (data.title === undefined && (input.title || parsed.title)) data.title = input.title || parsed.title;
     }
     if (s.type === "screen" && data.src && media.assets?.[data.src]) data = { ...media.assets[data.src], ...data, src: media.assets[data.src].src };
-    let tr = s.transition;
+    const mo = s.motion ?? {};
+    let tr = mo.transition ?? s.transition;
     if (!tr) {
       if (s.talk !== undefined && start === 0) tr = "cut";
       else {
@@ -394,6 +399,12 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
     let variant = s.variant ?? Math.floor(r() * nv);
     if (s.variant === undefined && nv > 1 && lastVariant[s.type] === variant) variant = (variant + 1) % nv;
     lastVariant[s.type] = variant;
+    // 元素入场语法：分镜显式声明的优先；否则按该组件「第几次出现」自动轮转。
+    // 这是单变体组件（49 个里占 34 个）被复用时不重样的兜底。
+    const nSeen = seenEnter[s.type] ?? 0;
+    seenEnter[s.type] = nSeen + 1;
+    const motion = { enter: mo.enter ?? autoEnterFor(s.type, nSeen) };
+    if (mo.energy !== undefined) motion.energy = mo.energy;
     shots.push({
       id: `s${i}`,
       type: s.type,
@@ -404,6 +415,7 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
       text,
       data,
       transition: tr,
+      motion,
       hideCaptions: s.captions === false ? true : s.captions === true ? false : undefined,
       auto: !!s.auto,
     });

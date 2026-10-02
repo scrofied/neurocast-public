@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
+import { ENTER_KINDS, TRANSITIONS } from "./lib/motion.mjs";
 import { loadRegistry } from "./lib/registry-node.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -60,18 +61,53 @@ const out = [
   "- **锚点**：类型写着「锚点」的字段（`at`、`until`、`xxxAt`）填台词里的原文片段，如 `\"at\": \"封面\"`，管线会换算成那个词说出口的帧；也可填秒数（相对本镜头开始）。`\"文字$\"` = 这几个字说完的时刻，`\"文字+0.3\"` = 往后偏 0.3 秒。",
   "- **可放侧栏**：能作为 `talking-head-stage` 的 `left/right` 小组件。",
   "- **自动隐藏字幕**：画面本身就显示了台词（对话、指令、冲击大字），默认不再叠底部字幕；分镜里写 `\"captions\": true` 可强制打开。",
+  `- **动效（每条镜头都能声明）**：\`"motion": { "enter": "${ENTER_KINDS[1]}", "transition": "cut", "energy": 3 }\`。\`enter\` = 元素入场语法（${ENTER_KINDS.join(" / ")}）；\`transition\` = 镜头转场（${TRANSITIONS.join(" / ")}）；\`energy\` = 1~3 强度。**不写也会自动错开**（同一组件第 2 次出现自动换一种入场），但显式写才能让运动与台词语义对齐。`,
+  "- **动效列怎么用**：把「动效」读成「这一镜画面里什么东西在动、怎么动」。连续几镜不要用同一种（都是元素聚合 / 都是路径推进 就会显得重复）。",
+  "",
+  "## 新增组件判定（写分镜时就要做）",
+  "",
+  "组件库的价值在于**每条片子都长出几个新资产**，所以判定阈值**故意压低**：",
+  "",
+  "| 情况 | 处理 |",
+  "|---|---|",
+  "| 现有组件完全表达不了这个语义 | **必须新增** |",
+  "| 现有组件表达得不够准（要拐弯、要凑、要改字段含义） | **也应当新增** ← 阈值低在这里 |",
+  "| 现有组件差一点点（改个 data 就贴） | 不新增，直接用 |",
+  "| 现有组件完全合适 | 不新增 |",
+  "",
+  "**每条片子的下限：至少新增 2 个组件。** 不新增说明这片的语义全在已有覆盖内，或者判得太松。",
+  "",
+  "判定流程：",
+  "",
+  "1. 写分镜时给每条镜头写 `intent` —— 一句话说「这一镜画面要做什么」（不是台词，是画面意图）",
+  "2. 跑 `node scripts/pick.mjs --storyboard <分镜文件>` 看吻合度",
+  "3. 吻合度低于 4.5 的，问一句：**现有组件里有没有一个能不改一字就表达它？** 没有 → 新增",
+  "4. 新增后跑 `node scripts/catalog.mjs` 登记进本目录",
+  "",
+  "新增组件的质量要求：",
+  "",
+  "- **按叙事动作定义，不按题材**：不是「讲电商的组件」，而是「把琐碎经历提炼成可售卖的资产」。题材的东西无法复用。",
+  "- **内容全参数化**：所有文字/数值从 `data` 走，不许写死。",
+  "- **能说出 3 个不相关题材的用法**，写进 `use` 字段——说不出来说明它太窄，不值得进库。",
+  "- **画面必须有动作**：纯静态排版不算组件（那正是「PPT 感」的来源）。",
+  "- **接入动效层**：`const enterAt = useEnter(variant)`，入场用 `enterAt(frame, at, { fallback: \"…\" })`；`fallback` 保住你的原生基线，分镜写 `motion.enter` 时才被覆盖。",
+  "- **标 `motion: { kind, energy }`**：让它在选型时能按「动感」被挑出来。",
+  "- `node scripts/motion-audit.mjs` 可查还有哪些老组件没接入动效层（迁移队列）。",
   "",
   "## 速查",
   "",
-  "| id | 名称 | 适用 |",
-  "|---|---|---|",
-  ...reg.list.map((c) => `| \`${c.id}\` | ${c.name} | ${(c.use || c.tags.join("、") || "").replace(/\|/g, "\\|")} |`),
+  "| id | 名称 | 动效 | 适用 |",
+  "|---|---|---|---|",
+  ...reg.list.map(
+    (c) =>
+      `| \`${c.id}\` | ${c.name} | ${(c.motion ? c.motion.kind : "—").replace(/\|/g, "\\|")} | ${(c.use || c.tags.join("、") || "").replace(/\|/g, "\\|")} |`
+  ),
   "",
 ];
 for (const [layer, list] of Object.entries(byLayer)) {
   out.push(`## ${LAYER[layer] || layer}`, "");
   for (const c of list) {
-    const flags = [`${c.minSec}–${c.maxSec}s`, `变体 ${c.variants}`, c.panel ? "可放侧栏" : "", c.hideCaptions ? "自动隐藏字幕" : ""].filter(Boolean).join(" · ");
+    const flags = [`${c.minSec}–${c.maxSec}s`, `变体 ${c.variants}`, c.motion ? `动效 ${c.motion.kind}｜强度 ${c.motion.energy}` : "动效 未标注", c.panel ? "可放侧栏" : "", c.hideCaptions ? "自动隐藏字幕" : ""].filter(Boolean).join(" · ");
     out.push(`### \`${c.id}\` ${c.name}`, "", `${flags}`, "");
     if (c.desc) out.push(`**画面**：${c.desc}`, "");
     if (c.use) out.push(`**适用**：${c.use}`, "");

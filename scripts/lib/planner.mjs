@@ -1,4 +1,5 @@
 import { DETECTORS, detectMetaphor, keywords, clean, short } from "./detect.mjs";
+import { TRANSITIONS } from "./motion.mjs";
 
 const rngOf = (seed) => {
   let a = seed >>> 0 || 1;
@@ -14,7 +15,10 @@ const rngOf = (seed) => {
 const SKINS = ["aurora", "violet", "amber", "matrix", "arctic"];
 const FONTS = ["yahei", "noto", "deng"];
 const WORLDS = ["grid", "tunnel", "stars"];
-const TRANSITIONS = ["fly", "warp", "iris", "glitch"];
+// 随机转场池：cut（无入场硬切）留给开场与分镜的显式声明，不参与随机——
+// 随机硬切会让节奏失控。渲染层实际支持 6 种，此前池子只有 4 个且只取 3 个，
+// 等于一半的转场能力闲置。
+const RANDOM_TRANSITIONS = TRANSITIONS.filter((t) => t !== "cut");
 
 export const VARIANTS = { neural: 3, agents: 3, prompt: 2, funnel: 1, vault: 1, assembly: 1, number: 2, code: 3, flow: 3, timeline: 2, versus: 2, growth: 2, cards: 2, screen: 3, quote: 2, chapter: 2, narration: 2, hook: 1, outro: 1 };
 
@@ -182,7 +186,7 @@ export const styleFor = (input) => {
     font: FONTS[Math.floor(r() * FONTS.length)],
     world: WORLDS[Math.floor(r() * WORLDS.length)],
     mirror: r() < 0.35,
-    transitions: [...TRANSITIONS].sort(() => r() - 0.5).slice(0, 3),
+    transitions: [...RANDOM_TRANSITIONS].sort(() => r() - 0.5).slice(0, 4),
     variantOffset: Math.floor(r() * 6),
     pace: 0.94 + r() * 0.12,
   };

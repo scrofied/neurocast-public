@@ -10,6 +10,7 @@ import { plan as planLegacy, PlanError, styleFor, VARIANTS } from "./lib/planner
 import { parseTimedScript } from "./lib/script.mjs";
 import { beatsMarkdown, planTimed, splitOpening, TimedError } from "./lib/timed.mjs";
 import { wordsOf } from "./lib/align.mjs";
+import { checkKindParity } from "./lib/motion.mjs";
 import { loadRegistry, validateShot } from "./lib/registry-node.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -21,6 +22,13 @@ const fail = (code, msg) => {
   console.error(`\n✖ 失败 [${code}] ${msg}\n`);
   process.exit(1);
 };
+
+// 入场语法列表在渲染侧（src/lib/enter.tsx）和脚本侧（scripts/lib/motion.mjs）各有一份，
+// 这里比对，防止两处漂移后静默失效
+{
+  const _parity = checkKindParity(fs.readFileSync(path.join(ROOT, "src/lib/enter.tsx"), "utf8"));
+  if (_parity) fail("E_MOTION_PARITY", _parity);
+}
 const warnings = [];
 const warn = (m) => {
   warnings.push(m);
@@ -248,6 +256,13 @@ const runTimed = async () => {
     const norm = derived(abs, "presenter", "mp4", (f) => sh("ffmpeg", ["-v", "error", "-y", "-i", abs, "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-pix_fmt", "yuv420p", "-movflags", "+faststart", f], "E_ASSET"));
     fs.copyFileSync(norm, path.join(jobDir, "presenter.mp4"));
     const dur = probe(norm).duration;
+    // poster = the clip's first frame: held on screen during the alignment offset so the shot
+    // underneath is never exposed before the (delayed) person video starts.
+    let poster;
+    try {
+      sh("ffmpeg", ["-v", "error", "-y", "-i", path.join(jobDir, "presenter.mp4"), "-frames:v", "1", path.join(jobDir, "presenter-poster.png")], "E_ASSET");
+      poster = pubRel(path.join(jobDir, "presenter-poster.png"));
+    } catch { /* fall back to a frozen video frame in the player */ }
     // align the person's lips to the TTS: median of (tts - talk) over identical words spoken in both
     let offset = pr.offset;
     if (offset == null && media.tts && (pr.timeline || !opt["--no-asr"])) {
@@ -266,6 +281,7 @@ const runTimed = async () => {
     }
     out.timeline.meta.presenter = {
       src: pubRel(path.join(jobDir, "presenter.mp4")),
+      poster,
       frames: Math.floor(dur * FPS),
       offset: Math.round((offset || 0) * FPS),
       full: Math.round((pr.full ?? 2) * FPS),
@@ -321,6 +337,75 @@ const antiPpt = (tl, reg) => {
   // same component back-to-back reads like a slide template too
   for (let i = 1; i < body.length; i++)
     if (body[i].type === body[i - 1].type && body[i].type !== "talking-head-stage") warn(`${body[i - 1].id}→${body[i].id} 连续两个 ${body[i].type}，换一个组件或换 variant`);
+};
+
+// ---------- 动效与选型的多样性：把「观众看出来的重复」变成出片前的告警 ----------
+// 上面 antiPpt 只比相邻两镜，所以 number 落在第 1/6/21 镜、punch-text 落在 7/9/12 镜
+// 这种「隔一镜又来一次」完全逃得过检测——而观众恰恰是这样看出重复的。
+// 这里补三个维度：全片频次、5 镜滑窗、以及元素入场语法的连续重复。
+const similarTo = (reg, type, exclude) => {
+  const def = reg.list.find((c) => c.id === type);
+  if (!def) return [];
+  const mine = new Set(def.tags);
+  return reg.list
+    .filter((c) => c.id !== type && c.layer !== "opening" && !exclude.has(c.id))
+    .map((c) => ({ id: c.id, score: c.tags.filter((t) => mine.has(t)).length + (c.layer === def.layer ? 0.5 : 0) }))
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((x) => x.id);
+};
+
+const varietyCheck = (tl, reg) => {
+  const body = tl.shots.filter((s) => s.type !== "outro" && s.type !== "talking-head-stage");
+  if (body.length < 4) return;
+
+  const cnt = {};
+  for (const s of body) (cnt[s.type] ??= []).push(s.id);
+  const used = new Set(Object.keys(cnt));
+
+  // ① 全片频次：同一个组件出现 3 次以上
+  for (const [type, ids] of Object.entries(cnt)) {
+    if (ids.length <= 2) continue;
+    const alt = similarTo(reg, type, used);
+    warn(`组件 ${type} 全片出现 ${ids.length} 次（${ids.join(" ")}）：${alt.length ? `可换成 ${alt.join(" / ")}` : "换一个语义相近的组件"}`);
+  }
+
+  // ② 5 镜滑窗：同一个组件在短窗口内重复（这才是观众真正察觉的那种重复）。
+  //    同一组重复会被多个窗口扫到，去重后只报一次
+  const W = 5;
+  const reported = new Set();
+  for (let i = 0; i + W <= body.length; i++) {
+    const seen = {};
+    for (const s of body.slice(i, i + W)) (seen[s.type] ??= []).push(s.id);
+    for (const [type, ids] of Object.entries(seen)) {
+      if (ids.length < 2) continue;
+      const key = `${type}:${ids.join(",")}`;
+      if (reported.has(key)) continue;
+      reported.add(key);
+      warn(`第 ${i + 1}–${i + W} 镜里 ${type} 出现 ${ids.length} 次（${ids.join(" ")}）：5 镜内不要重复同一个组件`);
+    }
+  }
+
+  // ③ 元素入场语法的连续重复：不同组件也可能是同一种运动，观感照样平
+  let run = 1;
+  for (let i = 1; i < body.length; i++) {
+    const cur = body[i].motion?.enter;
+    if (cur && cur === body[i - 1].motion?.enter) {
+      run++;
+      if (run === 3) warn(`${body[i - 2].id}→${body[i].id} 连续 3 镜都是「${cur}」入场：换一种运动方式（看 CATALOG 的动效列，或写 shot.motion.enter）`);
+    } else run = 1;
+  }
+
+  // ④ 单变体组件被复用：骨架必然相同。已经用 motion.enter 逐镜错开的不再报
+  for (const [type, ids] of Object.entries(cnt)) {
+    if (ids.length < 2) continue;
+    const def = reg.list.find((c) => c.id === type);
+    if (!def || def.variants !== 1) continue;
+    const enters = body.filter((s) => s.type === type).map((s) => s.motion?.enter);
+    if (new Set(enters).size >= ids.length) continue; // 每镜入场都不同 → 已经错开
+    warn(`${type} 只有 1 个变体却用了 ${ids.length} 次（${ids.join(" ")}），且入场没有逐镜错开：请写不同的 shot.motion.enter，或改用别的组件`);
+  }
 };
 
 // component variant counts come from the registry (so new assets need no planner edit)
@@ -405,6 +490,7 @@ const main = async () => {
   for (const s of tl.shots) delete s.auto;
   checkOpening(openingUsed, tl);
   antiPpt(tl, reg);
+  varietyCheck(tl, reg);
 
   const tlPath = path.join(jobDir, "timeline.json");
   fs.writeFileSync(tlPath, JSON.stringify(tl, null, 1));
@@ -436,7 +522,7 @@ const main = async () => {
   fs.writeFileSync(propsPath, JSON.stringify({ timeline: tl }));
   const cli = path.join(ROOT, "node_modules", "@remotion", "cli", "remotion-cli.js");
   if (!fs.existsSync(cli)) fail("E_DEPS", `缺少依赖 ${cli}，请在 ${ROOT} 执行 npm install`);
-  const rargs = [cli, "render", "src/index.ts", "NeuroCast", out, `--props=${propsPath}`, "--gl=angle", `--concurrency=${opt["--concurrency"] || "12"}`, "--crf=18", "--x264-preset=medium", "--timeout=120000"];
+  const rargs = [cli, "render", "src/index.ts", "NeuroCast", out, `--props=${propsPath}`, "--gl=angle", `--concurrency=${opt["--concurrency"] || "12"}`, "--crf=26", "--x264-preset=medium", "--timeout=120000"];
   if (opt["--frames"]) rargs.push(`--frames=${opt["--frames"]}`);
   console.log(`▶ 开始渲染 -> ${out}`);
   const r = spawnSync(process.execPath, rargs, { cwd: ROOT, stdio: "inherit" });

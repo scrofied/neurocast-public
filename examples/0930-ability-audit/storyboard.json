@@ -1,10 +1,18 @@
 {
-  "keywords": ["隐藏资产", "能力切片", "隐形溢价", "排雷指南"],
+  "keywords": [
+    "隐藏资产",
+    "能力切片",
+    "隐形溢价",
+    "排雷指南"
+  ],
   "opening": {
     "type": "opening-model-arena",
     "at": 0,
     "until": "竞技场$+0.25",
-    "data": { "slamAt": 2.0, "typeOutAt": 1.6 }
+    "data": {
+      "slamAt": 2.0,
+      "typeOutAt": 1.6
+    }
   },
   "shots": [
     {
@@ -13,10 +21,18 @@
         "aspect": 1.707,
         "centerX": 0.42,
         "inAt": 2.0,
-        "boards": [{ "src": "assets/arena-livebench.png", "note": "全球最权威的大模型竞技场" }]
+        "boards": [
+          {
+            "src": "assets/arena-livebench.png",
+            "note": "全球最权威的大模型竞技场"
+          }
+        ]
+      },
+      "motion": {
+        "enter": "slam",
+        "energy": 3
       }
     },
-
     {
       "start": "上面记录了",
       "type": "number",
@@ -25,9 +41,12 @@
         "value": 200,
         "unit": "万次",
         "label": "人类盲测对战数据 · 来自全球每一个角落"
+      },
+      "motion": {
+        "enter": "zoom-through",
+        "energy": 2
       }
     },
-
     {
       "start": "你看这个榜单",
       "type": "board-proof",
@@ -38,12 +57,21 @@
         "inAt": 0.2,
         "swapAt": "明天",
         "boards": [
-          { "src": "assets/arena-rank-overall.png", "note": "按 OVERALL 总排名：DeepSeek V4.1 Flash 第 7" },
-          { "src": "assets/arena-rank-agentic.png", "note": "按 AGENTIC CODING 排名：同一个 DeepSeek 第 1" }
+          {
+            "src": "assets/arena-rank-overall.png",
+            "note": "按 OVERALL 总排名：DeepSeek V4.1 Flash 第 7"
+          },
+          {
+            "src": "assets/arena-rank-agentic.png",
+            "note": "按 AGENTIC CODING 排名：同一个 DeepSeek 第 1"
+          }
         ]
+      },
+      "motion": {
+        "enter": "wipe",
+        "energy": 2
       }
     },
-
     {
       "start": "但不管这帮硅谷大厂",
       "type": "scale-gap",
@@ -54,8 +82,14 @@
           "value": "一直在卷",
           "at": "但不管",
           "boosts": [
-            { "text": "榜单每周翻新", "at": "怎么卷" },
-            { "text": "分数咬得很紧", "at": "分数" }
+            {
+              "text": "榜单每周翻新",
+              "at": "怎么卷"
+            },
+            {
+              "text": "分数咬得很紧",
+              "at": "分数"
+            }
           ]
         },
         "small": {
@@ -65,33 +99,56 @@
           "verdict": "跟你没半毛钱关系",
           "verdictAt": "没半毛钱关系"
         }
+      },
+      "motion": {
+        "enter": "slide-r",
+        "energy": 2
       }
     },
-
     {
       "start": "模型再强",
       "type": "untapped-potential",
       "data": {
         "kicker": "榜单再卷，跟你没关系",
         "title": "你手里的算力，被你当成了玩具",
-        "machine": { "label": "价值百亿的算力", "icon": "bot" },
+        "machine": {
+          "label": "价值百亿的算力",
+          "icon": "bot"
+        },
         "used": [
-          { "text": "当聊天玩具", "at": "聊天玩具" },
-          { "text": "查资料当百度", "at": "百度" }
+          {
+            "text": "当聊天玩具",
+            "at": "聊天玩具"
+          },
+          {
+            "text": "查资料当百度",
+            "at": "百度"
+          }
         ],
         "usedPct": 3,
         "potential": [
-          { "text": "拆解你的经历" },
-          { "text": "挖出隐藏资产" },
-          { "text": "生成可卖方案" },
-          { "text": "替你干活" }
+          {
+            "text": "拆解你的经历"
+          },
+          {
+            "text": "挖出隐藏资产"
+          },
+          {
+            "text": "生成可卖方案"
+          },
+          {
+            "text": "替你干活"
+          }
         ],
         "revealAt": "价值百亿",
         "verdict": "拿算力捡烂菜叶",
         "verdictAt": "烂菜叶"
+      },
+      "motion": {
+        "enter": "assemble",
+        "energy": 2
       }
     },
-
     {
       "start": "普通人最该学的",
       "type": "before-after",
@@ -102,20 +159,36 @@
           "label": "追模型榜第一",
           "icon": "award",
           "items": [
-            { "text": "那是大厂之间的游戏", "at": "追哪个模型" },
-            { "text": "永远追不完", "at": "拿了第一" }
+            {
+              "text": "那是大厂之间的游戏",
+              "at": "追哪个模型"
+            },
+            {
+              "text": "永远追不完",
+              "at": "拿了第一"
+            }
           ]
         },
         "after": {
           "label": "手边最普通的 AI",
           "icon": "bot",
           "at": "而是用手边",
-          "items": [{ "text": "你现在就能用" }, { "text": "放大你攒下的能力" }]
+          "items": [
+            {
+              "text": "你现在就能用"
+            },
+            {
+              "text": "放大你攒下的能力"
+            }
+          ]
         },
         "verdict": "别追榜，用你手边那个"
+      },
+      "motion": {
+        "enter": "rise",
+        "energy": 2
       }
     },
-
     {
       "start": "把你自己过去几年",
       "type": "number",
@@ -124,20 +197,29 @@
         "value": 10,
         "prefix": "×",
         "label": "同一个 AI，把你过去几年攒下的能力放大"
+      },
+      "motion": {
+        "enter": "slam",
+        "energy": 3
       }
     },
-
     {
       "start": "你不知道自己擅长什么",
       "type": "punch-text",
       "data": {
         "text": "你擅长什么？",
-        "emphasis": ["擅长"],
+        "emphasis": [
+          "擅长"
+        ],
         "sub": "先回答这一个问题",
         "style": "slam"
+      },
+      "motion": {
+        "enter": "drop",
+        "energy": 3,
+        "transition": "cut"
       }
     },
-
     {
       "start": "直接把你的真实简历",
       "type": "prompt",
@@ -147,19 +229,27 @@
         "input": "真实简历 + 薪资流水",
         "output": "连你自己都没意识到的高价值资产",
         "chip": "AI"
+      },
+      "motion": {
+        "enter": "slide-l",
+        "energy": 2
       }
     },
-
     {
       "start": "废话不多说",
       "type": "punch-text",
       "data": {
         "text": "直接看实操步骤",
-        "emphasis": ["实操步骤"],
+        "emphasis": [
+          "实操步骤"
+        ],
         "style": "stamp"
+      },
+      "motion": {
+        "enter": "wipe",
+        "energy": 3
       }
     },
-
     {
       "start": "第一步，给 AI 设定",
       "type": "chat-command",
@@ -168,14 +258,29 @@
         "app": "任意免费大模型",
         "appIcon": "bot",
         "lines": [
-          { "text": "① 给 AI 设定「无情审计员」的角色", "at": "第一步" },
-          { "text": "② 打开任意一个免费大模型", "at": "打开手机" },
-          { "text": "③ 别问「我能干啥」", "at": "别问" },
-          { "text": "④ 复制下面这段原话，原样丢进去", "at": "复制这句原话" }
+          {
+            "text": "① 给 AI 设定「无情审计员」的角色",
+            "at": "第一步"
+          },
+          {
+            "text": "② 打开任意一个免费大模型",
+            "at": "打开手机"
+          },
+          {
+            "text": "③ 别问「我能干啥」",
+            "at": "别问"
+          },
+          {
+            "text": "④ 复制下面这段原话，原样丢进去",
+            "at": "复制这句原话"
+          }
         ]
+      },
+      "motion": {
+        "enter": "rise",
+        "energy": 1
       }
     },
-
     {
       "start": "这是我过去四年的真实履历",
       "type": "data-sieve",
@@ -184,38 +289,95 @@
         "title": "倒进去，洗出一张客观技能清单",
         "pool": "你的四年",
         "chips": [
-          { "text": "项目复盘", "kind": "real", "bin": 0 },
-          { "text": "「我觉得我不行」", "kind": "noise" },
-          { "text": "对接供应商", "kind": "real", "bin": 1 },
-          { "text": "「这没啥技术含量」", "kind": "noise" },
-          { "text": "沉淀的模板", "kind": "real", "bin": 2 },
-          { "text": "「运气好而已」", "kind": "noise" },
-          { "text": "催货对账", "kind": "real", "bin": 1 },
-          { "text": "「都是打杂」", "kind": "noise" },
-          { "text": "带新人上手", "kind": "real", "bin": 1 },
-          { "text": "复盘文档", "kind": "real", "bin": 2 }
+          {
+            "text": "项目复盘",
+            "kind": "real",
+            "bin": 0
+          },
+          {
+            "text": "「我觉得我不行」",
+            "kind": "noise"
+          },
+          {
+            "text": "对接供应商",
+            "kind": "real",
+            "bin": 1
+          },
+          {
+            "text": "「这没啥技术含量」",
+            "kind": "noise"
+          },
+          {
+            "text": "沉淀的模板",
+            "kind": "real",
+            "bin": 2
+          },
+          {
+            "text": "「运气好而已」",
+            "kind": "noise"
+          },
+          {
+            "text": "催货对账",
+            "kind": "real",
+            "bin": 1
+          },
+          {
+            "text": "「都是打杂」",
+            "kind": "noise"
+          },
+          {
+            "text": "带新人上手",
+            "kind": "real",
+            "bin": 1
+          },
+          {
+            "text": "复盘文档",
+            "kind": "real",
+            "bin": 2
+          }
         ],
-        "bins": ["执行层", "协调层", "资产沉淀层"],
+        "bins": [
+          "执行层",
+          "协调层",
+          "资产沉淀层"
+        ],
         "commands": [
-          { "text": "剥离所有主观情绪", "at": "剥离所有主观情绪" },
-          { "text": "拆成执行层 / 协调层 / 资产沉淀层", "at": "执行层" },
-          { "text": "列出一张客观技能清单", "at": "清单" }
+          {
+            "text": "剥离所有主观情绪",
+            "at": "剥离所有主观情绪"
+          },
+          {
+            "text": "拆成执行层 / 协调层 / 资产沉淀层",
+            "at": "执行层"
+          },
+          {
+            "text": "列出一张客观技能清单",
+            "at": "清单"
+          }
         ],
         "dumpAt": "这是我过去四年"
+      },
+      "motion": {
+        "enter": "slide-l",
+        "energy": 2
       }
     },
-
     {
       "start": "第二步，精准榨取",
       "type": "punch-text",
       "data": {
         "text": "精准榨取隐形溢价",
-        "emphasis": ["隐形溢价"],
+        "emphasis": [
+          "隐形溢价"
+        ],
         "sub": "第二步",
         "style": "stamp"
+      },
+      "motion": {
+        "enter": "assemble",
+        "energy": 3
       }
     },
-
     {
       "start": "等它列出清单后",
       "type": "chat-command",
@@ -224,23 +386,40 @@
         "app": "同一个对话框",
         "appIcon": "chat",
         "lines": [
-          { "text": "① 挑出 2 项：我当琐事、市场却认的能力", "at": "挑出 2 项" },
-          { "text": "② 在外部细分市场，它到底值多少钱？", "at": "外部细分市场" }
+          {
+            "text": "① 挑出 2 项：我当琐事、市场却认的能力",
+            "at": "挑出 2 项"
+          },
+          {
+            "text": "② 在外部细分市场，它到底值多少钱？",
+            "at": "外部细分市场"
+          }
         ]
+      },
+      "motion": {
+        "enter": "slide-r",
+        "energy": 1
       }
     },
-
     {
       "start": "告诉我",
       "type": "signal-map",
       "data": {
         "kicker": "脱离当前平台",
         "title": "它到底能帮谁解决什么痛点",
-        "signals": ["供应商又延期了", "交货节点没人盯", "交付流程我不知道怎么搭", "有没有人能带我做一遍"],
+        "signals": [
+          "供应商又延期了",
+          "交货节点没人盯",
+          "交付流程我不知道怎么搭",
+          "有没有人能带我做一遍"
+        ],
         "label": "痛点越具体，越有人愿意付钱"
+      },
+      "motion": {
+        "enter": "zoom-through",
+        "energy": 2
       }
     },
-
     {
       "start": "举个真实案例",
       "type": "bullet-cards",
@@ -248,58 +427,122 @@
         "kicker": "举个真实案例",
         "title": "一个传统贸易公司的跟单员",
         "items": [
-          { "text": "三四十人的传统贸易公司", "tone": "neutral", "at": "三四十人" },
-          { "text": "干了三年", "tone": "neutral", "at": "干了三年" },
-          { "text": "岗位：跟单", "tone": "neutral", "at": "跟单" }
+          {
+            "text": "三四十人的传统贸易公司",
+            "tone": "neutral",
+            "at": "三四十人"
+          },
+          {
+            "text": "干了三年",
+            "tone": "neutral",
+            "at": "干了三年"
+          },
+          {
+            "text": "岗位：跟单",
+            "tone": "neutral",
+            "at": "跟单"
+          }
         ]
+      },
+      "motion": {
+        "enter": "rise",
+        "energy": 2
       }
     },
-
     {
       "start": "她自己觉得天天就是",
       "type": "untapped-potential",
       "data": {
         "kicker": "真实案例 · 她把资产当杂事",
         "title": "她觉得自己毫无核心竞争力",
-        "machine": { "label": "三年跟单攒下的经验", "icon": "user" },
+        "machine": {
+          "label": "三年跟单攒下的经验",
+          "icon": "user"
+        },
         "used": [
-          { "text": "微信催工厂发货", "at": "微信催工厂发货" },
-          { "text": "核对 Excel", "at": "核对" },
-          { "text": "在群里赔笑脸", "at": "赔笑脸" }
+          {
+            "text": "微信催工厂发货",
+            "at": "微信催工厂发货"
+          },
+          {
+            "text": "核对 Excel",
+            "at": "核对"
+          },
+          {
+            "text": "在群里赔笑脸",
+            "at": "赔笑脸"
+          }
         ],
         "usedPct": 5,
         "potential": [
-          { "text": "可标准化的流程" },
-          { "text": "可复用的经验" },
-          { "text": "可售卖的方法" },
-          { "text": "能带的人" }
+          {
+            "text": "可标准化的流程"
+          },
+          {
+            "text": "可复用的经验"
+          },
+          {
+            "text": "可售卖的方法"
+          },
+          {
+            "text": "能带的人"
+          }
         ],
         "revealAt": "毫无核心竞争力",
         "verdict": "把资产当杂事",
         "verdictAt": "毫无核心竞争力$"
+      },
+      "motion": {
+        "enter": "drop",
+        "energy": 2
       }
     },
-
     {
       "start": "结果把经历喂给 AI",
       "type": "comment-wall",
       "data": {
         "kicker": "结果 · 做完能力切片",
         "title": "AI 挑出两个她愣住的资产",
-        "video": { "title": "她以为毫无价值的三年", "views": "月薪 6500", "label": "看着像杂活" },
+        "video": {
+          "title": "她以为毫无价值的三年",
+          "views": "月薪 6500",
+          "label": "看着像杂活"
+        },
         "comments": [
-          { "text": "微信催工厂发货" },
-          { "text": "核对 Excel" },
-          { "text": "群里给客户赔笑脸", "gold": true, "tag": "资产" },
-          { "text": "40 多家供应商延期交付", "gold": true, "tag": "资产" },
-          { "text": "难缠客户的话术", "gold": true, "tag": "资产" }
+          {
+            "text": "微信催工厂发货"
+          },
+          {
+            "text": "核对 Excel"
+          },
+          {
+            "text": "群里给客户赔笑脸",
+            "gold": true,
+            "tag": "资产"
+          },
+          {
+            "text": "40 多家供应商延期交付",
+            "gold": true,
+            "tag": "资产"
+          },
+          {
+            "text": "难缠客户的话术",
+            "gold": true,
+            "tag": "资产"
+          }
         ],
         "focusAt": "能力切片",
         "badge": "AI 挑出隐藏资产",
-        "handoff": { "text": "下一步：提炼成能卖的东西", "at": "资产" }
+        "handoff": {
+          "text": "下一步：提炼成能卖的东西",
+          "at": "资产"
+        }
+      },
+      "motion": {
+        "enter": "wipe",
+        "energy": 2
       }
     },
-
     {
       "start": "第一，她三年里处理过",
       "type": "asset-distill",
@@ -307,9 +550,18 @@
         "kicker": "第一笔资产",
         "title": "从一堆杂事里，炼出一样能卖的东西",
         "fragments": [
-          { "text": "她三年里处理过", "at": "处理过" },
-          { "text": "40 多家小作坊供应商", "at": "40 多家" },
-          { "text": "反复催货、盯延期节点", "at": "延期交付" }
+          {
+            "text": "她三年里处理过",
+            "at": "处理过"
+          },
+          {
+            "text": "40 多家小作坊供应商",
+            "at": "40 多家"
+          },
+          {
+            "text": "反复催货、盯延期节点",
+            "at": "延期交付"
+          }
         ],
         "tower": "提炼",
         "towerIcon": "shovel",
@@ -320,9 +572,12 @@
         },
         "refineAt": "延期交付",
         "outAt": "一套"
+      },
+      "motion": {
+        "enter": "assemble",
+        "energy": 3
       }
     },
-
     {
       "start": "第二，她日常跟难缠客户",
       "type": "dialogue",
@@ -332,24 +587,50 @@
         "them": "难缠客户",
         "me": "她",
         "messages": [
-          { "who": "them", "text": "这批货又延期了，这单我不要了", "at": "难缠客户" },
-          { "who": "me", "text": "交期我重新给你排一版，先别退", "at": "周旋" },
-          { "who": "them", "text": "行吧，那就再给你两天", "at": "提炼出来" },
-          { "who": "me", "text": "同一套话 → 复购挽留话术模板", "at": "话术模板", "punch": true }
+          {
+            "who": "them",
+            "text": "这批货又延期了，这单我不要了",
+            "at": "难缠客户"
+          },
+          {
+            "who": "me",
+            "text": "交期我重新给你排一版，先别退",
+            "at": "周旋"
+          },
+          {
+            "who": "them",
+            "text": "行吧，那就再给你两天",
+            "at": "提炼出来"
+          },
+          {
+            "who": "me",
+            "text": "同一套话 → 复购挽留话术模板",
+            "at": "话术模板",
+            "punch": true
+          }
         ]
+      },
+      "motion": {
+        "enter": "slide-l",
+        "energy": 1
       }
     },
-
     {
       "start": "AI 接着给她输出",
       "type": "flow",
       "data": {
         "kicker": "第三笔：先试水，再放大",
         "title": "极低成本的测试方案",
-        "steps": ["整理成 5 页实操手册", "发到同行社群 / 垂直平台"]
+        "steps": [
+          "整理成 5 页实操手册",
+          "发到同行社群 / 垂直平台"
+        ]
+      },
+      "motion": {
+        "enter": "zoom-through",
+        "energy": 2
       }
     },
-
     {
       "start": "专门帮刚起步的电商小卖家",
       "type": "number",
@@ -359,9 +640,12 @@
         "prefix": "¥",
         "unit": "/份",
         "label": "帮刚起步的电商小卖家搭交付流程"
+      },
+      "motion": {
+        "enter": "slam",
+        "energy": 2
       }
     },
-
     {
       "start": "上个月，她靠这套",
       "type": "before-after",
@@ -371,18 +655,31 @@
         "before": {
           "label": "她以为",
           "icon": "trash",
-          "items": [{ "text": "无聊杂事", "at": "无聊杂事" }]
+          "items": [
+            {
+              "text": "无聊杂事",
+              "at": "无聊杂事"
+            }
+          ]
         },
         "after": {
           "label": "市场认了",
           "icon": "award",
           "at": "利用周末",
-          "items": [{ "text": "第一笔近 2000 元", "at": "近 2000 块" }]
+          "items": [
+            {
+              "text": "第一笔近 2000 元",
+              "at": "近 2000 块"
+            }
+          ]
         },
         "verdict": "只用周末跑出来的"
+      },
+      "motion": {
+        "enter": "slide-r",
+        "energy": 2
       }
     },
-
     {
       "start": "看到差距了吗",
       "type": "reframe",
@@ -392,36 +689,79 @@
         "you": {
           "label": "你 · 工位上",
           "icon": "user",
-          "items": [{ "text": "烦心事", "at": "烦心事" }, { "text": "踩过的坑", "at": "踩过的坑" }]
+          "items": [
+            {
+              "text": "烦心事",
+              "at": "烦心事"
+            },
+            {
+              "text": "踩过的坑",
+              "at": "踩过的坑"
+            }
+          ]
         },
         "them": {
           "label": "想入行的新人",
           "icon": "users",
           "at": "新人眼里",
-          "items": [{ "text": "避坑清单" }, { "text": "排雷指南", "at": "排雷指南" }]
+          "items": [
+            {
+              "text": "避坑清单"
+            },
+            {
+              "text": "排雷指南",
+              "at": "排雷指南"
+            }
+          ]
         },
         "verdict": "换个视角，它就是资产"
+      },
+      "motion": {
+        "enter": "wipe",
+        "energy": 3
       }
     },
-
     {
       "start": "真正拉开人与人距离",
       "type": "versus",
       "data": {
         "kicker": "真正拉开距离的",
         "title": "从来不是榜单上那 2%",
-        "left": { "label": "榜单跑分又涨 2%", "points": ["又是一次刷榜", "跟你的收入无关"] },
-        "right": { "label": "你的真实经验", "points": ["变成指挥 AI 的燃料", "变成你的生产力"] }
+        "left": {
+          "label": "榜单跑分又涨 2%",
+          "points": [
+            "又是一次刷榜",
+            "跟你的收入无关"
+          ]
+        },
+        "right": {
+          "label": "你的真实经验",
+          "points": [
+            "变成指挥 AI 的燃料",
+            "变成你的生产力"
+          ]
+        }
+      },
+      "motion": {
+        "enter": "slam",
+        "energy": 3
       }
     },
-
     {
       "start": "我把这些提示词",
       "type": "outro",
       "data": {
         "title": "把这两步存下来",
-        "recap": ["喂真实经历 · 挖出隐藏资产", "第一步 · 无情审计员", "第二步 · 榨取隐形溢价"],
+        "recap": [
+          "喂真实经历 · 挖出隐藏资产",
+          "第一步 · 无情审计员",
+          "第二步 · 榨取隐形溢价"
+        ],
         "cta": "评论区留言 · 提示词模板发你"
+      },
+      "motion": {
+        "enter": "rise",
+        "energy": 1
       }
     }
   ]

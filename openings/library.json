@@ -128,7 +128,8 @@
         "叮+强调色",
         "红章答案",
         "抖动"
-      ]
+      ],
+      "preview": "openings/previews/op-t01-question.mp4"
     },
     {
       "id": "op-t02-number",
@@ -156,7 +157,8 @@
         "滴答声",
         "推镜头",
         "逐字弹出"
-      ]
+      ],
+      "preview": "openings/previews/op-t02-number.mp4"
     },
     {
       "id": "op-t03-myth",
@@ -183,7 +185,8 @@
         "故障抖动",
         "真相砸入",
         "强调色"
-      ]
+      ],
+      "preview": "openings/previews/op-t03-myth.mp4"
     },
     {
       "id": "op-t04-pain",
@@ -210,7 +213,8 @@
         "压暗",
         "大字点名",
         "红色强调"
-      ]
+      ],
+      "preview": "openings/previews/op-t04-pain.mp4"
     },
     {
       "id": "op-t05-suspense",
@@ -237,7 +241,8 @@
         "锁头晃动",
         "riser 悬念音",
         "看到最后提示"
-      ]
+      ],
+      "preview": "openings/previews/op-t05-suspense.mp4"
     },
     {
       "id": "op-t06-callout",
@@ -264,7 +269,8 @@
         "标签逐个弹出",
         "擦出结论",
         "人脸推近"
-      ]
+      ],
+      "preview": "openings/previews/op-t06-callout.mp4"
     },
     {
       "id": "op-t07-before-after",
@@ -291,7 +297,8 @@
         "数值砸下",
         "箭头冲击",
         "钩子句"
-      ]
+      ],
+      "preview": "openings/previews/op-t07-before-after.mp4"
     },
     {
       "id": "op-t08-warning",
@@ -318,7 +325,8 @@
         "逐字弹出",
         "禁止牌砸下",
         "强抖动"
-      ]
+      ],
+      "preview": "openings/previews/op-t08-warning.mp4"
     },
     {
       "id": "op-t09-reveal",
@@ -345,7 +353,8 @@
         "档案发光",
         "大字弹出",
         "推镜头"
-      ]
+      ],
+      "preview": "openings/previews/op-t09-reveal.mp4"
     },
     {
       "id": "op-t10-countdown",
@@ -372,7 +381,8 @@
         "引线进度条",
         "归零爆字",
         "闪白"
-      ]
+      ],
+      "preview": "openings/previews/op-t10-countdown.mp4"
     },
     {
       "id": "op-t11-money",
@@ -399,7 +409,8 @@
         "金光扫过",
         "收钱音",
         "推镜头"
-      ]
+      ],
+      "preview": "openings/previews/op-t11-money.mp4"
     },
     {
       "id": "op-t12-rewind",
@@ -426,7 +437,8 @@
         "时间码倒滚",
         "扫描噪点",
         "问句砸出"
-      ]
+      ],
+      "preview": "openings/previews/op-t12-rewind.mp4"
     },
     {
       "id": "op-t13-versus",
@@ -453,7 +465,8 @@
         "冲击环",
         "闪白",
         "问句砸出"
-      ]
+      ],
+      "preview": "openings/previews/op-t13-versus.mp4"
     },
     {
       "id": "op-t14-list",
@@ -480,7 +493,8 @@
         "最后一张金光翻转",
         "暗化其余",
         "钩子句"
-      ]
+      ],
+      "preview": "openings/previews/op-t14-list.mp4"
     },
     {
       "id": "op-t15-chat",
@@ -507,7 +521,8 @@
         "消息提示音",
         "手机震动",
         "自己回复钩子"
-      ]
+      ],
+      "preview": "openings/previews/op-t15-chat.mp4"
     },
     {
       "id": "op-t16-crowd",
@@ -534,7 +549,8 @@
         "唯一发光",
         "放大聚焦",
         "结论烧色"
-      ]
+      ],
+      "preview": "openings/previews/op-t16-crowd.mp4"
     },
     {
       "id": "op-t17-news",
@@ -561,7 +577,8 @@
         "标题擦出",
         "滚动字幕",
         "主播推镜"
-      ]
+      ],
+      "preview": "openings/previews/op-t17-news.mp4"
     },
     {
       "id": "op-t18-magnify",
@@ -587,7 +604,8 @@
         "放大镜（真实放大画面）",
         "箭头标注",
         "擦出结论"
-      ]
+      ],
+      "preview": "openings/previews/op-t18-magnify.mp4"
     },
     {
       "id": "op-t19-bet",
@@ -614,7 +632,8 @@
         "逐字弹出",
         "承诺盖章",
         "剧烈抖动"
-      ]
+      ],
+      "preview": "openings/previews/op-t19-bet.mp4"
     },
     {
       "id": "op-t20-glitch",
@@ -641,6 +660,216 @@
         "故障闪字",
         "信号恢复推镜",
         "钩子逐字"
+      ],
+      "preview": "openings/previews/op-t20-glitch.mp4"
+    },
+    {
+      "id": "opening-never-from-zero",
+      "date": "2026-10-01",
+      "status": "trial",
+      "usedBy": [
+        "../../../neurocast-motionface"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 别再让AI每次从零开始（常识被划掉 → 复利砸入）",
+      "file": "src/openings/2026-10-01-never-from-zero/Opening.tsx",
+      "desc": "首帧砸出带引号的常识「做视频，就得每次从零开始」+绿勾，说到「从零开始」红线划掉、勾翻成叉、红字「别再！」，说到「干活了」真相「让能力复利」烧成强调色从下方砸入",
+      "script": "../../../neurocast-motionface",
+      "hook": "反常识",
+      "techniques": [
+        "首帧大字",
+        "闪白+冲击音",
+        "常识→划掉",
+        "勾变叉",
+        "故障抖动",
+        "否定红字",
+        "真相砸入",
+        "强调色"
+      ]
+    },
+    {
+      "id": "op-three-beat",
+      "date": "2026-10-01",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "模板 · 三拍子（实景 → 反转金句 → 正文首句）",
+      "file": "src/openings/templates/t21-three-beat.tsx",
+      "desc": "第一拍演处境：一个身份 + 反复循环的动作图标 + 一直累加的计数（2 秒内连滚三次）；第二拍整幅定格压暗，反转金句从 1.6 倍砸到正中、强调词烧成暖色，下方补一句小字；第三拍正文第一句用主题条从底部推进接住，重点词单独点亮",
+      "script": "template",
+      "hook": "三拍子",
+      "techniques": [
+        "处境循环动作",
+        "计数器累加",
+        "定格压暗",
+        "反转句砸入",
+        "逐字弹出+强调色",
+        "主题条底部推进",
+        "闪白+冲击音"
+      ]
+    },
+    {
+      "id": "trick-01-zoom-suspense",
+      "date": "2026-10-01",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "第1招 · 慢慢放大 + 做悬疑",
+      "file": "src/openings/templates/trick-01-05.tsx",
+      "desc": "人物画面从 1.0 全程缓慢推近到 1.2 倍（持续压迫感），悬念问句逐字弹出、强调词变色，全程不给答案",
+      "script": "template",
+      "hook": "悬念推镜",
+      "techniques": [
+        "持续推镜",
+        "逐字弹出",
+        "强调色",
+        "不给答案"
+      ]
+    },
+    {
+      "id": "trick-02-morph-rhythm",
+      "date": "2026-10-01",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "第2招 · 出其不意 + 按节奏变形",
+      "file": "src/openings/templates/trick-01-05.tsx",
+      "desc": "前半段正常全屏讲第一句；说到关键词那一刻人像容器突然变形（变成圆形/宽幅/倾斜），画面一震 + 闪白，第二句砸出",
+      "script": "template",
+      "hook": "形态突变",
+      "techniques": [
+        "容器形态突变",
+        "卡语音节奏",
+        "闪白+震动",
+        "强调句"
+      ]
+    },
+    {
+      "id": "trick-03-mask-focus",
+      "date": "2026-10-01",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "第3招 · 蒙版缩圈 + 开篇主题",
+      "file": "src/openings/templates/trick-01-05.tsx",
+      "desc": "画面外圈被黑暗遮罩包住并向中心收圈（强制聚焦到人脸），收到最小时主题大字点亮、副标题补上，是「本片要讲什么」的预告",
+      "script": "template",
+      "hook": "遮罩收圈",
+      "techniques": [
+        "遮罩收圈",
+        "强制聚焦",
+        "主题预告",
+        "叮音点亮"
+      ]
+    },
+    {
+      "id": "trick-04-title-behind",
+      "date": "2026-10-01",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "第4招 · 身后飞个大标题 + 抠像 + 副标题",
+      "file": "src/openings/templates/trick-01-05.tsx",
+      "desc": "人物保持主体（半透明景深把人像托到前景），大标题从人物身后由远及近飞入放大，最后副标题从下方补位 —— 字在身后、人在前面",
+      "script": "template",
+      "hook": "分层飞入",
+      "techniques": [
+        "人像前置（景深）",
+        "标题从身后飞入",
+        "副标题补位",
+        "推镜"
+      ]
+    },
+    {
+      "id": "trick-05-info-first",
+      "date": "2026-10-01",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "第5招 · 文字干货先出现，再露脸",
+      "file": "src/openings/templates/trick-01-05.tsx",
+      "desc": "第 0 帧先砸出干货要点（此时人还没出现，画面是暗底 + 文字），延后 0.2~1 秒人物画面才淡入 —— 先用信息抓住人，再露脸",
+      "script": "template",
+      "hook": "信息前置",
+      "techniques": [
+        "人声/信息前置",
+        "人物延后入画",
+        "逐条弹出",
+        "淡入"
+      ]
+    },
+    {
+      "id": "opening-cost-bill",
+      "date": "2026-10-02",
+      "status": "trial",
+      "usedBy": [
+        "../../../neurocast-motionface-v2"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 成本账单（首帧90%大字 → 4份钱账单 → 90→10 计数器）",
+      "file": "src/openings/2026-10-02-cost-bill/Opening.tsx",
+      "desc": "第 0 帧 kicker+大字「白白浪费 90% 的成本」砸下闪白；3 秒内账单卡四行「重新找参考/拆镜头/搭工程/试错」逐行砸下算出 4 份钱；随后账单收走，Counter 90→10% 滚动 + 盖章「沉淀成可复用资产」",
+      "script": "../../../neurocast-motionface-v2",
+      "hook": "数字冲击+痛点账单",
+      "techniques": [
+        "首帧大字",
+        "闪白+冲击音",
+        "账单逐行砸下",
+        "数字滚动",
+        "盖章",
+        "价值承诺前置"
       ]
     }
   ]

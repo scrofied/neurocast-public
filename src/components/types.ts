@@ -37,6 +37,14 @@ export type Cam = {
   mirror?: boolean;
 };
 
+// 组件的动效特征（写分镜时用来错开"动感"，避免连续几镜都是同一种运动）
+export type MotionTag = {
+  /** 画面里什么东西在动、怎么动：元素聚合 / 路径推进 / 数值滚动 / 图表生长 / 镜头推移 / 逐条点亮 … */
+  kind: string;
+  /** 适合的强度：1 克制 / 2 标准 / 3 强冲击 */
+  energy: number;
+};
+
 export type CompDef<D = any> = {
   id: string;
   name: string;
@@ -45,6 +53,8 @@ export type CompDef<D = any> = {
   minSec: number;
   maxSec: number;
   tags: string[];
+  // 动效特征；未标注 = 尚未梳理（CATALOG 里显示「未标注」）
+  motion?: MotionTag;
   // 画面是什么（给写分镜的模型看）
   desc?: string;
   // 什么内容该用它（语义，不是关键词）

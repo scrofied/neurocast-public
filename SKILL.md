@@ -179,11 +179,19 @@ node scripts/openings.mjs status opening-comment-mining keep
   - **技术类通用 6 招**（`tech-opening-01`~`06`，`src/openings/tech.tsx`）：按第一句话的手法选（慢慢放大做悬疑 / 出其不意按节奏变形 / 蒙版缩圈 / 身后飞标题 / 文字干货先出现 / 极简闪白），只改字段就能用。参考《开场手法素材》招数表。
   - **20 个按钩子类型的模板**（`op-t01`~`op-t20`，`src/openings/templates/`）：按文案第一句的钩子类型（反问/数字/反常识/痛点/悬念/点名/对比/警告/揭秘/倒计时/收益/结果先行/VS/清单/私信/稀缺/快讯/放大镜/打赌/故障打断）挑一个，只改字段。选型表在 `openings/TEMPLATES.md`，预览在 `openings/previews/op-t*.mp4`。
   - 同一个模板不要连着用；要大改就复制成专属开场。
-- 目前 48 个正片组件，另有专属开场（`src/openings/`，不计入）。最新加入的通用组件：
-  - untapped-potential（大材小用：很强的东西只用了 5%）、scope-shrink（目标缩小 → 成功率涨满，可带具体例子）
+- 目前 82 个正片组件（结构 7 / 信息图 25 / 概念隐喻 29 / 叙事场景 8 / 产品 10 / 屏幕 3），另有 29 个开场（`src/openings/`，不计入）。最新加入的通用组件：
+  - **处境人设**：persona-scene（无脸剪影 + 工位/屏幕/两头跑，循环动作越转越快 + 时钟转深夜 + 台灯亮起 + 最后瘫倒）。共用 `src/lib/figure.tsx` 无脸人物骨架（关节角度驱动，可插值：stand/work/stare/slump/despair/proud/fall/dig/look/cheer/raise/handsUp/sit/reach/turn + gait 步态）。
+  - **反转拍**：blame-strike（连环劈掉假因 → 真因砸下）、fork-paths（同一起点 → 岔路两种结局）、counter-example（正例 + 反例对照）。
+  - **体量/危机**：pile-crush（堆成山 → 一板压扁）、unread-flood（未读轰炸 → AI 接手清零）、pit-trap（透视路面的坑 + 安全路线）、walled-garden（高墙花园）、safety-brake（紧急制动 / 保险丝）。
+  - **账目/对比**：open-ledger（摊开算账：单账累加 / 双账对比）、spec-matrix（横评打勾表）、version-lanes（同话 N 版本）、tier-grid（分档格 + 红黄绿灯）、vet-card（鉴伪卡）、measure-ruler（拿尺子量一量）。
+  - **时间/进程**：step-rail（底部步骤轨 / 进度条）、case-replay（事件回放，scale=hour/day/year 兼时间轴）、time-shards（捡碎时间）、time-ceiling（收入天花板）。
+  - **隐喻**：teardown-lens（拆解透视）、reveal-cards（亮底牌）、lever-lift（杠杆 / 护城河）、race-lanes（同一起跑线赛跑）、painkiller（止痛药 vs 保健品）、ring-assembly（环形拼图，缺一环不成立）、spinner-reasoning（转圈即思考）、carry-or-dig（挑水 vs 挖井）、dusty-shelf（积灰货架）、mirror-reveal（AI 是镜子）、surface-vs-core（换皮不换骨）、one-fish-four-plates（一鱼多吃）。
+  - **屏幕类**：ui-replica（无录屏时仿制界面：editor/terminal/timeline/chat 四预设 + 光标点击）、ab-audio-wave（双声波形盲测）。
+  - 早期：untapped-potential（大材小用：很强的东西只用了 5%）、scope-shrink（目标缩小 → 成功率涨满，可带具体例子）。
   - 代码/产品动画三件套：file-launch（贴代码 → 改后缀 → 双击弹出成品）、bug-fix-loop（点不动 → F12 抓报错 → 甩给 AI → 整份覆盖修好）、drag-deploy（拖进托管虚线框 → 进度走满 → 吐出网址 → 手机电脑同时打开）。三者共用 `src/components/product/MiniApp.tsx` 小工具界面（标题/输入/按钮/结果行都走参数）。
   - flywheel（循环/正反馈/恶性循环）、domino-chain（连锁反应）。sword-forge 支持 `icon` 字段，可以把剑换成任意产品图标。
-- 预览：`npm run studio` → Gallery 文件夹；或 `node scripts/preview.mjs <id>` 出 4 个时刻的静帧拼图（`out/preview/`）。
+  - **共享工具**：`src/lib/bits.tsx`（StampBox 结论章 / Mark ✓✗? 标记 / hitShake 衰减抖动 / Pill 胶囊标签）。
+- 预览：`npm run studio` → Gallery 文件夹；或 `node scripts/preview.mjs <id>` 出 4 个时刻的静帧拼图（`out/preview/`）；自定义数据用 `node scripts/qa/try.mjs <id> <data.json> [秒] [时刻]`。
 
 ## 扩展组件资产（组件不是固定的，缺什么就补什么）
 

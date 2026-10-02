@@ -1,6 +1,7 @@
 import React from "react";
 import { z } from "zod";
 import { clamp, easeOut, easeOutBack, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues, typed } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
@@ -25,7 +26,8 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
+  const enterAt = useEnter(variant);
   const t = useTheme();
   const { width, height } = useBox();
   const wx = 230;
@@ -41,17 +43,18 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const replyAt = cueOr(data.replyAt, (data.prompt ? doneAt : lastLine) + 10);
   const steps = data.steps ?? [];
   const scues = listCues(steps, replyAt + 16, Math.max(replyAt + 30, dur - 20));
-  const win = easeOutBack(prog(frame, 0, 18));
+  // 窗口与气泡的入场交给动效层（原生是轻微放大淡入，用 fallback 保住这个基线）
+  const eWin = enterAt(frame, 0, { fallback: "rise", dur: 18, dist: 0.5 });
   const typingNow = data.prompt ? frame >= typeAt && frame < doneAt : lines.some((_, i) => frame >= lcues[i] && frame < lcues[i] + 16);
   const caret = Math.floor(frame / 8) % 2 === 0;
-  const bubbleIn = easeOut(prog(frame, typeAt - 4, 10));
+  const eBubble = enterAt(frame, typeAt - 4, { fallback: "rise", dur: 10, dist: 0.7 });
   const fsPrompt = data.prompt ? fitFont(data.prompt.slice(0, 26), ww * 0.62, 44, 28) : 40;
   const typingSfx: number[] = [];
   if (data.prompt) for (let f = typeAt; f < doneAt - 10; f += 40) typingSfx.push(f);
   return (
     <>
       <Heading kicker={data.kicker ?? "COMMAND"} title={data.title} frame={frame} width={width} />
-      <div style={{ position: "absolute", left: wx, top: wy, width: ww, height: wh, borderRadius: 26, background: `linear-gradient(170deg, ${alpha(t.bg2, 0.95)}, ${alpha(t.bg, 0.92)})`, border: `1.5px solid ${alpha(t.primary, 0.4)}`, boxShadow: `0 0 60px ${alpha(t.primary, 0.18)}, 0 30px 80px rgba(0,0,0,.5)`, overflow: "hidden", transform: `scale(${0.94 + 0.06 * win})`, opacity: clamp(win * 1.4) }}>
+      <div style={{ position: "absolute", left: wx, top: wy, width: ww, height: wh, borderRadius: 26, background: `linear-gradient(170deg, ${alpha(t.bg2, 0.95)}, ${alpha(t.bg, 0.92)})`, border: `1.5px solid ${alpha(t.primary, 0.4)}`, boxShadow: `0 0 60px ${alpha(t.primary, 0.18)}, 0 30px 80px rgba(0,0,0,.5)`, overflow: "hidden", transform: `translate(${eWin.dx}px, ${eWin.dy}px) scale(${eWin.scale})`, opacity: eWin.opacity }}>
         <div style={{ height: 78, display: "flex", alignItems: "center", gap: 16, padding: "0 30px", borderBottom: `1px solid ${alpha(t.primary, 0.18)}`, background: alpha(t.primary, 0.05) }}>
           <div style={{ width: 46, height: 46, borderRadius: 12, background: `linear-gradient(135deg, ${t.primary}, ${t.secondary})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Icon name={data.appIcon ?? "bot"} size={28} color={t.bg} stroke={2.4} />
@@ -64,7 +67,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         </div>
         {/* your message (typed live) */}
         {frame >= typeAt - 4 && (
-          <div style={{ position: "absolute", right: 36, top: 110, maxWidth: ww * 0.74, padding: "22px 30px", borderRadius: 26, borderTopRightRadius: 6, background: `linear-gradient(135deg, ${alpha(t.primary, 0.32)}, ${alpha(t.secondary, 0.22)})`, border: `2px solid ${alpha(t.primary, 0.7)}`, opacity: bubbleIn, transform: `translateY(${(1 - bubbleIn) * 16}px)` }}>
+          <div style={{ position: "absolute", right: 36, top: 110, maxWidth: ww * 0.74, padding: "22px 30px", borderRadius: 26, borderTopRightRadius: 6, background: `linear-gradient(135deg, ${alpha(t.primary, 0.32)}, ${alpha(t.secondary, 0.22)})`, border: `2px solid ${alpha(t.primary, 0.7)}`, opacity: eBubble.opacity, transform: `translate(${eBubble.dx}px, ${eBubble.dy}px)` }}>
             {data.prompt && (
               <div style={{ fontFamily: t.font.body, fontWeight: 700, fontSize: fsPrompt, lineHeight: 1.45, color: t.text }}>
                 {typed(data.prompt, frame, typeAt, doneAt)}
@@ -134,6 +137,7 @@ export const ChatCommand: CompDef<D> = {
   minSec: 3,
   maxSec: 14,
   tags: ["命令", "指令", "提示词", "跟它说", "一句话"],
+  motion: { kind: "逐字打字 + 逐条打勾", energy: 2 },
   desc: "AI 对话窗口：你的指令跟着配音逐字打出（或分条 ①②③ 在说到时打出），点击发送后 AI 回复并逐项打勾执行",
   use: "“你给它一句命令：……”“下这条死命令：……”——展示具体对 AI 说了什么",
   hideCaptions: true,

@@ -6,6 +6,7 @@ import { cueOr, listCues } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -20,13 +21,15 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const afterAt = cueOr(data.after.at, dur * 0.55);
   const bCues = listCues(data.before.items, cueOr(data.before.at, 8) + 6, Math.max(20, afterAt - 16));
   const aCues = listCues(data.after.items, afterAt + 10, Math.max(afterAt + 14, dur * 0.85));
-  const ap = easeOutBack(prog(frame, afterAt, 18));
+  // 「现在」这张卡原生是从右侧滑入并放大；分镜写了 motion.enter 就改由它决定
+  const eA = enterAt(frame, afterAt, { fallback: "slide-r", dur: 18, dist: 1.08 });
   const beforeDim = easeInOut(prog(frame, afterAt, 16));
   const hit = frame >= afterAt && frame < afterAt + 14 ? noise1(frame * 3, seed) * 10 * (1 - (frame - afterAt) / 14) : 0;
   const single = data.before.items.length === 1 && data.after.items.length === 1;
@@ -42,7 +45,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     const col = good ? t.primary : t.bad;
     const fs = itemFs;
     return (
-      <div style={{ position: "absolute", left: x, top, width: cw, height: ch, borderRadius: 28, background: `linear-gradient(160deg, ${alpha(col, good ? 0.2 : 0.1)}, ${t.glass} 45%, ${alpha(t.bg, 0.7)})`, border: `2px solid ${alpha(col, good ? 0.9 : 0.45)}`, boxShadow: good ? `0 0 80px ${alpha(col, 0.35)}` : undefined, overflow: "hidden", ...(good ? { transform: `translateX(${(1 - clamp(ap)) * 260}px) scale(${0.9 + 0.1 * ap})`, opacity: clamp(ap * 1.4) } : { transform: `scale(${1 - beforeDim * 0.06}) translateX(${hit}px)`, opacity: 1 - beforeDim * 0.45, filter: `saturate(${1 - beforeDim * 0.8})` }) }}>
+      <div style={{ position: "absolute", left: x, top, width: cw, height: ch, borderRadius: 28, background: `linear-gradient(160deg, ${alpha(col, good ? 0.2 : 0.1)}, ${t.glass} 45%, ${alpha(t.bg, 0.7)})`, border: `2px solid ${alpha(col, good ? 0.9 : 0.45)}`, boxShadow: good ? `0 0 80px ${alpha(col, 0.35)}` : undefined, overflow: "hidden", ...(good ? { transform: `translate(${eA.dx}px, ${eA.dy}px) scale(${eA.scale})`, opacity: eA.opacity } : { transform: `scale(${1 - beforeDim * 0.06}) translateX(${hit}px)`, opacity: 1 - beforeDim * 0.45, filter: `saturate(${1 - beforeDim * 0.8})` }) }}>
         <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 8, background: col, boxShadow: `0 0 24px ${col}` }} />
         <div style={{ display: "flex", alignItems: "center", gap: 20, padding: "44px 50px 0" }}>
           {s.icon && (
@@ -56,9 +59,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           {s.items.map((it, i) => {
             const at = cues[i];
             if (frame < at) return null;
-            const p = easeOut(prog(frame, at, 12));
+            const ei = enterAt(frame, at, { fallback: good ? "slide-r" : "slide-l", dur: 12, dist: 0.17 });
             return (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: single ? 0 : fs * 0.55, opacity: p, transform: `translateX(${(1 - p) * (good ? 40 : -40)}px)` }}>
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: single ? 0 : fs * 0.55, opacity: ei.opacity, transform: `translate(${ei.dx}px, ${ei.dy}px)` }}>
                 <div style={{ flex: "none", width: fs * 0.9, height: fs * 0.9, borderRadius: "50%", background: alpha(col, 0.18), border: `2px solid ${col}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <Icon name={good ? "check" : "x"} size={fs * 0.5} color={col} stroke={3} />
                 </div>
@@ -80,7 +83,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         <Icon name="arrowRight" size={46} color={frame >= afterAt ? t.primary : t.dim} stroke={3} />
       </div>
       {data.verdict && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: top + ch + 30, textAlign: "center", fontFamily: t.font.body, fontWeight: 800, fontSize: 38, color: t.text, opacity: easeOut(prog(frame, aCues[aCues.length - 1] + 12, 14)) }}>{data.verdict}</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: top + ch + 30, textAlign: "center", fontFamily: t.font.body, fontWeight: 800, fontSize: 38, color: t.text, opacity: enterAt(frame, aCues[aCues.length - 1] + 12, { fallback: "rise", dur: 14 }).opacity }}>{data.verdict}</div>
       )}
       <Sfx name="impact" at={afterAt} volume={0.35} />
     </>
@@ -95,6 +98,7 @@ export const BeforeAfter: CompDef<D> = {
   minSec: 2,
   maxSec: 12,
   tags: ["以前", "现在", "过去", "如今", "传统", "人工", "AI"],
+  motion: { kind: "对比卡对撞（左卡退灰 / 右卡滑入）", energy: 3 },
   desc: "左卡“以前”逐条列出麻烦（✕），说到“现在”时右卡带冲击砸进来，左卡变灰退后，右卡逐条 ✓",
   use: "“以前得…现在只要…”“过去人工…现在 AI…”的前后对比（按讲话节奏，不是同时出现）",
   schema,

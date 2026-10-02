@@ -4,6 +4,7 @@ import { useVideoConfig } from "remotion";
 import { clamp, easeInOut, easeOut, noise1, prog, rng } from "../../lib/anim";
 import { sampleText } from "../../lib/particles";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fmtNum, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -19,6 +20,7 @@ type D = z.infer<typeof schema>;
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const ref = useRef<HTMLCanvasElement>(null);
   const dec = data.decimals ?? (Number.isInteger(data.value) ? 0 : 1);
@@ -36,6 +38,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const count = easeOut(prog(frame, 0, gather + 6));
   const shown = data.value * count;
   const settled = prog(frame, gather + 4, 12);
+  // 粒子旋入凝聚是组件的身份证，不接 motion（换掉就没特色了）；
+  // 接的是它身后的「数字落定」与「说明文字」，这两处分镜可控
+  const eNum = enterAt(frame, gather + 4, { fallback: "rise", dur: 12 });
+  const eLabel = enterAt(frame, gather, { fallback: "rise", dur: 16 });
 
   useLayoutEffect(() => {
     const c = ref.current;
@@ -83,7 +89,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
           fontWeight: 900,
           fontSize,
           color: t.text,
-          opacity: solid * 0.92,
+          opacity: eNum.opacity * 0.92,
           textShadow: `0 0 40px ${alpha(t.primary, 0.7)}, 0 0 90px ${alpha(t.primary, 0.35)}`,
           letterSpacing: 0,
           whiteSpace: "nowrap",
@@ -103,7 +109,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
             fontSize: 40,
             fontWeight: 700,
             color: t.dim,
-            opacity: easeOut(prog(frame, gather, 16)),
+            opacity: eLabel.opacity,
+            transform: `translate(${eLabel.dx}px, ${eLabel.dy}px)`,
             letterSpacing: 4,
           }}
         >
@@ -123,6 +130,7 @@ export const ParticleNumber: CompDef<D> = {
   minSec: 3,
   maxSec: 7,
   tags: ["数字", "百分比", "倍", "万", "亿", "增长", "提升", "数据"],
+  motion: { kind: "粒子旋入凝聚 + 数值滚动", energy: 2 },
   desc: "几千个粒子从四周旋入凝聚成一个大数字，数值滚动到位，下方说明",
   use: "单个关键数字 / 百分比 / 倍数（多个同单位数值用 growth）",
   schema,

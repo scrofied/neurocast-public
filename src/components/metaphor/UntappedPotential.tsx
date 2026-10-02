@@ -1,6 +1,7 @@
 import React from "react";
 import { z } from "zod";
 import { easeOut, easeOutBack, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
@@ -23,7 +24,8 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
+  const enterAt = useEnter(variant);
   const t = useTheme();
   const { width, height } = useBox();
   const n = data.potential.length;
@@ -37,7 +39,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const cy = height * 0.55;
   const R = Math.min(230, height * 0.23);
   const SW = 40;
-  const m = easeOutBack(prog(frame, machineAt, 18));
+  // 仪表盘原生是从 0 弹出（scale 0→1）；from:0 保住这个基线
+  const eM = enterAt(frame, machineAt, { fallback: "rise", dur: 18, from: 0 });
   const rv = easeOut(prog(frame, revealAt, 14));
   const used = data.usedPct;
   const seg = (100 - used) / n;
@@ -57,7 +60,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
     <>
       <Heading kicker={data.kicker} title={data.title} frame={frame} width={width} />
       <svg width={width} height={height} style={{ position: "absolute", inset: 0 }}>
-        <g transform={`rotate(-90 ${cx} ${cy})`} opacity={Math.min(1, m)}>
+        <g transform={`rotate(-90 ${cx} ${cy})`} opacity={Math.min(1, eM.p)}>
           <circle cx={cx} cy={cy} r={R} fill="none" stroke={alpha(t.primary, 0.1)} strokeWidth={SW} />
           {/* the tiny slice you use */}
           <circle cx={cx} cy={cy} r={R} fill="none" stroke="#9aa3ad" strokeWidth={SW} pathLength={100} strokeDasharray={`${used * uP} 100`} />
@@ -84,7 +87,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
           width: inner * 2,
           height: inner * 2,
           borderRadius: "50%",
-          transform: `scale(${m * pulse})`,
+          transform: `scale(${eM.scale * pulse})`,
           background: `radial-gradient(circle at 40% 35%, ${alpha(t.primary, 0.25 + 0.3 * rv)}, ${alpha(t.bg2, 0.95)} 72%)`,
           border: `3px solid ${alpha(t.primary, 0.5 + 0.5 * rv)}`,
           boxShadow: `0 0 ${30 + 70 * rv}px ${alpha(t.primary, 0.25 + 0.45 * rv)}, inset 0 0 40px ${alpha(t.primary, 0.2)}`,
@@ -158,6 +161,7 @@ export const UntappedPotential: CompDef<D> = {
   minSec: 3,
   maxSec: 10,
   tags: ["大材小用", "只用了", "潜力", "浪费", "当成", "印钞机"],
+  motion: { kind: "能力环逐段点亮 + 标签弹出 + 红章盖下", energy: 2 },
   desc: "一台发光的“机器”外面套一圈能力环，你只用了灰色的一小段（右侧灰卡：写周报…、“只用了 5%”）；揭晓时环上其余能力逐段点亮、标签弹出，最后红章盖下结论",
   use: "很强的东西只被用来干小事：AI 只拿来写周报、旗舰手机只打电话、健身年卡只去洗澡、数据库只当记事本（machine / used / potential 全可改）",
   schema,

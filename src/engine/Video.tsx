@@ -4,6 +4,7 @@ import { BY_ID } from "../components/registry";
 import type { Cam, CompDef } from "../components/types";
 import { easeIn, easeInOut, prog } from "../lib/anim";
 import { Box } from "../lib/box";
+import { MotionProvider } from "../lib/enter";
 import { alpha, ThemeProvider, useTheme } from "../lib/theme";
 import { Sfx, SfxProvider, type SfxName } from "../lib/sfx";
 import type { Shot, Timeline } from "../types";
@@ -29,7 +30,9 @@ const ShotView: React.FC<{ shot: Shot; seed: number }> = ({ shot, seed }) => {
   const tsfx = TRANSITION_SFX[shot.transition];
   return (
     <ShotFrame frame={f} dur={shot.dur} transition={shot.transition} seed={seed + shot.start}>
-      <C data={data} frame={f} dur={shot.dur} variant={shot.variant % Math.max(1, def.variants)} seed={seed + shot.start} text={shot.text} />
+      <MotionProvider spec={shot.motion}>
+        <C data={data} frame={f} dur={shot.dur} variant={shot.variant % Math.max(1, def.variants)} seed={seed + shot.start} text={shot.text} />
+      </MotionProvider>
       {tsfx && shot.start > 0 && <Sfx name={tsfx} at={0} volume={0.16} />}
     </ShotFrame>
   );
@@ -80,9 +83,10 @@ const PresenterLayer: React.FC<{ p: PresenterMeta; opening: OpeningLive | null }
   const t = useTheme();
   const { width, height } = useVideoConfig();
   const end = Math.min(p.offset + p.frames - 1, p.hideFrom ?? Infinity);
-  // before the clip's own first frame there is nothing to show — without this the black
-  // container fills the screen for `offset` frames (a black flash on frame 0)
-  if (f >= end || f < p.offset) return null;
+  if (f >= end) return null;
+  // the person's lips are delayed by `offset` to match the TTS (Sequence from={offset}); during the
+  // first `offset` frames the clip has no frame yet, so we hold its poster (first frame) to cover the
+  // shot underneath instead of exposing it.
   const k = easeInOut(prog(f, p.full, 22));
   const out = easeIn(prog(f, end - 12, 12));
   const px = width - PIP.w - PIP.right;
@@ -111,6 +115,11 @@ const PresenterLayer: React.FC<{ p: PresenterMeta; opening: OpeningLive | null }
       }}
     >
       <div style={{ position: "absolute", inset: 0, ...camInner(cam, p.focusX, p.focusY), transformOrigin: driving ? "50% 45%" : `${p.focusX * 100}% ${p.focusY * 100}%` }}>
+        {f < p.offset && (p.poster ? (
+          <img src={src(p.poster)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `${p.focusX * 100}% ${p.focusY * 100}%` }} />
+        ) : (
+          <OffthreadVideo src={src(p.src)} muted startFrom={0} endAt={1} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `${p.focusX * 100}% ${p.focusY * 100}%` }} />
+        ))}
         <Sequence from={p.offset} layout="none">
           <OffthreadVideo src={src(p.src)} muted style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `${p.focusX * 100}% ${p.focusY * 100}%` }} />
         </Sequence>

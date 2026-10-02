@@ -10,7 +10,9 @@ let cached = null;
 export const loadRegistry = async () => {
   if (cached) return cached;
   const { build } = await import("esbuild");
-  const outfile = path.join(ROOT, ".cache", "registry.node.mjs");
+  // 产物名带 pid：make.mjs / catalog.mjs / motion-audit.mjs 同时跑时，会互相覆盖同一个
+  // 文件并 import 到半成品（症状是 REGISTRY undefined → "Cannot read properties of undefined"）
+  const outfile = path.join(ROOT, ".cache", `registry.node.${process.pid}.mjs`);
   fs.mkdirSync(path.dirname(outfile), { recursive: true });
   await build({
     entryPoints: [path.join(ROOT, "src", "components", "registry.ts")],

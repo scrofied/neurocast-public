@@ -1,3 +1,13 @@
+import type { EnterKind } from "./lib/enter";
+
+// shot.motion：分镜级的动效声明（storyboard.json 里每条镜头可写 motion 字段）
+export type Motion = {
+  /** 元素入场语法；不写则按该组件第几次出现自动轮转 */
+  enter?: EnterKind;
+  /** 1 克制 / 2 标准 / 3 强冲击 */
+  energy?: number;
+};
+
 export type Shot = {
   id: string;
   type: string;
@@ -8,6 +18,7 @@ export type Shot = {
   text: string;
   data: Record<string, any>;
   transition: string;
+  motion?: Motion;
   hideCaptions?: boolean;
 };
 
@@ -36,7 +47,7 @@ export type Timeline = {
     sfx?: boolean;
     chapterFlash?: boolean;
     // muted talking-head clip: full screen for `full` frames, then a picture-in-picture box
-    presenter?: { src: string; frames: number; offset: number; full: number; focusX: number; focusY: number; hideFrom?: number };
+    presenter?: { src: string; poster?: string; frames: number; offset: number; full: number; focusX: number; focusY: number; hideFrom?: number };
   };
   durationInFrames: number;
   chapters: Chapter[];

@@ -2,6 +2,7 @@ import React from "react";
 import { z } from "zod";
 import { Img, staticFile } from "remotion";
 import { clamp, easeIn, easeInOut, easeOut, easeOutBack, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Sfx } from "../../lib/sfx";
@@ -30,7 +31,8 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data: d, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
+  const enterAt = useEnter(variant);
   const t = useTheme();
   const { width, height } = useBox();
   const n = d.boards.length;
@@ -39,7 +41,9 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur }) => {
   const outAt = cueOr(d.outAt, Math.max(inAt + 30, dur - 12));
   const swapAt = cueOr(d.swapAt, inAt + (outAt - inAt) * 0.55);
 
-  const slamIn = easeOutBack(prog(frame, inAt, 16));
+  // 原生是「从 0.58 放大到位 + 透视翻转」；用 from 保住这个基线，分镜写 motion.enter 才换
+  const eIn = enterAt(frame, inAt, { fallback: "rise", dur: 16, from: 0.58 });
+  const eTag = enterAt(frame, inAt, { fallback: "rise", dur: 12, dist: 0.6 });
   const outP = easeOut(prog(frame, outAt, 11));
   const slide = easeInOut(prog(frame, swapAt, 13)) * (n > 1 ? 1 : 0);
   const glitch = frame >= swapAt && frame < swapAt + 15 ? 1 - (frame - swapAt) / 15 : 0;
@@ -58,8 +62,8 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur }) => {
       <div
         style={{
           position: "absolute",
-          left: bx + (1 - slamIn) * bw * 0.16,
-          top: by + (1 - slamIn) * bh * 0.12,
+          left: bx + (1 - eIn.p) * bw * 0.16,
+          top: by + (1 - eIn.p) * bh * 0.12,
           width: bw,
           height: bh,
           borderRadius: 24,
@@ -67,8 +71,8 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur }) => {
           background: alpha(t.bg, 0.97),
           border: `3px solid ${alpha(t.primary, 0.85)}`,
           boxShadow: `0 0 ${80 * (1 - outP)}px ${alpha(t.primary, 0.5)}, 0 40px 130px rgba(0,0,0,.75)`,
-          transform: `perspective(1500px) scale(${0.58 + 0.42 * slamIn}) rotateX(${(1 - slamIn) * 9}deg) scale(${(1 + d.zoom * hold) * (1 - outP * 0.12)})`,
-          opacity: Math.min(1, slamIn * 1.8) * (1 - outP),
+          transform: `perspective(1500px) scale(${eIn.scale}) rotateX(${(1 - eIn.p) * 9}deg) scale(${(1 + d.zoom * hold) * (1 - outP * 0.12)})`,
+          opacity: Math.min(1, eIn.p * 1.8) * (1 - outP),
         }}
       >
         {/* 竖向叠两张：滑切读起来就是「同一张榜被重新排序」 */}
@@ -110,7 +114,7 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur }) => {
       </div>
 
       {(d.kicker || d.title) && (
-        <div style={{ position: "absolute", left: 96, top: Math.max(20, by - 88), opacity: easeOut(prog(frame, inAt, 12)) * (1 - outP), transform: `translateY(${(1 - easeOut(prog(frame, inAt, 12))) * 24}px)` }}>
+        <div style={{ position: "absolute", left: 96, top: Math.max(20, by - 88), opacity: eTag.opacity * (1 - outP), transform: `translateY(${eTag.dy}px)` }}>
           {d.kicker && (
             <div style={{ display: "inline-flex", alignItems: "center", gap: 12, fontFamily: t.font.mono, fontSize: 20, letterSpacing: 6, color: t.primary }}>
               <span style={{ width: 40, height: 2, background: t.primary, boxShadow: `0 0 10px ${t.primary}` }} />
@@ -137,6 +141,7 @@ export const BoardProof: CompDef<D> = {
   minSec: 2,
   maxSec: 20,
   tags: ["截图", "榜单", "举证", "排名", "真实数据"],
+  motion: { kind: "整屏砸入（透视缩放）+ 竖直滑切 + 扫描线", energy: 2 },
   desc: "把一张真截图放大盖满画面当证据（边框 + 扫描线 + 高亮带 + LIVE），给 2 张时竖直滑切换图（同一张榜换个排序，左上角标签跟着换），讲完自动撤走露出真人",
   use: "用真实截图证明一个会变/会涨会跌的东西：大模型榜单换个排序就换第一、后台数据看板前后对比、价格页调整前后的截图、搜索结果页的变化（boards / aspect / swapAt 全可改）",
   schema,
