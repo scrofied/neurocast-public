@@ -6,6 +6,7 @@ import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -29,8 +30,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const acts = data.actions.length ? data.actions : [];
@@ -42,7 +44,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const barH = full ? 52 : 30;
   const sideW = data.sidebar.length ? (full ? 230 : 100) : 0;
   const app = data.app;
-  const inP = easeOut(prog(frame, 0, 16));
+  // 窗口原生是从下方 60px 升起淡入；rise 的位移基数是 22px，用 dist 换算保住原幅度
+  const eWin = enterAt(frame, 0, { fallback: "rise", dur: 16, dist: 60 / 22 });
   // typed content: each line types in, staggered from the first action
   const typeStart = cues[0] ?? 12;
   const perLine = Math.max(8, Math.min(26, Math.round((dur * 0.6) / Math.max(1, data.lines.length))));
@@ -82,7 +85,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     <>
       {full && <Heading kicker={data.kicker} title={data.title} frame={frame} width={W} />}
       {/* window */}
-      <div style={{ position: "absolute", left: winX, top: lerp(winY + 60, winY, inP), width: winW, height: winH, opacity: inP, borderRadius: 16, background: alpha(t.bg2, 0.96), border: `2.5px solid ${alpha(t.primary, 0.55)}`, boxShadow: `0 30px 80px rgba(0,0,0,.6), 0 0 40px ${alpha(t.primary, 0.18)}`, overflow: "hidden" }}>
+      <div style={{ position: "absolute", left: winX, top: winY, width: winW, height: winH, opacity: eWin.opacity, transform: `translate(${eWin.dx}px, ${eWin.dy}px)`, borderRadius: 16, background: alpha(t.bg2, 0.96), border: `2.5px solid ${alpha(t.primary, 0.55)}`, boxShadow: `0 30px 80px rgba(0,0,0,.6), 0 0 40px ${alpha(t.primary, 0.18)}`, overflow: "hidden" }}>
         {/* title bar */}
         <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: barH, background: alpha(t.primary, 0.1), borderBottom: `2px solid ${alpha(t.primary, 0.3)}`, display: "flex", alignItems: "center", paddingLeft: full ? 20 : 10, gap: full ? 14 : 7 }}>
           {["#ff5d6c", "#ffcf5c", "#3dffa8"].map((c, i) => (
@@ -96,9 +99,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           <div style={{ position: "absolute", left: 0, top: barH, bottom: 0, width: sideW, background: alpha(t.bg, 0.7), borderRight: `1.5px solid ${alpha(t.text, 0.12)}`, padding: full ? "14px 12px" : "7px 6px", display: "flex", flexDirection: "column", gap: full ? 8 : 4 }}>
             {data.sidebar.map((s, i) => {
               const active = i === 0;
-              const p = easeOut(prog(frame, 8 + i * 4, 10));
+              const es = enterAt(frame, 8 + i * 4, { fallback: "rise", dur: 10 });
               return (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: full ? 8 : 4, padding: `${full ? 5 : 2}px ${full ? 10 : 5}px`, borderRadius: 7, background: active ? alpha(t.primary, 0.16) : "transparent", opacity: p }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: full ? 8 : 4, padding: `${full ? 5 : 2}px ${full ? 10 : 5}px`, borderRadius: 7, background: active ? alpha(t.primary, 0.16) : "transparent", opacity: es.opacity }}>
                   <Icon name={app === "chat" ? "user" : "doc"} size={full ? 17 : 9} color={active ? t.primary : t.dim} />
                   <span style={{ fontFamily: t.font.body, fontWeight: active ? 800 : 600, fontSize: fitFont(s, sideW - (full ? 60 : 30), full ? 19 : 10, 8), color: active ? t.text : t.dim, whiteSpace: "nowrap" }}>{s}</span>
                 </div>
@@ -135,8 +138,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
                 <div key={r} style={{ position: "relative", height: full ? 42 : 22, marginBottom: full ? 8 : 4, background: alpha(t.text, 0.06), borderRadius: 6 }}>
                   {Array.from({ length: 3 }, (_, c) => {
                     const cw = (winW - sideW - (full ? 48 : 24)) / 3 - (full ? 8 : 4);
-                    const on = frame >= 20 + r * 8 + c * 6;
-                    return <div key={c} style={{ position: "absolute", left: c * (cw + (full ? 8 : 4)), top: 2, width: cw, height: full ? 38 : 18, borderRadius: 5, background: on ? `linear-gradient(90deg, ${alpha(t.secondary, 0.7)}, ${alpha(t.primary, 0.5)})` : alpha(t.text, 0.1), transform: `scaleX(${on ? easeOutBack(prog(frame, 20 + r * 8 + c * 6, 10)) : 0})`, transformOrigin: "0 50%" }} />;
+                    const at = 20 + r * 8 + c * 6;
+                    const on = frame >= at;
+                    // 素材块原生是横向长出（scaleX 0→1），无位移：只消费 e.p
+                    const et = enterAt(frame, at, { fallback: "rise", dur: 10, dist: 0 });
+                    return <div key={c} style={{ position: "absolute", left: c * (cw + (full ? 8 : 4)), top: 2, width: cw, height: full ? 38 : 18, borderRadius: 5, background: on ? `linear-gradient(90deg, ${alpha(t.secondary, 0.7)}, ${alpha(t.primary, 0.5)})` : alpha(t.text, 0.1), transform: `scaleX(${on ? et.p : 0})`, transformOrigin: "0 50%" }} />;
                   })}
                 </div>
               ))}
@@ -148,9 +154,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           <div style={{ position: "absolute", left: sideW, right: full ? 24 : 12, top: buttonsY, display: "flex", justifyContent: "flex-end", gap: full ? 14 : 7 }}>
             {data.buttons.map((b, i) => {
               const isHl = data.highlight === b || (acts.some((a) => a.click === b) && frame >= (cues[acts.findIndex((a) => a.click === b)] ?? 0));
-              const p = easeOut(prog(frame, 10 + i * 3, 10));
+              const eb = enterAt(frame, 10 + i * 3, { fallback: "rise", dur: 10 });
               return (
-                <div key={i} style={{ padding: `${full ? 8 : 4}px ${full ? 22 : 11}px`, borderRadius: 8, background: isHl ? t.primary : alpha(t.text, 0.1), border: `2px solid ${isHl ? t.primary : alpha(t.dim, 0.5)}`, boxShadow: isHl ? `0 0 24px ${alpha(t.primary, 0.7)}` : undefined, fontFamily: t.font.title, fontWeight: 800, fontSize: full ? 21 : 11, color: isHl ? t.bg : t.text, whiteSpace: "nowrap", opacity: p }}>{b}</div>
+                <div key={i} style={{ padding: `${full ? 8 : 4}px ${full ? 22 : 11}px`, borderRadius: 8, background: isHl ? t.primary : alpha(t.text, 0.1), border: `2px solid ${isHl ? t.primary : alpha(t.dim, 0.5)}`, boxShadow: isHl ? `0 0 24px ${alpha(t.primary, 0.7)}` : undefined, fontFamily: t.font.title, fontWeight: 800, fontSize: full ? 21 : 11, color: isHl ? t.bg : t.text, whiteSpace: "nowrap", opacity: eb.opacity }}>{b}</div>
               );
             })}
           </div>
@@ -164,7 +170,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {cursor.click > 0 && <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: full ? 70 : 38, height: full ? 70 : 38, borderRadius: "50%", border: `3px solid ${alpha(t.accent, cursor.click)}` }} />}
       </div>
       {data.caption && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: winY + winH + (full ? 28 : 14), textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.caption, W * 0.8, full ? 38 : 19, 13), color: t.accent, whiteSpace: "nowrap", opacity: easeOut(prog(frame, 12, 14)), textShadow: `0 0 18px ${alpha(t.accent, 0.5)}` }}>{data.caption}</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: winY + winH + (full ? 28 : 14), textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.caption, W * 0.8, full ? 38 : 19, 13), color: t.accent, whiteSpace: "nowrap", opacity: enterAt(frame, 12, { fallback: "rise", dur: 14 }).opacity, textShadow: `0 0 18px ${alpha(t.accent, 0.5)}` }}>{data.caption}</div>
       )}
       <Sfx name="click" at={8} volume={0.24} />
       {acts.map((a, i) => (

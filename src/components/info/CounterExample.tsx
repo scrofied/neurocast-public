@@ -8,6 +8,7 @@ import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Heading } from "../../lib/ui";
+import { useEnter } from "../../lib/enter";
 import type { CompDef, CompProps } from "../types";
 
 const schema = z.object({
@@ -22,8 +23,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const badAt = cueOr(data.badAt, Math.round(dur * 0.3));
@@ -36,16 +38,18 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const mainY = full ? H * 0.28 : H * 0.2;
   const badX = full ? W * 0.56 : W * 0.52;
   const badY = mainY;
-  const badP = easeInOut(prog(frame, badAt, 20));
-  const mainIn = easeOut(prog(frame, 0, 14));
   const cmp = easeOut(prog(frame, compareAt, 16));
+  // 正例卡原生是淡入 + 从下方 30px 起；反例卡原生是从画面右侧推进来
+  const eMain = enterAt(frame, 0, { fallback: "rise", dur: 14, dist: 1.36 });
+  const eBad = enterAt(frame, badAt, { fallback: "slide-r", dur: 20, dist: (W + cardW - badX) / 240 });
+  const eVerdict = enterAt(frame, verdictAt, { fallback: "rise", dur: 14, from: 0 });
 
   return (
     <>
       {full && <Heading kicker={data.kicker} title={data.title} frame={frame} width={W} />}
       <div style={{ position: "absolute", inset: 0, transform: `translate(${sh.x}px, ${sh.y}px)` }}>
         {/* main sample */}
-        <div style={{ position: "absolute", left: mainX, top: mainY, width: cardW, height: cardH, borderRadius: 18, background: `linear-gradient(160deg, ${alpha(t.primary, 0.18)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.35)}`, opacity: mainIn, transform: `translateY(${(1 - mainIn) * 30}px)`, display: "flex", flexDirection: "column", padding: full ? 26 : 14, gap: full ? 14 : 8 }}>
+        <div style={{ position: "absolute", left: mainX, top: mainY, width: cardW, height: cardH, borderRadius: 18, background: `linear-gradient(160deg, ${alpha(t.primary, 0.18)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.35)}`, opacity: eMain.opacity, transform: `translate(${eMain.dx}px, ${eMain.dy}px)`, display: "flex", flexDirection: "column", padding: full ? 26 : 14, gap: full ? 14 : 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <Icon name="check" size={full ? 30 : 18} color={t.primary} stroke={4} />
             <span style={{ fontFamily: t.font.mono, fontSize: full ? 20 : 13, letterSpacing: 3, color: t.primary }}>{data.main.label}</span>
@@ -55,7 +59,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         </div>
         {/* bad example slides in with a red edge */}
         {frame >= badAt - 4 && (
-          <div style={{ position: "absolute", left: lerp(W + cardW, badX, badP), top: badY, width: cardW, height: cardH, borderRadius: 18, background: `linear-gradient(160deg, ${alpha(t.bad, 0.14)}, ${alpha(t.bg2, 0.95)})`, border: `3px dashed ${t.bad}`, boxShadow: `0 0 40px ${alpha(t.bad, 0.3)}`, filter: `grayscale(${0.35 * badP})`, display: "flex", flexDirection: "column", padding: full ? 26 : 14, gap: full ? 14 : 8 }}>
+          <div style={{ position: "absolute", left: badX, top: badY, width: cardW, height: cardH, borderRadius: 18, background: `linear-gradient(160deg, ${alpha(t.bad, 0.14)}, ${alpha(t.bg2, 0.95)})`, border: `3px dashed ${t.bad}`, boxShadow: `0 0 40px ${alpha(t.bad, 0.3)}`, opacity: eBad.opacity, transform: `translate(${eBad.dx}px, ${eBad.dy}px)`, filter: `grayscale(${0.35 * eBad.p})`, display: "flex", flexDirection: "column", padding: full ? 26 : 14, gap: full ? 14 : 8 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <Icon name="x" size={full ? 30 : 18} color={t.bad} stroke={4} />
               <span style={{ fontFamily: t.font.mono, fontSize: full ? 20 : 13, letterSpacing: 3, color: t.bad }}>{data.bad.label}</span>
@@ -80,7 +84,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           </svg>
         )}
         {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left: W / 2, top: mainY + cardH + (full ? 150 : 84), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, verdictAt, 14))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 58 : 28, 16), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 26px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
+          <div style={{ position: "absolute", left: W / 2, top: mainY + cardH + (full ? 150 : 84), transform: `translateX(-50%) scale(${eVerdict.scale}) translate(${eVerdict.dx}px, ${eVerdict.dy}px)`, opacity: eVerdict.opacity, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 58 : 28, 16), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 26px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
         )}
       </div>
       <Sfx name="swish" at={badAt} volume={0.32} />

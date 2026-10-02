@@ -4,6 +4,7 @@ import { clamp, easeIn, easeInOut, easeOut, easeOutBack, lerp, prog } from "../.
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Heading } from "../../lib/ui";
@@ -29,8 +30,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.rules.length;
@@ -48,7 +50,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const markAt = cueOr(data.markAt, subjectAt + 18);
   const marks = data.marks ?? data.rules.map(() => null);
   const stampAt = cueOr(data.stampAt, markAt + n * 14 + 18);
-  const subjP = easeInOut(prog(frame, subjectAt, 20));
+  // 对象卡原生从画面右侧整体滑到位：用 slide-r + 原行程距离保住基线
+  const eSubj = enterAt(frame, subjectAt, { fallback: "slide-r", dur: 20, dist: (W + subjW - subjX) / 240 });
+  // 结论章原生是大字号砸下收缩到位：slam + from 2
+  const eStamp = enterAt(frame, stampAt, { fallback: "slam", dur: 7, from: 2 });
   const sh = hitShake(frame, [stampAt], full ? 12 : 6, 12, seed);
   // beam from a rule row to the subject while it is being judged
   const beam = (() => {
@@ -68,10 +73,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           {data.rules.map((r, i) => {
             const c = ruleCues[i];
             if (frame < c) return null;
-            const p = easeOut(prog(frame, c, 12));
+            // 标准条目原生从左侧滑入刻上（-30px）+ 淡入
+            const e = enterAt(frame, c, { fallback: "slide-l", dur: 12, dist: 30 / 240 });
             const fs = fitFont(r.name, cardW - 80, rowH * 0.44, 12);
             return (
-              <div key={i} style={{ position: "absolute", left: 20, right: 20, top: 78 + i * rowH, height: rowH - 8, opacity: p, transform: `translateX(${(1 - p) * -30}px)`, display: "flex", alignItems: "center", gap: 12, borderBottom: `1px solid ${alpha(t.text, 0.12)}` }}>
+              <div key={i} style={{ position: "absolute", left: 20, right: 20, top: 78 + i * rowH, height: rowH - 8, opacity: e.opacity, transform: `translate(${e.dx}px, ${e.dy}px)`, display: "flex", alignItems: "center", gap: 12, borderBottom: `1px solid ${alpha(t.text, 0.12)}` }}>
                 <span style={{ fontFamily: t.font.mono, fontWeight: 900, fontSize: fs * 0.9, color: t.accent }}>{String(i + 1).padStart(2, "0")}</span>
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fs, color: t.text, whiteSpace: "nowrap" }}>{r.name}</div>
@@ -83,7 +89,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         </div>
         {/* subject card slides in from the right */}
         {frame >= subjectAt && (
-          <div style={{ position: "absolute", left: lerp(W + subjW, subjX, subjP), top: subjTop, width: subjW, height: subjH, borderRadius: 18, background: `linear-gradient(160deg, ${alpha(t.accent, 0.18)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${alpha(t.accent, 0.8)}`, boxShadow: `0 0 40px ${alpha(t.accent, 0.3)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10 }}>
+          <div style={{ position: "absolute", left: subjX, top: subjTop, width: subjW, height: subjH, transform: `translate(${eSubj.dx}px, ${eSubj.dy}px)`, clipPath: eSubj.clip, opacity: eSubj.opacity, borderRadius: 18, background: `linear-gradient(160deg, ${alpha(t.accent, 0.18)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${alpha(t.accent, 0.8)}`, boxShadow: `0 0 40px ${alpha(t.accent, 0.3)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10 }}>
             <div style={{ fontFamily: t.font.mono, fontSize: full ? 18 : 12, letterSpacing: 4, color: t.accent }}>被 审 对 象</div>
             <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.subject, subjW * 0.8, full ? 46 : 24, 14), color: t.text, whiteSpace: "nowrap" }}>{data.subject}</div>
             {data.subjectNote && <div style={{ fontFamily: t.font.body, fontWeight: 700, fontSize: full ? 22 : 13, color: t.dim, whiteSpace: "nowrap" }}>{data.subjectNote}</div>}
@@ -105,8 +111,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             if (frame < c + 8) return null;
             const my = subjTop + ((i + 0.5) / n) * subjH;
             const col = m === null ? t.gold : m ? t.primary : t.bad;
+            // 判定徽章原生回弹弹出（0→1）
+            const em = enterAt(frame, c + 8, { fallback: "rise", dur: 12, from: 0 });
             return (
-              <div key={i} style={{ position: "absolute", left: subjX + subjW + (full ? 22 : 10), top: my, transform: `translateY(-50%) scale(${easeOutBack(prog(frame, c + 8, 12))})`, width: full ? 54 : 30, height: full ? 54 : 30, borderRadius: "50%", background: alpha(col, 0.2), border: `3px solid ${col}`, display: "flex", alignItems: "center", justifyContent: "center", color: col, fontFamily: t.font.mono, fontWeight: 900, fontSize: full ? 28 : 16, boxShadow: `0 0 18px ${alpha(col, 0.6)}` }}>
+              <div key={i} style={{ position: "absolute", left: subjX + subjW + (full ? 22 : 10), top: my, transform: `translateY(-50%) scale(${em.scale})`, width: full ? 54 : 30, height: full ? 54 : 30, borderRadius: "50%", background: alpha(col, 0.2), border: `3px solid ${col}`, display: "flex", alignItems: "center", justifyContent: "center", color: col, fontFamily: t.font.mono, fontWeight: 900, fontSize: full ? 28 : 16, boxShadow: `0 0 18px ${alpha(col, 0.6)}` }}>
                 {m === null ? "?" : m ? "✓" : "✗"}
               </div>
             );
@@ -116,7 +124,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const p = easeOut(prog(frame, stampAt, 7));
           const fs = fitFont(data.stamp, subjW * 1.1, full ? 96 : 44, 24);
           return (
-            <div style={{ position: "absolute", left: subjX + subjW / 2, top: subjTop + subjH / 2, transform: `translate(-50%,-50%) rotate(${lerp(-14, -8, p)}deg) scale(${2 - p})`, opacity: clamp(p * 1.6), padding: `${fs * 0.16}px ${fs * 0.44}px`, border: `${Math.max(4, fs * 0.09)}px solid ${t.bad}`, borderRadius: fs * 0.2, background: "rgba(0,0,0,.5)", fontFamily: t.font.title, fontWeight: 900, fontSize: fs, color: t.bad, whiteSpace: "nowrap", textShadow: `0 0 26px ${alpha(t.bad, 0.7)}` }}>
+            <div style={{ position: "absolute", left: subjX + subjW / 2, top: subjTop + subjH / 2, transform: `translate(-50%,-50%) rotate(${lerp(-14, -8, p)}deg) scale(${eStamp.scale})`, opacity: clamp(eStamp.p * 1.6), padding: `${fs * 0.16}px ${fs * 0.44}px`, border: `${Math.max(4, fs * 0.09)}px solid ${t.bad}`, borderRadius: fs * 0.2, background: "rgba(0,0,0,.5)", fontFamily: t.font.title, fontWeight: 900, fontSize: fs, color: t.bad, whiteSpace: "nowrap", textShadow: `0 0 26px ${alpha(t.bad, 0.7)}` }}>
               {data.stamp}
             </div>
           );

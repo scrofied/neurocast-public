@@ -3,6 +3,7 @@ import { z } from "zod";
 import { Freeze, OffthreadVideo, Sequence, staticFile, useCurrentFrame } from "remotion";
 import { clamp, easeInOut, easeOut, prog } from "../../lib/anim";
 import { Box, useBox } from "../../lib/box";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { Corners } from "../../lib/ui";
 import { LOOKUP } from "../lookup";
@@ -143,8 +144,9 @@ const camBox = (cam: Cam): React.CSSProperties => {
   return st;
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, text }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed, text }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const intro = data.shrinkAt ?? data.intro ?? 24;
   const op = data.opening;
@@ -154,13 +156,19 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, text }) => {
   const opening = !!(odef?.camera && orange && frame >= orange.from && frame < orange.to);
   const cam: Cam = opening ? odef!.camera!(odata, frame - orange!.from, orange!.to - orange!.from) : {};
   // an opening that drives the person suppresses the shrink: it owns the window shape for its window
-  const k = opening ? 0 : easeInOut(prog(frame, intro, 26));
+  // 收缩（舞台框）是本组件自己那层的入场：只取 e.p 顶替原生进度（fallback=wipe → easeInOut，基线不变），
+  // 不消费 dx/dy/clip，避免给窗口凭空加位移；分镜写 motion.enter 时由它改这段节奏。
+  const eStage = enterAt(frame, intro, { fallback: "wipe", dur: 26 });
+  const k = opening ? 0 : eStage.p;
   const x = WIN.x * k;
   const y = WIN.y * k;
   const w = width + (WIN.w - width) * k;
   const h = height + (WIN.h - height) * k;
   const radius = 26 * k;
-  const show = easeOut(prog(frame, intro + 12, 20)) * (opening ? 0 : 1);
+  // 侧栏槽位（两侧玻璃栏的淡入）也是本组件自己那层的入场：只取 e.p 顶替原生 easeOut 进度
+  // （fallback=slide-r 的 p 即 easeOut，基线一致），位移仍由 Panel 原生 (1-show) 计算，不额外叠加。
+  const eSlot = enterAt(frame, intro + 12, { fallback: "slide-r", dur: 20 });
+  const show = eSlot.p * (opening ? 0 : 1);
   const vf = data.videoFrames ?? Infinity;
   const last = Math.max(0, Math.floor(vf) - 2);
   const src = /^https?:/.test(data.video) ? data.video : staticFile(data.video);
@@ -259,6 +267,7 @@ export const TalkingHeadStage: CompDef<D> = {
   minSec: 3,
   maxSec: 40,
   tags: ["口播", "真人", "开场"],
+  motion: { kind: "真人从全屏收进中间发光舞台框，两侧玻璃侧栏随之滑入", energy: 2 },
   desc: "开头 1 秒真人全屏，随后收进中间发光窗口；左右两块玻璃侧栏按讲话节奏依次放入小组件（手机信息流、要点卡、逻辑翻转、数字等）",
   use: "真人口播片段（[口播: x.mp4]）。侧栏内容要跟他当时说的话对应，用 at 锚点卡住节奏",
   schema,

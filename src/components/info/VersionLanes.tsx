@@ -4,6 +4,7 @@ import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/an
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Heading } from "../../lib/ui";
@@ -27,8 +28,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.lanes.length;
@@ -47,6 +49,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const sh = hitShake(frame, [verdictAt], full ? 10 : 5, 12, seed);
   // the winner scales up once decided
   const zoom = bestIdx >= 0 && frame >= verdictAt ? easeOut(prog(frame, verdictAt, 18)) : 0;
+  // 结论原生是回弹弹出；分镜写 motion.enter 才换
+  const eV = enterAt(frame, verdictAt, { fallback: "rise", dur: 14, from: 0 });
 
   return (
     <>
@@ -55,11 +59,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {/* lane frames first */}
         {data.lanes.map((l, i) => {
           const y = top + i * (laneH + (full ? 18 : 8));
-          const p = easeOut(prog(frame, i * 3, 14));
+          // 泳道框原生从左侧滑入（40px）+ 淡入
+          const e = enterAt(frame, i * 3, { fallback: "slide-l", dur: 14, dist: 40 / 240 });
           const isBest = i === best && zoom > 0;
           const col = l.best ? t.gold : t.dim;
           return (
-            <div key={i} style={{ position: "absolute", left: left, top: y, width: sayW + resW + (full ? 40 : 16), height: laneH, transform: `scale(${1 + (isBest ? zoom * (bestIdx >= 0 ? 0.05 : 0) : 0)}) translateX(${(1 - p) * -40}px)`, transformOrigin: "0 50%", opacity: clamp(p * 1.4), borderRadius: 16, background: isBest ? alpha(t.gold, 0.08 * zoom) : alpha(t.text, 0.04), border: `2px solid ${isBest ? alpha(t.gold, 0.4 + 0.6 * zoom) : alpha(t.text, 0.14)}`, boxShadow: isBest ? `0 0 ${30 * zoom}px ${alpha(t.gold, 0.4)}` : undefined }}>
+            <div key={i} style={{ position: "absolute", left: left, top: y, width: sayW + resW + (full ? 40 : 16), height: laneH, transform: `scale(${1 + (isBest ? zoom * (bestIdx >= 0 ? 0.05 : 0) : 0)}) translate(${e.dx}px, ${e.dy}px)`, transformOrigin: "0 50%", opacity: clamp(e.p * 1.4), borderRadius: 16, background: isBest ? alpha(t.gold, 0.08 * zoom) : alpha(t.text, 0.04), border: `2px solid ${isBest ? alpha(t.gold, 0.4 + 0.6 * zoom) : alpha(t.text, 0.14)}`, boxShadow: isBest ? `0 0 ${30 * zoom}px ${alpha(t.gold, 0.4)}` : undefined }}>
               <div style={{ position: "absolute", left: full ? 18 : 8, top: full ? 14 : 6, fontFamily: t.font.mono, fontSize: full ? 18 : 11, letterSpacing: 3, color: col }}>{String.fromCharCode(65 + i)}</div>
             </div>
           );
@@ -72,7 +77,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const shown = chars.slice(0, Math.round(k * chars.length)).join("");
           const fs = fitFont(l.say, sayW - (full ? 50 : 24), laneH * 0.24, 12);
           return (
-            <div key={i} style={{ position: "absolute", left: left + (full ? 44 : 22), top: y + laneH * 0.5, width: sayW, transform: "translateY(-50%)", fontFamily: t.font.body, fontWeight: 800, fontSize: fs, color: t.text, lineHeight: 1.3, opacity: easeOut(prog(frame, typeAt + i * 4, 8)) }}>
+            <div key={i} style={{ position: "absolute", left: left + (full ? 44 : 22), top: y + laneH * 0.5, width: sayW, transform: "translateY(-50%)", fontFamily: t.font.body, fontWeight: 800, fontSize: fs, color: t.text, lineHeight: 1.3, opacity: enterAt(frame, typeAt + i * 4, { fallback: "rise", dur: 8 }).opacity }}>
               {shown}
               {k < 1 && <span style={{ opacity: 0.7 }}>|</span>}
             </div>
@@ -114,7 +119,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           </svg>
         )}
         {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left, top: top + n * (laneH + (full ? 18 : 8)) + (full ? 22 : 10), transform: `scale(${easeOutBack(prog(frame, verdictAt, 14))})`, transformOrigin: "0 50%", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 54 : 26, 15), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
+          <div style={{ position: "absolute", left, top: top + n * (laneH + (full ? 18 : 8)) + (full ? 22 : 10), transform: `scale(${eV.scale})`, transformOrigin: "0 50%", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 54 : 26, 15), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
         )}
       </div>
       {data.lanes.map((_, i) => (

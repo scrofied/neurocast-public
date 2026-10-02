@@ -1,6 +1,7 @@
 import React from "react";
 import { z } from "zod";
-import { easeIn, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { easeIn, easeInOut, easeOut, lerp, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues } from "../../lib/cue";
@@ -46,8 +47,9 @@ const Back: React.FC<{ w: number; h: number }> = ({ w, h }) => {
   );
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.cards.length;
@@ -96,6 +98,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         })}
         {key && frame >= keyAt - 10 && (() => {
           const k = prog(frame, keyAt - 10, 10);
+          // 「底 牌」小标签弹出是纯入场；拍下下落本身是隐喻主体，只留 k 驱动
+          const eTag = enterAt(frame, keyAt + 8, { fallback: "rise", dur: 12 });
           const y = lerp(-kh * 1.6, tableY - kh / 2 - 10, easeIn(k));
           const s = lerp(1.9, 1, easeIn(k));
           const glow = 0.6 + 0.4 * Math.sin(frame * 0.15);
@@ -106,7 +110,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
               <div style={{ position: "absolute", left: W / 2 - kw / 2, top: y, width: kw, height: kh, transform: `scale(${s}) rotate(${lerp(-12, -2, k)}deg)` }}>
                 <Face c={key} w={kw} h={kh} col={t.gold} big />
               </div>
-              {frame >= keyAt + 8 && <div style={{ position: "absolute", left: W / 2, top: tableY - kh / 2 - (full ? 64 : 34), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, keyAt + 8, 12))})`, fontFamily: t.font.mono, fontWeight: 900, fontSize: full ? 30 : 18, letterSpacing: 6, color: t.gold }}>底 牌</div>}
+              {frame >= keyAt + 8 && <div style={{ position: "absolute", left: W / 2, top: tableY - kh / 2 - (full ? 64 : 34), transform: `translateX(-50%) scale(${eTag.p}) translate(${eTag.dx}px, ${eTag.dy}px)`, clipPath: eTag.clip, fontFamily: t.font.mono, fontWeight: 900, fontSize: full ? 30 : 18, letterSpacing: 6, color: t.gold }}>底 牌</div>}
             </>
           );
         })()}

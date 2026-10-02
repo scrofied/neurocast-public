@@ -4,6 +4,7 @@ import { clamp, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -33,8 +34,9 @@ type D = z.infer<typeof schema>;
 
 const LAMPS = { red: "#ff5d6c", yellow: "#ffcf5c", green: "#3dffa8" } as const;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.tiers.length;
@@ -53,6 +55,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const hi = data.highlight;
   const hiAt = hi !== undefined ? cues[hi] + 12 : -1;
   const sh = hitShake(frame, [hiAt], full ? 9 : 5, 26, seed);
+  const eNote = enterAt(frame, noteAt, { fallback: "slide-r", dur: 12 });
 
   return (
     <>
@@ -86,14 +89,18 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const bw = cw - gap;
           const bh = ch - gap;
           if (frame < cues[i]) return null;
-          const p = easeOutBack(prog(frame, cues[i], 14));
+          // 档位章原生是回弹淡入 + 0.92→1 放大、印章由大到小砸下（easeOutBack）：用 rise + from 复原基线
+          const e = enterAt(frame, cues[i], { fallback: "rise", dur: 14, from: 0.92 });
+          const p = e.p;
+          const eRule = enterAt(frame, cues[i] + 8, { fallback: "slide-r", dur: 12 });
+          const eRes = enterAt(frame, cues[i] + 16, { fallback: "slide-r", dur: 12, dist: 0.17 });
           const isHi = i === hi;
           const hiK = isHi && hiAt >= 0 ? clamp((frame - hiAt) / 10) : 0;
           const icon = x.icon ?? guessIcon(x.name) ?? "grid";
           const lamp = x.light ? LAMPS[x.light] : undefined;
           const nameFs = fitFont(x.name, bw * 0.8, full ? 56 : 30, 16);
           return (
-            <div key={i} style={{ position: "absolute", left: bx, top: by, width: bw, height: bh, opacity: clamp(p * 1.4), transform: `scale(${0.92 + 0.08 * p})`, borderRadius: 16, background: isHi ? alpha(t.bad, 0.1 * hiK) : "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 12 : 6, padding: full ? 20 : 10 }}>
+            <div key={i} style={{ position: "absolute", left: bx, top: by, width: bw, height: bh, opacity: e.opacity, transform: `scale(${e.scale}) translate(${e.dx}px, ${e.dy}px)`, clipPath: e.clip, borderRadius: 16, background: isHi ? alpha(t.bad, 0.1 * hiK) : "transparent", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 12 : 6, padding: full ? 20 : 10 }}>
               {/* stamp: the tier label slams in like a seal */}
               <div style={{ transform: `scale(${2 - p}) rotate(${lerp(-8, -2, p)}deg)`, display: "flex", alignItems: "center", gap: full ? 14 : 8, padding: `${full ? 8 : 4}px ${full ? 26 : 13}px`, border: `${full ? 5 : 3}px solid ${isHi ? t.bad : t.primary}`, borderRadius: 12, background: alpha(t.bg, 0.55), boxShadow: `0 0 24px ${alpha(isHi ? t.bad : t.primary, 0.45)}` }}>
                 <Icon name={icon} size={nameFs * 0.85} color={isHi ? t.bad : t.primary} />
@@ -109,10 +116,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
               )}
               {/* rule + result fly in after the stamp */}
               {x.rule && (
-                <div style={{ opacity: easeOut(prog(frame, cues[i] + 8, 12)), transform: `translateY(${(1 - easeOut(prog(frame, cues[i] + 8, 12))) * 14}px)`, fontFamily: t.font.body, fontWeight: 800, fontSize: fitFont(x.rule, bw * 0.86, full ? 32 : 18, 12), color: t.text, whiteSpace: "nowrap" }}>{x.rule}</div>
+                <div style={{ opacity: eRule.p, transform: `translateY(${(1 - eRule.p) * 14}px)`, fontFamily: t.font.body, fontWeight: 800, fontSize: fitFont(x.rule, bw * 0.86, full ? 32 : 18, 12), color: t.text, whiteSpace: "nowrap" }}>{x.rule}</div>
               )}
               {x.result && (
-                <div style={{ opacity: easeOut(prog(frame, cues[i] + 16, 12)), fontFamily: t.font.body, fontWeight: 900, fontSize: fitFont(x.result, bw * 0.86, full ? 28 : 16, 11), color: t.bad, whiteSpace: "nowrap" }}>{x.result}</div>
+                <div style={{ opacity: eRes.p, transform: `translate(${eRes.dx}px, ${eRes.dy}px)`, clipPath: eRes.clip, fontFamily: t.font.body, fontWeight: 900, fontSize: fitFont(x.result, bw * 0.86, full ? 28 : 16, 11), color: t.bad, whiteSpace: "nowrap" }}>{x.result}</div>
               )}
               {data.stampLabel && (
                 <div style={{ position: "absolute", right: full ? 16 : 8, top: full ? 12 : 6, fontFamily: t.font.mono, fontSize: full ? 16 : 11, letterSpacing: 3, color: t.dim }}>{data.stampLabel}</div>
@@ -121,7 +128,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           );
         })}
         {data.note && frame >= noteAt && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: bottom + (full ? 24 : 12), textAlign: "center", opacity: easeOut(prog(frame, noteAt, 12)), fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.note, W * 0.8, full ? 44 : 22, 14), color: t.gold, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>{data.note}</div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: bottom + (full ? 24 : 12), textAlign: "center", opacity: eNote.p, transform: `translate(${eNote.dx}px, ${eNote.dy}px)`, clipPath: eNote.clip, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.note, W * 0.8, full ? 44 : 22, 14), color: t.gold, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>{data.note}</div>
         )}
       </div>
       {cues.map((c, i) => (

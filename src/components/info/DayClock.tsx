@@ -7,6 +7,7 @@ import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { GlowDefs, Heading } from "../../lib/ui";
+import { useEnter, type EnterState } from "../../lib/enter";
 import type { CompDef, CompProps } from "../types";
 
 const end = z.object({ label: z.string(), time: z.string().describe("HH:MM"), event: z.string().optional(), at: z.number().optional() });
@@ -23,8 +24,9 @@ const mins = (s: string) => {
   return (h || 0) * 60 + (m || 0);
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const a0 = cueOr(data.from.at, 8);
   const a1 = cueOr(data.to.at, Math.max(a0 + 30, dur * 0.7));
@@ -38,13 +40,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const sy = cy - Math.sin(ang) * R * 0.78;
   const m = Math.round(mins(data.from.time) + (mins(data.to.time) - mins(data.from.time)) * k);
   const clock = `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
-  const p0 = easeOutBack(prog(frame, a0, 16));
-  const p1 = easeOutBack(prog(frame, a1, 16));
+  // 起终点的事件旗原生是从 0 回弹弹出（scale 0→1）；from:0 保住这个基线
+  const eFrom = enterAt(frame, a0, { fallback: "rise", dur: 16, from: 0 });
+  const eTo = enterAt(frame, a1, { fallback: "rise", dur: 16, from: 0 });
   const dusk = k;
   const arc = `M${cx - R},${cy} A${R},${R * 0.78} 0 0 1 ${cx + R},${cy}`;
-  const pin = (x: number, y: number, e: z.infer<typeof end>, p: number, gold: boolean) =>
-    e.event && p > 0 ? (
-      <div style={{ position: "absolute", left: x, top: y - 150, transform: `translate(-50%,0) scale(${p})`, transformOrigin: "center bottom", display: "flex", flexDirection: "column", alignItems: "center" }}>
+  const pin = (x: number, y: number, e: z.infer<typeof end>, ent: EnterState, gold: boolean) =>
+    e.event && ent.p > 0 ? (
+      <div style={{ position: "absolute", left: x, top: y - 150, transform: `translate(-50%,0) scale(${ent.scale}) translate(${ent.dx}px, ${ent.dy}px)`, opacity: ent.opacity, transformOrigin: "center bottom", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ padding: "12px 24px", borderRadius: 16, background: alpha(gold ? t.gold : t.primary, 0.18), border: `2px solid ${gold ? t.gold : t.primary}`, boxShadow: `0 0 30px ${alpha(gold ? t.gold : t.primary, 0.4)}`, display: "flex", alignItems: "center", gap: 10, fontFamily: t.font.title, fontWeight: 900, fontSize: 36, color: gold ? t.gold : t.text, whiteSpace: "nowrap" }}>
           <Icon name={gold ? "send" : "shovel"} size={32} color={gold ? t.gold : t.primary} />
           {e.event}
@@ -78,8 +81,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
           <div style={{ fontFamily: t.font.mono, fontSize: 26, color: t.dim, fontWeight: 400 }}>{(e as z.infer<typeof end>).time}</div>
         </div>
       ))}
-      {pin(cx - R * 0.62, cy, data.from, p0, false)}
-      {pin(cx + R * 0.62, cy, data.to, p1, true)}
+      {pin(cx - R * 0.62, cy, data.from, eFrom, false)}
+      {pin(cx + R * 0.62, cy, data.to, eTo, true)}
       <Sfx name="pop" at={a0} volume={0.3} />
       <Sfx name="whoosh" at={a0 + 6} volume={0.2} />
       <Sfx name="ding" at={a1} volume={0.35} />
@@ -95,6 +98,7 @@ export const DayClock: CompDef<D> = {
   minSec: 2,
   maxSec: 8,
   tags: ["早上", "晚上", "当天", "一天", "晚饭前", "效率", "马上"],
+  motion: { kind: "太阳沿弧线从早走到晚 + 时钟数字滚动，起终点事件旗弹出", energy: 2 },
   desc: "太阳沿一天的弧线从早上走到傍晚，中间数字时钟滚动，起点插旗“挖到痛点”，终点金色插旗“已发布”",
   use: "从 A 时刻到 B 时刻就做完了（时间压缩、效率）：早上想到晚上上线、上午开会下午交付、9 点提需求 11 点出方案",
   schema,

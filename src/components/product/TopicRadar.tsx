@@ -3,6 +3,7 @@ import { z } from "zod";
 import { clamp, easeOut, easeOutBack, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -19,8 +20,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const cx = width * 0.36;
   const cy = height * 0.54;
@@ -36,9 +38,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
     return { a, x: cx + Math.cos(a) * rr, y: cy + Math.sin(a) * rr * 0.9 };
   });
   // each take appears when the sweep first passes its angle (one turn = 36 frames)
+  // 每张做法被扫描到的瞬间回弹弹出（原生 scale，rise 等价）
   const seen = (a: number) => scanAt + ((a + Math.PI / 2) / (Math.PI * 2)) * 36;
-  const pk = easeOutBack(prog(frame, pickAt, 20));
-  const core = easeOutBack(prog(frame, 2, 18));
+  const ePick = enterAt(frame, pickAt, { fallback: "rise", dur: 20, from: 0 });
+  const eCore = enterAt(frame, 2, { fallback: "rise", dur: 18, from: 0 });
   const gx = width * 0.77;
   const gy = cy - 40;
   return (
@@ -65,16 +68,16 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
             return <path key={k} d={`M${cx},${cy} L${cx + Math.cos(a0) * R},${cy + Math.sin(a0) * R} A${R},${R} 0 0 0 ${cx + Math.cos(a1) * R},${cy + Math.sin(a1) * R} Z`} fill={t.primary} opacity={0.22 * (1 - k / 14)} />;
           })}
         {frame >= scanAt && frame < pickAt + 10 && <line x1={cx} y1={cy} x2={cx + Math.cos(sweepA) * R} y2={cy + Math.sin(sweepA) * R} stroke={t.primary} strokeWidth={3} filter="url(#tr)" />}
-        {frame >= pickAt && <path d={`M${cx},${cy} C${(cx + gx) / 2},${cy - 160} ${(cx + gx) / 2},${gy} ${gx - 250},${gy}`} fill="none" stroke={t.gold} strokeWidth={3} strokeDasharray="8 8" strokeDashoffset={-frame * 2} opacity={clamp(pk)} filter="url(#tr)" />}
+        {frame >= pickAt && <path d={`M${cx},${cy} C${(cx + gx) / 2},${cy - 160} ${(cx + gx) / 2},${gy} ${gx - 250},${gy}`} fill="none" stroke={t.gold} strokeWidth={3} strokeDasharray="8 8" strokeDashoffset={-frame * 2} opacity={clamp(ePick.p)} filter="url(#tr)" />}
       </svg>
       {takes.map((tk, i) => {
         const p = pos[i];
         const s = seen(p.a);
         const on = frame >= s;
-        const q = on ? easeOutBack(prog(frame, s, 12)) : 0;
         if (!on) return null;
+        const eT = enterAt(frame, s, { fallback: "rise", dur: 12, from: 0, seed: i });
         return (
-          <div key={i} style={{ position: "absolute", left: p.x, top: p.y, transform: `translate(-50%,-50%) scale(${q})`, padding: "10px 18px", borderRadius: 14, background: alpha(t.bg2, 0.92), border: `1.5px solid ${alpha(t.dim, 0.55)}`, fontFamily: t.font.body, fontWeight: 700, fontSize: 24, color: alpha(t.text, 0.8), whiteSpace: "nowrap", opacity: frame >= pickAt ? 0.4 : 1 }}>
+          <div key={i} style={{ position: "absolute", left: p.x, top: p.y, transform: `translate(-50%,-50%) scale(${eT.scale}) translate(${eT.dx}px, ${eT.dy}px)`, clipPath: eT.clip, padding: "10px 18px", borderRadius: 14, background: alpha(t.bg2, 0.92), border: `1.5px solid ${alpha(t.dim, 0.55)}`, fontFamily: t.font.body, fontWeight: 700, fontSize: 24, color: alpha(t.text, 0.8), whiteSpace: "nowrap", opacity: frame >= pickAt ? 0.4 : 1 }}>
             {tk.text}
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4, fontFamily: t.font.mono, fontSize: 18, color: t.dim }}>
               <Icon name="fire" size={16} color={t.accent} />
@@ -85,12 +88,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: cx, top: cy, transform: `translate(-50%,-50%) scale(${core})`, padding: "18px 30px", borderRadius: 20, background: `linear-gradient(135deg, ${alpha(t.primary, 0.35)}, ${alpha(t.secondary, 0.3)})`, border: `2px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.5)}`, display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.topic, 380, 40, 22), color: t.text, whiteSpace: "nowrap" }}>
+      <div style={{ position: "absolute", left: cx, top: cy, transform: `translate(-50%,-50%) scale(${eCore.scale}) translate(${eCore.dx}px, ${eCore.dy}px)`, clipPath: eCore.clip, padding: "18px 30px", borderRadius: 20, background: `linear-gradient(135deg, ${alpha(t.primary, 0.35)}, ${alpha(t.secondary, 0.3)})`, border: `2px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.5)}`, display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.topic, 380, 40, 22), color: t.text, whiteSpace: "nowrap" }}>
         <Icon name="target" size={36} color={t.primary} />
         {data.topic}
       </div>
       {frame >= pickAt && (
-        <div style={{ position: "absolute", left: gx - 250, top: gy - 130, width: 520, transform: `scale(${pk})`, transformOrigin: "left center", padding: "28px 34px", borderRadius: 26, background: `linear-gradient(150deg, ${alpha(t.gold, 0.25)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${t.gold}`, boxShadow: `0 0 70px ${alpha(t.gold, 0.5)}` }}>
+        <div style={{ position: "absolute", left: gx - 250, top: gy - 130, width: 520, transform: `scale(${ePick.scale}) translate(${ePick.dx}px, ${ePick.dy}px)`, clipPath: ePick.clip, transformOrigin: "left center", padding: "28px 34px", borderRadius: 26, background: `linear-gradient(150deg, ${alpha(t.gold, 0.25)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${t.gold}`, boxShadow: `0 0 70px ${alpha(t.gold, 0.5)}` }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.body, fontWeight: 800, fontSize: 28, color: t.gold }}>
             <Icon name="spark" size={30} color={t.gold} fill={t.gold} />
             {data.pick.label}
@@ -112,6 +115,7 @@ export const TopicRadar: CompDef<D> = {
   minSec: 3,
   maxSec: 12,
   tags: ["选题", "角度", "差异化", "网上已经", "竞品", "搜索"],
+  motion: { kind: "雷达扫描线旋转、已有做法随扫描逐个回弹弹出、金色角度卡回弹入场", energy: 2 },
   desc: "中心是你的话题，雷达扫过时周围冒出网上已有的做法（标热度和“已饱和”），最后一张金色卡片弹出“值得你做的角度”",
   use: "调研已有内容/竞品后找空白、差异化角度；“先看看网上发成什么样了，再挑出还值得做的角度”",
   schema,

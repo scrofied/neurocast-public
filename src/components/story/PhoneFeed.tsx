@@ -6,6 +6,7 @@ import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -21,8 +22,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: bw, height: bh } = useBox();
   const full = bw >= 900;
   const top = full ? 200 : 20;
@@ -39,9 +41,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const swipeAt = cueOr(data.swipeAt, dur * 0.45);
   const swipes = [swipeAt, swipeAt + 14, swipeAt + 26];
   const off = swipes.reduce((a, s) => a + easeInOut(clamp((frame - s) / 9)), 0);
-  const enter = easeOutBack(prog(frame, 0, 18));
-  const note = easeOutBack(prog(frame, 8, 16));
-  const dwell = easeOutBack(prog(frame, swipeAt + 5, 14));
+  const ePhone = enterAt(frame, 0, { fallback: "rise", dur: 18, from: 0.9 });
+  const eNote = enterAt(frame, 8, { fallback: "rise", dur: 16, from: 0 });
+  const eDwell = enterAt(frame, swipeAt + 5, { fallback: "rise", dur: 14, from: 0 });
+  const eLabel = enterAt(frame, 12, { fallback: "rise", dur: 16 });
   const cards = [data.mine, ...data.cards];
   const hues = [t.primary, t.secondary, t.accent, t.primary, t.secondary];
   const fsTitle = fitFont(data.mine, sw * 0.62, sw * 0.12, 14);
@@ -59,8 +62,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           background: "#05070c",
           border: `2px solid ${alpha(t.dim, 0.55)}`,
           boxShadow: `0 0 50px ${alpha(t.primary, 0.18)}, 0 30px 60px rgba(0,0,0,.6)`,
-          transform: `scale(${0.9 + 0.1 * enter})`,
-          opacity: clamp(enter * 1.5),
+          transform: `translate(${ePhone.dx}px, ${ePhone.dy}px) scale(${ePhone.scale})`,
+          clipPath: ePhone.clip,
+          opacity: ePhone.opacity,
         }}
       >
         <div style={{ position: "absolute", left: inset, top: inset, width: sw, height: sh, borderRadius: pw * 0.11, overflow: "hidden", background: t.bg }}>
@@ -101,7 +105,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
                       fontFamily: t.font.body,
                       fontWeight: 800,
                       fontSize: sw * 0.058,
-                      transform: `rotate(-6deg) scale(${note})`,
+                      transform: `translate(${eNote.dx}px, ${eNote.dy}px) rotate(-6deg) scale(${eNote.scale})`,
+                      clipPath: eNote.clip,
                       transformOrigin: "left center",
                       display: "flex",
                       alignItems: "center",
@@ -137,7 +142,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             position: "absolute",
             left: cx,
             top: y0 + ph - 14,
-            transform: `translate(-50%, -50%) scale(${dwell})`,
+            transform: `translate(-50%, -50%) translate(${eDwell.dx}px, ${eDwell.dy}px) scale(${eDwell.scale})`,
+            clipPath: eDwell.clip,
             padding: full ? "12px 26px" : "8px 18px",
             borderRadius: 999,
             background: alpha(t.bad, 0.18),
@@ -159,7 +165,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         </div>
       )}
       {data.label && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: y0 + ph + (full ? 50 : 34), textAlign: "center", fontFamily: t.font.body, fontWeight: 700, fontSize: full ? 30 : 20, color: t.dim, opacity: easeOut(prog(frame, 12, 16)) }}>{data.label}</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: y0 + ph + (full ? 50 : 34), textAlign: "center", fontFamily: t.font.body, fontWeight: 700, fontSize: full ? 30 : 20, color: t.dim, opacity: eLabel.opacity, transform: `translate(${eLabel.dx}px, ${eLabel.dy}px)`, clipPath: eLabel.clip }}>{data.label}</div>
       )}
       {swipes.map((s, i) => (
         <Sfx key={i} name="swipe" at={s} volume={0.3} />
@@ -177,6 +183,7 @@ export const PhoneFeed: CompDef<D> = {
   minSec: 3,
   maxSec: 12,
   tags: ["划走", "停留", "完播", "信息流", "刷到", "没人看"],
+  motion: { kind: "手机卡片放大淡入 + 心声/停留徽章弹出 + 内容被逐条上划", energy: 2 },
   desc: "一部手机里是你的内容（贴着“我觉得超重要”），观众手指一划连刷三条，红色徽章弹出“停留 0.3 秒”",
   use: "观众不感兴趣 / 划走 / 停留时长短 / 完播率低 / 自嗨内容没人看",
   panel: true,

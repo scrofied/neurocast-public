@@ -1,7 +1,8 @@
 import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
-import { clamp, easeOut, easeOutBack, prog } from "../../lib/anim";
+import { clamp, easeOut, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { Glass, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -37,6 +38,7 @@ const tokenize = (line: string, t: ReturnType<typeof useTheme>) => {
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const lines = data.code.replace(/\t/g, "  ").split("\n").slice(0, 16);
   const total = lines.reduce((a, l) => a + l.length, 0);
@@ -47,7 +49,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const h = Math.max(360, lines.length * lh + 130);
   const left = variant === 1 ? width - w - 140 : (width - w) / 2;
   const top = (height - h) / 2 + 50;
-  const enter = easeOutBack(prog(frame, 0, 22));
+  // 窗口原生是回弹放大 + 淡入（0.85→1）→ rise + from:0.85，e.scale 与原生 scale 完全等价
+  const eW = enterAt(frame, 0, { fallback: "rise", dur: 22, from: 0.85 });
   const tilt = variant === 2 ? 14 : variant === 1 ? -10 : 8;
   const done = typed >= total;
   const hi = new Set((data.highlight ?? []).map((n) => n - 1));
@@ -68,7 +71,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
 
   return (
     <>
-      <div style={{ position: "absolute", left, top, width: w, height: h, transform: `perspective(2000px) rotateY(${tilt * (1 - enter * 0.6)}deg) rotateX(${4 * (1 - enter)}deg) scale(${0.85 + 0.15 * enter})`, opacity: clamp(enter) }}>
+      <div style={{ position: "absolute", left, top, width: w, height: h, transform: `perspective(2000px) translate(${eW.dx}px, ${eW.dy}px) rotateY(${tilt * (1 - eW.p * 0.6)}deg) rotateX(${4 * (1 - eW.p)}deg) scale(${eW.scale})`, clipPath: eW.clip, opacity: clamp(eW.p) }}>
         <Glass style={{ inset: 0 }}>
           <div style={{ height: 54, display: "flex", alignItems: "center", gap: 10, padding: "0 22px", borderBottom: `1px solid ${alpha(t.primary, 0.2)}` }}>
             {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
@@ -111,6 +114,7 @@ export const CodeEditor: CompDef<D> = {
   minSec: 4,
   maxSec: 12,
   tags: ["代码", "写代码", "函数", "脚本", "命令", "Python", "JavaScript"],
+  motion: { kind: "编辑器窗口回弹入场 + 代码逐字打字 + 光标闪烁", energy: 2 },
   desc: "代码编辑器窗口，代码逐行打字并语法高亮",
   use: "讲稿里用 ``` 包起来的代码块",
   schema,

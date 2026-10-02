@@ -4,6 +4,7 @@ import { clamp, easeIn, easeInOut, easeOut, easeOutBack, lerp, prog } from "../.
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Figure, gait, mixPose, POSES } from "../../lib/figure";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -25,8 +26,9 @@ type D = z.infer<typeof schema>;
 
 // a perspective road running from the bottom of the frame to a vanishing point; pits sit on it
 // in depth order. Road coordinates: u in [-1,1] across, v in [0,1] from near to far.
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.pits.length;
@@ -160,12 +162,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {pits.map((p, i) => {
           const c = proj(p.u, p.v);
           if (frame < cues[i] - 2) return null;
-          const k = easeOutBack(prog(frame, cues[i], 14));
+          // 坑名标签原生是原地回弹放大入场（scale 0→1，easeOutBack）；坑盖翻开、人掉下去、安全线生长都是隐喻主体运动，保持原生
+          const e = enterAt(frame, cues[i], { fallback: "rise", dur: 14, from: 0, seed: i });
           const fs = fitFont(p.text, W * 0.24, (full ? 54 : 26) * Math.max(0.6, c.s * 1.4), 16);
           const side = p.u >= 0 ? 1 : -1;
           const lx = c.x + side * (full ? W * 0.2 : W * 0.18) * Math.max(0.6, c.s * 1.3);
           return (
-            <div key={i} style={{ position: "absolute", left: lx, top: c.y, transform: `translate(${side > 0 ? "0" : "-100%"}, -50%) scale(${k})`, transformOrigin: side > 0 ? "0 50%" : "100% 50%", textAlign: side > 0 ? "left" : "right" }}>
+            <div key={i} style={{ position: "absolute", left: lx, top: c.y, transform: `translate(${side > 0 ? "0" : "-100%"}, -50%) translate(${e.dx}px, ${e.dy}px) scale(${e.scale})`, transformOrigin: side > 0 ? "0 50%" : "100% 50%", textAlign: side > 0 ? "left" : "right", opacity: e.opacity }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "6px 20px", borderRadius: 12, background: alpha(t.bg, 0.85), border: `3px solid ${t.bad}`, boxShadow: `0 0 18px ${alpha(t.bad, 0.5)}` }}>
                 <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fs * 0.8, color: t.bad }}>!</span>
                 <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fs, color: t.text, whiteSpace: "nowrap" }}>{p.text}</span>
@@ -175,7 +178,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           );
         })}
         {data.safeLine && frame >= safeAt + 10 && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: full ? H * 0.12 + 60 : H * 0.1, textAlign: "center", opacity: easeOut(prog(frame, safeAt + 10, 12)) }}>
+          // 安全线结语原生是 12 帧淡入（slide 的 p 就是 easeOut 进度，观感不变）
+          <div style={{ position: "absolute", left: 0, right: 0, top: full ? H * 0.12 + 60 : H * 0.1, textAlign: "center", opacity: enterAt(frame, safeAt + 10, { fallback: "slide-r", dur: 12 }).p }}>
             <span style={{ display: "inline-block", padding: "10px 34px", borderRadius: 40, background: alpha(t.bg, 0.85), border: `3px solid ${t.primary}`, boxShadow: `0 0 28px ${alpha(t.primary, 0.55)}`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.safeLine, W * 0.7, full ? 56 : 26, 16), color: t.primary, whiteSpace: "nowrap" }}>✓ {data.safeLine}</span>
           </div>
         )}

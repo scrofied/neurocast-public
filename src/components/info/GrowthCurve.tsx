@@ -3,6 +3,7 @@ import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { clamp, easeInOut, easeOut, prog } from "../../lib/anim";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -17,6 +18,7 @@ type D = z.infer<typeof schema>;
 // line grows like a living organism; a comet head rides the tip, values pop at each node
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const pts = data.points;
   const n = pts.length;
@@ -34,10 +36,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const f = headIdx - hi;
   const hp = hi >= n - 1 ? P[n - 1] : { x: P[hi].x + (P[hi + 1].x - P[hi].x) * f, y: P[hi].y + (P[hi + 1].y - P[hi].y) * (f * f * (3 - 2 * f)) };
   const clipW = hp.x;
+  // 这个组件的身份证是「曲线逐点生长」（主体轨迹，不动）。原生没有任何元素入场，
+  // 这里在曲线起笔处给图表本体接一个入场，让分镜的 motion.enter 有落点；
+  // from:1 = 不缩放整张图表（坐标系会跟着晃），只保留淡入与位移/擦除
+  const eChart = enterAt(frame, 8, { fallback: "rise", dur: 16, from: 1, dist: 0.5 });
 
   return (
     <>
-      <svg width={width} height={height} style={{ position: "absolute", inset: 0 }}>
+      <svg width={width} height={height} style={{ position: "absolute", inset: 0, opacity: eChart.opacity, transform: `translate(${eChart.dx}px, ${eChart.dy}px) scale(${eChart.scale})`, clipPath: eChart.clip }}>
         <GlowDefs id="gc" std={8} />
         <defs>
           <linearGradient id="gcf" x1="0" y1="0" x2="0" y2="1">
@@ -94,6 +100,7 @@ export const GrowthCurve: CompDef<D> = {
   minSec: 4,
   maxSec: 10,
   tags: ["增长", "趋势", "曲线", "上涨", "翻倍", "逐年", "变化", "数据"],
+  motion: { kind: "曲线带彗星头逐点生长，节点数值弹出定格", energy: 2 },
   desc: "增长曲线逐点画出，节点标数值",
   use: "同一单位的多个数值随时间变化的趋势",
   schema,

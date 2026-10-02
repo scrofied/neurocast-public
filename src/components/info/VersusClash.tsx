@@ -2,6 +2,7 @@ import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { clamp, easeIn, easeOut, easeOutBack, noise1, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Glass, GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -13,6 +14,7 @@ type D = z.infer<typeof schema>;
 // two slabs rush in, collide in the middle (shockwave), then separate to show details
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const cx = width / 2;
   const cy = height / 2 + 70;
@@ -28,6 +30,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const rightX = frame < 14 ? cx + (1 - rush) * 900 : cx + 30 * back + 10;
   const wave = prog(frame, 14, 24);
   const ring = variant === 1;
+  // VS 章原生回弹弹入（0→1）；定型的旋转角度属于组件内容，保持原生进度
+  const eVs = enterAt(frame, 16, { fallback: "rise", dur: 16, from: 0 });
 
   const panel = (d: z.infer<typeof side>, x: number, good: boolean, delay: number) => {
     const col = good ? t.primary : t.secondary;
@@ -40,9 +44,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
           <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(d.label, pw - 100, 64), color: t.text, marginTop: 10, textShadow: `0 0 24px ${alpha(col, 0.6)}` }}>{d.label}</div>
           <div style={{ marginTop: 26 }}>
             {pts.map((p, i) => {
-              const pp = easeOut(prog(frame, delay + i * 6, 14));
+              // 要点原生逐条从面板内侧滑入（左板 -40 / 右板 +40）
+              const ep = enterAt(frame, delay + i * 6, { fallback: good ? "slide-r" : "slide-l", dur: 14, dist: 40 / 240 });
               return (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 16, opacity: pp, transform: `translateX(${(1 - pp) * (good ? 40 : -40)}px)`, fontFamily: t.font.body, fontSize: 30, color: alpha(t.text, 0.9), fontWeight: 600 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 16, opacity: ep.opacity, transform: `translate(${ep.dx}px, ${ep.dy}px)`, fontFamily: t.font.body, fontSize: 30, color: alpha(t.text, 0.9), fontWeight: 600 }}>
                   <span style={{ color: col, fontSize: 22 }}>{good ? "✓" : "✕"}</span>
                   {p}
                 </div>
@@ -93,7 +98,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
           fontWeight: 900,
           fontSize: 44,
           color: t.accent,
-          transform: `scale(${easeOutBack(prog(frame, 16, 16))}) rotate(${(1 - clamp(prog(frame, 16, 16))) * 180}deg)`,
+          transform: `scale(${eVs.scale}) rotate(${(1 - clamp(prog(frame, 16, 16))) * 180}deg)`,
         }}
       >
         VS
@@ -111,6 +116,7 @@ export const VersusClash: CompDef<D> = {
   minSec: 4,
   maxSec: 10,
   tags: ["对比", "区别", "vs", "VS", "以前", "现在", "传统", "而是", "不是", "相比"],
+  motion: { kind: "双板从两侧加速对撞（冲击波+抖动）弹开，要点逐条滑入，VS 章回弹定型", energy: 3 },
   desc: "两块面板从两侧冲来对撞（冲击波），弹开后展示左右要点",
   use: "两种方案/观点同时摆出来比（A vs B）；有先后节奏的“以前…现在…”用 before-after",
   schema,

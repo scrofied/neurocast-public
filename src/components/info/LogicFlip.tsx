@@ -7,6 +7,7 @@ import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
+import { useEnter, type EnterState } from "../../lib/enter";
 import type { CompDef, CompProps } from "../types";
 
 const schema = z.object({
@@ -20,8 +21,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: bw, height: bh } = useBox();
   const full = bw >= 900;
   const flipAt = cueOr(data.flipAt, dur * 0.6);
@@ -49,13 +51,16 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const pa = rot(A, 1);
   const pb = rot(B, 1);
   const col = flipped ? t.bad : t.primary;
-  const inA = easeOutBack(prog(frame, 4, 18));
-  const inB = easeOutBack(prog(frame, 14, 18));
+  // 两个节点原生是从 0 回弹弹出（先后错开）；from:0 保住这个基线，翻转轨迹不动
+  const eA = enterAt(frame, 4, { fallback: "rise", dur: 18, from: 0, seed: 0 });
+  const eB = enterAt(frame, 14, { fallback: "rise", dur: 18, from: 0, seed: 1 });
   const arrowP = easeOut(prog(frame, 22, 16));
-  const node = (p: { x: number; y: number }, label: string, step: string, k: number, lead: boolean) => {
+  const eNote = enterAt(frame, 26, { fallback: "rise", dur: 14, dist: 0.6 });
+  const eFlipNote = enterAt(frame, flipAt + 14, { fallback: "rise", dur: 12, dist: 0.6 });
+  const node = (p: { x: number; y: number }, label: string, step: string, st: EnterState, lead: boolean) => {
     const fs = fitFont(label, r * 1.6, vertical ? 34 : 50, 16);
     return (
-      <div style={{ position: "absolute", left: p.x - r + shake, top: p.y - r, width: r * 2, height: r * 2, transform: `scale(${k})` }}>
+      <div style={{ position: "absolute", left: p.x - r + shake, top: p.y - r, width: r * 2, height: r * 2, transform: `translate(${st.dx}px, ${st.dy}px) scale(${st.scale})`, opacity: st.opacity }}>
         <div
           style={{
             position: "absolute",
@@ -86,7 +91,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const midFade = 1 - Math.sin(Math.PI * fp) * 0.95;
   const tip = { x: ax1 + (ax2 - ax1) * arrowP, y: ay1 + (ay2 - ay1) * arrowP };
   const head = 18;
-  const xMark = easeOutBack(prog(frame, flipAt + 12, 14));
+  const xMark = enterAt(frame, flipAt + 12, { fallback: "rise", dur: 14, from: 0, seed: 2 });
   return (
     <>
       <Heading kicker={data.kicker} title={data.title} frame={frame} width={bw} />
@@ -108,18 +113,18 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             })}
         </g>
       </svg>
-      {node(pa, data.nodes[0], data.steps[0], inA, !flipped)}
-      {node(pb, data.nodes[1], data.steps[1], inB, flipped)}
+      {node(pa, data.nodes[0], data.steps[0], eA, !flipped)}
+      {node(pb, data.nodes[1], data.steps[1], eB, flipped)}
       {flipped && (
-        <div style={{ position: "absolute", left: (ax1 + ax2) / 2 - 34 + shake, top: (ay1 + ay2) / 2 - 34, width: 68, height: 68, borderRadius: "50%", background: t.bad, boxShadow: `0 0 30px ${t.bad}`, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${xMark})` }}>
+        <div style={{ position: "absolute", left: (ax1 + ax2) / 2 - 34 + shake, top: (ay1 + ay2) / 2 - 34, width: 68, height: 68, borderRadius: "50%", background: t.bad, boxShadow: `0 0 30px ${t.bad}`, display: "flex", alignItems: "center", justifyContent: "center", transform: `translate(${xMark.dx}px, ${xMark.dy}px) scale(${xMark.scale})`, opacity: xMark.opacity }}>
           <Icon name="x" size={40} color="#fff" stroke={3.4} />
         </div>
       )}
       {data.note && !flipped && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: vertical ? cy + span / 2 + r + 26 : cy + r + 60, textAlign: "center", fontFamily: t.font.body, fontWeight: 700, fontSize: vertical ? 22 : 34, color: t.dim, opacity: easeOut(prog(frame, 26, 14)) * (1 - fp) }}>{data.note}</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: vertical ? cy + span / 2 + r + 26 : cy + r + 60, textAlign: "center", fontFamily: t.font.body, fontWeight: 700, fontSize: vertical ? 22 : 34, color: t.dim, opacity: eNote.opacity * (1 - fp), transform: `translate(${eNote.dx}px, ${eNote.dy}px)` }}>{data.note}</div>
       )}
       {data.flipNote && flipped && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: vertical ? cy + span / 2 + r + 22 : cy + r + 56, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: vertical ? 28 : 46, color: t.bad, textShadow: `0 0 20px ${alpha(t.bad, 0.6)}`, opacity: easeOut(prog(frame, flipAt + 14, 12)) }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: vertical ? cy + span / 2 + r + 22 : cy + r + 56, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: vertical ? 28 : 46, color: t.bad, textShadow: `0 0 20px ${alpha(t.bad, 0.6)}`, opacity: eFlipNote.opacity, transform: `translate(${eFlipNote.dx}px, ${eFlipNote.dy}px)` }}>
           {data.flipNote}
         </div>
       )}
@@ -137,6 +142,7 @@ export const LogicFlip: CompDef<D> = {
   minSec: 3,
   maxSec: 10,
   tags: ["倒过来", "搞反了", "本末倒置", "顺序", "先…再…"],
+  motion: { kind: "两节点弹出后绕中心互换位置，箭头变红打叉", energy: 3 },
   desc: "两个发光节点 A→B 表示正确顺序，说到“倒过来”时两个节点绕中心互换位置，箭头变红、打叉，下方红字点题",
   use: "“先有 A 再有 B，但很多人反过来了”这类顺序被搞反、因果倒置的论述",
   panel: true,

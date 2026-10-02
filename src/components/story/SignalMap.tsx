@@ -5,6 +5,7 @@ import { useBox } from "../../lib/box";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fmtNum, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -17,8 +18,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const cx = width / 2;
   const cy = height / 2 + 60;
@@ -54,17 +56,20 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const sigs = data.signals;
   const sigNodes = sigs.map((_, i) => (i * 37 + 11) % nodes.length);
   const period = Math.max(24, (dur - 20) / sigs.length);
+  const eGlobe = enterAt(frame, 0, { fallback: "rise", dur: 20 });
+  const eCount = enterAt(frame, 4, { fallback: "rise", dur: 14 });
+  const eLabel = enterAt(frame, 20, { fallback: "rise", dur: 14 });
   const count = data.count ? Math.round(data.count.value * easeOut(prog(frame, 6, Math.min(80, dur * 0.7)))) : 0;
   return (
     <>
       <Heading kicker={data.kicker ?? "REAL SIGNALS"} title={data.title} frame={frame} width={width} />
-      <div style={{ position: "absolute", left: cx - R * 0.72, top: cy - R * 0.62, width: R * 1.44, height: R * 1.24, borderRadius: "50%", background: `radial-gradient(ellipse at 50% 50%, ${alpha(t.primary, 0.14)}, ${alpha(t.secondary, 0.06)} 55%, transparent 72%)`, opacity: easeOut(prog(frame, 0, 20)) }} />
-      <svg width={width} height={height} style={{ position: "absolute", inset: 0 }}>
+      <div style={{ position: "absolute", left: cx - R * 0.72, top: cy - R * 0.62, width: R * 1.44, height: R * 1.24, borderRadius: "50%", background: `radial-gradient(ellipse at 50% 50%, ${alpha(t.primary, 0.14)}, ${alpha(t.secondary, 0.06)} 55%, transparent 72%)`, opacity: eGlobe.opacity, transform: `translate(${eGlobe.dx}px, ${eGlobe.dy}px)` }} />
+      <svg width={width} height={height} style={{ position: "absolute", inset: 0, transform: `translate(${eGlobe.dx}px, ${eGlobe.dy}px)` }}>
         {links.map(([a, b], i) => {
           const pa = proj[a];
           const pb = proj[b];
           const vis = clamp((pa.z + pb.z) / 2 + 0.6);
-          return <line key={i} x1={pa.sx} y1={pa.sy} x2={pb.sx} y2={pb.sy} stroke={t.primary} strokeOpacity={0.24 * vis * easeOut(prog(frame, 0, 20))} strokeWidth={1.3} />;
+          return <line key={i} x1={pa.sx} y1={pa.sy} x2={pb.sx} y2={pb.sy} stroke={t.primary} strokeOpacity={0.24 * vis * eGlobe.opacity} strokeWidth={1.3} />;
         })}
         {proj.map((p, i) => {
           const n = nodes[i];
@@ -83,12 +88,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         const life = frame - at;
         if (life < 0) return null;
         const p = proj[sigNodes[i]];
-        const q = easeOutBack(prog(frame, at, 14));
+        const eq = enterAt(frame, at, { fallback: "rise", dur: 14, from: 0 });
         const fade = 1 - clamp((life - period * 2.2) / 20);
         if (fade <= 0) return null;
         const left = p.sx > cx;
         return (
-          <div key={i} style={{ position: "absolute", left: p.sx + (left ? 24 : -24), top: p.sy - 30, transform: `translate(${left ? 0 : -100}%, -50%) scale(${q})`, transformOrigin: left ? "left center" : "right center", opacity: fade, padding: "10px 20px", borderRadius: 16, background: alpha(t.bg2, 0.92), border: `2px solid ${alpha(t.accent, 0.8)}`, boxShadow: `0 0 26px ${alpha(t.accent, 0.35)}`, display: "flex", alignItems: "center", gap: 10, fontFamily: t.font.body, fontWeight: 800, fontSize: 30, color: t.text, whiteSpace: "nowrap" }}>
+          <div key={i} style={{ position: "absolute", left: p.sx + (left ? 24 : -24), top: p.sy - 30, transform: `translate(${left ? 0 : -100}%, -50%) translate(${eq.dx}px, ${eq.dy}px) scale(${eq.scale})`, clipPath: eq.clip, transformOrigin: left ? "left center" : "right center", opacity: fade * eq.opacity, padding: "10px 20px", borderRadius: 16, background: alpha(t.bg2, 0.92), border: `2px solid ${alpha(t.accent, 0.8)}`, boxShadow: `0 0 26px ${alpha(t.accent, 0.35)}`, display: "flex", alignItems: "center", gap: 10, fontFamily: t.font.body, fontWeight: 800, fontSize: 30, color: t.text, whiteSpace: "nowrap" }}>
             <Icon name="help" size={28} color={t.accent} />
             {s}
             <Sfx name="pop" at={at} volume={0.22} />
@@ -96,7 +101,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         );
       })}
       {data.count && (
-        <div style={{ position: "absolute", left: 120, top: 220, opacity: easeOut(prog(frame, 4, 14)) }}>
+        <div style={{ position: "absolute", left: 120, top: 220, opacity: eCount.opacity, transform: `translate(${eCount.dx}px, ${eCount.dy}px)`, clipPath: eCount.clip }}>
           <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: 96, color: t.text, textShadow: `0 0 40px ${alpha(t.accent, 0.5)}` }}>
             {fmtNum(count, 0)}
             <span style={{ color: t.accent }}>{data.count.suffix ?? "+"}</span>
@@ -104,7 +109,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           {data.count.label && <div style={{ fontFamily: t.font.body, fontWeight: 700, fontSize: 32, color: t.dim, display: "flex", alignItems: "center", gap: 10 }}><Icon name="signal" size={30} color={t.accent} />{data.count.label}</div>}
         </div>
       )}
-      {data.label && <div style={{ position: "absolute", right: 120, top: 240, fontFamily: t.font.mono, fontSize: 26, letterSpacing: 8, color: t.accent, opacity: easeOut(prog(frame, 20, 14)) }}>{data.label}</div>}
+      {data.label && <div style={{ position: "absolute", right: 120, top: 240, fontFamily: t.font.mono, fontSize: 26, letterSpacing: 8, color: t.accent, opacity: eLabel.opacity, transform: `translate(${eLabel.dx}px, ${eLabel.dy}px)`, clipPath: eLabel.clip }}>{data.label}</div>}
     </>
   );
 };
@@ -117,6 +122,7 @@ export const SignalMap: CompDef<D> = {
   minSec: 3,
   maxSec: 10,
   tags: ["成千上万", "真实的人", "呼救", "需求", "信号", "用户"],
+  motion: { kind: "缓慢旋转的信号星球 + 求助气泡按节拍弹出 + 左上计数滚动", energy: 2 },
   desc: "一颗缓慢旋转的网络星球，节点不断亮起脉冲，求助原话（“求新手教程”“为什么我没流量”）从节点弹出，左上计数器滚动",
   use: "大量信号散落各处、到处都在发生：用户的需求原话、各地的订单、全网的讨论、各城市的求职者（signals 换成任何原话）",
   schema,

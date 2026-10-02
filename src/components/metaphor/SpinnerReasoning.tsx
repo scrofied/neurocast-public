@@ -1,6 +1,7 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeOut, lerp, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
@@ -26,8 +27,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const waitAt = cueOr(data.waitAt, Math.round(dur * 0.12));
@@ -74,15 +76,19 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const shown = frame >= done;
           const col = isSlow ? t.gold : t.dim;
           const bars = isSlow ? slowBarCount : fastBarCount;
+          // 面板浮现：淡入 + 26px 上浮，正好是 rise 的原生形状（dist 把 22px 基准配回 26px）
+          const ePanel = enterAt(frame, 6 + side * 5, { fallback: "rise", dur: 14, dist: 26 / 22 });
+          // 「吐结果」时的整块淡入是入场；逐行内容生长(bp)保留原生
+          const eRes = enterAt(frame, done, { fallback: "rise", dur: 12 });
           return (
             <React.Fragment key={side}>
-              <div style={{ position: "absolute", left: x, top, width: panelW, height: panelH, borderRadius: 18, background: alpha(t.bg2, 0.9), border: `2.5px solid ${alpha(col, 0.7)}`, boxShadow: shown && isSlow ? `0 0 40px ${alpha(t.gold, 0.4)}` : undefined, opacity: easeOut(prog(frame, 6 + side * 5, 14)), transform: `translateY(${(1 - easeOut(prog(frame, 6 + side * 5, 14))) * 26}px)` }}>
+              <div style={{ position: "absolute", left: x, top, width: panelW, height: panelH, borderRadius: 18, background: alpha(t.bg2, 0.9), border: `2.5px solid ${alpha(col, 0.7)}`, boxShadow: shown && isSlow ? `0 0 40px ${alpha(t.gold, 0.4)}` : undefined, opacity: ePanel.opacity, transform: `translateY(${ePanel.dy}px)` }}>
                 <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: full ? 62 : 34, borderBottom: `2px solid ${alpha(col, 0.35)}`, display: "flex", alignItems: "center", paddingLeft: full ? 22 : 11, gap: full ? 10 : 5 }}>
                   <Icon name={isSlow ? "bot" : "zap"} size={full ? 26 : 14} color={col} />
                   <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 26 : 14, color: t.text, whiteSpace: "nowrap" }}>{label}</span>
                 </div>
                 {/* body: spinner then result */}
-                <div style={{ position: "absolute", left: 0, right: 0, top: full ? 62 : 34, bottom: 0, opacity: eased(shown, frame, done) }}>
+                <div style={{ position: "absolute", left: 0, right: 0, top: full ? 62 : 34, bottom: 0, opacity: shown ? eRes.opacity : 1 }}>
                   {!shown && spinner(panelW / 2, (panelH - (full ? 62 : 34)) / 2, full ? 44 : 24, frame >= waitAt, col)}
                   {shown && (
                     <div style={{ position: "absolute", left: full ? 22 : 11, right: full ? 22 : 11, top: full ? 20 : 10 }}>
@@ -104,13 +110,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         })}
         {/* the wait line */}
         {frame >= waitAt && frame < revealAt && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: top + panelH + (full ? 40 : 20), textAlign: "center", opacity: easeInOut(prog(frame, waitAt + 20, 18)), fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 30 : 16, color: t.dim, whiteSpace: "nowrap" }}>{data.waitText}</div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: top + panelH + (full ? 40 : 20), textAlign: "center", opacity: enterAt(frame, waitAt + 20, { fallback: "rise", dur: 18 }).opacity, fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 30 : 16, color: t.dim, whiteSpace: "nowrap" }}>{data.waitText}</div>
         )}
         {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left: W / 2, top: top + panelH + (full ? 84 : 42), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, verdictAt, 14))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 52 : 26, 15), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
+          <div style={{ position: "absolute", left: W / 2, top: top + panelH + (full ? 84 : 42), transform: `translateX(-50%) scale(${enterAt(frame, verdictAt, { fallback: "rise", dur: 14 }).p})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 52 : 26, 15), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
         )}
         {/* task line */}
-        <div style={{ position: "absolute", left: 0, right: 0, top: top - (full ? 130 : 68), textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.task, W * 0.6, full ? 40 : 20, 13), color: t.text, whiteSpace: "nowrap", opacity: easeOut(prog(frame, 4, 14)) }}>{data.task}</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: top - (full ? 130 : 68), textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.task, W * 0.6, full ? 40 : 20, 13), color: t.text, whiteSpace: "nowrap", opacity: enterAt(frame, 4, { fallback: "rise", dur: 14 }).opacity }}>{data.task}</div>
       </div>
       <Sfx name="click" at={waitAt} volume={0.26} />
       <Sfx name="riser" at={Math.max(0, revealAt - 46)} volume={0.16} />
@@ -120,8 +126,6 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     </>
   );
 };
-
-const eased = (shown: boolean, frame: number, at: number) => (shown ? easeOut(prog(frame, at, 12)) : 1);
 
 export const SpinnerReasoning: CompDef<D> = {
   id: "spinner-reasoning",

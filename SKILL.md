@@ -172,6 +172,17 @@ node scripts/openings.mjs status opening-comment-mining keep
 
 去 PPT 感（`--plan-only` 会警告）：纯文字镜头（narration / quote / punch-text / chapter / bullet-cards / cards / hook）不超过 20%，不能连续两个；同一组件不要紧挨着用两次。
 
+**入场语法：每条正片镜头都显式写 `motion.enter`。** 现在 84 个正片组件全部接了 `src/lib/enter.tsx`（252 处入场调用点），分镜写什么就用什么运动：`rise / slam / slide-l / slide-r / wipe / assemble / zoom-through / drop`，可配 `energy: 1|2|3`。
+
+```json
+{ "type": "leaderboard", "motion": { "enter": "slide-l", "energy": 2 }, "data": { … } }
+```
+
+- 同一个组件在一条片子里用第 2、3 次时，**必须换一种 enter**（`--plan-only` 的多样性检查会盯全片频次、5 镜滑窗、连续同入场、单变体复用四项）。这样即使躲不开复用，观众看到的也不是同一个动作。
+- 组件里的 `fallback` 保住的是它原生观感：不写 `motion.enter` 时逐帧和迁移前一致（已用 316 帧像素对照验证，最大平均差 1.5/255）。所以 enter 是**免费**的改动，只影响这一镜的运动方式。
+- 例外：隐喻主体的运动轨迹（骨牌倒下、药片下落、传送带、曲线生长、翻牌角度）不由 enter 决定，那些是组件的内容；enter 只管元素怎么进场。
+- 新增组件时必须接 `useEnter(variant)` 并消费 `e.p / e.opacity / e.scale / e.dx / e.dy / e.clip`，只换 `e.p` 不算接完（`node scripts/motion-audit.mjs` 查得出）。
+
 ## 组件资产库
 
 - 全部组件、字段、适用场景：**`CATALOG.md`**（由 `node scripts/catalog.mjs` 从 registry 自动生成，不要手改）。
@@ -179,7 +190,7 @@ node scripts/openings.mjs status opening-comment-mining keep
   - **技术类通用 6 招**（`tech-opening-01`~`06`，`src/openings/tech.tsx`）：按第一句话的手法选（慢慢放大做悬疑 / 出其不意按节奏变形 / 蒙版缩圈 / 身后飞标题 / 文字干货先出现 / 极简闪白），只改字段就能用。参考《开场手法素材》招数表。
   - **20 个按钩子类型的模板**（`op-t01`~`op-t20`，`src/openings/templates/`）：按文案第一句的钩子类型（反问/数字/反常识/痛点/悬念/点名/对比/警告/揭秘/倒计时/收益/结果先行/VS/清单/私信/稀缺/快讯/放大镜/打赌/故障打断）挑一个，只改字段。选型表在 `openings/TEMPLATES.md`，预览在 `openings/previews/op-t*.mp4`。
   - 同一个模板不要连着用；要大改就复制成专属开场。
-- 目前 82 个正片组件（结构 7 / 信息图 25 / 概念隐喻 29 / 叙事场景 8 / 产品 10 / 屏幕 3），另有 29 个开场（`src/openings/`，不计入）。最新加入的通用组件：
+- 目前 84 个正片组件（结构 7 / 信息图 25 / 概念隐喻 30 / 叙事场景 8 / 产品 11 / 屏幕 3），另有 31 个开场（`src/openings/`，不计入）。最新加入的通用组件：
   - **处境人设**：persona-scene（无脸剪影 + 工位/屏幕/两头跑，循环动作越转越快 + 时钟转深夜 + 台灯亮起 + 最后瘫倒）。共用 `src/lib/figure.tsx` 无脸人物骨架（关节角度驱动，可插值：stand/work/stare/slump/despair/proud/fall/dig/look/cheer/raise/handsUp/sit/reach/turn + gait 步态）。
   - **反转拍**：blame-strike（连环劈掉假因 → 真因砸下）、fork-paths（同一起点 → 岔路两种结局）、counter-example（正例 + 反例对照）。
   - **体量/危机**：pile-crush（堆成山 → 一板压扁）、unread-flood（未读轰炸 → AI 接手清零）、pit-trap（透视路面的坑 + 安全路线）、walled-garden（高墙花园）、safety-brake（紧急制动 / 保险丝）。

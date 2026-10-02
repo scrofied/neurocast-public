@@ -44,7 +44,7 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, seed }) => {
 
       {/* 第 0 帧就有字：kicker 逐字弹出 + 大字砸下；计数开始前整块上移退场，不和承诺区打架 */}
       <div style={{ position: "absolute", left: 96, top: 168, opacity: (1 - 0.45 * easeOut(prog(frame, d.billAt, 10))) * (1 - easeIn(prog(frame, d.rollAt - 26, 12))), transform: `translateY(${-80 * easeIn(prog(frame, d.rollAt - 26, 12))}px)` }}>
-        <CharPop frame={frame} text={d.kick} cues={Array.from(d.kick).map((_, i) => Math.min(2 + i, 12))} hl={idxOf(d.kick, "Opus")} hlColor={t.accent} size={58} color={t.text} font={t.font.title} strokeW={7} />
+        <CharPop frame={frame} at={0} text={d.kick} cues={Array.from(d.kick).map((_, i) => Math.min(2 + i, 12))} hl={idxOf(d.kick, "Opus")} hlColor={t.accent} size={58} color={t.text} font={t.font.title} strokeW={7} />
         <div style={{ marginTop: 22, position: "relative" }}>
           <Slam frame={frame} at={0} text="白白浪费" size={150} color={t.text} font={t.font.title} from={2.0} len={6} blur={4} minOpacity={0.9} strokeW={12} style={{ display: "inline-block" }} />
           <span style={{ ...ink(178, t.accent, t.font.title, 13), display: "inline-block", marginLeft: 18, transform: `scale(${1 + 0.5 * (1 - easeOut(prog(frame, 2, 8)))})`, color: t.accent }}>90%</span>

@@ -1,8 +1,9 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, prog } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -28,8 +29,9 @@ type D = z.infer<typeof schema>;
 // workers in a row; an AI core wakes up on the right and takes each job chip, one by one —
 // the chip flies over and gets absorbed, the worker goes grey and slouches; then throughput
 // explodes (counter rolls), and a stamp drops
-const C: React.FC<CompProps<D>> = ({ data, frame }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const jobs = data.jobs;
   const n = jobs.length;
@@ -49,12 +51,17 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
   const CY = H * 0.5;
   const R = 148;
 
-  const coreIn = easeOutBack(prog(frame, aiAt - 8, 16));
+  // AI 核心原生是回弹放大点亮（easeOutBack prog 16 帧、从 0 弹入）；分镜写 motion.enter 才换
+  const eCore = enterAt(frame, aiAt - 8, { fallback: "rise", dur: 16, from: 0 });
   const flash = Math.max(0, ...cues.map((c) => (frame >= c + 16 ? 1 - (frame - c - 16) / 10 : 0))); // pulse on each absorption
   const rot = 2 * frame + (frame > speedAt ? (frame - speedAt) * (frame - speedAt) * 0.45 : 0);
-  const boost = easeOut(prog(frame, speedAt, 20));
+  // 吞吐面板原生是淡入 + 上移 30px 到位（rise 的 dy=22×dist，dist=1.36≈30px）
+  const eCount = enterAt(frame, speedAt, { fallback: "rise", dur: 20, dist: 30 / 22 });
+  // 倍数徽章原生从 0.8 微放大到位
+  const eRate = enterAt(frame, speedAt, { fallback: "rise", dur: 20, from: 0.8 });
+  // 结论章原生是原地由大砸到 1（无位移）；dist 0 保住这个基线，只接管缩放/透明度
+  const eStamp = enterAt(frame, stampAt, { fallback: "slam", dur: 7, from: 2, dist: 0 });
   const doneCount = jobs.length + Math.max(0, Math.floor((frame - speedAt) * 0.9 * jobs.length));
-  const stampScale = frame >= stampAt ? 2 - easeOut(prog(frame, stampAt, 7)) : 2;
   const anyTaken = frame >= cues[0] + 16;
 
   return (
@@ -88,7 +95,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
         })}
         {/* AI core */}
         {frame >= aiAt - 8 && (
-          <g transform={`translate(${CX}, ${CY}) scale(${coreIn})`}>
+          <g transform={`translate(${CX}, ${CY}) scale(${eCore.scale})`}>
             <g transform={`rotate(${rot})`}>
               <circle r={R + 52} fill="none" stroke={alpha(t.primary, 0.6)} strokeWidth={4} strokeDasharray="26 34" filter="url(#lt)" />
             </g>
@@ -155,14 +162,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
       })}
 
       {/* labels */}
-      <div style={{ position: "absolute", left: xL - 40, top: BY + 30, fontFamily: t.font.mono, fontSize: 26, letterSpacing: 2, color: t.dim, opacity: easeOut(prog(frame, 8, 12)), transition: "none" }}>
+      <div style={{ position: "absolute", left: xL - 40, top: BY + 30, fontFamily: t.font.mono, fontSize: 26, letterSpacing: 2, color: t.dim, opacity: enterAt(frame, 8, { fallback: "rise", dur: 12 }).opacity, transition: "none" }}>
         <span style={{ color: anyTaken ? t.bad : t.dim }}>{data.workerLabel}</span>
       </div>
       {frame >= aiAt && (
-        <div style={{ position: "absolute", left: CX - 160, width: 320, top: CY + R + 90, textAlign: "center", opacity: clamp(coreIn * 1.4) }}>
+        <div style={{ position: "absolute", left: CX - 160, width: 320, top: CY + R + 90, textAlign: "center", opacity: eCore.opacity }}>
           <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: 40, color: t.primary, letterSpacing: 4 }}>{data.aiLabel}</div>
-          {boost > 0.01 && (
-            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 10, padding: "8px 24px", borderRadius: 30, background: alpha(t.bg2, 0.85), border: `2px solid ${t.accent}`, boxShadow: `0 0 30px ${alpha(t.accent, 0.4)}`, transform: `scale(${0.8 + 0.2 * boost})` }}>
+          {eRate.p > 0.01 && (
+            <div style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 10, padding: "8px 24px", borderRadius: 30, background: alpha(t.bg2, 0.85), border: `2px solid ${t.accent}`, boxShadow: `0 0 30px ${alpha(t.accent, 0.4)}`, transform: `scale(${eRate.scale})`, opacity: eRate.opacity }}>
               <Icon name="zap" size={30} color={t.accent} stroke={2.6} />
               <span style={{ fontFamily: t.font.mono, fontWeight: 800, fontSize: 34, color: t.accent }}>{data.rate}</span>
             </div>
@@ -171,7 +178,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
       )}
       {/* throughput counter */}
       {frame >= speedAt && (
-        <div style={{ position: "absolute", right: W * 0.06, top: H * 0.16, textAlign: "right", opacity: boost, transform: `translateY(${(1 - boost) * 30}px)` }}>
+        <div style={{ position: "absolute", right: W * 0.06, top: H * 0.16, textAlign: "right", opacity: eCount.opacity, transform: `translate(${eCount.dx}px, ${eCount.dy}px)` }}>
           <div style={{ fontFamily: t.font.mono, fontSize: 24, letterSpacing: 3, color: t.dim }}>TASKS DONE</div>
           <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: 96, color: t.accent, textShadow: `0 0 26px ${alpha(t.accent, 0.6)}` }}>{doneCount}</div>
         </div>
@@ -185,7 +192,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
             top: H * 0.27,
             width: 560,
             textAlign: "center",
-            transform: `rotate(-6deg) scale(${stampScale})`,
+            transform: `rotate(-6deg) scale(${eStamp.scale})`,
+            opacity: eStamp.opacity,
             padding: "12px 0",
             border: `7px solid ${t.accent}`,
             borderRadius: 18,
@@ -226,6 +234,7 @@ export const LaborTakeover: CompDef<D> = {
   minSec: 5,
   maxSec: 16,
   tags: ["替代", "接管", "裁员", "自动化", "产能", "人工", "失业", "效率碾压"],
+  motion: { kind: "AI 核心弹出旋转点亮，任务卡被一张张抽走，吞吐数字狂跳、结论章砸下", energy: 3 },
   desc: "一排打工人头顶各自的任务卡，右侧 AI 核心点亮后把任务卡一张张抽走（人变灰低头打✕），最后 AI 吞吐爆发数字狂跳，砸下结论章",
   use: "AI 正在替代/接管某种人力工作、人的活被 AI 一件件拿走、产能被碾压式反超；也可换成「旧工具被新方案逐个替代」「外包流程被自动化接管」等 A 被 B 替代的叙事（jobs / workerLabel / rate / stamp 全走参数）",
   schema,

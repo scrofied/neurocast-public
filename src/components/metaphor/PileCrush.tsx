@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { z } from "zod";
-import { clamp, easeIn, easeInOut, easeOut, easeOutBack, lerp, prog, rng } from "../../lib/anim";
+import { clamp, easeIn, easeInOut, easeOut, lerp, prog, rng } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
+import { useEnter } from "../../lib/enter";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues } from "../../lib/cue";
 import { guessIcon, Icon } from "../../lib/icons";
@@ -26,8 +27,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const pileAt = cueOr(data.pileAt, 6);
@@ -148,13 +150,15 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {data.payoff.map((p, i) => {
           const c = pCues[i];
           if (frame < c) return null;
-          const k = easeOutBack(prog(frame, c, 14));
+          // 收束短句原生是回弹升起（easeOutBack 0→1 喂给位移 + 淡入）；下落堆料/压板/计数器是隐喻主体运动，保持原生
+          const e = enterAt(frame, c, { fallback: "rise", dur: 14, seed: i });
+          const k = e.p;
           const rowH = full ? 92 : 48;
           const top0 = G - th * 3 - data.payoff.length * (rowH + 18);
           const yy = lerp(G - th * 2, top0 + i * (rowH + 18), k);
           const bw = full ? Math.min(W * 0.5, 820) : W * 0.84;
           return (
-            <div key={i} style={{ position: "absolute", left: (full ? cx : W / 2) - bw / 2, top: yy, width: bw, height: rowH, borderRadius: 16, background: alpha(t.bg, 0.88), border: `3px solid ${t.gold}`, boxShadow: `0 0 22px ${alpha(t.gold, 0.4)}`, display: "flex", alignItems: "center", gap: 18, padding: "0 26px", opacity: clamp(k * 1.5) }}>
+            <div key={i} style={{ position: "absolute", left: (full ? cx : W / 2) - bw / 2, top: yy, width: bw, height: rowH, borderRadius: 16, background: alpha(t.bg, 0.88), border: `3px solid ${t.gold}`, boxShadow: `0 0 22px ${alpha(t.gold, 0.4)}`, display: "flex", alignItems: "center", gap: 18, padding: "0 26px", transform: `translate(${e.dx}px, ${e.dy}px)`, opacity: clamp(k * 1.5) * e.opacity }}>
               <span style={{ fontFamily: t.font.mono, fontWeight: 900, fontSize: rowH * 0.42, color: t.gold }}>{i + 1}</span>
               <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(p.text, bw - 110, rowH * 0.5, 16), color: t.text, whiteSpace: "nowrap" }}>{p.text}</span>
             </div>

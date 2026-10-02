@@ -1,11 +1,12 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, noise1, prog } from "../../lib/anim";
+import { clamp, easeInOut, noise1 } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { listCues, typed } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fmtNum, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -22,8 +23,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const steps = data.steps;
   const cues = listCues(steps, 6, Math.max(20, dur * 0.72));
@@ -37,23 +39,26 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const fx = 1260;
   const fw = 540;
   const urlDone = openAt + 16;
-  const pageIn = easeOut(prog(frame, urlDone, 12));
+  // 浏览器窗口 / 页面内容 / 光标 / 文件卡的「出现」接入语法层；滚动、飞行轨迹、计数、光标路径保持原样
+  const eWin = enterAt(frame, 0, { fallback: "rise", dur: 12 });
+  const ePage = enterAt(frame, urlDone, { fallback: "rise", dur: 12 });
+  const eCur = enterAt(frame, openAt - 4, { fallback: "rise", dur: 10 });
+  // 文件卡原生用 easeOutBack(prog) 同时喂 scale(0→1) 与 opacity(clamp)，rise 的 e.p 与基线一致
+  const eFile = enterAt(frame, openAt + 10, { fallback: "rise", dur: 16, from: 0 });
   const speed = frame < scrollAt ? 0 : Math.min(9, (frame - scrollAt) * 0.35);
   const scrolled = frame < scrollAt ? 0 : ((frame - scrollAt) * Math.min(9, (frame - scrollAt) * 0.175));
   const rowH = 96;
   const listTop = 330;
   const saved = Math.round(data.target * easeInOut(clamp((frame - scrollAt) / Math.max(10, saveAt + 20 - scrollAt))));
-  const file = easeOutBack(prog(frame, openAt + 10, 16));
   // AI cursor path: url bar -> page -> scroll area
   const curX = frame < urlDone ? bx + 300 : bx + bw - 120 + noise1(frame / 20, seed) * 10;
   const curY = frame < urlDone ? by + 80 : by + 420 + Math.sin(frame / 5) * (speed > 0 ? 40 : 0);
-  const curIn = easeOut(prog(frame, openAt - 4, 10));
   const flying = frame >= scrollAt && frame < saveAt + 20;
   return (
     <>
       <Heading kicker={data.kicker ?? "AGENT BROWSER"} title={data.title} frame={frame} width={width} />
       {/* browser window */}
-      <div style={{ position: "absolute", left: bx, top: by, width: bw, height: bh, borderRadius: 22, overflow: "hidden", background: alpha(t.bg2, 0.96), border: `1.5px solid ${alpha(t.primary, 0.45)}`, boxShadow: `0 0 60px ${alpha(t.primary, 0.16)}, 0 30px 80px rgba(0,0,0,.5)`, opacity: easeOut(prog(frame, 0, 12)) }}>
+      <div style={{ position: "absolute", left: bx, top: by, width: bw, height: bh, borderRadius: 22, overflow: "hidden", background: alpha(t.bg2, 0.96), border: `1.5px solid ${alpha(t.primary, 0.45)}`, boxShadow: `0 0 60px ${alpha(t.primary, 0.16)}, 0 30px 80px rgba(0,0,0,.5)`, transform: `translate(${eWin.dx}px, ${eWin.dy}px)`, opacity: eWin.opacity }}>
         <div style={{ height: 58, display: "flex", alignItems: "center", gap: 10, padding: "0 20px", background: alpha(t.bg, 0.6) }}>
           {[t.bad, t.accent, t.primary].map((c, i) => (
             <span key={i} style={{ width: 14, height: 14, borderRadius: 7, background: c }} />
@@ -68,7 +73,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             AI 操作中
           </div>
         </div>
-        <div style={{ position: "absolute", left: 0, right: 0, top: 58, bottom: 0, opacity: pageIn, overflow: "hidden" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, top: 58, bottom: 0, opacity: ePage.opacity, transform: `translate(${ePage.dx}px, ${ePage.dy}px)`, overflow: "hidden" }}>
           {24 - scrolled > -260 && (
             <div style={{ position: "absolute", left: 30, top: 24 - scrolled, width: bw - 60, height: 230, borderRadius: 16, background: `linear-gradient(150deg, ${alpha(t.accent, 0.45)}, ${alpha(t.secondary, 0.3)})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Icon name="play" size={80} color="#fff" fill={alpha("#ffffff", 0.3)} />
@@ -96,7 +101,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           })}
         </div>
         {/* AI cursor */}
-        <div style={{ position: "absolute", left: curX - bx, top: curY - by, opacity: curIn, transition: "none" }}>
+        <div style={{ position: "absolute", left: curX - bx, top: curY - by, transform: `translate(${eCur.dx}px, ${eCur.dy}px)`, opacity: eCur.opacity, transition: "none" }}>
           <Icon name="cursor" size={44} color={t.primary} fill={alpha(t.primary, 0.35)} stroke={2.2} />
           <span style={{ position: "absolute", left: 36, top: 36, padding: "2px 10px", borderRadius: 8, background: t.primary, color: t.bg, fontFamily: t.font.mono, fontWeight: 900, fontSize: 18 }}>AI</span>
         </div>
@@ -114,7 +119,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           return <div key={k} style={{ position: "absolute", left: x - 30, top: y - 12, width: 60, height: 24, borderRadius: 8, background: alpha(t.primary, 0.8 * (1 - q)), boxShadow: `0 0 16px ${t.primary}` }} />;
         })}
       {/* file + counter */}
-      <div style={{ position: "absolute", left: fx, top: by, width: fw, height: 300, borderRadius: 22, background: `linear-gradient(160deg, ${alpha(t.primary, 0.16)}, ${t.glass})`, border: `2px solid ${alpha(t.primary, 0.5)}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.2)}`, transform: `scale(${file})`, opacity: clamp(file), padding: 30 }}>
+      <div style={{ position: "absolute", left: fx, top: by, width: fw, height: 300, borderRadius: 22, background: `linear-gradient(160deg, ${alpha(t.primary, 0.16)}, ${t.glass})`, border: `2px solid ${alpha(t.primary, 0.5)}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.2)}`, transform: `scale(${eFile.scale}) translate(${eFile.dx}px, ${eFile.dy}px)`, opacity: clamp(eFile.p), padding: 30 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <Icon name="doc" size={70} color={t.primary} stroke={1.8} />
           <div>
@@ -135,9 +140,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {steps.map((s, i) => {
           const at = cues[i];
           const on = frame >= at;
-          const p = easeOutBack(prog(frame, at, 14));
+          // 原生无位移，只把「点亮」的 scale 0.96→1 入场接入语法层（rise+from:0.96 与基线一致）
+          const eStep = enterAt(frame, at, { fallback: "rise", dur: 14, from: 0.96, seed: i });
           return (
-            <div key={i} style={{ height: 104, marginBottom: 16, borderRadius: 18, display: "flex", alignItems: "center", gap: 18, padding: "0 26px", background: on ? alpha(t.primary, 0.12) : alpha(t.text, 0.03), border: `1.5px solid ${alpha(t.primary, on ? 0.6 : 0.15)}`, transform: `scale(${on ? 0.96 + 0.04 * p : 0.96})`, opacity: on ? 1 : 0.4 }}>
+            <div key={i} style={{ height: 104, marginBottom: 16, borderRadius: 18, display: "flex", alignItems: "center", gap: 18, padding: "0 26px", background: on ? alpha(t.primary, 0.12) : alpha(t.text, 0.03), border: `1.5px solid ${alpha(t.primary, on ? 0.6 : 0.15)}`, transform: `scale(${on ? eStep.scale : 0.96}) translate(${eStep.dx}px, ${eStep.dy}px)`, opacity: on ? 1 : 0.4 }}>
               <div style={{ width: 54, height: 54, borderRadius: 27, background: on ? t.primary : "transparent", border: `2px solid ${t.primary}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {on ? <Icon name="check" size={32} color={t.bg} stroke={3.2} /> : <span style={{ fontFamily: t.font.mono, color: t.primary, fontSize: 24 }}>{i + 1}</span>}
               </div>
@@ -161,6 +167,7 @@ export const BrowserAgent: CompDef<D> = {
   minSec: 3,
   maxSec: 12,
   tags: ["自己打开", "自己往下翻", "自动", "采集", "抓取", "浏览器"],
+  motion: { kind: "AI 光标打字打开页面 → 评论流滚动、光块飞入文件计数上涨 → 步骤逐条点亮打勾", energy: 2 },
   desc: "浏览器里 AI 光标自己输网址、打开页面、加速往下翻评论；评论被抓取后化成光块飞进右侧文件，计数滚到 500；右侧三个动作依次打勾",
   use: "AI/Agent 自动完成网页操作、采集、下载、整理（“它自己打开页面，自己往下翻，自己存好”）",
   schema,

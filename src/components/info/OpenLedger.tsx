@@ -4,6 +4,7 @@ import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/an
 import { hitShake, StampBox } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, fmtNum, Heading } from "../../lib/ui";
@@ -49,8 +50,9 @@ const Paper: React.FC<{ x: number; y: number; w: number; h: number; name: string
   );
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const ink = "#1d2420";
@@ -78,14 +80,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     const rowsOf = (b: typeof L, x: number, other: typeof L) =>
       b.items.map((it, i) => {
         if (frame < cues[i]) return null;
-        const k = easeOut(prog(frame, cues[i], 10));
+        const e = enterAt(frame, cues[i], { fallback: "slide-r", dur: 10 });
         const o = other.items[i];
         const same = it.same || (o && o.amount === it.amount && o.name === it.name);
         const ratio = o && o.amount ? it.amount / o.amount : 0;
         const big = !same && (ratio >= 1.5 || (!!o && o.amount === 0 && it.amount > 0));
         const fs = rh * 0.42;
         return (
-          <div key={i} style={{ position: "absolute", left: 22, right: 22, top: 90 + i * rh, height: rh, display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px dotted #9aa396", opacity: (0.3 + 0.7 * k) * (same ? 1 - rv * 0.6 : 1), clipPath: `inset(0 ${(1 - k) * 100}% 0 0)` }}>
+          <div key={i} style={{ position: "absolute", left: 22, right: 22, top: 90 + i * rh, height: rh, display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px dotted #9aa396", opacity: (0.3 + 0.7 * e.p) * (same ? 1 - rv * 0.6 : 1), clipPath: e.clip ?? `inset(0 ${(1 - e.p) * 100}% 0 0)` }}>
             <span style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: fitFont(it.name, pw * 0.48, fs, 12), color: same && rv > 0.5 ? "#8b938a" : ink, whiteSpace: "nowrap", textDecoration: same && rv > 0.5 ? "line-through" : undefined }}>{it.name}</span>
             <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
               {big && rv > 0 && <span style={{ transform: `scale(${easeOutBack(prog(frame, revealAt + 4, 12))})`, padding: "2px 10px", borderRadius: 8, background: t.bad, color: "#fff", fontFamily: t.font.mono, fontWeight: 900, fontSize: fs * 0.8 }}>{o && o.amount === 0 ? "0→有" : `×${+ratio.toFixed(ratio >= 10 ? 0 : 1)}`}</span>}
@@ -95,7 +97,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         );
       });
     const totalRow = (sum: number, other: number) => (
-      <div style={{ position: "absolute", left: 22, right: 22, top: 90 + n * rh + 20, display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: `3px solid ${ink}`, paddingTop: 12, opacity: easeOut(prog(frame, cues[n - 1] + 8, 10)) }}>
+      <div style={{ position: "absolute", left: 22, right: 22, top: 90 + n * rh + 20, display: "flex", justifyContent: "space-between", alignItems: "baseline", borderTop: `3px solid ${ink}`, paddingTop: 12, opacity: enterAt(frame, cues[n - 1] + 8, { fallback: "slide-r", dur: 10 }).p }}>
         <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: rh * 0.45, color: ink }}>合计</span>
         <span style={{ fontFamily: t.font.mono, fontWeight: 900, fontSize: rh * 0.62, color: sum > other && rv > 0.3 ? "#c8182c" : ink }}>{money(Math.round(sum * clamp(prog(frame, cues[n - 1] + 8, 16))))}</span>
       </div>

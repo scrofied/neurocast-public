@@ -1,12 +1,13 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -24,8 +25,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const inCues = data.inside.map((x, i) => cueOr(x.at, 6 + i * Math.round(Math.max(10, (dur * 0.24) / data.inside.length))));
@@ -66,12 +68,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           {data.inside.map((x, i) => {
             const c = inCues[i];
             if (frame < c) return null;
-            const p = easeOutBack(prog(frame, c, 14));
+            // 资料原生从 0 弹入（rise 等价）；落点 sx 是算死的，位移走 SVG transform 属性（CSS transform 对图元不可靠）
+            const ei = enterAt(frame, c, { fallback: "rise", dur: 14, from: 0 });
             const cols = Math.min(data.inside.length, 4);
             const sx = gx + (gw * (i + 0.5)) / cols;
             const ic = x.icon ?? guessIcon(x.text) ?? "doc";
             return (
-              <g key={i} transform={`translate(${sx} ${gy + gh * 0.62}) scale(${p})`}>
+              <g key={i} transform={`translate(${sx + ei.dx} ${gy + gh * 0.62 + ei.dy}) scale(${ei.scale})`}>
                 <circle r={full ? 40 : 24} fill={alpha(t.primary, 0.18)} stroke={t.primary} strokeWidth={3} />
                 <g transform={`translate(${full ? -22 : -13} ${full ? -22 : -13})`}>
                   <foreignObject width={full ? 44 : 26} height={full ? 44 : 26}>
@@ -88,8 +91,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           if (frame < c) return null;
           const cols = Math.min(data.inside.length, 4);
           const sx = gx + (gw * (i + 0.5)) / cols;
+          // 纯淡入入场：吃 e.opacity + 位移/擦除（落点 sx 是算死的，不是 p 插值出来的）
+          const el = enterAt(frame, c + 6, { fallback: "rise", dur: 12 });
           return (
-            <div key={i} style={{ position: "absolute", left: sx, top: gy + gh * 0.62 + (full ? 50 : 30), width: full ? 220 : 120, transform: "translateX(-50%)", textAlign: "center", fontFamily: t.font.body, fontWeight: 800, fontSize: fitFont(x.text, full ? 210 : 116, full ? 24 : 14, 10), color: t.primary, whiteSpace: "nowrap", opacity: easeOut(prog(frame, c + 6, 12)) }}>{x.text}</div>
+            <div key={i} style={{ position: "absolute", left: sx, top: gy + gh * 0.62 + (full ? 50 : 30), width: full ? 220 : 120, transform: `translateX(-50%) translate(${el.dx}px, ${el.dy}px)`, clipPath: el.clip, textAlign: "center", fontFamily: t.font.body, fontWeight: 800, fontSize: fitFont(x.text, full ? 210 : 116, full ? 24 : 14, 10), color: t.primary, whiteSpace: "nowrap", opacity: el.opacity }}>{x.text}</div>
         );
       })}
         {/* outside items try to fly in and bounce off the wall */}
@@ -128,15 +133,23 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           });
         })}
         {/* wall sign */}
-        {data.label && (
-          <div style={{ position: "absolute", left: gx + gw / 2, top: gy - (full ? 96 : 54), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, 8, 14))})`, display: "flex", alignItems: "center", gap: full ? 12 : 6, padding: `${full ? 8 : 4}px ${full ? 24 : 12}px`, borderRadius: 12, background: alpha(t.gold, 0.16), border: `3px solid ${t.gold}`, boxShadow: `0 0 26px ${alpha(t.gold, 0.5)}` }}>
+        {data.label && (() => {
+          // 牌子原生从 0 弹入（rise+from:0 等价）；挂点在墙上算死 → 位移可以叠加
+          const es = enterAt(frame, 8, { fallback: "rise", dur: 14, from: 0 });
+          return (
+          <div style={{ position: "absolute", left: gx + gw / 2, top: gy - (full ? 96 : 54), transform: `translateX(-50%) translate(${es.dx}px, ${es.dy}px) scale(${es.scale})`, clipPath: es.clip, display: "flex", alignItems: "center", gap: full ? 12 : 6, padding: `${full ? 8 : 4}px ${full ? 24 : 12}px`, borderRadius: 12, background: alpha(t.gold, 0.16), border: `3px solid ${t.gold}`, boxShadow: `0 0 26px ${alpha(t.gold, 0.5)}` }}>
             <Icon name="lock" size={full ? 30 : 16} color={t.gold} />
             <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 34 : 17, color: t.gold, whiteSpace: "nowrap" }}>{data.label}</span>
           </div>
-        )}
-        {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: G + (full ? 44 : 22), textAlign: "center", opacity: easeOut(prog(frame, verdictAt, 12)), fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.8, full ? 52 : 26, 15), color: t.text, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>{data.verdict}</div>
-        )}
+          );
+        })()}
+        {data.verdict && frame >= verdictAt && (() => {
+          // 结论淡入 + 位移（贴地平线，rise 的下沉量小，不会出画）
+          const ev = enterAt(frame, verdictAt, { fallback: "rise", dur: 12 });
+          return (
+          <div style={{ position: "absolute", left: 0, right: 0, top: G + (full ? 44 : 22), textAlign: "center", opacity: ev.opacity, transform: `translate(${ev.dx}px, ${ev.dy}px)`, clipPath: ev.clip, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.8, full ? 52 : 26, 15), color: t.text, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>{data.verdict}</div>
+          );
+        })()}
       </div>
       {inCues.map((c, i) => (
         <Sfx key={`i${i}`} name="pop" at={c} volume={0.28} />

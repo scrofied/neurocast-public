@@ -1,7 +1,8 @@
 import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
-import { clamp, easeIn, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeIn, easeOut, lerp, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -17,17 +18,21 @@ type D = z.infer<typeof schema>;
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const cx = width / 2;
   const cy = height / 2 + 60;
   const input = data.input ?? "帮我写一份周报";
   const output = data.output ?? "结构化结果 ✓";
   const chars = Array.from(input);
-  const chipIn = easeOutBack(prog(frame, 0, 20));
+  // 芯片原生是回弹长大入场（scale 0→1，easeOutBack）
+  const eChip = enterAt(frame, 0, { fallback: "rise", dur: 20, from: 0 });
   const suck0 = 18;
   const suckDur = Math.max(20, Math.min(40, dur * 0.3));
   const procEnd = suck0 + suckDur + 20;
   const outP = easeOut(prog(frame, procEnd, 22));
+  // 结果原生是从左边 120px 推入 + 淡入（slide-l 的 p 就是 easeOut 进度，dist 换算成同样的 120px）
+  const eOut = enterAt(frame, procEnd, { fallback: "slide-l", dur: 22, dist: 120 / 240 });
   const heat = clamp(prog(frame, suck0, suckDur + 20)) * (1 - outP * 0.6);
   const size = 320;
   const leftX = variant === 1 ? cx - 620 : cx - 640;
@@ -80,7 +85,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           width: size,
           height: size,
           borderRadius: 26,
-          transform: `perspective(1200px) rotateX(${18 - heat * 8}deg) rotateY(${-16 + heat * 10}deg) scale(${chipIn})`,
+          transform: `perspective(1200px) translate(${eChip.dx}px, ${eChip.dy}px) rotateX(${18 - heat * 8}deg) rotateY(${-16 + heat * 10}deg) scale(${eChip.scale})`,
+          opacity: eChip.opacity,
+          clipPath: eChip.clip,
           background: `radial-gradient(circle at 50% 45%, ${alpha(t.primary, 0.25 + heat * 0.45)}, ${alpha(t.bg2, 0.95)} 70%)`,
           border: `2px solid ${alpha(t.primary, 0.6 + heat * 0.4)}`,
           boxShadow: `0 0 ${40 + heat * 80}px ${alpha(t.primary, 0.3 + heat * 0.4)}, inset 0 0 40px ${alpha(t.primary, 0.2)}`,
@@ -133,9 +140,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           fontWeight: 800,
           fontSize: 40,
           color: t.accent,
-          opacity: outP,
-          transform: `translateX(${(1 - outP) * -120}px)`,
-          filter: `blur(${(1 - outP) * 10}px)`,
+          opacity: eOut.p,
+          transform: `translate(${eOut.dx}px, ${eOut.dy}px)`,
+          filter: `blur(${(1 - eOut.p) * 10}px)`,
           textShadow: `0 0 24px ${alpha(t.accent, 0.6)}`,
         }}
       >
@@ -154,6 +161,7 @@ export const PromptChip: CompDef<D> = {
   minSec: 4,
   maxSec: 9,
   tags: ["提示词", "Prompt", "指令", "输入", "问它", "告诉它", "喂给", "输出", "生成"],
+  motion: { kind: "提示词逐字被吸进芯片（芯片发热运转）→ 右侧结果滑出", energy: 2 },
   desc: "一句提示词化作芯片插进 LLM 模块，模块运转后吐出结果",
   use: "“给模型一句话就出结果”的抽象表达；要展示指令原文、逐字打出时用 chat-command",
   schema,

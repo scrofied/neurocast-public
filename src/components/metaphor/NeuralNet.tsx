@@ -3,6 +3,7 @@ import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { easeOut, noise1, project, prog, rng, rotX, rotY } from "../../lib/anim";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -11,6 +12,7 @@ type D = z.infer<typeof schema>;
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const layers = variant === 1 ? [4, 7, 9, 7, 3] : [5, 8, 8, 4];
   const nodes = useMemo(() => {
@@ -66,10 +68,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
         {P.map((p, i) => {
           const n = nodes[i];
           const on = Math.max(0, 1 - Math.abs(wave - n.l) * 1.3);
-          const appear = easeOut(prog(frame, 4 + n.l * 7 + (i % 5), 16));
+          // 节点按层淡入 = 元素入场；整网生长 build 与信号波扫描是主体动画不动
+          const eN = enterAt(frame, 4 + n.l * 7 + (i % 5), { fallback: "rise", dur: 16, seed: i });
           const r = (12 + on * 8) * p.s;
           return (
-            <g key={i} opacity={appear}>
+            <g key={i} opacity={eN.opacity} transform={`translate(${eN.dx} ${eN.dy})`}>
               <circle cx={p.x} cy={p.y} r={r * 2.4} fill={alpha(t.primary, 0.08 + on * 0.25)} />
               <circle cx={p.x} cy={p.y} r={r} fill={on > 0.3 ? t.primary : t.bg2} stroke={t.primary} strokeWidth={1.5} filter={on > 0.3 ? "url(#nng)" : undefined} />
             </g>
@@ -81,15 +84,15 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
         const last = P.filter((_, i) => nodes[i].l === layers.length - 1);
         const fx = Math.min(...first.map((p) => p.x)) - 60;
         const lx = Math.max(...last.map((p) => p.x)) + 60;
-        const pin = easeOut(prog(frame, 10, 20));
-        const pout = easeOut(prog(frame, 50, 20));
+        const eIn = enterAt(frame, 10, { fallback: "rise", dur: 20 });
+        const eOut = enterAt(frame, 50, { fallback: "rise", dur: 20 });
         return (
           <>
-            <div style={{ position: "absolute", left: fx - 260, top: cy - 30, width: 240, textAlign: "right", fontFamily: t.font.mono, fontSize: 26, color: t.text, opacity: pin }}>
+            <div style={{ position: "absolute", left: fx - 260, top: cy - 30, width: 240, textAlign: "right", fontFamily: t.font.mono, fontSize: 26, color: t.text, opacity: eIn.opacity, transform: `translate(${eIn.dx}px, ${eIn.dy}px)`, clipPath: eIn.clip }}>
               <div style={{ fontSize: 14, color: t.dim, letterSpacing: 4 }}>INPUT</div>
               {inTxt}
             </div>
-            <div style={{ position: "absolute", left: lx + 20, top: cy - 30, width: 300, fontFamily: t.font.mono, fontSize: 26, color: t.accent, opacity: pout, textShadow: `0 0 18px ${alpha(t.accent, 0.6)}` }}>
+            <div style={{ position: "absolute", left: lx + 20, top: cy - 30, width: 300, fontFamily: t.font.mono, fontSize: 26, color: t.accent, opacity: eOut.opacity, transform: `translate(${eOut.dx}px, ${eOut.dy}px)`, clipPath: eOut.clip, textShadow: `0 0 18px ${alpha(t.accent, 0.6)}` }}>
               <div style={{ fontSize: 14, color: t.dim, letterSpacing: 4 }}>OUTPUT</div>
               {outTxt}
             </div>
@@ -109,6 +112,7 @@ export const NeuralNet: CompDef<D> = {
   minSec: 4,
   maxSec: 10,
   tags: ["模型", "大模型", "神经网络", "AI", "训练", "推理", "参数", "LLM", "GPT", "深度学习"],
+  motion: { kind: "节点按层淡入成形 + 信号波逐层点亮（持续）+ 输入/输出标签淡入", energy: 2 },
   desc: "多层神经网络，信号从输入（你的问题）逐层点亮传到输出（答案）",
   use: "解释大模型/神经网络怎么工作；不要只因为出现“AI”两个字就用",
   schema,

@@ -6,6 +6,7 @@ import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 import { MiniApp } from "./MiniApp";
@@ -32,8 +33,9 @@ const ext = (s: string) => {
   return i > 0 ? [s.slice(0, i), s.slice(i)] : [s, ""];
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const pasteAt = cueOr(data.pasteAt, 12);
   const renameAt = cueOr(data.renameAt, Math.max(pasteAt + 30, dur * 0.35));
@@ -44,8 +46,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const ny = 210;
   const nw = 860;
   const nh = 560;
-  const win = easeOutBack(prog(frame, 0, 16));
-  const app = easeOutBack(prog(frame, appAt, 20));
+  const eWin = enterAt(frame, 0, { fallback: "rise", dur: 16, from: 0.92 });
+  // 成品窗原生从图标里 0.12→1 放大到位；缩放交给 e（rise 下与原曲线逐帧等价），位移不消费，轨迹仍按 eApp.p 插值
+  const eApp = enterAt(frame, appAt, { fallback: "rise", dur: 20, from: 0.12 });
   const back = easeOut(prog(frame, appAt, 14));
   // desktop file icon
   const fx = 1400;
@@ -65,14 +68,17 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const bh = 640;
   const bx = (width - bw) / 2;
   const by = 250;
-  const ax = fx + (bx + bw / 2 - fx) * app;
-  const ay = fy + (by + bh / 2 - fy) * app;
+  const ax = fx + (bx + bw / 2 - fx) * eApp.p;
+  const ay = fy + (by + bh / 2 - fy) * eApp.p;
+  const eIcon = enterAt(frame, 6, { fallback: "rise", dur: 12 });
+  const eKey = enterAt(frame, pasteAt - 6, { fallback: "rise", dur: 6 });
+  const eBadge = enterAt(frame, appAt + 18, { fallback: "rise", dur: 12, from: 0 });
   const lineFs = 30;
   return (
     <>
       <Heading kicker={data.kicker} title={data.title} frame={frame} width={width} />
       {/* notepad */}
-      <div style={{ position: "absolute", left: nx, top: ny, width: nw, height: nh, borderRadius: 14, overflow: "hidden", background: "#f4f6f9", boxShadow: `0 0 0 2px ${alpha(t.primary, 0.4)}, 0 30px 70px rgba(0,0,0,.55)`, transform: `scale(${(0.92 + 0.08 * win) * (1 - back * 0.08)})`, opacity: clamp(win * 1.4) * (1 - back * 0.55), filter: back > 0 ? `blur(${back * 3}px)` : undefined }}>
+      <div style={{ position: "absolute", left: nx, top: ny, width: nw, height: nh, borderRadius: 14, overflow: "hidden", background: "#f4f6f9", boxShadow: `0 0 0 2px ${alpha(t.primary, 0.4)}, 0 30px 70px rgba(0,0,0,.55)`, transform: `scale(${eWin.scale * (1 - back * 0.08)})`, opacity: eWin.opacity * (1 - back * 0.55), filter: back > 0 ? `blur(${back * 3}px)` : undefined }}>
         <div style={{ height: 50, display: "flex", alignItems: "center", gap: 12, padding: "0 18px", background: "#e3e7ee", fontFamily: t.font.body, fontSize: 22, color: "#333" }}>
           <Icon name="doc" size={24} color="#4a6fa5" />
           {`${rn ? data.to : data.from} - ${data.editor}`}
@@ -82,10 +88,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
             <span style={{ color: "#333", opacity: Math.floor(frame / 8) % 2 ? 1 : 0 }}>▍</span>
           ) : (
             data.code.map((ln, i) => {
-              const p = easeOut(prog(frame, pasteAt + i * 2, 8));
+              // 每行原生是从右侧 20px 滑入淡入（slide-r, dist≈20/240）
+              const eLine = enterAt(frame, pasteAt + i * 2, { fallback: "slide-r", dur: 8, dist: 0.083 });
               const tag = /^\s*</.test(ln);
               return (
-                <div key={i} style={{ opacity: p, transform: `translateX(${(1 - p) * 20}px)`, color: tag ? "#1f5fbf" : "#333", whiteSpace: "nowrap" }}>
+                <div key={i} style={{ opacity: eLine.opacity, transform: `translateX(${eLine.dx}px)`, color: tag ? "#1f5fbf" : "#333", whiteSpace: "nowrap" }}>
                   {ln}
                 </div>
               );
@@ -96,7 +103,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       </div>
       {/* Ctrl+V keycaps */}
       {frame >= pasteAt - 6 && frame < pasteAt + 36 && (
-        <div style={{ position: "absolute", left: nx + nw - 300, top: ny + nh + 22, display: "flex", gap: 12, opacity: easeOut(prog(frame, pasteAt - 6, 6)) * (1 - easeOut(prog(frame, pasteAt + 26, 10))) }}>
+        <div style={{ position: "absolute", left: nx + nw - 300, top: ny + nh + 22, display: "flex", gap: 12, opacity: eKey.opacity * (1 - easeOut(prog(frame, pasteAt + 26, 10))) }}>
           {["Ctrl", "V"].map((k, i) => (
             <span key={k} style={{ padding: "10px 22px", borderRadius: 12, background: t.bg2, border: `2px solid ${t.primary}`, fontFamily: t.font.mono, fontWeight: 700, fontSize: 32, color: t.text, transform: `translateY(${frame >= pasteAt && frame < pasteAt + 5 ? 5 : 0}px)`, boxShadow: `0 ${frame >= pasteAt && frame < pasteAt + 5 ? 1 : 6}px 0 ${alpha(t.primary, 0.6)}` }}>
               {i ? k : k}
@@ -105,7 +112,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         </div>
       )}
       {/* desktop file icon + rename */}
-      <div style={{ position: "absolute", left: fx - 100, top: fy - 90, width: 200, textAlign: "center", opacity: easeOut(prog(frame, 6, 12)) * (1 - back) }}>
+      <div style={{ position: "absolute", left: fx - 100, top: fy - 90, width: 200, textAlign: "center", opacity: eIcon.opacity * (1 - back) }}>
         <div style={{ width: 150, height: 170, margin: "0 auto", borderRadius: 18, display: "flex", alignItems: "center", justifyContent: "center", background: isHtml ? `linear-gradient(135deg, ${t.primary}, ${t.secondary})` : "#e9edf3", boxShadow: isHtml ? `0 0 40px ${alpha(t.primary, 0.6)}` : "0 10px 30px rgba(0,0,0,.5)", transform: `scale(${isHtml ? 1 + 0.12 * (1 - easeOut(prog(frame, renameAt + 20, 12))) : 1})` }}>
           <Icon name={isHtml ? "globe" : "doc"} size={90} color={isHtml ? t.bg : "#5a6b80"} stroke={1.8} />
         </div>
@@ -130,13 +137,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       )}
       {/* the finished tool pops out of the icon */}
       {frame >= appAt && (
-        <div style={{ position: "absolute", left: ax - bw / 2, top: ay - bh / 2, width: bw, height: bh, transform: `scale(${0.12 + 0.88 * app})`, opacity: clamp(app * 2) }}>
+        <div style={{ position: "absolute", left: ax - bw / 2, top: ay - bh / 2, width: bw, height: bh, transform: `scale(${eApp.scale})`, opacity: clamp(eApp.p * 2) }}>
           <MiniApp w={bw} h={bh} frame={frame} app={{ ...data.app, url: data.app.url ?? `file:///桌面/${data.to}` }} workAt={appAt + 22} />
         </div>
       )}
       {data.badge && frame >= appAt + 18 && (
         <div style={{ position: "absolute", left: 0, right: 0, top: by + bh + 20, textAlign: "center" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 12, padding: "10px 30px", borderRadius: 30, background: alpha(t.bg, 0.8), border: `2px solid ${t.accent}`, fontFamily: t.font.title, fontWeight: 900, fontSize: 36, color: t.accent, transform: `scale(${easeOutBack(prog(frame, appAt + 18, 12))})`, boxShadow: `0 0 30px ${alpha(t.accent, 0.4)}` }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 12, padding: "10px 30px", borderRadius: 30, background: alpha(t.bg, 0.8), border: `2px solid ${t.accent}`, fontFamily: t.font.title, fontWeight: 900, fontSize: 36, color: t.accent, transform: `scale(${eBadge.scale})`, boxShadow: `0 0 30px ${alpha(t.accent, 0.4)}` }}>
             <Icon name="zap" size={34} color={t.accent} />
             {data.badge}
           </span>
@@ -162,6 +169,7 @@ export const FileLaunch: CompDef<D> = {
   minSec: 4,
   maxSec: 12,
   tags: ["记事本", "改后缀", "双击", "HTML", "打开", "运行", "单文件"],
+  motion: { kind: "代码逐行贴进记事本、后缀改写图标变亮、双击后成品窗从图标放大弹出", energy: 3 },
   desc: "编辑器窗口里 Ctrl+V 贴进代码；桌面文件图标的后缀被划掉改写（txt → html），图标变亮；鼠标双击后，成品小工具从图标里放大弹出成浏览器窗口，数据行开始跑",
   use: "把一段东西存成文件就能直接用：AI 写的 HTML 双击即跑、脚本改后缀变可执行、导出的 .csv 双击进表格、配置文件改名生效（code / from / to / app 全可改）",
   schema,

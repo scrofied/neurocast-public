@@ -7,6 +7,7 @@ import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -23,8 +24,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.surface.length;
@@ -42,8 +44,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const slotW = full ? 320 : 180;
   const shift = (frame * speed) % slotW;
   const count = Math.ceil(beltW / slotW) + 2;
-  const coreK = easeOutBack(prog(frame, lockAt, 16));
+  // 内核点亮：原生是 easeOutBack scale 0→1（rise 等价），只消费 e.p/e.scale，不加位移
+  const eCore = enterAt(frame, lockAt, { fallback: "rise", dur: 16, from: 0 });
   const locked = frame >= lockAt;
+  // 两个说明标签：淡入入场
+  const eLblTop = enterAt(frame, 4, { fallback: "rise", dur: 14 });
+  const eLblCore = enterAt(frame, lockAt, { fallback: "rise", dur: 14 });
+  // 结论文字：原生回弹放大入场（rise+from:0 与基线一致）；新元素，位移通道一并接上
+  const eVerdict = enterAt(frame, verdictAt, { fallback: "rise", dur: 14, from: 0 });
 
   return (
     <>
@@ -72,26 +80,26 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           </div>
         ))}
         {/* label: what keeps changing */}
-        <div style={{ position: "absolute", left: full ? W * 0.06 : 12, top: top - (full ? 54 : 28), fontFamily: t.font.mono, fontSize: full ? 22 : 12, letterSpacing: 4, color: t.dim, opacity: easeOut(prog(frame, 4, 14)) }}>一直在换的</div>
+        <div style={{ position: "absolute", left: full ? W * 0.06 : 12, top: top - (full ? 54 : 28), fontFamily: t.font.mono, fontSize: full ? 22 : 12, letterSpacing: 4, color: t.dim, opacity: eLblTop.opacity }}>一直在换的</div>
         {/* the core: a still, glowing bar */}
-        <div style={{ position: "absolute", left: W * 0.1, top: coreTop, width: W * 0.8, height: coreH, transform: `scale(${locked ? coreK : 1})`, borderRadius: 18, background: `linear-gradient(90deg, ${alpha(t.gold, 0.22)}, ${alpha(t.gold, 0.12)})`, border: `3px solid ${t.gold}`, boxShadow: `0 0 ${locked ? 40 : 16}px ${alpha(t.gold, locked ? 0.55 : 0.25)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 6 : 3 }}>
+        <div style={{ position: "absolute", left: W * 0.1, top: coreTop, width: W * 0.8, height: coreH, transform: `scale(${locked ? eCore.scale : 1})`, borderRadius: 18, background: `linear-gradient(90deg, ${alpha(t.gold, 0.22)}, ${alpha(t.gold, 0.12)})`, border: `3px solid ${t.gold}`, boxShadow: `0 0 ${locked ? 40 : 16}px ${alpha(t.gold, locked ? 0.55 : 0.25)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 6 : 3 }}>
           <div style={{ display: "flex", alignItems: "center", gap: full ? 14 : 7 }}>
             <Icon name="lock" size={full ? 30 : 16} color={t.gold} />
             <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.core, W * 0.7, full ? 44 : 22, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 20px ${alpha(t.gold, 0.6)}` }}>{data.core}</span>
           </div>
           {data.coreNote && <div style={{ fontFamily: t.font.body, fontWeight: 700, fontSize: full ? 21 : 12, color: alpha(t.gold, 0.85), whiteSpace: "nowrap" }}>{data.coreNote}</div>}
         </div>
-        <div style={{ position: "absolute", left: full ? W * 0.06 : 12, top: coreTop + coreH + (full ? 14 : 7), fontFamily: t.font.mono, fontSize: full ? 22 : 12, letterSpacing: 4, color: t.gold, opacity: easeOut(prog(frame, lockAt, 14)) }}>始终不动的</div>
+        <div style={{ position: "absolute", left: full ? W * 0.06 : 12, top: coreTop + coreH + (full ? 14 : 7), fontFamily: t.font.mono, fontSize: full ? 22 : 12, letterSpacing: 4, color: t.gold, opacity: eLblCore.opacity }}>始终不动的</div>
         {/* vertical comparison guides showing the core never moves while the belt does */}
         <svg width={W} height={H} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
           <GlowDefs id="svc" std={7} user />
           {locked && [0.28, 0.72].map((k, i) => (
-            <line key={i} x1={W * k} y1={top + beltH * 0.5} x2={W * k} y2={coreTop + coreH / 2} stroke={alpha(t.gold, 0.5)} strokeWidth={3} strokeDasharray="10 10" opacity={coreK} />
+            <line key={i} x1={W * k} y1={top + beltH * 0.5} x2={W * k} y2={coreTop + coreH / 2} stroke={alpha(t.gold, 0.5)} strokeWidth={3} strokeDasharray="10 10" opacity={eCore.p} />
           ))}
-          {locked && <line x1={W * 0.1} y1={coreTop + coreH / 2} x2={W * 0.9} y2={coreTop + coreH / 2} stroke={t.gold} strokeWidth={3} filter="url(#svc)" opacity={coreK * 0.5} />}
+          {locked && <line x1={W * 0.1} y1={coreTop + coreH / 2} x2={W * 0.9} y2={coreTop + coreH / 2} stroke={t.gold} strokeWidth={3} filter="url(#svc)" opacity={eCore.p * 0.5} />}
         </svg>
         {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left: W / 2, top: coreTop + coreH + (full ? 78 : 40), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, verdictAt, 14))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 50 : 25, 15), color: t.text, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>{data.verdict}</div>
+          <div style={{ position: "absolute", left: W / 2, top: coreTop + coreH + (full ? 78 : 40), transform: `translateX(-50%) translate(${eVerdict.dx}px, ${eVerdict.dy}px) scale(${eVerdict.scale})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 50 : 25, 15), color: t.text, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>{data.verdict}</div>
         )}
       </div>
       <Sfx name="swish" at={0} volume={0.12} />

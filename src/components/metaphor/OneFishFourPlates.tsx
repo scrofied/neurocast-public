@@ -1,11 +1,12 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { easeInOut, easeOut, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -29,8 +30,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.plates.length;
@@ -47,13 +49,16 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const gap = full ? 20 : 10;
   const top = full ? H * 0.24 : H * 0.14;
   const srcIcon = data.sourceIcon ?? guessIcon(data.source) ?? "film";
+  // 源盘 / 结论从 0 弹出 = 元素入场；分瓣曲线、切口虚线、把内容送进盘里是主体动作不动
+  const eSrc = enterAt(frame, 4, { fallback: "rise", dur: 16, from: 0 });
+  const eVerd = enterAt(frame, verdictAt, { fallback: "rise", dur: 14, from: 0 });
 
   return (
     <>
       {full && <Heading kicker={data.kicker} title={data.title} frame={frame} width={W} />}
       <div style={{ position: "absolute", inset: 0 }}>
         {/* the source dish */}
-        <div style={{ position: "absolute", left: srcX, top: srcY, width: srcW, height: srcH, transform: `scale(${easeOutBack(prog(frame, 4, 16))})`, borderRadius: 18, background: `linear-gradient(150deg, ${alpha(t.primary, 0.25)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.4)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 8 : 4 }}>
+        <div style={{ position: "absolute", left: srcX, top: srcY, width: srcW, height: srcH, transform: `translate(${eSrc.dx}px, ${eSrc.dy}px) scale(${eSrc.scale})`, opacity: eSrc.opacity, borderRadius: 18, background: `linear-gradient(150deg, ${alpha(t.primary, 0.25)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.4)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 8 : 4 }}>
           <Icon name={srcIcon} size={full ? 44 : 24} color={t.primary} />
           <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.source, srcW - (full ? 30 : 16), full ? 26 : 14, 11), color: t.text, whiteSpace: "nowrap" }}>{data.source}</div>
           <div style={{ fontFamily: t.font.mono, fontSize: full ? 16 : 10, letterSpacing: 3, color: t.primary }}>一条源内容</div>
@@ -86,13 +91,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {data.plates.map((p, i) => {
           const c = cues[i];
           if (frame < c) return null;
-          const pp = easeOutBack(prog(frame, c, 14));
+          // 每只盘子从右侧滑入淡入 = 元素入场
+          const ePl = enterAt(frame, c, { fallback: "slide-r", dur: 14, dist: 70 / 240, seed: i });
           const y = top + i * (plateH + gap);
           // each plate is a different shape: 竖屏 / 横屏 / 图文 / 音频
           const shape = i % 4;
           const ic = p.icon ?? guessIcon(p.name) ?? "film";
           return (
-            <div key={i} style={{ position: "absolute", left: plateX, top: y, width: plateW, height: plateH, transform: `translateX(${(1 - pp) * 70}px)`, opacity: clamp(pp * 1.4), borderRadius: shape === 3 ? 18 : 14, background: alpha(t.bg, 0.9), border: `2.5px solid ${alpha(t.accent, 0.85)}`, boxShadow: `0 0 22px ${alpha(t.accent, 0.3)}`, display: "flex", alignItems: "center", gap: full ? 16 : 8, padding: `0 ${full ? 20 : 10}px`, overflow: "hidden" }}>
+            <div key={i} style={{ position: "absolute", left: plateX, top: y, width: plateW, height: plateH, transform: `translate(${ePl.dx}px, ${ePl.dy}px)`, opacity: ePl.opacity, borderRadius: shape === 3 ? 18 : 14, background: alpha(t.bg, 0.9), border: `2.5px solid ${alpha(t.accent, 0.85)}`, boxShadow: `0 0 22px ${alpha(t.accent, 0.3)}`, display: "flex", alignItems: "center", gap: full ? 16 : 8, padding: `0 ${full ? 20 : 10}px`, overflow: "hidden" }}>
               {/* plate silhouette */}
               <div style={{ width: full ? 54 : 30, height: full ? 54 : 30, borderRadius: shape === 0 ? 8 : shape === 3 ? "50%" : 4, border: `2.5px solid ${t.accent}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <Icon name={ic} size={full ? 26 : 14} color={t.accent} />
@@ -106,7 +112,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           );
         })}
         {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: top + n * (plateH + gap) + (full ? 26 : 12), textAlign: "center", transform: `scale(${easeOutBack(prog(frame, verdictAt, 14))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.8, full ? 48 : 24, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 22px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: top + n * (plateH + gap) + (full ? 26 : 12), textAlign: "center", transform: `translate(${eVerd.dx}px, ${eVerd.dy}px) scale(${eVerd.scale})`, opacity: eVerd.opacity, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.8, full ? 48 : 24, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 22px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
         )}
       </div>
       <Sfx name="swipe" at={cutAt} volume={0.3} />

@@ -6,6 +6,7 @@ import { cueOr, listCues } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -26,8 +27,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const youCues = listCues(data.you.items, 6, Math.max(24, dur * 0.3));
   const revealAt = cueOr(data.revealAt ?? data.them.at, Math.max(youCues[youCues.length - 1] + 16, dur * 0.46));
@@ -42,9 +44,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const cx = width * 0.5;
   const cy = py + ph * 0.42;
 
+  const ePanel = enterAt(frame, 2, { fallback: "rise", dur: 14 });
   const rv = easeOut(prog(frame, revealAt, 16));
   const sweep = easeOut(prog(frame, revealAt, 20));
-  const vd = easeOutBack(prog(frame, verdictAt, 12));
+  const ev = enterAt(frame, verdictAt, { fallback: "rise", dur: 12, from: 0.9 });
   const seedAngle = frame * 0.9;
 
   return (
@@ -80,7 +83,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
           borderRadius: 20,
           background: "rgba(38,38,48,.86)",
           border: "2px solid #6b6b80",
-          opacity: easeOut(prog(frame, 2, 14)) * (1 - rv * 0.2),
+          opacity: ePanel.opacity * (1 - rv * 0.2),
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.body, fontWeight: 800, fontSize: 28, color: "#c9ced6" }}>
@@ -88,8 +91,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
           <span style={{ whiteSpace: "nowrap" }}>{data.you.label}</span>
         </div>
         {data.you.items.map((it, i) => {
-          const p = easeOutBack(prog(frame, youCues[i], 12));
           if (frame < youCues[i]) return null;
+          const ei = enterAt(frame, youCues[i], { fallback: "slide-l", dur: 12, dist: 40 / 240 });
           return (
             <div
               key={i}
@@ -104,8 +107,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
                 fontSize: fitFont(it.text, pw - 100, 44, 22),
                 color: "#b9bfc9",
                 whiteSpace: "nowrap",
-                transform: `translateX(${(1 - p) * -40}px)`,
-                opacity: Math.min(1, p),
+                transform: `translateX(${ei.dx}px)`,
+                opacity: ei.opacity,
               }}
             >
               {it.text}
@@ -127,7 +130,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
           background: rv > 0.02 ? `linear-gradient(155deg, ${alpha(t.gold, 0.16)}, ${alpha(t.bg2, 0.94)} 62%)` : alpha(t.bg, 0.6),
           border: `3px solid ${rv > 0.02 ? alpha(t.gold, 0.5 + 0.45 * rv) : "#3a3a48"}`,
           boxShadow: rv > 0.1 ? `0 0 ${44 * rv}px ${alpha(t.gold, 0.35)}` : undefined,
-          opacity: easeOut(prog(frame, 2, 14)),
+          opacity: ePanel.opacity,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.body, fontWeight: 800, fontSize: 28, color: rv > 0.4 ? t.gold : "#7c7c90", transition: "none" }}>
@@ -136,9 +139,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         </div>
         {rv < 0.25 && <div style={{ marginTop: 42, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: 190, lineHeight: 1, color: alpha("#ffffff", 0.07 * (1 - rv * 3)) }}>?</div>}
         {data.them.items.map((it, i) => {
-          const p = easeOutBack(prog(frame, themCues[i], 14));
           if (frame < themCues[i]) return null;
           const flip = clamp((frame - themCues[i]) / 14);
+          const ei = enterAt(frame, themCues[i], { fallback: "slide-r", dur: 14, dist: 30 / 240 });
           return (
             <div
               key={i}
@@ -153,9 +156,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
                 fontSize: fitFont(it.text, pw - 100, 44, 22),
                 color: t.text,
                 whiteSpace: "nowrap",
-                transform: `perspective(900px) rotateY(${(1 - flip) * -78}deg) translateX(${(1 - p) * 30}px)`,
+                transform: `perspective(900px) rotateY(${(1 - flip) * -78}deg) translateX(${ei.dx}px)`,
                 transformOrigin: "left center",
-                opacity: Math.min(1, p * 1.4),
+                opacity: ei.opacity,
                 boxShadow: `0 0 22px ${alpha(t.gold, 0.28)}`,
               }}
             >
@@ -181,8 +184,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
             fontWeight: 900,
             fontSize: fitFont(data.verdict, 1300, 62, 32),
             color: t.gold,
-            opacity: clamp(vd * 2),
-            transform: `scale(${0.9 + 0.1 * vd})`,
+            opacity: ev.opacity,
+            transform: `scale(${ev.scale})`,
             textShadow: `0 0 30px ${alpha(t.gold, 0.6)}`,
           }}
         >
@@ -210,6 +213,7 @@ export const Reframe: CompDef<D> = {
   minSec: 3,
   maxSec: 10,
   tags: ["视角", "换位", "你以为", "别人眼里", "值钱", "排雷指南"],
+  motion: { kind: "两侧面板淡入 + 清单项左右滑入 + 金光扫过翻转视角 + 结论弹出", energy: 2 },
   desc: "左边灰色面板写你自己的视角（烦心事、踩过的坑），中间一只眼睛透镜，说到关键处一道金光扫过右侧面板：同一件东西在另一群人眼里发光并被翻转亮出（排雷指南、避坑清单），最后砸出结论",
   use: "同一件事换个人看就值钱：你的坑是别人的排雷指南、你的日常是别人的刚需、你的抱怨是别人的需求、你的经验是新人的导航（you / them / verdict 全可改）",
   schema,

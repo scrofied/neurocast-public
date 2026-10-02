@@ -1,7 +1,7 @@
 import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
-import { easeOut, easeOutBack, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, GlowDefs } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -9,12 +9,15 @@ import type { CompDef, CompProps } from "../types";
 const schema = z.object({ title: z.string().optional(), cta: z.string().optional(), recap: z.array(z.string()).max(5).optional() });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const cx = width / 2;
   const rec = data.recap ?? [];
-  const btn = easeOutBack(prog(frame, 24 + rec.length * 6, 18));
+  // 按钮原生是回弹放大（从 0 起）；回顾条目从左侧滑入；地面波纹圈是持续动画不接
+  const btn = enterAt(frame, 24 + rec.length * 6, { fallback: "rise", dur: 18, from: 0 });
+  const titleIn = enterAt(frame, 0, { fallback: "rise", dur: 16 });
   const title = data.title ?? "下期见";
   return (
     <>
@@ -25,12 +28,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
           return <circle key={i} cx={cx} cy={height - 250} r={r} fill="none" stroke={t.primary} strokeOpacity={0.3 * (1 - (r - 200) / 360)} />;
         })}
       </svg>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 150, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(title, 1500, 84), color: t.text, opacity: easeOut(prog(frame, 0, 16)), textShadow: `0 0 30px ${alpha(t.primary, 0.6)}` }}>{title}</div>
+      <div style={{ position: "absolute", left: 0, right: 0, top: 150, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(title, 1500, 84), color: t.text, opacity: titleIn.opacity, textShadow: `0 0 30px ${alpha(t.primary, 0.6)}` }}>{title}</div>
       <div style={{ position: "absolute", left: cx - 520, width: 1040, top: 310 }}>
         {rec.map((r, i) => {
-          const p = easeOut(prog(frame, 12 + i * 6, 14));
+          const p = enterAt(frame, 12 + i * 6, { fallback: "slide-l", dur: 14, dist: 0.25, seed: i });
           return (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 20, opacity: p, transform: `translateX(${(1 - p) * -60}px)`, fontFamily: t.font.body, fontWeight: 700, fontSize: 34, color: t.text }}>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 20, opacity: p.opacity, transform: `translateX(${p.dx}px)`, fontFamily: t.font.body, fontWeight: 700, fontSize: 34, color: t.text }}>
               <span style={{ fontFamily: t.font.mono, color: t.primary, fontSize: 26 }}>{String(i + 1).padStart(2, "0")}</span>
               <span style={{ flex: 1, height: 1, maxWidth: 40, background: t.primary }} />
               {r}
@@ -55,7 +58,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
           fontWeight: 900,
           fontSize: 40,
           color: t.bg,
-          transform: `scale(${btn * (1 + Math.sin(frame / 6) * 0.03)})`,
+          opacity: btn.opacity,
+          transform: `translate(${btn.dx}px, ${btn.dy}px) scale(${btn.scale * (1 + Math.sin(frame / 6) * 0.03)})`,
         }}
       >
         {data.cta ?? "关注 · 下期更硬核"}
@@ -72,6 +76,7 @@ export const Outro: CompDef<D> = {
   minSec: 4,
   maxSec: 8,
   tags: [],
+  motion: { kind: "回顾条目从左逐条滑入，关注按钮回弹入画并呼吸，地面波纹持续外扩", energy: 2 },
   desc: "结尾：标题 + 逐条回顾要点 + 呼吸发光的关注按钮",
   use: "最后一句（关注/评论区留言等 CTA），放在最后一个镜头",
   schema,

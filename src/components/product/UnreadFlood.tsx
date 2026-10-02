@@ -4,6 +4,7 @@ import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog, rng } from "../../l
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -26,8 +27,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const floodAt = cueOr(data.floodAt, 8);
@@ -64,7 +66,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const maxRows = Math.floor(listH / rowH);
   const aiX = full ? W * 0.72 : W * 0.5;
   const aiY = full ? H * 0.52 : H * 0.9;
-  const aiIn = easeOutBack(prog(frame, respondAt - 6, 16));
+  // AI 接手圆原生从 0 回弹入画（rise 等价）；角标首现弹跳、承接率面板淡入同理
+  const eAi = enterAt(frame, respondAt - 6, { fallback: "rise", dur: 16, from: 0 });
+  const eMeter = enterAt(frame, respondAt + 10, { fallback: "rise", dur: 12 });
+  const eBadge = enterAt(frame, floodAt, { fallback: "rise", dur: 10 });
   const meterK = has ? easeOut(prog(frame, respondAt + 10, Math.max(30, dur - respondAt - 26))) : 0;
 
   return (
@@ -103,7 +108,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         </div>
         {/* big unread badge on the phone corner */}
         {frame >= floodAt && (
-          <div style={{ position: "absolute", left: px + pw - pw * 0.18, top: py - pw * 0.1, minWidth: pw * 0.34, height: pw * 0.34, borderRadius: pw * 0.2, background: unread === 0 ? t.primary : t.bad, border: `4px solid ${t.bg}`, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 14px", fontFamily: t.font.title, fontWeight: 900, fontSize: pw * (badge.length > 2 ? 0.14 : 0.17), color: "#fff", boxShadow: `0 0 ${hot ? 40 : 18}px ${alpha(unread === 0 ? t.primary : t.bad, 0.8)}`, transform: `scale(${1 + (hot && frame < respondAt ? 0.1 * Math.sin(frame / 1.5) : 0) + 0.15 * easeOutBack(prog(frame, floodAt, 10)) * (1 - prog(frame, floodAt + 10, 6))})` }}>
+          <div style={{ position: "absolute", left: px + pw - pw * 0.18, top: py - pw * 0.1, minWidth: pw * 0.34, height: pw * 0.34, borderRadius: pw * 0.2, background: unread === 0 ? t.primary : t.bad, border: `4px solid ${t.bg}`, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 14px", fontFamily: t.font.title, fontWeight: 900, fontSize: pw * (badge.length > 2 ? 0.14 : 0.17), color: "#fff", boxShadow: `0 0 ${hot ? 40 : 18}px ${alpha(unread === 0 ? t.primary : t.bad, 0.8)}`, transform: `translate(${eBadge.dx}px, ${eBadge.dy}px) scale(${1 + (hot && frame < respondAt ? 0.1 * Math.sin(frame / 1.5) : 0) + 0.15 * eBadge.p * (1 - prog(frame, floodAt + 10, 6))})`, clipPath: eBadge.clip }}>
             {unread === 0 ? "✓" : badge}
           </div>
         )}
@@ -128,10 +133,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {/* responder */}
         {has && frame >= respondAt - 6 && (
           <>
-            <div style={{ position: "absolute", left: aiX - 100, top: aiY - 100, width: 200, height: 200, borderRadius: "50%", transform: `scale(${aiIn * (full ? 1 : 0.5)})`, background: `radial-gradient(circle at 40% 35%, ${alpha(t.primary, 0.5)}, ${alpha(t.bg2, 0.95)} 70%)`, border: `4px solid ${t.primary}`, boxShadow: `0 0 60px ${alpha(t.primary, 0.6)}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ position: "absolute", left: aiX - 100, top: aiY - 100, width: 200, height: 200, borderRadius: "50%", transform: `translate(${eAi.dx}px, ${eAi.dy}px) scale(${eAi.scale * (full ? 1 : 0.5)})`, clipPath: eAi.clip, background: `radial-gradient(circle at 40% 35%, ${alpha(t.primary, 0.5)}, ${alpha(t.bg2, 0.95)} 70%)`, border: `4px solid ${t.primary}`, boxShadow: `0 0 60px ${alpha(t.primary, 0.6)}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Icon name="bot" size={110} color={t.text} />
             </div>
-            {full && <div style={{ position: "absolute", left: aiX - 240, width: 480, top: aiY + 120, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.responder!, 460, 50, 24), color: t.text, opacity: aiIn, whiteSpace: "nowrap" }}>{data.responder}</div>}
+            {full && <div style={{ position: "absolute", left: aiX - 240, width: 480, top: aiY + 120, textAlign: "center", transform: `translate(${eAi.dx}px, ${eAi.dy}px)`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.responder!, 460, 50, 24), color: t.text, opacity: eAi.p, whiteSpace: "nowrap" }}>{data.responder}</div>}
             {/* beams to the row being handled */}
             {full && frame >= respondAt && (
               <svg width={W} height={H} style={{ position: "absolute", inset: 0 }}>
@@ -145,7 +150,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
               </svg>
             )}
             {data.meter && full && (
-              <div style={{ position: "absolute", left: aiX - 220, width: 440, top: aiY - 280, opacity: easeOut(prog(frame, respondAt + 10, 12)) }}>
+              <div style={{ position: "absolute", left: aiX - 220, width: 440, top: aiY - 280, opacity: eMeter.opacity, transform: `translate(${eMeter.dx}px, ${eMeter.dy}px)`, clipPath: eMeter.clip }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", fontFamily: t.font.title, fontWeight: 900, color: t.text }}>
                   <span style={{ fontSize: 32, color: t.dim }}>{data.meter}</span>
                   <span style={{ fontSize: 64, color: t.primary, fontVariantNumeric: "tabular-nums" }}>{Math.round(lerp(12, data.meterTo, meterK))}%</span>

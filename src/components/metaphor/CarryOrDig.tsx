@@ -1,6 +1,6 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
@@ -8,6 +8,7 @@ import { Figure, gait, mixPose, POSES } from "../../lib/figure";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -25,8 +26,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const digAt = cueOr(data.digAt, 24);
@@ -72,6 +74,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     return { x: wellX - (full ? 60 : 34) - p * (full ? 90 : 48), y: G - (full ? 40 : 22) - Math.sin(p * Math.PI) * (full ? 70 : 38), o: 1 - p };
   }) : [];
 
+  // 标签/注记原生是纯淡入（easeOut prog），接进统一入场语法
+  const eLbl = enterAt(frame, 4, { fallback: "rise", dur: 14 });
+  const eFlow = enterAt(frame, waterAt + 6, { fallback: "rise", dur: 12 });
+  const eStop = enterAt(frame, stopAt + 16, { fallback: "rise", dur: 12 });
+
   return (
     <>
       {full && <Heading kicker={data.kicker} title={data.title} frame={frame} width={W} />}
@@ -108,24 +115,25 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           {walking && <circle cx={carryX + figH * 0.34} cy={G - figH * 0.62} r={figH * 0.12} fill={alpha(t.primary, 0.75)} />}
           <Figure x={wellX - (full ? 130 : 76)} y={G} h={diggerH} pose={digPose} color={frame >= waterAt ? t.gold : t.text} glow={frame >= waterAt ? t.gold : t.primary} />
         </svg>
-        {/* labels */}
-        <div style={{ position: "absolute", left: 0, top: full ? H * 0.22 : H * 0.14, width: halfW, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 36 : 19, color: t.dim, opacity: easeOut(prog(frame, 4, 14)) }}>{data.dailyTask}</div>
-        <div style={{ position: "absolute", left: halfW, top: full ? H * 0.22 : H * 0.14, width: halfW, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 36 : 19, color: t.gold, opacity: easeOut(prog(frame, 4, 14)) }}>先挖一口井</div>
+        {/* labels（位置固定，不靠 e.p 插值 → 接上入场位移/擦除） */}
+        <div style={{ position: "absolute", left: 0, top: full ? H * 0.22 : H * 0.14, width: halfW, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 36 : 19, color: t.dim, opacity: eLbl.opacity, transform: `translate(${eLbl.dx}px, ${eLbl.dy}px)`, clipPath: eLbl.clip }}>{data.dailyTask}</div>
+        <div style={{ position: "absolute", left: halfW, top: full ? H * 0.22 : H * 0.14, width: halfW, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 36 : 19, color: t.gold, opacity: eLbl.opacity, transform: `translate(${eLbl.dx}px, ${eLbl.dy}px)`, clipPath: eLbl.clip }}>先挖一口井</div>
         {/* income readouts */}
         <div style={{ position: "absolute", left: 0, top: G + (full ? 30 : 16), width: halfW, textAlign: "center" }}>
           <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.dailyIncome, halfW * 0.6, full ? 54 : 26, 15), color: level > 0.05 ? t.primary : t.dim, whiteSpace: "nowrap", transition: "none" }}>{data.dailyIncome}</span>
-          {frame >= stopAt && <div style={{ marginTop: 6, fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 26 : 14, color: t.bad, opacity: easeOut(prog(frame, stopAt + 16, 12)) }}>停下来就没有了</div>}
+          {frame >= stopAt && <div style={{ marginTop: 6, fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 26 : 14, color: t.bad, opacity: eStop.opacity, transform: `translate(${eStop.dx}px, ${eStop.dy}px)`, clipPath: eStop.clip }}>停下来就没有了</div>}
         </div>
         <div style={{ position: "absolute", left: halfW, top: G + (full ? 30 : 16), width: halfW, textAlign: "center" }}>
           <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.wellIncome, halfW * 0.6, full ? 54 : 26, 15), color: income > 0.05 ? t.gold : t.dim, whiteSpace: "nowrap" }}>{data.wellIncome}</span>
           {/* wells light up as they are "paid for" by the flow */}
           <div style={{ marginTop: full ? 14 : 6, display: "flex", justifyContent: "center", gap: full ? 14 : 7 }}>
             {data.wells.map((w, i) => {
-              const on = frame >= waterAt + 14 + i * 12;
-              const p = on ? easeOutBack(prog(frame, waterAt + 14 + i * 12, 12)) : 0;
+              // 井逐个点亮：原生是从 0 回弹放大到位，rise + from:0 与原曲线一致
+              // 芯片位置由 flex 排版决定（不是 e.p 插值）→ 位移接在 transform 末尾
+              const e = enterAt(frame, waterAt + 14 + i * 12, { fallback: "rise", dur: 12, from: 0, seed: i });
               const ic = w.icon ?? guessIcon(w.text) ?? "shovel";
               return (
-                <div key={i} style={{ transform: `scale(${p})`, display: "flex", alignItems: "center", gap: full ? 8 : 4, padding: `${full ? 5 : 3}px ${full ? 14 : 7}px`, borderRadius: 20, background: alpha(t.gold, 0.14), border: `2px solid ${alpha(t.gold, 0.8)}` }}>
+                <div key={i} style={{ transform: `scale(${e.scale}) translate(${e.dx}px, ${e.dy}px)`, clipPath: e.clip, display: "flex", alignItems: "center", gap: full ? 8 : 4, padding: `${full ? 5 : 3}px ${full ? 14 : 7}px`, borderRadius: 20, background: alpha(t.gold, 0.14), border: `2px solid ${alpha(t.gold, 0.8)}` }}>
                   <Icon name={ic} size={full ? 22 : 12} color={t.gold} />
                   <span style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 22 : 12, color: t.gold, whiteSpace: "nowrap" }}>{w.text}</span>
                 </div>
@@ -134,7 +142,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           </div>
         </div>
         {frame >= waterAt && (
-          <div style={{ position: "absolute", left: wellX + wellW / 2 + (full ? 20 : 10), top: wellTop - (full ? 60 : 32), opacity: easeOut(prog(frame, waterAt + 6, 12)), fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 30 : 15, color: t.primary, whiteSpace: "nowrap", textShadow: `0 0 16px ${alpha(t.primary, 0.6)}` }}>{data.flowLabel}</div>
+          <div style={{ position: "absolute", left: wellX + wellW / 2 + (full ? 20 : 10), top: wellTop - (full ? 60 : 32), opacity: eFlow.opacity, transform: `translate(${eFlow.dx}px, ${eFlow.dy}px)`, clipPath: eFlow.clip, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 30 : 15, color: t.primary, whiteSpace: "nowrap", textShadow: `0 0 16px ${alpha(t.primary, 0.6)}` }}>{data.flowLabel}</div>
         )}
       </div>
       <Sfx name="swish" at={10} volume={0.14} />

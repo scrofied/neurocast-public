@@ -1,9 +1,10 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Figure, gait, mixPose, POSES } from "../../lib/figure";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -42,8 +43,9 @@ const rawDist = (f: number, start: number, speed: number, boostAt?: number) => {
   return speed * warm(run(start, Infinity));
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const lanes = data.lanes;
@@ -66,7 +68,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const x1 = full ? W * 0.86 : W * 0.9; // finish line
   const figH = Math.min(laneH * 0.78, full ? 150 : 90);
   const sh = hitShake(frame, [finishAt], 8, 10);
-  const enter = easeOut(prog(frame, 0, 14));
+  // 场地（起终点线 + 终点格子 + goal 字）原生是 14 帧淡入；slide 的 p 就是 easeOut 进度，观感不变
+  const enter = enterAt(frame, 0, { fallback: "slide-r", dur: 14 }).p;
   const goalFont = full ? 30 : 18;
 
   return (
@@ -76,7 +79,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         {/* lanes */}
         {lanes.map((l, i) => {
           const y = top + laneH * i;
-          const k = easeOut(prog(frame, i * 4, 14));
+          // 跑道逐条淡入并从起点线向右铺开：进度走入场层（slide 的 p 就是 easeOut，观感不变）
+          const k = enterAt(frame, i * 4, { fallback: "slide-l", dur: 14, seed: i }).p;
           return (
             <g key={i} opacity={k}>
               <rect x={x0 - 30} y={y + 4} width={(x1 - x0 + 90) * k} height={laneH - 8} rx={10} fill={alpha(l.hero ? t.primary : t.text, l.hero ? 0.08 : 0.035)} stroke={alpha(l.hero ? t.primary : t.dim, 0.35)} strokeWidth={1.5} />
@@ -133,14 +137,16 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         const fs = fitFont(l.name, full ? W * 0.16 : W * 0.3, full ? 26 : 16, 12);
         const d = dist(i, frame);
         const x = lerp(x0 + 20, x1 - 10, d);
-        const tagK = l.tag ? easeOutBack(prog(frame, finishAt + 4 + i * 5, 12)) : 0;
+        // 冲线后人头上的标签原生是回弹放大贴上去（easeOutBack scale 0→1）：rise + from 0 复原基线
+        const eTag = l.tag ? enterAt(frame, finishAt + 4 + i * 5, { fallback: "rise", dur: 12, from: 0, seed: i }) : null;
+        const tagK = eTag ? eTag.p : 0;
         return (
           <React.Fragment key={i}>
-            <div style={{ position: "absolute", left: x0 - 20, top: y + 10, fontFamily: t.font.title, fontWeight: 800, fontSize: fs, color: l.hero ? t.primary : t.dim, whiteSpace: "nowrap", opacity: easeOut(prog(frame, i * 4 + 6, 12)), textShadow: "0 2px 0 #000" }}>
+            <div style={{ position: "absolute", left: x0 - 20, top: y + 10, fontFamily: t.font.title, fontWeight: 800, fontSize: fs, color: l.hero ? t.primary : t.dim, whiteSpace: "nowrap", opacity: enterAt(frame, i * 4 + 6, { fallback: "slide-l", dur: 12, seed: i }).p, textShadow: "0 2px 0 #000" }}>
               {l.name}
             </div>
-            {l.tag && tagK > 0 && (
-              <div style={{ position: "absolute", left: Math.min(x + figH * 0.35, W - 170), top: y + laneH * 0.3, transform: `scale(${tagK})`, transformOrigin: "0 50%", padding: full ? "4px 14px" : "2px 8px", borderRadius: 8, background: alpha(t.bg, 0.8), border: `2px solid ${l.hero ? t.primary : t.dim}`, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 26 : 15, color: l.hero ? t.primary : t.text, whiteSpace: "nowrap" }}>
+            {eTag && tagK > 0 && (
+              <div style={{ position: "absolute", left: Math.min(x + figH * 0.35, W - 170), top: y + laneH * 0.3, transform: `translate(${eTag.dx}px, ${eTag.dy}px) scale(${eTag.scale})`, opacity: eTag.opacity, transformOrigin: "0 50%", padding: full ? "4px 14px" : "2px 8px", borderRadius: 8, background: alpha(t.bg, 0.8), border: `2px solid ${l.hero ? t.primary : t.dim}`, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 26 : 15, color: l.hero ? t.primary : t.text, whiteSpace: "nowrap" }}>
                 {l.tag}
               </div>
             )}
@@ -162,6 +168,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         const yy = bottom + (full ? 26 : 14);
         const xe = lerp(xs, x1, k);
         const label = data.gapLabel ?? "";
+        // 差距标签原生是回弹放大盖章（easeOutBack scale 0→1）；量尺本身向右画开是测量动作，保持原生
+        const eGap = enterAt(frame, gapAt + 10, { fallback: "rise", dur: 12, from: 0 });
         return (
           <>
             <svg width={W} height={H} style={{ position: "absolute", inset: 0, overflow: "visible" }}>
@@ -171,7 +179,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
               <line x1={xs} y1={top + laneH * slow + laneH - 16} x2={xs} y2={yy} stroke={alpha(t.bad, 0.5)} strokeWidth={2} strokeDasharray="6 6" />
             </svg>
             {label && (
-              <div style={{ position: "absolute", left: (xs + x1) / 2, top: yy + 8, transform: `translate(-50%, 0) scale(${easeOutBack(prog(frame, gapAt + 10, 12))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 44 : 22, color: t.bad, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>
+              <div style={{ position: "absolute", left: (xs + x1) / 2, top: yy + 8, transform: `translate(-50%, 0) translate(${eGap.dx}px, ${eGap.dy}px) scale(${eGap.scale})`, opacity: eGap.opacity, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 44 : 22, color: t.bad, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>
                 {label}
               </div>
             )}

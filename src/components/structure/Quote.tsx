@@ -2,6 +2,7 @@ import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { clamp, easeOut, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import type { CompDef, CompProps } from "../types";
 
@@ -11,6 +12,7 @@ type D = z.infer<typeof schema>;
 // big statement: characters ignite one by one, emphasised words burn in accent colour
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width } = useVideoConfig();
   const text = data.text;
   const emph = data.emphasis ?? [];
@@ -30,9 +32,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   for (let i = 0; i < len; i += perLine) lines.push(chars.slice(i, i + perLine));
   const speed = Math.max(1, Math.min(3, (dur * 0.5) / len));
   let idx = 0;
+  // 逐字点燃是组件主体效果（保留）；motion.enter 落在整个金句块的首次入画上
+  const eBlock = enterAt(frame, 0, { fallback: "rise", dur: 14 });
   return (
     <>
-      <div style={{ position: "absolute", left: 150, right: 150, top: "50%", transform: "translateY(-50%)", textAlign: variant === 1 ? "left" : "center" }}>
+      <div style={{ position: "absolute", left: 150, right: 150, top: "50%", transform: `translateY(-50%) translate(${eBlock.dx}px, ${eBlock.dy}px) scale(${eBlock.scale})`, textAlign: variant === 1 ? "left" : "center", opacity: eBlock.opacity, clipPath: eBlock.clip }}>
         <div style={{ fontFamily: t.font.mono, fontSize: 20, letterSpacing: 8, color: t.primary, marginBottom: 30, opacity: easeOut(prog(frame, 0, 12)) }}>{data.kicker ?? "// KEY INSIGHT"}</div>
         {lines.map((ln, li) => (
           <div key={li} style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fs, lineHeight: 1.3, whiteSpace: "nowrap" }}>
@@ -72,6 +76,7 @@ export const Quote: CompDef<D> = {
   minSec: 3,
   maxSec: 7,
   tags: ["记住", "本质", "核心", "关键", "一句话", "说白了", "真正"],
+  motion: { kind: "金句块入画，大字逐字点燃（虚化转清晰、上浮），强调词烧成强调色", energy: 2 },
   desc: "一句话大字逐字点燃，强调词烧成强调色（变体 1 左对齐）",
   use: "金句、结论、观点总结（10~26 字）；更短更冲的反问/吐槽用 punch-text",
   schema,

@@ -1,8 +1,9 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, prog } from "../../lib/anim";
+import { clamp, easeInOut, easeOutBack, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -20,8 +21,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const full = width >= 900;
   const n = data.nodes.length;
@@ -38,7 +40,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const spinK = clamp(acc / 40);
   const lit = (i: number) => easeOutBack(prog(frame, cues[i], 14));
   const allLit = frame >= (cues[n - 1] ?? 0);
-  const boost = easeOutBack(prog(frame, spinAt + 18, 16));
+  // 结论徽章原生是回弹放大弹出（easeOutBack prog 16 帧）；分镜写 motion.enter 才换
+  const eBoost = enterAt(frame, spinAt + 18, { fallback: "rise", dur: 16, from: 0 });
+  // 中心标题原生只有淡入，位移接上后 slide/wipe 之类才落到画面上
+  const eCenter = enterAt(frame, 6, { fallback: "rise", dur: 14 });
   const pos = (i: number) => {
     const a = (-90 + (360 / n) * i) * (Math.PI / 180);
     return { x: cx + Math.cos(a) * R, y: cy + Math.sin(a) * R };
@@ -131,13 +136,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         );
       })}
       {data.center && (
-        <div style={{ position: "absolute", left: cx - R * 0.7, width: R * 1.4, top: cy - 40, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.center, R * 1.3, full ? 56 : 28, 16), color: allLit ? t.accent : t.text, opacity: easeOut(prog(frame, 6, 14)), textShadow: `0 0 24px ${alpha(allLit ? t.accent : t.primary, 0.6)}` }}>
+        <div style={{ position: "absolute", left: cx - R * 0.7, width: R * 1.4, top: cy - 40, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.center, R * 1.3, full ? 56 : 28, 16), color: allLit ? t.accent : t.text, opacity: eCenter.opacity, transform: `translate(${eCenter.dx}px, ${eCenter.dy}px)`, textShadow: `0 0 24px ${alpha(allLit ? t.accent : t.primary, 0.6)}` }}>
           {data.center}
         </div>
       )}
-      {data.boost && boost > 0 && (
+      {data.boost && eBoost.p > 0 && (
         <div style={{ position: "absolute", left: 0, right: 0, top: cy + (full ? 50 : 30), textAlign: "center" }}>
-          <span style={{ display: "inline-block", transform: `scale(${boost})`, padding: full ? "8px 22px" : "4px 12px", borderRadius: 12, background: alpha(t.accent, 0.18), border: `2px solid ${t.accent}`, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 34 : 20, color: t.accent, whiteSpace: "nowrap" }}>{data.boost}</span>
+          <span style={{ display: "inline-block", transform: `translate(${eBoost.dx}px, ${eBoost.dy}px) scale(${eBoost.scale})`, opacity: eBoost.opacity, clipPath: eBoost.clip, padding: full ? "8px 22px" : "4px 12px", borderRadius: 12, background: alpha(t.accent, 0.18), border: `2px solid ${t.accent}`, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 34 : 20, color: t.accent, whiteSpace: "nowrap" }}>{data.boost}</span>
         </div>
       )}
       {cues.map((c, i) => (
@@ -157,6 +162,7 @@ export const Flywheel: CompDef<D> = {
   minSec: 3,
   maxSec: 10,
   tags: ["循环", "飞轮", "正反馈", "越来越", "滚雪球", "闭环"],
+  motion: { kind: "环上光带随转速加快、节点逐一点亮闭合成环，结论徽章回弹弹出", energy: 3 },
   desc: "3~6 个图标节点围成一个环，说到哪环哪环点亮、箭头弧线连到下一环；最后一环点亮后闭环，环上光带加速流动、能量光点越绕越快，弹出结论",
   use: "A 带来 B、B 又带来 C、最后回到 A 的循环/正反馈：内容→粉丝→数据→更好的内容；用户→数据→模型→更多用户；恶性循环也行（boost 写“越陷越深”）",
   panel: true,

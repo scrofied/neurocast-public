@@ -3,6 +3,7 @@ import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { clamp, easeOut, easeOutBack, prog } from "../../lib/anim";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -15,6 +16,7 @@ type D = z.infer<typeof schema>;
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const steps = data.steps;
   const n = steps.length;
@@ -46,7 +48,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
       {pts.map((p, i) => {
         const reached = flow >= i - 0.02;
         const hit = clamp((flow - i + 0.3) * 3);
-        const appear = easeOutBack(prog(frame, 2 + i * 4, 18));
+        // 节点原生是从 0 回弹弹出（能量到位前的入场）；from:0 保住这个基线
+        const eNode = enterAt(frame, 2 + i * 4, { fallback: "rise", dur: 18, from: 0, seed: i });
+        const eLabel = enterAt(frame, 6 + i * 4, { fallback: "rise", dur: 16, seed: i });
         const col = reached ? t.primary : t.dim;
         const ring = reached ? (frame - (12 + i * per)) : -1;
         const label = steps[i];
@@ -64,7 +68,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
                 width: 116,
                 height: 116,
                 borderRadius: variant === 2 ? 22 : "50%",
-                transform: `scale(${appear * (1 + hit * 0.06)}) rotate(${variant === 2 ? 45 : 0}deg)`,
+                transform: `translate(${eNode.dx}px, ${eNode.dy}px) scale(${eNode.scale * (1 + hit * 0.06)}) rotate(${variant === 2 ? 45 : 0}deg)`,
+                opacity: eNode.opacity,
                 background: `radial-gradient(circle, ${alpha(col, reached ? 0.45 : 0.1)}, ${alpha(t.bg2, 0.9)} 70%)`,
                 border: `2px solid ${alpha(col, reached ? 1 : 0.4)}`,
                 boxShadow: reached ? `0 0 40px ${alpha(t.primary, 0.6)}` : "none",
@@ -86,7 +91,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
                 fontWeight: 800,
                 fontSize: fs,
                 color: reached ? t.text : alpha(t.text, 0.4),
-                opacity: easeOut(prog(frame, 6 + i * 4, 16)),
+                opacity: eLabel.opacity,
+                transform: `translate(${eLabel.dx}px, ${eLabel.dy}px)`,
                 textShadow: reached ? `0 0 16px ${alpha(t.primary, 0.6)}` : undefined,
               }}
             >
@@ -108,6 +114,7 @@ export const EnergyPipeline: CompDef<D> = {
   minSec: 4,
   maxSec: 12,
   tags: ["第一步", "第二步", "步骤", "流程", "首先", "然后", "最后", "接着"],
+  motion: { kind: "能量头沿管线推进点亮节点，节点弹出 + 光环脉冲循环", energy: 2 },
   desc: "能量沿管线流动，依次点亮 N 个步骤节点（变体：直线 / 之字 / 菱形）",
   use: "第一步…第二步…、首先…然后…最后… 的操作流程",
   schema,

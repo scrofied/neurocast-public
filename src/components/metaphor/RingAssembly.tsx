@@ -1,6 +1,7 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeInOut, lerp, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues } from "../../lib/cue";
@@ -25,8 +26,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.pieces.length;
@@ -56,6 +58,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     const large = a1 - a0 > Math.PI ? 1 : 0;
     return `M${x0},${y0} A${r},${r} 0 ${large} 1 ${x1},${y1}`;
   };
+  const eCenter = enterAt(frame, closeAt, { fallback: "rise", dur: 14 });
+  const eCenterTxt = enterAt(frame, closeAt, { fallback: "rise", dur: 16 });
+  const eVerdict = enterAt(frame, verdictAt, { fallback: "rise", dur: 14 });
 
   return (
     <>
@@ -67,7 +72,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           <circle cx={cx} cy={cy} r={R} fill="none" stroke={alpha(t.text, 0.12)} strokeWidth={full ? 44 : 24} strokeDasharray="10 14" />
           {data.pieces.map((p, i) => {
             const c = cues[i];
-            const inP = frame >= c ? easeOutBack(prog(frame, c, 16)) : 0;
+            // 飞入轨迹（沿半径咬合）是隐喻主体，入场语法只接管它的节奏
+            const ePiece = enterAt(frame, c, { fallback: "rise", dur: 16, seed: i });
+            const inP = ePiece.p;
             const pulled = i === gapIdx ? gapK : 0;
             if (inP <= 0) return null;
             const mid = (i + 0.5) * arc - Math.PI / 2 + (spin * Math.PI) / 180;
@@ -90,7 +97,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           })}
           {/* center label */}
           {data.center && frame >= closeAt && (
-            <g opacity={easeOut(prog(frame, closeAt, 14))}>
+            <g opacity={eCenter.opacity} transform={`translate(${eCenter.dx} ${eCenter.dy})`}>
               <circle cx={cx} cy={cy} r={R * 0.42} fill={alpha(t.accent, 0.1)} stroke={alpha(t.accent, 0.5)} strokeWidth={3} />
             </g>
           )}
@@ -105,18 +112,19 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const ly = cy + Math.sin(mid) * (R + (full ? 118 : 62)) + Math.sin(mid) * (full ? 120 : 70) * pulled;
           const ic = icon(i);
           const fs = fitFont(p.text, full ? 220 : 120, full ? 26 : 14, 11);
+          const eL = enterAt(frame, c + 6, { fallback: "rise", dur: 14, seed: i });
           return (
-            <div key={i} style={{ position: "absolute", left: lx, top: ly, transform: `translate(-50%,-50%) scale(${easeOutBack(prog(frame, c + 6, 14)) * (1 - pulled * 0.2)})`, display: "flex", alignItems: "center", gap: full ? 10 : 5, padding: `${full ? 6 : 3}px ${full ? 16 : 8}px`, borderRadius: 30, background: alpha(t.bg, 0.88), border: `2px solid ${pulled > 0.1 ? t.bad : t.primary}`, boxShadow: `0 0 20px ${alpha(pulled > 0.1 ? t.bad : t.primary, 0.5)}`, whiteSpace: "nowrap" }}>
+            <div key={i} style={{ position: "absolute", left: lx, top: ly, transform: `translate(-50%,-50%) scale(${eL.p * (1 - pulled * 0.2)}) translate(${eL.dx}px, ${eL.dy}px)`, clipPath: eL.clip, display: "flex", alignItems: "center", gap: full ? 10 : 5, padding: `${full ? 6 : 3}px ${full ? 16 : 8}px`, borderRadius: 30, background: alpha(t.bg, 0.88), border: `2px solid ${pulled > 0.1 ? t.bad : t.primary}`, boxShadow: `0 0 20px ${alpha(pulled > 0.1 ? t.bad : t.primary, 0.5)}`, whiteSpace: "nowrap" }}>
               {ic && <Icon name={ic} size={full ? 24 : 13} color={pulled > 0.1 ? t.bad : t.primary} />}
               <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fs, color: t.text, whiteSpace: "nowrap" }}>{p.text}</span>
             </div>
           );
         })}
         {data.center && frame >= closeAt && (
-          <div style={{ position: "absolute", left: cx, top: cy, transform: `translate(-50%,-50%) scale(${easeOutBack(prog(frame, closeAt, 16))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.center, R * 0.8, full ? 46 : 22, 14), color: t.accent, whiteSpace: "nowrap", textShadow: `0 0 22px ${alpha(t.accent, 0.7)}` }}>{data.center}</div>
+          <div style={{ position: "absolute", left: cx, top: cy, transform: `translate(-50%,-50%) scale(${eCenterTxt.p}) translate(${eCenterTxt.dx}px, ${eCenterTxt.dy}px)`, clipPath: eCenterTxt.clip, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.center, R * 0.8, full ? 46 : 22, 14), color: t.accent, whiteSpace: "nowrap", textShadow: `0 0 22px ${alpha(t.accent, 0.7)}` }}>{data.center}</div>
         )}
         {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left: cx, top: cy + R + (full ? 120 : 62), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, verdictAt, 14))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.6, full ? 48 : 24, 15), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
+          <div style={{ position: "absolute", left: cx, top: cy + R + (full ? 120 : 62), transform: `translateX(-50%) scale(${eVerdict.p}) translate(${eVerdict.dx}px, ${eVerdict.dy}px)`, clipPath: eVerdict.clip, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.6, full ? 48 : 24, 15), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
         )}
       </div>
       {cues.map((c, i) => (

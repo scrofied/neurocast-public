@@ -1,6 +1,7 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, noise1, prog } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, noise1, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
@@ -22,8 +23,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const n = data.big.length;
   const bCues = listCues(data.big, 6, Math.max(20, dur * 0.3));
@@ -43,15 +45,22 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const val = low + (data.meter.to - low) * easeOut(prog(frame, meterAt, 30));
   const exs = data.examples;
   const eCues = listCues(exs, smallAt + 34, Math.max(smallAt + 50, meterAt - 10));
-  const meterIn = easeOut(prog(frame, 8, 14));
+  // 仪表框与读数原生只有淡入、位置固定 → 位移/擦除交给入场语法
+  const eMeter = enterAt(frame, 8, { fallback: "rise", dur: 14 });
+  const meterIn = eMeter.opacity;
   const lowAlarm = frame < smallAt && frame >= bCues[0] + 10 && Math.floor(frame / 8) % 2 === 0;
-  const gem = easeOutBack(prog(frame, smallAt + 18, 16));
-  const vp = easeOutBack(prog(frame, verdictAt, 9));
+  // 小方块与红章的弹出缩放是入场（落点固定，可以叠加位移）；坍缩(s)、数值上涨(val)、脉动光晕是主体/持续动画
+  const eGem = enterAt(frame, smallAt + 18, { fallback: "rise", dur: 16 });
+  const gem = eGem.p;
+  const eStamp = enterAt(frame, verdictAt, { fallback: "rise", dur: 9 });
+  const vp = eStamp.p;
+  const eSmallLbl = enterAt(frame, smallAt + 22, { fallback: "rise", dur: 12 });
   return (
     <>
       <Heading kicker={data.kicker} title={data.title} frame={frame} width={width} />
       {data.big.map((b, i) => {
-        const p = easeOutBack(prog(frame, bCues[i], 18));
+        // 球是按 p 从 0 长出来的（r = R * p）：尺寸/位置已由 e.p 驱动，再叠 dx/dy 会变成两倍动
+        const p = enterAt(frame, bCues[i], { fallback: "rise", dur: 18, seed: i }).p;
         if (frame < bCues[i]) return null;
         const [sx, sy] = slots[i];
         const wob = noise1(frame * 0.05, seed + i * 7) * 8;
@@ -70,25 +79,26 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
       })}
       {data.verdict && frame >= verdictAt && s < 0.5 && (
         <div style={{ position: "absolute", left: cx - 200, width: 400, top: cy + R * 0.55, textAlign: "center", opacity: 1 - s * 2 }}>
-          <span style={{ display: "inline-block", transform: `rotate(-8deg) scale(${vp < 1 ? 2 - vp : 1})`, padding: "8px 30px", border: `6px solid ${t.bad}`, borderRadius: 14, background: "rgba(0,0,0,.45)", fontFamily: t.font.title, fontWeight: 900, fontSize: 84, color: t.bad, textShadow: `0 0 24px ${alpha(t.bad, 0.7)}` }}>{data.verdict}</span>
+          <span style={{ display: "inline-block", transform: `translate(${eStamp.dx}px, ${eStamp.dy}px) rotate(-8deg) scale(${vp < 1 ? 2 - vp : 1})`, padding: "8px 30px", border: `6px solid ${t.bad}`, borderRadius: 14, background: "rgba(0,0,0,.45)", fontFamily: t.font.title, fontWeight: 900, fontSize: 84, color: t.bad, textShadow: `0 0 24px ${alpha(t.bad, 0.7)}` }}>{data.verdict}</span>
         </div>
       )}
       {/* collapse into one small, sharp target */}
       {frame >= smallAt + 12 && (
         <>
-          <div style={{ position: "absolute", left: cx - 90, top: cy - 90, width: 180, height: 180, borderRadius: 40, transform: `scale(${gem}) rotate(${(1 - gem) * 40}deg)`, background: `linear-gradient(135deg, ${t.primary}, ${t.accent})`, boxShadow: `0 0 ${60 + 20 * Math.sin(frame / 6)}px ${alpha(t.primary, 0.7)}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ position: "absolute", left: cx - 90, top: cy - 90, width: 180, height: 180, borderRadius: 40, transform: `translate(${eGem.dx}px, ${eGem.dy}px) scale(${gem}) rotate(${(1 - gem) * 40}deg)`, background: `linear-gradient(135deg, ${t.primary}, ${t.accent})`, boxShadow: `0 0 ${60 + 20 * Math.sin(frame / 6)}px ${alpha(t.primary, 0.7)}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <Icon name={data.small.icon ?? "tool"} size={110} color={t.bg} stroke={2.4} />
           </div>
-          <div style={{ position: "absolute", left: cx - 400, width: 800, top: cy + 130, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.small.text, 760, 64, 30), color: t.text, opacity: easeOut(prog(frame, smallAt + 22, 12)), whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.primary, 0.6)}` }}>{data.small.text}</div>
+          <div style={{ position: "absolute", left: cx - 400, width: 800, top: cy + 130, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.small.text, 760, 64, 30), color: t.text, opacity: eSmallLbl.opacity, transform: `translate(${eSmallLbl.dx}px, ${eSmallLbl.dy}px)`, clipPath: eSmallLbl.clip, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.primary, 0.6)}` }}>{data.small.text}</div>
         </>
       )}
       {exs.map((e, i) => {
         if (frame < eCues[i]) return null;
-        const p = easeOutBack(prog(frame, eCues[i], 12));
+        const eEx = enterAt(frame, eCues[i], { fallback: "rise", dur: 12, seed: i });
+        const p = eEx.p;
         const w = 380;
         const total = exs.length * w + (exs.length - 1) * 30;
         return (
-          <div key={i} style={{ position: "absolute", left: cx - total / 2 + i * (w + 30), top: cy + 215, width: w, height: 74, display: "flex", alignItems: "center", gap: 14, padding: "0 22px", borderRadius: 16, background: alpha(t.bg, 0.85), border: `2px solid ${t.accent}`, transform: `scale(${p})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(e.text, w - 100, 36, 20), color: t.text, whiteSpace: "nowrap", boxShadow: `0 0 20px ${alpha(t.accent, 0.35)}` }}>
+          <div key={i} style={{ position: "absolute", left: cx - total / 2 + i * (w + 30), top: cy + 215, width: w, height: 74, display: "flex", alignItems: "center", gap: 14, padding: "0 22px", borderRadius: 16, background: alpha(t.bg, 0.85), border: `2px solid ${t.accent}`, transform: `translate(${eEx.dx}px, ${eEx.dy}px) scale(${p})`, clipPath: eEx.clip, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(e.text, w - 100, 36, 20), color: t.text, whiteSpace: "nowrap", boxShadow: `0 0 20px ${alpha(t.accent, 0.35)}` }}>
             <Icon name={e.icon ?? "target"} size={38} color={t.accent} />
             {e.text}
           </div>
@@ -98,10 +108,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         <div style={{ position: "absolute", left: cx - 40 - (frame - smallAt - 12) * 10, top: cy - 40 - (frame - smallAt - 12) * 10, width: 80 + (frame - smallAt - 12) * 20, height: 80 + (frame - smallAt - 12) * 20, borderRadius: "50%", border: `4px solid ${alpha(t.primary, 1 - (frame - smallAt - 12) / 28)}` }} />
       )}
       {/* success meter */}
-      <div style={{ position: "absolute", left: mx - 50, top: mTop, width: 100, height: mH, borderRadius: 50, border: `3px solid ${alpha(lowAlarm ? t.bad : t.primary, 0.7)}`, background: alpha(t.bg, 0.6), overflow: "hidden", opacity: meterIn }}>
+      <div style={{ position: "absolute", left: mx - 50, top: mTop, width: 100, height: mH, borderRadius: 50, border: `3px solid ${alpha(lowAlarm ? t.bad : t.primary, 0.7)}`, background: alpha(t.bg, 0.6), overflow: "hidden", opacity: meterIn, transform: `translate(${eMeter.dx}px, ${eMeter.dy}px)`, clipPath: eMeter.clip }}>
         <div style={{ position: "absolute", left: 8, right: 8, bottom: 8, height: `calc(${clamp(val / 100) * 100}% - 16px)`, minHeight: 12, borderRadius: 42, background: val > 50 ? `linear-gradient(0deg, ${t.primary}, ${t.accent})` : t.bad, boxShadow: `0 0 30px ${alpha(val > 50 ? t.primary : t.bad, 0.7)}` }} />
       </div>
-      <div style={{ position: "absolute", left: mx - 160, width: 320, top: mTop + mH + 18, textAlign: "center", opacity: meterIn }}>
+      <div style={{ position: "absolute", left: mx - 160, width: 320, top: mTop + mH + 18, textAlign: "center", opacity: meterIn, transform: `translate(${eMeter.dx}px, ${eMeter.dy}px)` }}>
         <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: 86, lineHeight: 1, color: val > 50 ? t.accent : t.bad, fontVariantNumeric: "tabular-nums", textShadow: "0 4px 16px rgba(0,0,0,.6)" }}>{Math.round(val)}%</div>
         <div style={{ fontFamily: t.font.body, fontWeight: 700, fontSize: 28, color: t.dim, marginTop: 6 }}>{data.meter.label}</div>
       </div>
@@ -127,6 +137,7 @@ export const ScopeShrink: CompDef<D> = {
   minSec: 3,
   maxSec: 12,
   tags: ["缩小目标", "别贪心", "小目标", "降维", "聚焦", "MVP"],
+  motion: { kind: "野心球逐颗弹出涨大 → 红章拍下 → 全部坍缩成一颗旋转落定发光小方块，右侧成功率仪表涨满", energy: 3 },
   desc: "几个巨大的“野心球”（商城 / 外卖平台）撑满画面，右侧成功率仪表红色报警、盖章“找死”；说到小目标时大球全部坍缩成一颗发光小方块（指甲刀），仪表一路涨满",
   use: "目标越小越容易成功：新手做产品先做 MVP、减肥先定小目标、创业先打一个细分市场、学习先攻一个章节（big / small / meter 全可改）",
   schema,

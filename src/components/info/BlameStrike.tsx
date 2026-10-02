@@ -1,11 +1,12 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeIn, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeIn, easeOut, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -24,8 +25,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.wrongs.length;
@@ -43,7 +45,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const verdictAt = Math.max(strikeCues[n - 1] + 10, cueOr(data.verdictAt, strikeCues[n - 1] + 24));
   const land = verdictAt + 9;
   const sh = hitShake(frame, [...strikeCues.map((c) => c + 2), land], 16, 12, seed);
-  const vIn = easeIn(prog(frame, verdictAt, 9));
+  // 真因重牌原生是加速坠地（easeIn）→ slam 的 p 与原生一致；坠落的位移仍走 vY，不再叠加 dy 免得翻倍
+  const eV = enterAt(frame, verdictAt, { fallback: "slam", dur: 9 });
+  const vIn = eV.p;
+  // 小字原生是纯淡入
+  const eNote = enterAt(frame, land + 6, { fallback: "rise", dur: 12 });
   const vW = Math.min(W * 0.72, fitFont(data.verdict, W * 0.66, full ? 120 : 48) * (Array.from(data.verdict).length + 1.2));
   const vH = full ? 200 : 90;
   const vFs = fitFont(data.verdict, vW * 0.86, full ? 120 : 48, 20);
@@ -74,7 +80,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const st = standCues[i];
           const sk = strikeCues[i];
           if (frame < st) return null;
-          const up = easeOutBack(prog(frame, st, 12));
+          // 牌子原生是从地面 scaleY 长起来（easeOutBack）→ rise 的 p 与原生等价
+          const eb = enterAt(frame, st, { fallback: "rise", dur: 12 });
+          const up = eb.p;
           const fs = fitFont(w.text, bw * 0.84, full ? 58 : 30, 16);
           const struck = frame >= sk + 4;
           const since = frame - (sk + 4);
@@ -131,7 +139,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             );
           }
           return (
-            <div key={i} style={{ position: "absolute", left: x, top: G - bh, width: bw, height: bh, transformOrigin: "50% 100%", transform: `scaleY(${clamp(up, 0, 1.2)})`, opacity: 1 - 0.65 * prog(frame, verdictAt, 10) }}>
+            <div key={i} style={{ position: "absolute", left: x, top: G - bh, width: bw, height: bh, transformOrigin: "50% 100%", transform: `translate(${eb.dx}px, ${eb.dy}px) scaleY(${clamp(up, 0, 1.2)})`, clipPath: eb.clip, opacity: 1 - 0.65 * prog(frame, verdictAt, 10) }}>
               {/* post */}
               {body}
               {frame >= sk && slashO > 0 && (
@@ -152,7 +160,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
               width: vW,
               height: vH,
               transformOrigin: "50% 100%",
-              transform: `scale(${2 - squash}, ${squash})`,
+              transform: `scale(${2 - squash}, ${squash}) translate(${eV.dx}px, 0)`,
+              clipPath: eV.clip,
               borderRadius: 22,
               background: `linear-gradient(180deg, ${alpha(t.gold, 0.35)}, ${alpha(t.bg2, 0.95)})`,
               border: `5px solid ${t.gold}`,
@@ -170,7 +179,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           </div>
         )}
         {data.verdictNote && frame >= land + 6 && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: G + 26, textAlign: "center", fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 36 : 20, color: t.gold, opacity: easeOut(prog(frame, land + 6, 12)) }}>{data.verdictNote}</div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: G + 26, textAlign: "center", fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 36 : 20, color: t.gold, opacity: eNote.opacity }}>{data.verdictNote}</div>
         )}
         {/* dust burst */}
         {frame >= land &&

@@ -2,6 +2,7 @@ import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { clamp, easeInOut, easeOut, easeOutBack, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -16,6 +17,7 @@ type D = z.infer<typeof schema>;
 // camera tracks along a long rail; past events recede, the current one is spotlit
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const ev = data.events;
   const n = ev.length;
@@ -30,6 +32,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const originX = width * 0.38;
   const current = Math.round(idxF);
 
+  const eCounter = enterAt(frame, 6, { fallback: "rise", dur: 20 });
   return (
     <>
       <svg width={width} height={height} style={{ position: "absolute", inset: 0 }}>
@@ -46,7 +49,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
         const dist = Math.abs(i - idxF);
         const focus = clamp(1 - dist);
         const passed = i <= idxF + 0.05;
-        const appear = easeOutBack(prog(frame, 10 + i * per - 12, 18));
+        // 事件节点原生是回弹弹入（dot scale + 卡片淡入）；分镜写 motion.enter 才换
+        const en = enterAt(frame, 10 + i * per - 12, { fallback: "rise", dur: 18, from: 0 });
         const up = variant === 1 ? i % 2 === 0 : true;
         const scale = 0.72 + focus * 0.38;
         const tf = fitFont(e.text, 440, 34, 22);
@@ -63,7 +67,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
                 background: passed ? t.primary : t.bg2,
                 border: `3px solid ${passed ? t.text : alpha(t.primary, 0.5)}`,
                 boxShadow: passed ? `0 0 ${20 + focus * 30}px ${t.primary}` : "none",
-                transform: `scale(${appear})`,
+                transform: `scale(${en.scale}) translate(${en.dx}px, ${en.dy}px)`,
+                clipPath: en.clip,
               }}
             />
             <div
@@ -73,8 +78,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
                 width: 460,
                 top: up ? railY - 60 - 210 * scale : railY + 50,
                 height: 210 * scale,
-                opacity: clamp(appear) * (0.35 + focus * 0.65),
-                transform: `scale(${scale})`,
+                opacity: clamp(en.p) * (0.35 + focus * 0.65),
+                transform: `scale(${scale}) translate(${en.dx}px, ${en.dy}px)`,
+                clipPath: en.clip,
                 transformOrigin: up ? "50% 100%" : "50% 0%",
                 textAlign: "center",
                 display: "flex",
@@ -89,7 +95,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           </React.Fragment>
         );
       })}
-      <div style={{ position: "absolute", right: 120, bottom: 150, fontFamily: t.font.mono, fontSize: 18, color: t.dim, letterSpacing: 3, opacity: easeOut(prog(frame, 6, 20)) }}>
+      <div style={{ position: "absolute", right: 120, bottom: 150, fontFamily: t.font.mono, fontSize: 18, color: t.dim, letterSpacing: 3, opacity: eCounter.opacity, transform: `translate(${eCounter.dx}px, ${eCounter.dy}px)`, clipPath: eCounter.clip }}>
         {`EVENT ${String(current + 1).padStart(2, "0")} / ${String(n).padStart(2, "0")}`}
       </div>
       <Headline kicker={data.kicker ?? "TIMELINE"} title={data.title} frame={frame} />
@@ -105,6 +111,7 @@ export const Timeline: CompDef<D> = {
   minSec: 5,
   maxSec: 14,
   tags: ["年", "月", "时间", "历史", "发展", "发布", "那时候", "后来"],
+  motion: { kind: "镜头沿时间轨道推进，事件节点依次回弹点亮", energy: 2 },
   desc: "时间轴上的年份节点依次点亮，镜头沿轴推进",
   use: "按年份/时间顺序讲发展历程",
   schema,

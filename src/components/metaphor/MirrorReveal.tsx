@@ -1,12 +1,13 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, noise1, prog, rng } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, lerp, noise1, prog, rng } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Figure, mixPose, POSES } from "../../lib/figure";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -22,8 +23,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const askAt = cueOr(data.askAt, Math.round(dur * 0.2));
@@ -59,6 +61,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const lean = frame >= askAt && frame < turnAt ? easeInOut(prog(frame, askAt, 16)) : frame >= turnAt ? 1 - easeOut(prog(frame, turnAt, 18)) : 0;
   const pose = mixPose(POSES.stand, { ...POSES.stand, lean: 14, head: 8, ls: 40, rs: 30, le: 60, re: 50 }, lean);
   const bubbleText = clearK > 0.5 ? data.clearOut : data.blurIn;
+  // 人物标签淡入 / 结果卡从 0 弹出 / 旁注淡入 = 元素入场；乱麻理顺、镜面转金是隐喻主体不动
+  const ePerson = enterAt(frame, 4, { fallback: "rise", dur: 12 });
+  const eCard = enterAt(frame, askAt, { fallback: "rise", dur: 14, from: 0 });
+  const eNote = enterAt(frame, turnAt + 10, { fallback: "rise", dur: 12 });
 
   return (
     <>
@@ -95,17 +101,17 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           <Figure x={figX} y={G} h={figH} pose={pose} color={t.text} glow={t.primary} />
         </svg>
         {/* label above the person */}
-        <div style={{ position: "absolute", left: figX, top: G - figH - (full ? 70 : 38), transform: "translateX(-50%)", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 28 : 15, color: t.text, whiteSpace: "nowrap", opacity: easeOut(prog(frame, 4, 12)), textShadow: "0 2px 0 #000" }}>{data.person}</div>
+        <div style={{ position: "absolute", left: figX, top: G - figH - (full ? 70 : 38), transform: `translateX(-50%) translate(${ePerson.dx}px, ${ePerson.dy}px)`, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 28 : 15, color: t.text, whiteSpace: "nowrap", opacity: ePerson.opacity, textShadow: "0 2px 0 #000" }}>{data.person}</div>
         {/* the result card the mirror spits out */}
         {frame >= askAt && (
-          <div style={{ position: "absolute", left: mx + mirrorW + (full ? 40 : 18), top: my + mirrorH * 0.3, width: full ? W * 0.24 : W * 0.32, transform: `scale(${easeOutBack(prog(frame, askAt, 14))}) translateX(${(1 - clearK) * (full ? 30 : 15)}px)`, transformOrigin: "0 50%", borderRadius: 14, background: alpha(t.bg, 0.88), border: `3px solid ${clearK > 0.5 ? t.primary : t.bad}`, boxShadow: `0 0 26px ${alpha(clearK > 0.5 ? t.primary : t.bad, 0.5)}`, padding: full ? "16px 22px" : "8px 11px" }}>
+          <div style={{ position: "absolute", left: mx + mirrorW + (full ? 40 : 18), top: my + mirrorH * 0.3, width: full ? W * 0.24 : W * 0.32, transform: `translate(${eCard.dx}px, ${eCard.dy}px) scale(${eCard.scale}) translateX(${(1 - clearK) * (full ? 30 : 15)}px)`, opacity: eCard.opacity, transformOrigin: "0 50%", borderRadius: 14, background: alpha(t.bg, 0.88), border: `3px solid ${clearK > 0.5 ? t.primary : t.bad}`, boxShadow: `0 0 26px ${alpha(clearK > 0.5 ? t.primary : t.bad, 0.5)}`, padding: full ? "16px 22px" : "8px 11px" }}>
             <div style={{ fontFamily: t.font.mono, fontSize: full ? 17 : 10, letterSpacing: 3, color: t.dim, marginBottom: full ? 8 : 4 }}>它吐出来的</div>
             {/* the output is fuzzy while the input is fuzzy */}
             <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(bubbleText, (full ? W * 0.24 : W * 0.32) - (full ? 44 : 22), full ? 30 : 15, 12), color: t.text, lineHeight: 1.3, filter: `blur(${(1 - clearK) * 3}px)`, opacity: 0.6 + clearK * 0.4 }}>{bubbleText}</div>
           </div>
         )}
         {data.note && frame >= turnAt && (
-          <div style={{ position: "absolute", left: mx + mirrorW / 2, top: my + mirrorH + (full ? 30 : 14), transform: "translateX(-50%)", opacity: easeOut(prog(frame, turnAt + 10, 12)), fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 26 : 14, color: t.gold, whiteSpace: "nowrap" }}>{data.note}</div>
+          <div style={{ position: "absolute", left: mx + mirrorW / 2, top: my + mirrorH + (full ? 30 : 14), transform: `translateX(-50%) translate(${eNote.dx}px, ${eNote.dy}px)`, opacity: eNote.opacity, fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 26 : 14, color: t.gold, whiteSpace: "nowrap" }}>{data.note}</div>
         )}
         {/* ask pulse at the mirror when the question goes in */}
         {frame >= askAt && frame < askAt + 24 && (

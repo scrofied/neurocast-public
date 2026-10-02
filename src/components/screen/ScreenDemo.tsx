@@ -2,6 +2,7 @@ import React from "react";
 import { z } from "zod";
 import { Img, OffthreadVideo, staticFile, useVideoConfig } from "remotion";
 import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -28,6 +29,7 @@ const Cursor: React.FC<{ x: number; y: number; press: number; color: string }> =
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const style = data.frameStyle ?? (["browser", "laptop", "float"] as const)[variant % 3];
   const aspect = data.aspect ?? 16 / 10;
@@ -53,7 +55,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const fy = (height - fh) / 2 + 60;
 
   const focus = data.focus ?? [];
-  const enter = easeOutBack(prog(frame, 0, 26));
+  // 设备框原生是 easeOutBack 从 0.8 摆正入画（rise 等价），分镜写 motion.enter 才换
+  const eFrame = enterAt(frame, 0, { fallback: "rise", dur: 26, from: 0.8 });
   const settle = 28;
   const n = focus.length;
   const per = n ? Math.max(40, (dur - settle - 20) / n) : 1;
@@ -89,7 +92,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const zy = curF ? to.y : height / 2;
   const spotR = curF ? (curF.w ?? 0.14) * sw * 0.8 : 200;
   const tiltY = style === "float" ? -14 : -8;
-  const rot = (1 - enter) * 30 + tiltY * (1 - zoomP) * (frame < settle ? 1 : 0.35);
+  const rot = (1 - eFrame.p) * 30 + tiltY * (1 - zoomP) * (frame < settle ? 1 : 0.35);
 
   const src = data.src.startsWith("http") ? data.src : staticFile(data.src);
 
@@ -103,8 +106,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
             top: fy,
             width: fw,
             height: fh,
-            transform: `perspective(2200px) rotateY(${rot}deg) rotateX(${(1 - enter) * 12 + 3}deg) scale(${0.8 + 0.2 * clamp(enter)})`,
-            opacity: clamp(enter * 1.5),
+            transform: `perspective(2200px) rotateY(${rot}deg) rotateX(${(1 - eFrame.p) * 12 + 3}deg) scale(${eFrame.scale})`,
+            opacity: clamp(eFrame.p * 1.5),
             borderRadius: style === "float" ? 18 : 14,
             overflow: "hidden",
             border: `1.5px solid ${alpha(t.primary, 0.5)}`,
@@ -132,7 +135,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           </div>
         </div>
         {style === "laptop" && (
-          <div style={{ position: "absolute", left: fx - 70, top: fy + fh, width: fw + 140, height: 26, borderRadius: "0 0 30px 30px", background: "linear-gradient(#2a3140,#11151d)", opacity: clamp(enter), transform: `perspective(2200px) rotateY(${rot}deg)` }} />
+          <div style={{ position: "absolute", left: fx - 70, top: fy + fh, width: fw + 140, height: 26, borderRadius: "0 0 30px 30px", background: "linear-gradient(#2a3140,#11151d)", opacity: clamp(eFrame.p), transform: `perspective(2200px) rotateY(${rot}deg)` }} />
         )}
         {/* spotlight dim */}
         {curF && zoomP > 0.01 && (
@@ -148,12 +151,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           <div style={{ position: "absolute", left: to.x - ripple * 3, top: to.y - ripple * 3, width: ripple * 6, height: ripple * 6, borderRadius: "50%", border: `3px solid ${alpha(t.accent, 1 - ripple / 24)}`, boxShadow: `0 0 20px ${alpha(t.accent, 0.6)}` }} />
         )}
         {curF && curF.label && (() => {
-          const lp = easeOutBack(clamp((local - 28) / 14));
+          const eLabel = enterAt(frame, settle + fi * per + 28, { fallback: "rise", dur: 14, from: 0 });
           const right = to.x < width * 0.6;
           const bx = right ? to.x + 70 : to.x - 70 - 360;
           return (
             <>
-              <svg width={width} height={height} style={{ position: "absolute", inset: 0, opacity: clamp(lp) }}>
+              <svg width={width} height={height} style={{ position: "absolute", inset: 0, opacity: clamp(eLabel.p), transform: `translate(${eLabel.dx}px, ${eLabel.dy}px)` }}>
                 <line x1={to.x} y1={to.y} x2={right ? bx : bx + 360} y2={to.y - 60} stroke={t.accent} strokeWidth={2} />
                 <circle cx={to.x} cy={to.y} r={6} fill={t.accent} />
               </svg>
@@ -172,7 +175,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
                   fontWeight: 800,
                   fontSize: 26,
                   color: t.text,
-                  transform: `scale(${lp})`,
+                  transform: `translate(${eLabel.dx}px, ${eLabel.dy}px) scale(${eLabel.scale})`,
+                  clipPath: eLabel.clip,
                   display: "flex",
                   alignItems: "center",
                   gap: 12,
@@ -199,6 +203,7 @@ export const ScreenDemo: CompDef<D> = {
   minSec: 5,
   maxSec: 20,
   tags: ["点击", "打开", "界面", "操作", "设置", "按钮", "菜单", "页面", "截图", "录屏"],
+  motion: { kind: "设备框带透视摆正入画，鼠标弧线移动点击+涟漪，镜头推近聚焦点、标签回弹弹出", energy: 2 },
   desc: "截图/录屏装进浏览器或笔记本外框，镜头推到 OCR 定位到的按钮并模拟鼠标点击",
   use: "文案里 [图: x.png] / [录屏: x.mp4] 的操作演示；说明写「点击\"按钮名\"」会自动定位",
   schema,

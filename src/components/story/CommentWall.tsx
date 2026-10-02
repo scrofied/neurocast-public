@@ -6,6 +6,7 @@ import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -21,8 +22,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const focusAt = cueOr(data.focusAt, dur * 0.45);
   const fp = easeInOut(prog(frame, focusAt, 22));
@@ -38,8 +40,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const scroll = frame * 0.7;
   const list = [...data.comments, ...data.comments];
   const hand = data.handoff ? cueOr(data.handoff.at, dur * 0.8) : Infinity;
-  const hp = easeOutBack(prog(frame, hand, 16));
-  const badge = easeOutBack(prog(frame, focusAt + 10, 16));
+  // 原生元素入场：两张面板淡入、金标/交接条原位回弹放大（无位移 → dist: 0, from: 0）
+  const eVid = enterAt(frame, 0, { fallback: "rise", dur: 14 });
+  const ePanel = enterAt(frame, 6, { fallback: "rise", dur: 14 });
+  const eNo = enterAt(frame, focusAt + 8, { fallback: "rise", dur: 12 });
+  const eBadge = enterAt(frame, focusAt + 10, { fallback: "rise", dur: 16, from: 0, dist: 0 });
+  const eHand = enterAt(frame, hand, { fallback: "rise", dur: 16, from: 0, dist: 0 });
   return (
     <>
       <Heading kicker={data.kicker ?? "WHERE THE GOLD IS"} title={data.title} frame={frame} width={width} />
@@ -58,7 +64,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
           filter: `grayscale(${fp}) brightness(${1 - fp * 0.55}) blur(${fp * 2}px)`,
           transform: `scale(${1 - fp * 0.06})`,
           boxShadow: `0 0 ${60 * (1 - fp)}px ${alpha(t.accent, 0.35)}`,
-          opacity: easeOut(prog(frame, 0, 14)),
+          opacity: eVid.opacity,
         }}
       >
         <div style={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%,-50%)" }}>
@@ -68,13 +74,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         {data.video.views && <div style={{ position: "absolute", right: 20, top: 18, padding: "6px 16px", borderRadius: 99, background: alpha("#000000", 0.5), color: "#fff", fontFamily: t.font.mono, fontSize: 24 }}>▶ {data.video.views}</div>}
       </div>
       {fp > 0.3 && (
-        <div style={{ position: "absolute", left: vx + vw / 2, top: vy + vh + 40, transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: 10, fontFamily: t.font.body, fontWeight: 800, fontSize: 32, color: t.dim, opacity: easeOut(prog(frame, focusAt + 8, 12)) }}>
+        <div style={{ position: "absolute", left: vx + vw / 2, top: vy + vh + 40, transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: 10, fontFamily: t.font.body, fontWeight: 800, fontSize: 32, color: t.dim, opacity: eNo.opacity }}>
           <Icon name="x" size={30} color={t.bad} stroke={3} />
           {data.video.label ?? "秘密不在画面里"}
         </div>
       )}
       {/* comment section */}
-      <div style={{ position: "absolute", left: px, top: py, width: pw, height: ph, borderRadius: 24, background: `linear-gradient(170deg, ${alpha(t.bg2, 0.92)}, ${alpha(t.bg, 0.88)})`, border: `2px solid ${alpha(fp > 0.5 ? t.gold : t.primary, 0.3 + fp * 0.5)}`, boxShadow: `0 0 ${20 + fp * 60}px ${alpha(fp > 0.5 ? t.gold : t.primary, 0.15 + fp * 0.3)}`, overflow: "hidden", transform: `scale(${1 + fp * 0.03})`, opacity: easeOut(prog(frame, 6, 14)) }}>
+      <div style={{ position: "absolute", left: px, top: py, width: pw, height: ph, borderRadius: 24, background: `linear-gradient(170deg, ${alpha(t.bg2, 0.92)}, ${alpha(t.bg, 0.88)})`, border: `2px solid ${alpha(fp > 0.5 ? t.gold : t.primary, 0.3 + fp * 0.5)}`, boxShadow: `0 0 ${20 + fp * 60}px ${alpha(fp > 0.5 ? t.gold : t.primary, 0.15 + fp * 0.3)}`, overflow: "hidden", transform: `scale(${1 + fp * 0.03})`, opacity: ePanel.opacity }}>
         <div style={{ height: 76, display: "flex", alignItems: "center", gap: 14, padding: "0 30px", borderBottom: `1px solid ${alpha(t.primary, 0.2)}`, fontFamily: t.font.body, fontWeight: 800, fontSize: 30, color: t.text }}>
           <Icon name="chat" size={30} color={t.primary} />
           评论 · 12.8w
@@ -107,13 +113,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       {/* spotlight sweeps from the video to the comments */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", background: `radial-gradient(ellipse 560px 520px at ${vx + vw / 2 + (px + pw / 2 - vx - vw / 2) * fp}px ${vy + vh / 2 + (py + ph / 2 - vy - vh / 2) * fp}px, transparent 55%, ${alpha(t.bg, 0.5 * clamp(fp * 2))} 100%)` }} />
       {frame >= focusAt + 10 && (
-        <div style={{ position: "absolute", left: px + pw / 2, top: py - 34, transform: `translate(-50%,-50%) scale(${badge})`, padding: "12px 30px", borderRadius: 99, background: t.gold, color: t.bg, display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.title, fontWeight: 900, fontSize: 36, boxShadow: `0 0 40px ${alpha(t.gold, 0.7)}`, whiteSpace: "nowrap" }}>
+        <div style={{ position: "absolute", left: px + pw / 2, top: py - 34, transform: `translate(-50%,-50%) translate(${eBadge.dx}px, ${eBadge.dy}px) scale(${eBadge.scale})`, padding: "12px 30px", borderRadius: 99, background: t.gold, color: t.bg, display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.title, fontWeight: 900, fontSize: 36, boxShadow: `0 0 40px ${alpha(t.gold, 0.7)}`, whiteSpace: "nowrap", opacity: eBadge.opacity }}>
           <Icon name="key" size={32} color={t.bg} stroke={2.6} />
           {data.badge}
         </div>
       )}
       {data.handoff && frame >= hand && (
-        <div style={{ position: "absolute", left: vx + vw / 2, top: vy + vh + 110, transform: `translate(-50%,0) scale(${hp})`, padding: "16px 36px", borderRadius: 18, background: `linear-gradient(90deg, ${alpha(t.primary, 0.3)}, ${alpha(t.secondary, 0.3)})`, border: `2px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.45)}`, display: "flex", alignItems: "center", gap: 16, fontFamily: t.font.title, fontWeight: 900, fontSize: 40, color: t.text, whiteSpace: "nowrap" }}>
+        <div style={{ position: "absolute", left: vx + vw / 2, top: vy + vh + 110, transform: `translate(-50%,0) translate(${eHand.dx}px, ${eHand.dy}px) scale(${eHand.scale})`, padding: "16px 36px", borderRadius: 18, background: `linear-gradient(90deg, ${alpha(t.primary, 0.3)}, ${alpha(t.secondary, 0.3)})`, border: `2px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.45)}`, display: "flex", alignItems: "center", gap: 16, fontFamily: t.font.title, fontWeight: 900, fontSize: 40, color: t.text, whiteSpace: "nowrap", opacity: eHand.opacity }}>
           <Icon name="bot" size={40} color={t.primary} />
           {data.handoff.text}
         </div>
@@ -133,6 +139,7 @@ export const CommentWall: CompDef<D> = {
   minSec: 3,
   maxSec: 12,
   tags: ["评论区", "留言", "用户需求", "痛点", "真实反馈"],
+  motion: { kind: "评论区持续滚动 + 聚光灯从视频移到评论区 + 金标/交接条回弹弹出", energy: 2 },
   desc: "左边大博主的爆款视频，右边滚动的评论区；说到“评论区”时视频变灰、聚光灯移到评论区，真实需求评论发金光并打上标签，可在底部接一条交接提示",
   use: "真正有价值的东西不在表面、藏在反馈里：评论区的需求、差评里的改进点、客服记录里的痛点、问卷的开放题（video 换成任何“表面”，comments 换成任何反馈）",
   schema,

@@ -7,6 +7,7 @@ import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -23,8 +24,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const cells = data.cells;
@@ -44,7 +46,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const fillK = clamp((frame - fillAt) / Math.max(1, fillEnd - fillAt));
   const nFilled = Math.round(fillK * cells);
   // the ceiling: a glowing bar that grows across the top of the filled cells
-  const ceilGrow = easeInOut(prog(frame, fillEnd - 8, 24));
+  // 顶的「凝结」原生就是从左往右擦出（wipe 的 p 与原生 easeInOut 完全一致），基线不变
+  // ⚠ 横梁与延长线的长度都由 eCeil.p 插值（width / x2）→ 位置已由 e.p 驱动，不再叠加 dx/dy
+  const eCeil = enterAt(frame, fillEnd - 8, { fallback: "wipe", dur: 24 });
+  const ceilGrow = eCeil.p;
+  // 数额标签：fillEnd 处从 0.8 弹入（rise+from 复刻原生，e.scale 接管后分镜可换语法）；落点固定 → 位移也交给它
+  const eVal = enterAt(frame, fillEnd, { fallback: "rise", dur: 16, from: 0.8 });
+  // 曲线小标签：纯淡入入场
+  const eCurveLbl = enterAt(frame, fillAt, { fallback: "rise", dur: 12 });
   const hit = frame >= hitAt;
   const hitK = easeOut(prog(frame, hitAt, 10));
   // revenue curve climbs and slams into the ceiling
@@ -74,16 +83,18 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const on = i < nFilled;
           const c = i % cols;
           const r = Math.floor(i / cols);
-          const p = on ? easeOutBack(prog(frame, fillAt + (i / cells) * (fillEnd - fillAt), 10)) : 0;
+          // 每格出现时的弹入（不改逐格铺满的节奏，只把单格入场接入语法层）：格子落点是算死的网格坐标，
+          // 位移照接，但只给「已亮起」的格子——空格子跟着飘就露馅了
+          const ec = enterAt(frame, fillAt + (i / cells) * (fillEnd - fillAt), { fallback: "rise", dur: 10, from: 0 });
           return (
-            <div key={i} style={{ position: "absolute", left: gridX + c * cellW, top: gridTop + r * cellH, width: cellW - 6, height: cellH - 6, borderRadius: 6, background: on ? `linear-gradient(180deg, ${alpha(t.primary, 0.55)}, ${alpha(t.primary, 0.25)})` : alpha(t.text, 0.06), border: `1.5px solid ${on ? alpha(t.primary, 0.85) : alpha(t.text, 0.16)}`, transform: `scale(${on ? p : 1})`, boxShadow: on ? `0 0 12px ${alpha(t.primary, 0.4)}` : undefined }} />
+            <div key={i} style={{ position: "absolute", left: gridX + c * cellW, top: gridTop + r * cellH, width: cellW - 6, height: cellH - 6, borderRadius: 6, background: on ? `linear-gradient(180deg, ${alpha(t.primary, 0.55)}, ${alpha(t.primary, 0.25)})` : alpha(t.text, 0.06), border: `1.5px solid ${on ? alpha(t.primary, 0.85) : alpha(t.text, 0.16)}`, transform: on ? `translate(${ec.dx}px, ${ec.dy}px) scale(${ec.scale})` : undefined, boxShadow: on ? `0 0 12px ${alpha(t.primary, 0.4)}` : undefined }} />
           );
         })}
         {/* the glowing ceiling */}
         {ceilGrow > 0 && (
           <>
             <div style={{ position: "absolute", left: gridX - 10, top: ceilY - (full ? 20 : 12), width: (gridW + 20) * ceilGrow, height: full ? 12 : 7, borderRadius: 6, background: `linear-gradient(90deg, ${t.gold}, ${t.accent})`, boxShadow: `0 0 26px ${alpha(t.gold, 0.8)}` }} />
-            <div style={{ position: "absolute", left: gridX, top: ceilY - (full ? 78 : 44), width: gridW, textAlign: "center", opacity: ceilGrow, transform: `scale(${lerp(0.8, 1, easeOutBack(prog(frame, fillEnd, 16)))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.ceilingValue, gridW, full ? 40 : 20, 13), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 20px ${alpha(t.gold, 0.7)}` }}>
+            <div style={{ position: "absolute", left: gridX, top: ceilY - (full ? 78 : 44), width: gridW, textAlign: "center", opacity: ceilGrow, transform: `translate(${eVal.dx}px, ${eVal.dy}px) scale(${eVal.scale})`, clipPath: eVal.clip, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.ceilingValue, gridW, full ? 40 : 20, 13), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 20px ${alpha(t.gold, 0.7)}` }}>
               {data.ceilingValue}
             </div>
           </>
@@ -131,7 +142,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             </>
           )}
         </svg>
-        <div style={{ position: "absolute", left: curveX, top: curveTop - (full ? 46 : 24), fontFamily: t.font.mono, fontSize: full ? 22 : 13, letterSpacing: 4, color: t.primary, opacity: easeOut(prog(frame, fillAt, 12)) }}>{data.curveLabel}</div>
+        <div style={{ position: "absolute", left: curveX, top: curveTop - (full ? 46 : 24), fontFamily: t.font.mono, fontSize: full ? 22 : 13, letterSpacing: 4, color: t.primary, opacity: eCurveLbl.opacity, transform: `translate(${eCurveLbl.dx}px, ${eCurveLbl.dy}px)`, clipPath: eCurveLbl.clip }}>{data.curveLabel}</div>
         {/* hammer when the ceiling is broken */}
         {data.breakTop && hit && frame >= breakAt - 14 && (() => {
           const k = easeIn(prog(frame, breakAt - 14, 12));

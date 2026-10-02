@@ -1,6 +1,7 @@
 import React from "react";
 import { z } from "zod";
-import { easeIn, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { easeIn, easeInOut, easeOut, lerp, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { hitShake, StampBox } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
@@ -26,8 +27,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const Brake: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const Brake: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const goAt = cueOr(data.goAt, Math.round(dur * 0.06));
@@ -50,7 +52,9 @@ const Brake: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const tiltBase = frame > goAt ? 1.5 : 0;
   const tilt = skid ? -6 * (1 - prog(frame, brakeAt, 16)) : stopped ? 2 * Math.sin((frame - brakeAt - 16) * 0.5) * Math.exp(-(frame - brakeAt - 16) * 0.08) : tiltBase;
   const sh = hitShake(frame, [brakeAt], full ? 16 : 8, 14);
-  const hz = easeOutBack(prog(frame, hazardAt, 14));
+  // 危险区/崖边字的浮现是入场；小车冲刺、栏杆砸下是隐喻主体轨迹，不动
+  const eHz = enterAt(frame, hazardAt, { fallback: "rise", dur: 14 });
+  const hz = eHz.p;
   const armDrop = easeIn(prog(frame, brakeAt - 5, 6));
   const barrierX = stopX + cw + 4;
   const red = frame >= hazardAt && frame < brakeAt + 30 ? 0.5 + 0.5 * Math.sin(frame * 0.8) : 0;
@@ -98,7 +102,7 @@ const Brake: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         <div style={{ position: "absolute", left: cw * 0.1, bottom: -10, width: full ? 36 : 22, height: full ? 36 : 22, borderRadius: "50%", border: `5px solid ${t.dim}`, background: t.bg2 }} />
         <div style={{ position: "absolute", right: cw * 0.1, bottom: -10, width: full ? 36 : 22, height: full ? 36 : 22, borderRadius: "50%", border: `5px solid ${t.dim}`, background: t.bg2 }} />
       </div>
-      {hz > 0 && <div style={{ position: "absolute", left: edge + 10, top: G - (full ? 66 : 36), width: W - edge - 20, textAlign: "center", opacity: hz, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.hazard, W - edge - 28, full ? 34 : 18, 12), color: t.bad, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>{data.hazard}</div>}
+      {hz > 0 && <div style={{ position: "absolute", left: edge + 10, top: G - (full ? 66 : 36), width: W - edge - 20, textAlign: "center", opacity: hz, transform: `translate(${eHz.dx}px, ${eHz.dy}px)`, clipPath: eHz.clip, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.hazard, W - edge - 28, full ? 34 : 18, 12), color: t.bad, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>{data.hazard}</div>}
       <Sfx name="whoosh" at={goAt} volume={0.18} />
       <Sfx name="riser" at={Math.max(0, hazardAt - 34)} volume={0.16} />
       <Sfx name="stamp" at={brakeAt} volume={0.45} />
@@ -172,8 +176,9 @@ const Fuse: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   );
 };
 
-const RuleCard: React.FC<{ data: D; frame: number; dur: number }> = ({ data, frame, dur }) => {
+const RuleCard: React.FC<{ data: D; frame: number; dur: number; variant: number }> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const brakeAt = cueOr(data.brakeAt, Math.round(dur * 0.5));
@@ -183,11 +188,15 @@ const RuleCard: React.FC<{ data: D; frame: number; dur: number }> = ({ data, fra
   return (
     <>
       <StampBox text={data.rule} at={ruleAt} frame={frame} x={W / 2} y={y} size={size} color={t.primary} rot={-3} />
-      {data.ruleNote && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: y + size * 0.9, textAlign: "center", opacity: easeOut(prog(frame, ruleAt + 10, 12)), fontFamily: t.font.body, fontSize: full ? 24 : 14, color: t.dim, whiteSpace: "nowrap" }}>
-          {data.ruleNote}
-        </div>
-      )}
+      {data.ruleNote && (() => {
+        // 备注行原生只是淡入、位置固定 → 位移与擦除交给入场语法
+        const en = enterAt(frame, ruleAt + 10, { fallback: "rise", dur: 12 });
+        return (
+          <div style={{ position: "absolute", left: 0, right: 0, top: y + size * 0.9, textAlign: "center", opacity: en.opacity, transform: `translate(${en.dx}px, ${en.dy}px)`, clipPath: en.clip, fontFamily: t.font.body, fontSize: full ? 24 : 14, color: t.dim, whiteSpace: "nowrap" }}>
+            {data.ruleNote}
+          </div>
+        );
+      })()}
     </>
   );
 };
@@ -199,7 +208,7 @@ const C: React.FC<CompProps<D>> = (p) => {
     <>
       {full && <Heading kicker={p.data.kicker} title={p.data.title} frame={p.frame} width={W} />}
       {p.data.mode === "fuse" ? <Fuse {...p} /> : <Brake {...p} />}
-      <RuleCard data={p.data} frame={p.frame} dur={p.dur} />
+      <RuleCard data={p.data} frame={p.frame} dur={p.dur} variant={p.variant} />
     </>
   );
 };

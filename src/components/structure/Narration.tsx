@@ -1,7 +1,8 @@
 import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
-import { clamp, easeOut, easeOutBack, noise1, prog, rng } from "../../lib/anim";
+import { clamp, easeOutBack, rng } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Glass } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -12,6 +13,7 @@ type D = z.infer<typeof schema>;
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const kws = data.keywords;
   const n = kws.length;
@@ -20,6 +22,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const cx = width / 2;
   const cy = height / 2 + 10;
   const r = rng(seed + 21);
+  const lineIn = enterAt(frame, 8, { fallback: "rise", dur: 16 });
   return (
     <>
       {kws.map((k, i) => {
@@ -34,7 +37,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
         const y = oy + (cy - oy) * focusP;
         const s = (0.55 + (depth + 1) * 0.18) * (1 - focusP) + focusP * 1.0;
         const fs = isCur ? fitFont(k, 1300, 110) : 44;
-        const appear = easeOut(prog(frame, i * 3, 14));
+        const appear = enterAt(frame, i * 3, { fallback: "rise", dur: 14, seed: i }); // 环绕位置是主体轨迹，只接淡入
         return (
           <div
             key={i}
@@ -42,13 +45,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
               position: "absolute",
               left: x,
               top: y,
-              transform: `translate(-50%,-50%) scale(${s})`,
+              transform: `translate(-50%,-50%) scale(${s}) translate(${appear.dx}px, ${appear.dy}px)`,
               fontFamily: t.font.title,
               fontWeight: 900,
               fontSize: fs,
               whiteSpace: "nowrap",
               color: isCur ? t.text : alpha(t.text, 0.35 + (depth + 1) * 0.15),
-              opacity: appear,
+              opacity: appear.opacity,
               filter: isCur ? undefined : `blur(${(1 - (depth + 1) / 2) * 3}px)`,
               textShadow: isCur ? `0 0 40px ${alpha(t.primary, 0.8)}` : undefined,
               zIndex: isCur ? 10 : Math.round((depth + 1) * 4),
@@ -61,7 +64,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
         );
       })}
       {data.line && (
-        <Glass style={{ left: cx - 700, width: 1400, top: height - 330, height: 90, display: "flex", alignItems: "center", justifyContent: "center", opacity: easeOut(prog(frame, 8, 16)) }} corners={false}>
+        <Glass style={{ left: cx - 700, width: 1400, top: height - 330, height: 90, display: "flex", alignItems: "center", justifyContent: "center", opacity: lineIn.opacity, transform: `translate(${lineIn.dx}px, ${lineIn.dy}px)`, clipPath: lineIn.clip }} corners={false}>
           <div style={{ fontFamily: t.font.body, fontSize: 34, fontWeight: 600, color: t.text, padding: "0 40px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{data.line}</div>
         </Glass>
       )}
@@ -77,6 +80,7 @@ export const Narration: CompDef<D> = {
   minSec: 3,
   maxSec: 9,
   tags: [],
+  motion: { kind: "关键词在 3D 轨道上环绕，当前词拉到中心放大", energy: 2 },
   desc: "几个关键词在 3D 轨道上环绕，当前词拉到中心放大",
   use: "兜底：普通叙述、没有更贴切的画面时（写分镜时尽量少用）",
   schema,

@@ -1,8 +1,9 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog, rng } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, lerp, prog, rng } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -21,8 +22,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.items.length;
@@ -47,6 +49,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const countP = clamp((frame - countAt) / Math.max(1, countEnd - countAt));
   const shown = Math.round(lerp(0, data.pileCount, easeOut(countP)));
   const sh = { x: panX, y: 0 };
+  // 计数器与底部一句话：原生只有淡入，位移接上后 motion.enter 才真的推得进来
+  const eCnt = enterAt(frame, countAt, { fallback: "rise", dur: 12 });
+  const eCap = enterAt(frame, countEnd, { fallback: "rise", dur: 12, seed: 9 });
 
   return (
     <>
@@ -64,13 +69,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
                 const c = cues[i];
                 if (frame < c) return null;
                 const col = i % 4;
-                const ip = easeOutBack(prog(frame, c, 12));
+                // 原生是回弹放大摆上架（easeOutBack prog 12 帧）；分镜写 motion.enter 才换
+                const ei = enterAt(frame, c, { fallback: "rise", dur: 12, from: 0, seed: i });
                 const ic = it.icon ?? guessIcon(it.name) ?? "box";
                 const cw = (shelfW - (full ? 40 : 16)) / 4;
                 const x = shelfX + (full ? 20 : 8) + col * cw;
                 const chh = full ? 120 : 64;
                 return (
-                  <div key={i} style={{ position: "absolute", left: x + cw * 0.06, top: y - chh, width: cw * 0.88, height: chh, transform: `scale(${ip})`, transformOrigin: "50% 100%", borderRadius: 10, background: `linear-gradient(180deg, ${alpha(t.text, 0.16)}, ${alpha(t.bg2, 0.9)})`, border: `2px solid ${alpha(t.dim, 0.6)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 6 : 3 }}>
+                  <div key={i} style={{ position: "absolute", left: x + cw * 0.06, top: y - chh, width: cw * 0.88, height: chh, transform: `translate(${ei.dx}px, ${ei.dy}px) scale(${ei.scale})`, opacity: ei.opacity, clipPath: ei.clip, transformOrigin: "50% 100%", borderRadius: 10, background: `linear-gradient(180deg, ${alpha(t.text, 0.16)}, ${alpha(t.bg2, 0.9)})`, border: `2px solid ${alpha(t.dim, 0.6)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 6 : 3 }}>
                     <Icon name={ic} size={full ? 34 : 18} color={t.dim} />
                     <span style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: fitFont(it.name, cw * 0.82, full ? 19 : 10, 8), color: t.dim, whiteSpace: "nowrap" }}>{it.name}</span>
                     {it.days !== undefined && (
@@ -98,12 +104,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           <div key={i} style={{ position: "absolute", left: s.x + Math.sin(frame * 0.01 * s.sp + s.ph) * 40, top: s.y + Math.cos(frame * 0.008 * s.sp + s.ph) * 30, width: s.s * 2.6, height: s.s * 2.6, borderRadius: "50%", background: alpha("#e8dcc0", 0.35 * dust) }} />
         ))}
         {/* the counter */}
-        <div style={{ position: "absolute", right: full ? W * 0.06 : 16, top: full ? H * 0.3 : H * 0.14, textAlign: "right", opacity: easeOut(prog(frame, countAt, 12)) }}>
+        <div style={{ position: "absolute", right: full ? W * 0.06 : 16, top: full ? H * 0.3 : H * 0.14, textAlign: "right", opacity: eCnt.opacity, transform: `translate(${eCnt.dx}px, ${eCnt.dy}px)`, clipPath: eCnt.clip }}>
           <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 150 : 62, lineHeight: 1, color: t.dim, fontVariantNumeric: "tabular-nums", textShadow: "0 4px 18px rgba(0,0,0,.7)" }}>{shown}</div>
           <div style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 30 : 15, color: t.dim }}>个吃灰的</div>
         </div>
         {data.caption && frame >= countEnd && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: G + (full ? 46 : 22), textAlign: "center", opacity: easeOut(prog(frame, countEnd, 12)), fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.caption, W * 0.8, full ? 48 : 24, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 22px ${alpha(t.gold, 0.5)}, 0 3px 0 #000` }}>{data.caption}</div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: G + (full ? 46 : 22), textAlign: "center", opacity: eCap.opacity, transform: `translate(${eCap.dx}px, ${eCap.dy}px)`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.caption, W * 0.8, full ? 48 : 24, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 22px ${alpha(t.gold, 0.5)}, 0 3px 0 #000` }}>{data.caption}</div>
         )}
       </div>
       {cues.map((c, i) => (

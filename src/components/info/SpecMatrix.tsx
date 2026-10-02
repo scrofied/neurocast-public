@@ -4,6 +4,7 @@ import { clamp, easeIn, easeOut, easeOutBack, lerp, prog } from "../../lib/anim"
 import { hitShake, Mark } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Heading } from "../../lib/ui";
@@ -28,8 +29,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const nRow = data.rows.length;
@@ -49,6 +51,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const allCells = nRow * nCol;
   const lastCell = rowCues[nRow - 1] + 6 + (nCol - 1) * 8;
   const verdictAt = cueOr(data.verdictAt, lastCell + 26);
+  // 结论条原生是从左侧推入并淡入（easeOut）：用 slide-l + dist 复原原生 40px 位移，保基线
+  const eVerdict = enterAt(frame, verdictAt, { fallback: "slide-l", dur: 12, dist: 40 / 240 });
   const winRowAt = lastCell + 10;
   const sh = hitShake(frame, [verdictAt], full ? 8 : 4, 10, seed);
   const elim = data.eliminate !== false;
@@ -61,7 +65,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
       <div style={{ position: "absolute", inset: 0, transform: `translate(${sh.x}px, ${sh.y}px)` }}>
         {/* header: each criterion is typed in as it is spoken */}
         {data.cols.map((c, i) => {
-          const p = easeOutBack(prog(frame, colCues[i], 12));
+          const p = enterAt(frame, colCues[i], { fallback: "rise", dur: 12 }).p;
           if (frame < colCues[i]) return null;
           return (
             <div key={i} style={{ position: "absolute", left: left + nameW + i * colW, top: top - (full ? 62 : 34), width: colW, textAlign: "center", transform: `scale(${p})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(c, colW - 16, full ? 32 : 18, 12), color: t.primary, whiteSpace: "nowrap", textShadow: `0 0 16px ${alpha(t.primary, 0.6)}` }}>
@@ -74,7 +78,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {data.rows.map((r, ri) => {
           const rc = rowCues[ri];
           if (frame < rc) return null;
-          const inP = easeOut(prog(frame, rc, 12));
+          const inP = enterAt(frame, rc, { fallback: "slide-r", dur: 12 });
           const dead = elim && r.marks.some((m) => m === false);
           const deadK = dead ? easeIn(prog(frame, lastCell + 6 + ri * 4, 16)) : 0;
           const isWin = ri === winner && !dead;
@@ -83,7 +87,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const drop = deadK * (full ? 260 : 130);
           const fs = fitFont(r.name, nameW - 24, full ? 34 : 19, 12);
           return (
-            <div key={ri} style={{ position: "absolute", left, top: y + drop, width: tableW, height: rowH, opacity: (1 - deadK * 0.75) * inP, transform: `translateY(${(1 - inP) * 26}px) scale(${1 + winK * 0.03})`, filter: dead ? `grayscale(${deadK})` : undefined }}>
+            <div key={ri} style={{ position: "absolute", left, top: y + drop, width: tableW, height: rowH, opacity: (1 - deadK * 0.75) * inP.p, transform: `translateY(${(1 - inP.p) * 26}px) scale(${1 + winK * 0.03})`, filter: dead ? `grayscale(${deadK})` : undefined }}>
               {/* row plate */}
               <div style={{ position: "absolute", inset: 0, borderRadius: 14, background: isWin ? alpha(t.gold, 0.1 + 0.12 * winK) : alpha(t.text, 0.045), border: `2px solid ${isWin ? t.gold : alpha(t.text, 0.14)}`, boxShadow: isWin ? `0 0 ${26 + 26 * winK}px ${alpha(t.gold, 0.45)}` : undefined }} />
               {/* name */}
@@ -104,13 +108,13 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
               })}
               {/* note after all cells */}
               {r.note && (
-                <div style={{ position: "absolute", left: 0, top: rowH + (full ? 2 : 0), width: tableW, fontFamily: t.font.body, fontWeight: 700, fontSize: full ? 20 : 12, color: dead ? t.dim : isWin ? t.gold : t.dim, whiteSpace: "nowrap", opacity: easeOut(prog(frame, cellCue(ri, nCol - 1) + 6, 10)) }}>{r.note}</div>
+                <div style={{ position: "absolute", left: 0, top: rowH + (full ? 2 : 0), width: tableW, fontFamily: t.font.body, fontWeight: 700, fontSize: full ? 20 : 12, color: dead ? t.dim : isWin ? t.gold : t.dim, whiteSpace: "nowrap", opacity: enterAt(frame, cellCue(ri, nCol - 1) + 6, { fallback: "slide-r", dur: 10 }).p }}>{r.note}</div>
               )}
             </div>
           );
         })}
         {data.verdict && frame >= verdictAt && full && (
-          <div style={{ position: "absolute", left, top: top + nRow * rowH + (full ? 46 : 22), opacity: easeOut(prog(frame, verdictAt, 12)), transform: `translateX(${(1 - easeOut(prog(frame, verdictAt, 12))) * -40}px)`, display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ position: "absolute", left, top: top + nRow * rowH + (full ? 46 : 22), opacity: eVerdict.p, transform: `translateX(${eVerdict.dx}px)`, display: "flex", alignItems: "center", gap: 14 }}>
             <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 46 : 24, color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 22px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</span>
             <span style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 26 : 14, color: t.text, whiteSpace: "nowrap" }}>← {data.rows[winner]?.name}</span>
           </div>

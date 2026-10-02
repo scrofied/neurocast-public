@@ -6,6 +6,7 @@ import { cueOr, listCues } from "../../lib/cue";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -17,8 +18,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const items = data.items;
   const n = items.length;
@@ -32,7 +34,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const doneN = cues.filter((c) => frame >= c + 6).length;
   // linear: every item contributes its own 10-frame fill
   const pct = cues.reduce((a, c) => a + clamp((frame - c) / 10), 0) / n;
-  const dp = easeOutBack(prog(frame, doneAt, 18));
+  const eDone = enterAt(frame, doneAt, { fallback: "rise", dur: 18, from: 0 });
   return (
     <>
       <Heading kicker={data.kicker ?? "ALL-IN-ONE"} title={data.title} frame={frame} width={width} />
@@ -47,18 +49,18 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       </svg>
       {items.map((it, i) => {
         const at = cues[i];
-        const appear = easeOutBack(prog(frame, 2 + i * 3, 16));
+        const eAp = enterAt(frame, 2 + i * 3, { fallback: "rise", dur: 16, from: 0, seed: i });
         const lit = frame >= at;
-        const lp = easeOutBack(prog(frame, at, 14));
+        const eLp = enterAt(frame, at, { fallback: "rise", dur: 14, from: 0 });
         const icon = it.icon ?? guessIcon(it.text) ?? "check";
         return (
-          <div key={i} style={{ position: "absolute", left: x0 + i * (tw + 28), top: y0, width: tw, height: th, transform: `scale(${appear * (lit ? 1 + 0.06 * Math.sin(clamp((frame - at) / 14) * Math.PI) : 0.94)})`, opacity: clamp(appear * 1.4) * (lit ? 1 : 0.55), borderRadius: 26, background: lit ? `linear-gradient(160deg, ${alpha(t.primary, 0.3)}, ${alpha(t.bg2, 0.95)})` : alpha(t.bg2, 0.85), border: `2px solid ${alpha(t.primary, lit ? 0.9 : 0.25)}`, boxShadow: lit ? `0 0 40px ${alpha(t.primary, 0.4)}` : undefined, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 18 }}>
+          <div key={i} style={{ position: "absolute", left: x0 + i * (tw + 28), top: y0, width: tw, height: th, transform: `scale(${eAp.scale * (lit ? 1 + 0.06 * Math.sin(clamp((frame - at) / 14) * Math.PI) : 0.94)}) translate(${eAp.dx}px, ${eAp.dy}px)`, opacity: eAp.opacity * (lit ? 1 : 0.55), borderRadius: 26, background: lit ? `linear-gradient(160deg, ${alpha(t.primary, 0.3)}, ${alpha(t.bg2, 0.95)})` : alpha(t.bg2, 0.85), border: `2px solid ${alpha(t.primary, lit ? 0.9 : 0.25)}`, boxShadow: lit ? `0 0 40px ${alpha(t.primary, 0.4)}` : undefined, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 18 }}>
             <div style={{ width: tw * 0.42, height: tw * 0.42, borderRadius: tw * 0.12, background: lit ? t.primary : alpha(t.primary, 0.12), display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Icon name={icon} size={tw * 0.24} color={lit ? t.bg : t.primary} stroke={2.2} />
             </div>
             <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(it.text, tw - 30, 40, 20), color: lit ? t.text : t.dim, whiteSpace: "nowrap" }}>{it.text}</div>
             {lit && (
-              <div style={{ position: "absolute", right: -14, top: -14, width: 52, height: 52, borderRadius: 26, background: t.primary, boxShadow: `0 0 20px ${t.primary}`, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${lp})` }}>
+              <div style={{ position: "absolute", right: -14, top: -14, width: 52, height: 52, borderRadius: 26, background: t.primary, boxShadow: `0 0 20px ${t.primary}`, display: "flex", alignItems: "center", justifyContent: "center", transform: `scale(${eLp.scale}) translate(${eLp.dx}px, ${eLp.dy}px)` }}>
                 <Icon name="check" size={32} color={t.bg} stroke={3.4} />
               </div>
             )}
@@ -77,7 +79,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       </div>
       {data.done && frame >= doneAt && (
         <div style={{ position: "absolute", left: 0, right: 0, top: y0 - 150, display: "flex", justifyContent: "center" }}>
-          <div style={{ transform: `scale(${dp})`, padding: "16px 44px", borderRadius: 20, background: `linear-gradient(90deg, ${alpha(t.gold, 0.25)}, ${alpha(t.gold, 0.1)})`, border: `3px solid ${t.gold}`, boxShadow: `0 0 50px ${alpha(t.gold, 0.55)}`, display: "flex", alignItems: "center", gap: 16, fontFamily: t.font.title, fontWeight: 900, fontSize: 56, color: t.gold, whiteSpace: "nowrap" }}>
+          <div style={{ transform: `scale(${eDone.scale}) translate(${eDone.dx}px, ${eDone.dy}px)`, padding: "16px 44px", borderRadius: 20, background: `linear-gradient(90deg, ${alpha(t.gold, 0.25)}, ${alpha(t.gold, 0.1)})`, border: `3px solid ${t.gold}`, boxShadow: `0 0 50px ${alpha(t.gold, 0.55)}`, display: "flex", alignItems: "center", gap: 16, fontFamily: t.font.title, fontWeight: 900, fontSize: 56, color: t.gold, whiteSpace: "nowrap" }}>
             <Icon name="check" size={52} color={t.gold} stroke={3.4} />
             {data.done.text}
           </div>
@@ -96,6 +98,7 @@ export const Checklist: CompDef<D> = {
   minSec: 3,
   maxSec: 10,
   tags: ["一条龙", "全配齐", "全套", "一键", "封面", "正文", "标签", "分镜"],
+  motion: { kind: "交付物方块错峰回弹入列、说到哪项哪项点亮打勾、进度条走满、金横幅弹出", energy: 2 },
   desc: "一排交付物图块（自动配图标：封面/正文/标签/分镜/成片…），说到哪项哪项点亮打勾，进度条走满，最后金色横幅“一条全配齐”",
   use: "一个工具/流程把多项产出全包了；“从 A、B、C 一直到 D，一条全配齐”",
   schema,

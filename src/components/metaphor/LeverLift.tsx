@@ -1,6 +1,6 @@
 import React from "react";
 import { z } from "zod";
-import { easeIn, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { easeIn, easeInOut, easeOut, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr, listCues } from "../../lib/cue";
@@ -8,6 +8,7 @@ import { Figure, POSES, mixPose } from "../../lib/figure";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -31,8 +32,9 @@ const schema = z.object({
 type D = z.infer<typeof schema>;
 
 // ── lever ────────────────────────────────────────────────────────────────────
-const Lever: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const Lever: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const pressAt = cueOr(data.pressAt, Math.round(dur * 0.3));
@@ -69,6 +71,10 @@ const Lever: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const lx = (dx: number) => ({ x: endL.x + Math.cos(a) * dx, y: endL.y + Math.sin(a) * dx });
   const figPos = lx(full ? 40 : 22);
   const boxPos = { x: endR.x - Math.cos(a) * (full ? 150 : 80), y: endR.y - Math.sin(a) * (full ? 150 : 80) };
+  // ×N 倍数原生是从 0 弹出（easeOutBack scale），接进入场语法层保住基线
+  const eGain = enterAt(frame, gainAt, { fallback: "rise", dur: 14, from: 0 });
+  // 结论原生从左侧滑入并淡入（translateX -40 → 0）：dist 换算成同等位移
+  const eVerd = enterAt(frame, verdictAt, { fallback: "slide-l", dur: 12, dist: 40 / 240 });
   return (
     <>
       {full && <Heading kicker={data.kicker} title={data.title} frame={frame} width={W} />}
@@ -104,12 +110,12 @@ const Lever: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         {data.output && <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.output, boxW * 0.9, boxH * 0.2, 12), color: t.text, whiteSpace: "nowrap" }}>{data.output}</div>}
       </div>
       {frame >= gainAt && (
-        <div style={{ position: "absolute", left: Math.min(W - (full ? 260 : 120), boxPos.x - (full ? 20 : 10)), top: Math.max(full ? 120 : 20, boxPos.y - boxH - (full ? 190 : 90)), transform: `scale(${easeOutBack(prog(frame, gainAt, 14))})`, transformOrigin: "50% 100%", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 150 : 64, color: t.gold, whiteSpace: "nowrap", lineHeight: 1, textShadow: `0 0 30px ${alpha(t.gold, 0.7)}, 0 4px 0 #000` }}>
+        <div style={{ position: "absolute", left: Math.min(W - (full ? 260 : 120), boxPos.x - (full ? 20 : 10)), top: Math.max(full ? 120 : 20, boxPos.y - boxH - (full ? 190 : 90)), transform: `translate(${eGain.dx}px, ${eGain.dy}px) scale(${eGain.scale})`, transformOrigin: "50% 100%", opacity: eGain.opacity, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 150 : 64, color: t.gold, whiteSpace: "nowrap", lineHeight: 1, textShadow: `0 0 30px ${alpha(t.gold, 0.7)}, 0 4px 0 #000` }}>
           ×{cnt}
         </div>
       )}
       {data.verdict && frame >= verdictAt && full && (
-        <div style={{ position: "absolute", left: W * 0.08, top: H * 0.22, opacity: easeOut(prog(frame, verdictAt, 12)), transform: `translateX(${(1 - easeOut(prog(frame, verdictAt, 12))) * -40}px)`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.4, 56, 24), color: t.text, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>
+        <div style={{ position: "absolute", left: W * 0.08, top: H * 0.22, opacity: eVerd.opacity, transform: `translate(${eVerd.dx}px, ${eVerd.dy}px)`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.4, 56, 24), color: t.text, whiteSpace: "nowrap", textShadow: "0 3px 0 #000" }}>
           {data.verdict}
         </div>
       )}
@@ -124,14 +130,18 @@ const Lever: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
 // ── moat ─────────────────────────────────────────────────────────────────────
 // a small figure behind a wall; bricks stack up on cue, then a flood surges in from the right,
 // climbs, and breaks against the wall top while the figure stays dry
-const Moat: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const Moat: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const layers = data.layers?.length ? data.layers : [{ text: data.fulcrum }];
   const cues = listCues(layers, Math.round(dur * 0.1), Math.round(dur * 0.42));
   const floodAt = cueOr(data.floodAt, cues[cues.length - 1] + 26);
   const verdictAt = cueOr(data.verdictAt, floodAt + 40);
+  // 洪水标签淡入、结论缩放淡入都是元素入场；砖块砸下垒墙 / 水位上涨是护城河隐喻主体，保持不动
+  const eFlood = enterAt(frame, floodAt, { fallback: "rise", dur: 12 });
+  const eVerdict = enterAt(frame, verdictAt, { fallback: "rise", dur: 14, from: 1.3 });
   const G = H * 0.84;
   const wallX = W * 0.46;
   const wallW = full ? 170 : 90;
@@ -179,7 +189,7 @@ const Moat: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         <Figure x={wallX - (full ? 150 : 80)} y={G} h={figH} pose={pose} color={t.text} glow={t.primary} face={1} />
       </svg>
       {data.flood && fl > 0 && (
-        <div style={{ position: "absolute", right: W * 0.05, top: waterTop - (full ? 90 : 46), opacity: easeOut(prog(frame, floodAt, 12)), fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.flood, W * 0.35, full ? 60 : 28, 14), color: t.bad, whiteSpace: "nowrap", textShadow: `0 0 20px ${alpha(t.bad, 0.6)}, 0 3px 0 #000` }}>
+        <div style={{ position: "absolute", right: W * 0.05, top: waterTop - (full ? 90 : 46), opacity: eFlood.opacity, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.flood, W * 0.35, full ? 60 : 28, 14), color: t.bad, whiteSpace: "nowrap", textShadow: `0 0 20px ${alpha(t.bad, 0.6)}, 0 3px 0 #000` }}>
           {data.flood} →
         </div>
       )}
@@ -198,7 +208,7 @@ const Moat: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       })}
       <div style={{ position: "absolute", left: wallX + wallW / 2, top: G + 14, transform: "translateX(-50%)", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.fulcrum, W * 0.3, full ? 40 : 22, 12), color: t.gold, whiteSpace: "nowrap" }}>{data.fulcrum}</div>
       {data.verdict && frame >= verdictAt && (
-        <div style={{ position: "absolute", left: W * 0.05, top: full ? H * 0.2 : H * 0.06, opacity: easeOut(prog(frame, verdictAt, 12)), transform: `scale(${lerp(1.3, 1, easeOutBack(prog(frame, verdictAt, 14)))})`, transformOrigin: "0% 50%", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.42, full ? 60 : 26, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 20px ${alpha(t.gold, 0.5)}, 0 3px 0 #000` }}>
+        <div style={{ position: "absolute", left: W * 0.05, top: full ? H * 0.2 : H * 0.06, opacity: eVerdict.opacity, transform: `translate(${eVerdict.dx}px, ${eVerdict.dy}px) scale(${eVerdict.scale})`, transformOrigin: "0% 50%", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.42, full ? 60 : 26, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 20px ${alpha(t.gold, 0.5)}, 0 3px 0 #000` }}>
           {data.verdict}
         </div>
       )}

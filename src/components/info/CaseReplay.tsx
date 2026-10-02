@@ -1,12 +1,13 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -29,8 +30,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.events.length;
@@ -45,6 +47,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   let cur = -1;
   for (let i = 0; i < n; i++) if (frame >= cues[i]) cur = i;
   const railP = easeOut(prog(frame, 4, 18));
+  // 结论奖牌原生是从 0 回弹放大落位 → rise + from:0 保住基线
+  const eOut = enterAt(frame, outcomeAt, { fallback: "rise", dur: 14, from: 0 });
 
   return (
     <>
@@ -60,7 +64,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             const x = n === 1 ? left : left + (span * i) / (n - 1);
             const arrived = frame >= cues[i];
             const isCur = i === cur && data.hlCurrent;
-            const p = arrived ? easeOutBack(prog(frame, cues[i], 12)) : 0;
+            // 节点原生是 easeOutBack 弹出（半径长大）→ rise 的 p 与之一致；节点钉在轨道上，不额外加位移
+            const en = enterAt(frame, cues[i], { fallback: "rise", dur: 12, seed: i });
+            const p = arrived ? en.p : 0;
             const col = isCur ? t.accent : arrived ? t.primary : t.dim;
             return (
               <g key={i}>
@@ -76,14 +82,16 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const x = n === 1 ? left : left + (span * i) / (n - 1);
           const c = cues[i];
           if (frame < c) return null;
-          const p = easeOutBack(prog(frame, c, 14));
+          // 原生：卡片从上方 -26px 落下并回弹到位 → drop 的 p 同为 easeOutBack，dist 把 150px 折成原生 26px
+          const ec = enterAt(frame, c, { fallback: "drop", dur: 14, dist: 26 / 150, seed: i });
+          const p = ec.p;
           const isCur = i === cur && data.hlCurrent;
           const passed = i < cur;
           const col = isCur ? t.accent : passed ? t.primary : t.dim;
           const cw = full ? Math.min(300, span / n - 16) : Math.min(190, span / n - 8);
           const ic = e.icon ?? guessIcon(e.title) ?? "clock";
           return (
-            <div key={i} style={{ position: "absolute", left: x - cw / 2, top: railY - (full ? 150 : 84) - (full ? 130 : 74), width: cw, height: full ? 130 : 74, transform: `translateY(${(1 - p) * -26}px) scale(${p * (isCur ? 1.06 : 1)})`, transformOrigin: "50% 100%", opacity: clamp(p * 1.3) * (passed ? 0.72 : 1), borderRadius: 14, background: isCur ? alpha(t.accent, 0.12) : alpha(t.bg2, 0.92), border: `2.5px solid ${col}`, boxShadow: isCur ? `0 0 26px ${alpha(t.accent, 0.5)}` : undefined, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 6 : 3, padding: full ? 12 : 6 }}>
+            <div key={i} style={{ position: "absolute", left: x - cw / 2, top: railY - (full ? 150 : 84) - (full ? 130 : 74), width: cw, height: full ? 130 : 74, transform: `translate(${ec.dx}px, ${ec.dy}px) scale(${p * (isCur ? 1.06 : 1) * ec.scale})`, clipPath: ec.clip, transformOrigin: "50% 100%", opacity: clamp(p * 1.3) * (passed ? 0.72 : 1), borderRadius: 14, background: isCur ? alpha(t.accent, 0.12) : alpha(t.bg2, 0.92), border: `2.5px solid ${col}`, boxShadow: isCur ? `0 0 26px ${alpha(t.accent, 0.5)}` : undefined, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 6 : 3, padding: full ? 12 : 6 }}>
               <Icon name={ic} size={full ? 32 : 18} color={col} />
               <div style={{ fontFamily: t.font.mono, fontWeight: 900, fontSize: full ? 20 : 12, color: col, whiteSpace: "nowrap" }}>{e.time}</div>
               <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(e.title, cw - 20, full ? 26 : 14, 11), color: t.text, whiteSpace: "nowrap" }}>{e.title}</div>
@@ -93,7 +101,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         })}
         {/* outcome banner under the rail */}
         {data.outcome && frame >= outcomeAt && (
-          <div style={{ position: "absolute", left: W / 2, top: railY + (full ? 70 : 38), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, outcomeAt, 14))})`, display: "flex", alignItems: "center", gap: full ? 14 : 7, padding: `${full ? 10 : 5}px ${full ? 28 : 14}px`, borderRadius: 30, background: alpha(t.gold, 0.14), border: `3px solid ${t.gold}`, boxShadow: `0 0 30px ${alpha(t.gold, 0.5)}` }}>
+          <div style={{ position: "absolute", left: W / 2, top: railY + (full ? 70 : 38), transform: `translateX(-50%) translate(${eOut.dx}px, ${eOut.dy}px) scale(${eOut.scale})`, clipPath: eOut.clip, opacity: eOut.opacity, display: "flex", alignItems: "center", gap: full ? 14 : 7, padding: `${full ? 10 : 5}px ${full ? 28 : 14}px`, borderRadius: 30, background: alpha(t.gold, 0.14), border: `3px solid ${t.gold}`, boxShadow: `0 0 30px ${alpha(t.gold, 0.5)}` }}>
             <Icon name="award" size={full ? 32 : 17} color={t.gold} />
             <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.outcome, W * 0.7, full ? 40 : 20, 13), color: t.gold, whiteSpace: "nowrap" }}>{data.outcome}</span>
           </div>

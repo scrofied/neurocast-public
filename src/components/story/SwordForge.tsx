@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, prog, rng } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, prog, rng } from "../../lib/anim";
 import { useBox } from "../../lib/box";
+import { useEnter } from "../../lib/enter";
 import { cueOr } from "../../lib/cue";
 import { IconPaths } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
@@ -35,8 +36,9 @@ const Figure: React.FC<{ x: number; y: number; s: number; color: string; step: n
   );
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const forgeEnd = Math.min(62, dur * 0.3);
   const labelAt = cueOr(data.labelAt, forgeEnd - 10);
@@ -58,9 +60,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   }, [seed, forgeEnd]);
   const r2 = useMemo(() => rng(seed + 11), [seed]);
   const walkers = useMemo(() => new Array(data.crowd).fill(0).map((_, i) => ({ speed: 8.5 + r2() * 2.5, gap: 250 + r2() * 90, s: 0.9 + r2() * 0.2, i })), [data.crowd, r2]);
-  const label = easeOutBack(prog(frame, labelAt, 16));
-  const ask = easeOutBack(prog(frame, askAt, 16));
-  const you = easeOut(prog(frame, 6, 18));
+  // 卖点标签/气泡原生是回弹放大淡入（从 0 起），用 rise + from:0 保住基线
+  const label = enterAt(frame, labelAt, { fallback: "rise", dur: 16, from: 0 });
+  const ask = enterAt(frame, askAt, { fallback: "rise", dur: 16, from: 0 });
+  const you = enterAt(frame, 6, { fallback: "rise", dur: 18 });
   const youX = width * 0.33;
   return (
     <>
@@ -127,7 +130,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           })}
         </g>
         {/* you, proudly holding the product */}
-        <Figure x={youX} y={ground} s={1.25} color={alpha(t.primary, 0.9)} step={0} opacity={you} />
+        <Figure x={youX} y={ground} s={1.25} color={alpha(t.primary, 0.9)} step={0} opacity={you.opacity} />
         {/* passers-by walk right to left and do not stop */}
         {frame >= streetAt &&
           walkers.map((w) => {
@@ -138,7 +141,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
               <g key={w.i}>
                 <Figure x={x} y={ground} s={w.s} color={alpha(t.dim, 0.75)} step={(frame - streetAt) * 0.22 + w.i} />
                 {frame > askAt + 8 && near && (
-                  <g transform={`translate(${x},${ground - 210 * w.s})`} opacity={easeOut(prog(frame, askAt + 8 + w.i * 4, 10))}>
+                  <g transform={`translate(${x},${ground - 210 * w.s})`} opacity={enterAt(frame, askAt + 8 + w.i * 4, { fallback: "rise", dur: 10, seed: w.i }).opacity}>
                     <rect x={-44} y={-42} width={88} height={48} rx={24} fill={alpha(t.bg2, 0.95)} stroke={alpha(t.dim, 0.6)} />
                     <text x={0} y={-10} textAnchor="middle" fill={t.text} fontFamily={t.font.body} fontSize={26} fontWeight={700}>
                       {data.reply}
@@ -155,9 +158,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           position: "absolute",
           right: width - sx + 150,
           top: sy - 360,
-          transform: `scale(${label}) rotate(-4deg)`,
+          transform: `translate(${label.dx}px, ${label.dy}px) scale(${label.scale}) rotate(-4deg)`,
           transformOrigin: "right center",
-          opacity: clamp(label),
+          opacity: label.opacity,
+          clipPath: label.clip,
           padding: "10px 24px",
           border: `2px solid ${t.gold}`,
           borderRadius: 14,
@@ -181,8 +185,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             position: "absolute",
             right: width - youX - 40,
             top: ground - 330,
-            transform: `scale(${ask})`,
+            transform: `translate(${ask.dx}px, ${ask.dy}px) scale(${ask.scale})`,
             transformOrigin: "right bottom",
+            opacity: ask.opacity,
+            clipPath: ask.clip,
             maxWidth: 620,
             padding: "18px 30px",
             borderRadius: 28,
@@ -217,6 +223,7 @@ export const SwordForge: CompDef<D> = {
   minSec: 4,
   maxSec: 10,
   tags: ["闭门造车", "自嗨", "没人要", "先做产品", "推销", "需求错位"],
+  motion: { kind: "剑/产品在火花中自下锻出，路人成群走过，卖点标签与推销气泡弹出", energy: 2 },
   desc: "火花中造出一个发光的产品（缺省是一把剑，`icon` 可换成文档/视频/工具/App 等任何东西）+ 金色卖点标签，路人从右往左走过、头顶冒“……”，你推销的气泡无人理会",
   use: "先埋头做、再去找人要，结果没人需要：自嗨写的深度文章、没人用的 App、没市场的产品、没人报名的课程",
   schema,

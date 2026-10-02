@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { easeOut, easeOutBack, noise1, prog, rng } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -18,6 +19,7 @@ const ICONS = ["◆", "▲", "●", "■", "✦", "⬢", "◈", "✚"];
 
 const C: React.FC<CompProps<D>> = ({ data, frame, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const agents = (data.agents && data.agents.length ? data.agents : ["检索", "规划", "编码", "审查", "执行"]).slice(0, 8);
   const n = agents.length;
@@ -35,7 +37,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, variant, seed }) => {
     for (let i = 0; i < n; i++) out.push([i, (i + 2) % n]);
     return out;
   }, [n]);
-  const coreP = easeOutBack(prog(frame, 2, 22));
+  // 核心圆与中心字原生是回弹长大/淡入；环绕、脉冲、能量包是持续动画，保持原生
+  const eCore = enterAt(frame, 2, { fallback: "rise", dur: 22, from: 0 });
   const cycle = 36;
   const active = Math.floor(frame / cycle) % n;
   const k = (frame % cycle) / cycle;
@@ -64,16 +67,19 @@ const C: React.FC<CompProps<D>> = ({ data, frame, variant, seed }) => {
           const y = cy + (p.y - cy) * go;
           return <circle cx={x} cy={y} r={7} fill={k < 0.5 ? t.primary : t.accent} filter="url(#ag)" />;
         })()}
-        <circle cx={cx} cy={cy} r={100 * coreP} fill={alpha(t.primary, 0.16)} stroke={t.primary} strokeWidth={3} filter="url(#ag)" />
+        <circle cx={cx} cy={cy} r={100 * eCore.p} fill={alpha(t.primary, 0.16)} stroke={t.primary} strokeWidth={3} filter="url(#ag)" />
         {[0, 1, 2].map((i) => (
           <circle key={i} cx={cx} cy={cy} r={100 + ((frame * 1.4 + i * 40) % 120)} fill="none" stroke={t.primary} strokeOpacity={0.5 * (1 - ((frame * 1.4 + i * 40) % 120) / 120)} strokeWidth={2} />
         ))}
       </svg>
-      <div style={{ position: "absolute", left: cx - 150, top: cy - 30, width: 300, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: 44, color: t.text, opacity: coreP, textShadow: `0 0 24px ${t.primary}` }}>
+      {/* 核心圆的半径是 100*eCore.p 长大的（入场即生长），不叠加位移；中心字位置固定，位移接在这里 */}
+      <div style={{ position: "absolute", left: cx - 150, top: cy - 30, width: 300, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: 44, color: t.text, opacity: eCore.p, transform: `translate(${eCore.dx}px, ${eCore.dy}px)`, clipPath: eCore.clip, textShadow: `0 0 24px ${t.primary}` }}>
         {data.center ?? "AGENT"}
       </div>
       {pos.map((p, i) => {
-        const on = easeOutBack(prog(frame, 8 + i * 5, 18));
+        // Agent 节点卡原生逐个回弹弹出（0→1）；轨道位移/脉冲是持续动画，保持原生
+        // 卡片的 left/top 来自轨道（不是 e.p 插值），所以入场位移接在 transform 末尾
+        const e = enterAt(frame, 8 + i * 5, { fallback: "rise", dur: 18, from: 0, seed: i });
         const isActive = i === active;
         const pulse = isActive ? Math.sin(k * Math.PI) : 0;
         return (
@@ -89,7 +95,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, variant, seed }) => {
               background: `linear-gradient(135deg, ${alpha(isActive ? t.accent : t.primary, 0.18 + pulse * 0.2)}, ${t.glass})`,
               border: `1.5px solid ${alpha(isActive ? t.accent : t.primary, 0.5 + pulse * 0.5)}`,
               boxShadow: `0 0 ${20 + pulse * 40}px ${alpha(isActive ? t.accent : t.primary, 0.25 + pulse * 0.4)}`,
-              transform: `scale(${on * (1 + pulse * 0.08)})`,
+              transform: `scale(${e.scale * (1 + pulse * 0.08)}) translate(${e.dx}px, ${e.dy}px)`,
+              clipPath: e.clip,
               display: "flex",
               alignItems: "center",
               gap: 12,
@@ -119,6 +126,7 @@ export const AgentSwarm: CompDef<D> = {
   minSec: 4,
   maxSec: 10,
   tags: ["Agent", "智能体", "协作", "分工", "多个", "团队", "调度", "工作流", "Skill", "插件", "工具"],
+  motion: { kind: "核心回弹长大，节点逐个弹入并沿轨道环绕，能量包往返传递", energy: 2 },
   desc: "中心核心 + 环绕的节点（Agent/工具/平台），能量包在核心和节点间往返",
   use: "多个 Agent/工具协作分工；一个东西接入多个平台（center=Skill，agents=平台名）",
   schema,

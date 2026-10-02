@@ -1,7 +1,8 @@
 import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
-import { clamp, easeInOut, easeOut, easeOutBack, prog } from "../../lib/anim";
+import { easeInOut, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, GlowDefs, Title } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -11,10 +12,13 @@ type D = z.infer<typeof schema>;
 
 const C: React.FC<CompProps<D>> = ({ data, frame, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const cx = width / 2;
   const cy = height / 2;
-  const numP = easeOutBack(prog(frame, 0, 20));
+  // 大号编号原生是回弹放大淡入（从 0 起）；圆环/底线是生长动画（主体轨迹），不接
+  const numP = enterAt(frame, 0, { fallback: "rise", dur: 20, from: 0 });
+  const tagP = enterAt(frame, 8, { fallback: "rise", dur: 16 });
   const lineP = easeInOut(prog(frame, 6, 24));
   const num = String(data.index + 1).padStart(2, "0");
   const fs = fitFont(data.title, 1400, 92);
@@ -36,10 +40,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, variant }) => {
           </>
         )}
       </svg>
-      <div style={{ position: "absolute", left: 0, right: 0, top: variant === 0 ? cy - 210 : cy - 260, textAlign: "center", fontFamily: t.font.mono, fontWeight: 700, fontSize: 220, color: "transparent", WebkitTextStroke: `2px ${t.primary}`, opacity: clamp(numP), transform: `scale(${numP})`, textShadow: `0 0 50px ${alpha(t.primary, 0.5)}` }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: variant === 0 ? cy - 210 : cy - 260, textAlign: "center", fontFamily: t.font.mono, fontWeight: 700, fontSize: 220, color: "transparent", WebkitTextStroke: `2px ${t.primary}`, opacity: numP.opacity, transform: `translate(${numP.dx}px, ${numP.dy}px) scale(${numP.scale})`, clipPath: numP.clip, textShadow: `0 0 50px ${alpha(t.primary, 0.5)}` }}>
         {num}
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, top: cy + 110, textAlign: "center", fontFamily: t.font.mono, fontSize: 22, letterSpacing: 10, color: t.dim, opacity: easeOut(prog(frame, 8, 16)) }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: cy + 110, textAlign: "center", fontFamily: t.font.mono, fontSize: 22, letterSpacing: 10, color: t.dim, opacity: tagP.opacity }}>
         {`CHAPTER ${num} / ${String(data.total).padStart(2, "0")}`}
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, top: cy + 150, display: "flex", justifyContent: "center" }}>
@@ -57,6 +61,7 @@ export const ChapterCard: CompDef<D> = {
   minSec: 2,
   maxSec: 3,
   tags: [],
+  motion: { kind: "章节编号回弹砸入，圆环/刻度线从中心生长", energy: 2 },
   desc: "大号章节编号 + 章节标题的过场卡",
   use: "无配音估算模式的章节过场（有配音时章节由顶部 HUD 闪现，不占时长，一般不用它）",
   schema,

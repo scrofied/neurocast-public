@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { clamp, easeInOut, easeOut, easeOutBack, noise1, prog, rng } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -12,6 +13,7 @@ type D = z.infer<typeof schema>;
 // documents fly into a 3D vault, get sliced into vector chips, a query beam retrieves the relevant ones
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const docs = (data.docs && data.docs.length ? data.docs : ["产品手册.pdf", "会议纪要.docx", "客户FAQ.md", "合同模板.pdf", "培训课件.pptx"]).slice(0, 8);
   const cx = width / 2 + 120;
@@ -30,6 +32,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const gx = cx - (cols * cw) / 2;
   const gy = cy - (rows * ch) / 2;
   const rotY = -18 + noise1(frame / 90, seed) * 4;
+  const eQuery = enterAt(frame, flyEnd + 8, { fallback: "rise", dur: 8 });
+  const eMatch = enterAt(frame, flyEnd + 30, { fallback: "rise", dur: 20, seed: 7 });
 
   return (
     <>
@@ -88,7 +92,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
               fontWeight: 700,
               color: t.text,
               whiteSpace: "nowrap",
-              opacity: easeOut(prog(frame, 2 + i * 6, 8)) * (1 - clamp((p - 0.85) * 7)),
+              // 文档原生是快速淡入后起飞（位移轨迹是主体运动，不动）；淡入这一段交给入场层
+              opacity: enterAt(frame, 2 + i * 6, { fallback: "rise", dur: 8, seed: i }).opacity * (1 - clamp((p - 0.85) * 7)),
               transform: `translate(-50%,-50%) scale(${1 - p * 0.6}) rotate(${p * 20 * (i % 2 ? 1 : -1)}deg)`,
               boxShadow: `0 0 20px ${alpha(t.primary, 0.3)}`,
             }}
@@ -102,11 +107,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
         {q > 0 && <line x1={cx} y1={150} x2={cx} y2={150 + (cy - 150) * easeOut(q)} stroke={t.accent} strokeWidth={4} filter="url(#kv)" />}
       </svg>
       {q > 0 && (
-        <div style={{ position: "absolute", left: cx - 300, width: 600, top: 150 - 40, textAlign: "center", fontFamily: t.font.mono, fontSize: 28, color: t.accent, opacity: clamp(q * 3), textShadow: `0 0 16px ${t.accent}` }}>
+        <div style={{ position: "absolute", left: cx - 300, width: 600, top: 150 - 40, textAlign: "center", fontFamily: t.font.mono, fontSize: 28, color: t.accent, opacity: eQuery.opacity, transform: `translate(${eQuery.dx}px, ${eQuery.dy}px)`, clipPath: eQuery.clip, textShadow: `0 0 16px ${t.accent}` }}>
           {`? ${data.query ?? "退款流程是什么"}`}
         </div>
       )}
-      <div style={{ position: "absolute", right: 110, bottom: 130, fontFamily: t.font.mono, fontSize: 20, color: t.dim, letterSpacing: 3, opacity: found }}>
+      <div style={{ position: "absolute", right: 110, bottom: 130, fontFamily: t.font.mono, fontSize: 20, color: t.dim, letterSpacing: 3, opacity: eMatch.opacity, transform: `translate(${eMatch.dx}px, ${eMatch.dy}px)`, clipPath: eMatch.clip }}>
         {`MATCHED ${cells.filter((c) => c.hot).length} CHUNKS · ${(0.9 + found * 0.08).toFixed(2)} SIM`}
       </div>
       <Headline kicker={data.kicker ?? "KNOWLEDGE BASE"} title={data.title} frame={frame} />
@@ -122,6 +127,7 @@ export const KnowledgeVault: CompDef<D> = {
   minSec: 5,
   maxSec: 10,
   tags: ["知识库", "文档", "资料", "检索", "RAG", "向量", "上传", "记忆"],
+  motion: { kind: "3D 向量墙逐块淡起、文档一张张飞进库、检索光束落下点亮相关块", energy: 2 },
   desc: "文档方块堆成知识库墙，提问时相关文档被点亮检索出来",
   use: "知识库、RAG、检索、把资料喂给 AI",
   schema,

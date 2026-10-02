@@ -6,6 +6,7 @@ import { cueOr, listCues, typed } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading, textEm } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -24,8 +25,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const cmds = data.commands;
   const hasCmd = cmds.length > 0;
@@ -59,11 +61,15 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     });
   }, [data.chips, seed, nb, px, pw, py]);
   const purged = data.chips.filter((c) => c.kind === "noise").length;
+  // 面板/分类槽/命令面板：pass2 接上入场位移（dx/dy）；rise 下仅 22px 上浮，分镜写 slide 才真的推入。chips 自身轨迹（fall/q/drop）保持原样
+  const ePool = enterAt(frame, 0, { fallback: "rise", dur: 12 });
+  const eBin = enterAt(frame, sortAt - 6, { fallback: "rise", dur: 12 });
+  const eCmd = enterAt(frame, (cCues[0] ?? 0) - 10, { fallback: "rise", dur: 12 });
   return (
     <>
       <Heading kicker={data.kicker ?? "DATA CLEANING"} title={data.title} frame={frame} width={width} />
       {/* pool */}
-      <div style={{ position: "absolute", left: px, top: py, width: pw, height: ph, borderRadius: 26, background: `linear-gradient(170deg, ${alpha(t.bg2, 0.9)}, ${alpha(t.bg, 0.85)})`, border: `1.5px solid ${alpha(t.primary, 0.35)}`, boxShadow: `inset 0 0 60px ${alpha(t.primary, 0.06)}`, opacity: easeOut(prog(frame, 0, 12)) }}>
+      <div style={{ position: "absolute", left: px, top: py, width: pw, height: ph, borderRadius: 26, background: `linear-gradient(170deg, ${alpha(t.bg2, 0.9)}, ${alpha(t.bg, 0.85)})`, border: `1.5px solid ${alpha(t.primary, 0.35)}`, boxShadow: `inset 0 0 60px ${alpha(t.primary, 0.06)}`, transform: `translate(${ePool.dx}px, ${ePool.dy}px)`, opacity: ePool.opacity }}>
         <div style={{ position: "absolute", left: 28, top: 20, display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.body, fontWeight: 800, fontSize: 28, color: t.text }}>
           <Icon name="chat" size={28} color={t.primary} />
           {data.pool}
@@ -71,7 +77,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         </div>
         {frame >= sortAt - 6 &&
           bins.map((b, i) => (
-            <div key={i} style={{ position: "absolute", left: 30 + i * (binW + 20), top: binTop - py, width: binW, height: 230, borderRadius: 18, border: `2px dashed ${alpha(t.primary, 0.45)}`, background: alpha(t.primary, 0.05), opacity: easeOut(prog(frame, sortAt - 6, 12)) }}>
+            <div key={i} style={{ position: "absolute", left: 30 + i * (binW + 20), top: binTop - py, width: binW, height: 230, borderRadius: 18, border: `2px dashed ${alpha(t.primary, 0.45)}`, background: alpha(t.primary, 0.05), transform: `translate(${eBin.dx}px, ${eBin.dy}px)`, opacity: eBin.opacity }}>
               <div style={{ position: "absolute", left: 0, right: 0, bottom: 12, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(b, binW - 30, 30, 18), color: t.primary }}>{b}</div>
             </div>
           ))}
@@ -120,7 +126,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
       })}
       {/* command panel */}
       {hasCmd && (
-        <div style={{ position: "absolute", left: px + pw + 50, top: py, width: width - (px + pw + 50) - 110, height: ph, borderRadius: 26, background: alpha(t.bg, 0.8), border: `1.5px solid ${alpha(t.accent, 0.45)}`, padding: "26px 30px", opacity: easeOut(prog(frame, (cCues[0] ?? 0) - 10, 12)) }}>
+        <div style={{ position: "absolute", left: px + pw + 50, top: py, width: width - (px + pw + 50) - 110, height: ph, borderRadius: 26, background: alpha(t.bg, 0.8), border: `1.5px solid ${alpha(t.accent, 0.45)}`, padding: "26px 30px", transform: `translate(${eCmd.dx}px, ${eCmd.dy}px)`, opacity: eCmd.opacity }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.mono, fontWeight: 700, fontSize: 24, letterSpacing: 4, color: t.accent }}>
             <Icon name="terminal" size={26} color={t.accent} />
             死命令
@@ -155,6 +161,7 @@ export const DataSieve: CompDef<D> = {
   minSec: 4,
   maxSec: 16,
   tags: ["清洗", "去重", "剔掉", "归类", "筛选", "整理"],
+  motion: { kind: "标签雨砸进池子、噪音被划掉坠出、真实提问滑进分类槽、TOP 发金光", energy: 3 },
   desc: "一大坨评论标签砸进“评论池”；噪音（哈哈/表情包/玩梗）被划掉掉出去，真实提问飞进分类槽，每类第一名发金光打 TOP；右侧同步打出分条“死命令”",
   use: "把一堆杂乱的东西去噪、归类、挑出最好的：清洗评论、筛简历、整理笔记、分拣客户线索（pool / chips / bins 全可改）",
   schema,

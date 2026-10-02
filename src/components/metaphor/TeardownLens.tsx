@@ -7,6 +7,7 @@ import { cueOr } from "../../lib/cue";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -29,8 +30,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.layers.length;
@@ -47,7 +49,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const sh = hitShake(frame, [expl, coreAt], full ? 10 : 5, 12, seed);
   // skeleton glow once everything is peeled
   const bare = frame >= cues[n - 1] + 14;
-  const coreK = easeOutBack(prog(frame, coreAt, 16));
+  // 骨架/内核文字在 coreAt 出现：原生是 easeOutBack 从 0 弹入（rise 等价）
+  const eCore = enterAt(frame, coreAt, { fallback: "rise", dur: 16, from: 0 });
   // a scan line sweeps down as layers come off
   const scanY = lerp(cy - boxH, cy + boxH, clamp((frame - expl) / Math.max(20, cues[n - 1] - expl)));
 
@@ -96,7 +99,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           )}
           {/* core skeleton */}
           {bare && (
-            <g opacity={clamp(coreK)}>
+            <g opacity={clamp(eCore.p)}>
               {[-1, 1].map((s) => (
                 <line key={s} x1={cx + s * boxW * 0.22} y1={cy - boxH * 0.4} x2={cx + s * boxW * 0.22} y2={cy + boxH * 0.4} stroke={t.gold} strokeWidth={5} style={{ filter: `drop-shadow(0 0 14px ${t.gold})` }} />
               ))}
@@ -113,14 +116,16 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         {data.layers.map((l, i) => {
           const c = cues[i];
           if (frame < c) return null;
-          const p = easeOutBack(prog(frame, c, 14));
+          // 标签原生从右侧 60px 处弹入 + scale 0→1：用 e.p 保留这段位移，e.scale 接管缩放
+          const el = enterAt(frame, c, { fallback: "rise", dur: 14, from: 0 });
+          const p = el.p;
           const rowH = full ? 84 : 46;
           const stack = H * (full ? 0.26 : 0.16) + i * (rowH + 12);
           const lx = W * (full ? 0.72 : 0.5);
           const col = [t.primary, t.secondary, t.accent, t.gold][i % 4];
           const ic = l.icon ?? guessIcon(l.name);
           return (
-            <div key={i} style={{ position: "absolute", left: lx, top: stack, transform: `translateX(${(1 - p) * 60}px) scale(${p})`, transformOrigin: "0 50%", width: W * (full ? 0.24 : 0.46), height: rowH, borderRadius: 14, background: alpha(t.bg, 0.86), border: `2px solid ${col}`, boxShadow: `0 0 20px ${alpha(col, 0.4)}`, display: "flex", alignItems: "center", gap: full ? 14 : 8, padding: `0 ${full ? 20 : 10}px` }}>
+            <div key={i} style={{ position: "absolute", left: lx, top: stack, transform: `translateX(${(1 - p) * 60}px) scale(${el.scale})`, transformOrigin: "0 50%", opacity: el.opacity, width: W * (full ? 0.24 : 0.46), height: rowH, borderRadius: 14, background: alpha(t.bg, 0.86), border: `2px solid ${col}`, boxShadow: `0 0 20px ${alpha(col, 0.4)}`, display: "flex", alignItems: "center", gap: full ? 14 : 8, padding: `0 ${full ? 20 : 10}px` }}>
               {ic && <Icon name={ic} size={rowH * 0.44} color={col} />}
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(l.name, W * (full ? 0.16 : 0.3), rowH * 0.4, 12), color: t.text, whiteSpace: "nowrap" }}>{l.name}</div>
@@ -130,7 +135,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           );
         })}
         {data.core && frame >= coreAt && (
-          <div style={{ position: "absolute", left: cx, top: cy + boxH * 0.62, transform: `translate(-50%, 0) scale(${coreK})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.core, W * 0.3, full ? 52 : 26, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.7)}, 0 3px 0 #000` }}>{data.core}</div>
+          <div style={{ position: "absolute", left: cx, top: cy + boxH * 0.62, transform: `translate(-50%, 0) translate(${eCore.dx}px, ${eCore.dy}px) scale(${eCore.scale})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.core, W * 0.3, full ? 52 : 26, 14), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.7)}, 0 3px 0 #000` }}>{data.core}</div>
         )}
       </div>
       <Sfx name="whoosh" at={expl} volume={0.3} />

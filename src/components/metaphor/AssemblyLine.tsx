@@ -2,6 +2,7 @@ import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
 import { clamp, easeInOut, easeOut, prog } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { GlowDefs, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -10,8 +11,9 @@ const schema = z.object({ title: z.string().optional(), kicker: z.string().optio
 type D = z.infer<typeof schema>;
 
 // conveyor belt with robotic arms stamping each item as it passes
-const C: React.FC<CompProps<D>> = ({ data, frame }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const st = data.stations ?? ["理解", "生成", "校对"];
   const n = st.length;
@@ -26,6 +28,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
     const stage = stX.filter((sx) => x > sx).length;
     return { x, stage, k };
   });
+  // IN/OUT 读数原生是淡入（easeOut prog），接进统一入场语法
+  const eRead = enterAt(frame, 8, { fallback: "rise", dur: 16 });
   return (
     <>
       <svg width={width} height={height} style={{ position: "absolute", inset: 0 }}>
@@ -87,8 +91,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
           </div>
         );
       })}
-      <div style={{ position: "absolute", left: L, top: beltY + 60, fontFamily: t.font.mono, fontSize: 22, color: t.dim, letterSpacing: 3, opacity: easeOut(prog(frame, 8, 16)) }}>{`IN · ${data.input ?? "原始需求"}`}</div>
-      <div style={{ position: "absolute", right: 140, top: beltY + 60, fontFamily: t.font.mono, fontSize: 22, color: t.accent, letterSpacing: 3, opacity: easeOut(prog(frame, 8, 16)) }}>{`OUT · ${data.output ?? "成品"} · ${Math.floor(frame / 10)} pcs`}</div>
+      {/* IN/OUT 读数位置固定（不靠 e.p 插值），入场位移/擦除接在这里 */}
+      <div style={{ position: "absolute", left: L, top: beltY + 60, fontFamily: t.font.mono, fontSize: 22, color: t.dim, letterSpacing: 3, opacity: eRead.opacity, transform: `translate(${eRead.dx}px, ${eRead.dy}px)`, clipPath: eRead.clip }}>{`IN · ${data.input ?? "原始需求"}`}</div>
+      <div style={{ position: "absolute", right: 140, top: beltY + 60, fontFamily: t.font.mono, fontSize: 22, color: t.accent, letterSpacing: 3, opacity: eRead.opacity, transform: `translate(${eRead.dx}px, ${eRead.dy}px)`, clipPath: eRead.clip }}>{`OUT · ${data.output ?? "成品"} · ${Math.floor(frame / 10)} pcs`}</div>
       <Headline kicker={data.kicker ?? "AUTOMATION"} title={data.title} frame={frame} />
     </>
   );
@@ -102,6 +107,7 @@ export const AssemblyLine: CompDef<D> = {
   minSec: 4,
   maxSec: 10,
   tags: ["自动化", "批量", "流水线", "自动", "一键", "规模化", "量产", "工厂"],
+  motion: { kind: "传送带持续滚动送料，机械臂经过工位时下压盖章，工件逐站变形", energy: 2 },
   desc: "传送带上的原料依次经过几个工位，被加工成成品",
   use: "自动化流水线、批量生产、一键量产",
   schema,

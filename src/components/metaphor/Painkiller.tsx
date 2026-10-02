@@ -1,12 +1,13 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeIn, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeIn, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -22,8 +23,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const nL = data.mustSolve.length;
@@ -38,6 +40,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const panW = full ? W * 0.36 : W * 0.44;
   const painXs = Array.from({ length: nL }, (_, i) => W * (full ? 0.27 : 0.26));
   const painYs = Array.from({ length: nL }, (_, i) => top + (panH * (i + 0.5)) / nL);
+  // 两侧标题淡入 / 结论从 0 弹出 = 元素入场；药片下落、痛点脉动、积灰结网是主体/持续动画不动
+  const eLabL = enterAt(frame, 4, { fallback: "rise", dur: 14 });
+  const eLabR = enterAt(frame, 4, { fallback: "rise", dur: 14 });
+  const eVerdict = enterAt(frame, verdictAt, { fallback: "rise", dur: 14, from: 0 });
 
   return (
     <>
@@ -47,20 +53,20 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         <div style={{ position: "absolute", left: splitX - 1, top: top - (full ? 30 : 16), width: 2, height: panH + (full ? 60 : 32), background: alpha(t.text, 0.22) }} />
 
         {/* ── LEFT: red, throbbing pain ── */}
-        <div style={{ position: "absolute", left: 0, top: top - (full ? 66 : 36), width: splitX, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 40 : 20, color: t.bad, opacity: easeOut(prog(frame, 4, 14)), textShadow: `0 0 18px ${alpha(t.bad, 0.6)}` }}>
+        <div style={{ position: "absolute", left: 0, top: top - (full ? 66 : 36), width: splitX, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 40 : 20, color: t.bad, opacity: eLabL.opacity, textShadow: `0 0 18px ${alpha(t.bad, 0.6)}` }}>
           {data.painLabel ?? "必须马上解决"}
         </div>
         {data.mustSolve.map((p, i) => {
           const c = cueOr(undefined, 8 + i * 10);
           if (frame < c) return null;
-          const p0 = easeOutBack(prog(frame, c, 12));
+          const ePain = enterAt(frame, c, { fallback: "rise", dur: 12, from: 0, seed: i });
           // the pain throbs harder until a pill lands on it
           const cured = frame >= pillAt + 10 + i * 4;
           const cureK = cured ? clamp((frame - pillAt - 10 - i * 4) / 8) : 0;
           const beat = 1 + (cured ? 0 : 0.09 * Math.sin((frame - c) * 0.55));
           const fs = fitFont(p, W * (full ? 0.3 : 0.36), full ? 40 : 19, 11);
           return (
-            <div key={i} style={{ position: "absolute", left: painXs[i], top: painYs[i], transform: `translate(-50%,-50%) scale(${p0 * beat * (1 - cureK * 0.12)})`, display: "flex", alignItems: "center", gap: full ? 12 : 6, padding: `${full ? 10 : 5}px ${full ? 24 : 12}px`, borderRadius: 14, background: alpha(t.bad, 0.16 * (1 - cureK)), border: `3px solid ${alpha(t.bad, 0.85 * (1 - cureK) + 0.15)}`, boxShadow: `0 0 ${28 * (1 - cureK)}px ${alpha(t.bad, 0.6 * (1 - cureK))}`, opacity: 1 - cureK * 0.45 }}>
+            <div key={i} style={{ position: "absolute", left: painXs[i], top: painYs[i], transform: `translate(-50%,-50%) translate(${ePain.dx}px, ${ePain.dy}px) scale(${ePain.scale * beat * (1 - cureK * 0.12)})`, display: "flex", alignItems: "center", gap: full ? 12 : 6, padding: `${full ? 10 : 5}px ${full ? 24 : 12}px`, borderRadius: 14, background: alpha(t.bad, 0.16 * (1 - cureK)), border: `3px solid ${alpha(t.bad, 0.85 * (1 - cureK) + 0.15)}`, boxShadow: `0 0 ${28 * (1 - cureK)}px ${alpha(t.bad, 0.6 * (1 - cureK))}`, opacity: 1 - cureK * 0.45 }}>
               <Icon name="fire" size={fs * 0.9} color={t.bad} />
               <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fs, color: t.text, whiteSpace: "nowrap", textDecoration: cured ? "line-through" : undefined }}>{p}</span>
             </div>
@@ -80,20 +86,20 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         )}
 
         {/* ── RIGHT: grey, gathering dust ── */}
-        <div style={{ position: "absolute", left: splitX, top: top - (full ? 66 : 36), width: splitX, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 40 : 20, color: t.dim, opacity: easeOut(prog(frame, 4, 14)) }}>
+        <div style={{ position: "absolute", left: splitX, top: top - (full ? 66 : 36), width: splitX, textAlign: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 40 : 20, color: t.dim, opacity: eLabR.opacity }}>
           可有可无
         </div>
         {data.niceToHave.map((p, i) => {
           const c = cueOr(undefined, 12 + i * 12);
           if (frame < c) return null;
-          const p0 = easeOutBack(prog(frame, c, 12));
+          const eNice = enterAt(frame, c, { fallback: "rise", dur: 12, from: 0, seed: i });
           // dust accumulates on top of it
           const dust = clamp((frame - c) / 60);
           const fs = fitFont(p, W * (full ? 0.3 : 0.36), full ? 36 : 18, 10);
           const y = top + (panH * (i + 0.5)) / nR;
           return (
             <React.Fragment key={i}>
-              <div style={{ position: "absolute", left: splitX + W * (full ? 0.23 : 0.22), top: y, transform: `translate(-50%,-50%) scale(${p0})`, display: "flex", alignItems: "center", gap: full ? 12 : 6, padding: `${full ? 10 : 5}px ${full ? 24 : 12}px`, borderRadius: 14, background: alpha(t.text, 0.05), border: `2px solid ${alpha(t.dim, 0.5)}`, opacity: 0.55 + 0.45 * (1 - dust * 0.5) }}>
+              <div style={{ position: "absolute", left: splitX + W * (full ? 0.23 : 0.22), top: y, transform: `translate(-50%,-50%) translate(${eNice.dx}px, ${eNice.dy}px) scale(${eNice.scale})`, display: "flex", alignItems: "center", gap: full ? 12 : 6, padding: `${full ? 10 : 5}px ${full ? 24 : 12}px`, borderRadius: 14, background: alpha(t.text, 0.05), border: `2px solid ${alpha(t.dim, 0.5)}`, opacity: 0.55 + 0.45 * (1 - dust * 0.5) }}>
                 <Icon name="box" size={fs * 0.9} color={t.dim} />
                 <span style={{ fontFamily: t.font.title, fontWeight: 800, fontSize: fs, color: t.dim, whiteSpace: "nowrap" }}>{p}</span>
                 {/* dust settles on the card itself */}
@@ -111,7 +117,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         })}
 
         {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: G + (full ? 20 : 10), textAlign: "center", transform: `scale(${easeOutBack(prog(frame, verdictAt, 14))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 62 : 30, 16), color: t.bad, whiteSpace: "nowrap", textShadow: `0 0 26px ${alpha(t.bad, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
+          <div style={{ position: "absolute", left: 0, right: 0, top: G + (full ? 20 : 10), textAlign: "center", transform: `translate(${eVerdict.dx}px, ${eVerdict.dy}px) scale(${eVerdict.scale})`, opacity: eVerdict.opacity, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.7, full ? 62 : 30, 16), color: t.bad, whiteSpace: "nowrap", textShadow: `0 0 26px ${alpha(t.bad, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
         )}
       </div>
       {data.mustSolve.map((_, i) => (

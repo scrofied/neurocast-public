@@ -6,6 +6,7 @@ import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -20,8 +21,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const surf = height * 0.5;
   const drop = cueOr(data.dropAt, 14);
@@ -41,7 +43,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     const r = rng(seed + 3);
     return new Array(26).fill(0).map(() => ({ born: r() * 1, dx: (r() - 0.5) * 300, sz: 4 + r() * 12, sp: 1.5 + r() * 2.5 }));
   }, [seed]);
-  const label = easeOut(prog(frame, sinkAt + 2, 18));
+  const eLabel = enterAt(frame, sinkAt + 2, { fallback: "rise", dur: 18, dist: 40 / 22 });
   const wavePath = (amp: number, ph: number, k: number) => {
     let d = `M0,${surf}`;
     for (let x = 0; x <= width; x += 40) {
@@ -117,9 +119,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             return <circle key={i} cx={bx} cy={by} r={b.sz * 0.5} fill="none" stroke={alpha(t.text, 0.55)} strokeWidth={1.5} />;
           })}
       </svg>
-      <div style={{ position: "absolute", left: 0, right: 0, top: surf - 330, textAlign: "center", opacity: label }}>
+      <div style={{ position: "absolute", left: 0, right: 0, top: surf - 330, textAlign: "center", opacity: eLabel.opacity }}>
         {Array.from(data.label).map((c, i) => (
-          <span key={i} style={{ display: "inline-block", fontFamily: t.font.title, fontWeight: 900, fontSize: 130, color: t.text, letterSpacing: 18, transform: `translateY(${Math.sin(frame / 10 + i * 0.9) * 8 + (1 - label) * 40}px)`, textShadow: `0 0 40px ${alpha(t.primary, 0.6)}` }}>
+          <span key={i} style={{ display: "inline-block", fontFamily: t.font.title, fontWeight: 900, fontSize: 130, color: t.text, letterSpacing: 18, transform: `translateY(${Math.sin(frame / 10 + i * 0.9) * 8 + eLabel.dy}px)`, textShadow: `0 0 40px ${alpha(t.primary, 0.6)}` }}>
             {c}
           </span>
         ))}
@@ -138,6 +140,7 @@ export const Sink: CompDef<D> = {
   minSec: 2,
   maxSec: 8,
   tags: ["石沉大海", "没流量", "0播放", "没人看", "发出去没反应"],
+  motion: { kind: "视频卡片坠落砸水并下沉（涟漪水花气泡）+ 上方大字淡入上浮", energy: 2 },
   desc: "你的视频卡片从天而降砸进水面（涟漪+水花），然后慢慢沉底变暗，气泡上浮，卡片上“播放 0”，上方大字波动",
   use: "投入了却没有回响：发了没人看的视频、投了没回音的简历、上线没人用的功能、砸进去没水花的广告费（post / views / label 全可改）",
   schema,

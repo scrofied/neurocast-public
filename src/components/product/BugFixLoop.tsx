@@ -6,6 +6,7 @@ import { cueOr, typed } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 import { MiniApp, miniButton } from "./MiniApp";
@@ -38,8 +39,9 @@ const Key: React.FC<{ label: string; down: boolean }> = ({ label, down }) => {
   );
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width } = useBox();
   const failAt = cueOr(data.failAt, 20);
   const devAt = cueOr(data.devAt, failAt + 40);
@@ -56,7 +58,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const AW = 820;
   const AH = 620;
   const btn = miniButton(AW);
-  const win = easeOutBack(prog(frame, 0, 16));
+  // 原生是 0.92→1 回弹淡入，rise 等价顶替
+  const eWin = enterAt(frame, 0, { fallback: "rise", dur: 16, from: 0.92 });
   const cur = easeInOut(prog(frame, failAt - 16, 14));
   const curX = AX + AW * 0.75 + (AX + btn.x - (AX + AW * 0.75)) * cur;
   const curY = AY + AH * 0.9 + (AY + btn.y - (AY + AH * 0.9)) * cur;
@@ -64,12 +67,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const dv = easeOut(prog(frame, devAt, 12)) * (1 - easeInOut(prog(frame, replaceAt + 8, 10)));
   const PH = 300;
   const errHi = easeOut(prog(frame, errAt, 8));
+  const eGrab = enterAt(frame, errAt, { fallback: "rise", dur: 8 });
+  const eNo = enterAt(frame, failAt + 4, { fallback: "rise", dur: 10, from: 0 });
   // right: the AI chat
   const BX = 1010;
   const BY = 200;
   const BW = 800;
   const BH = 620;
-  const chatIn = easeOutBack(prog(frame, sendAt - 10, 14));
+  const eChat = enterAt(frame, sendAt - 10, { fallback: "rise", dur: 14, from: 0.9 });
   const fly = easeInOut(prog(frame, sendAt, 14));
   const errChip = data.errors[0].trim();
   const fromX = AX + 40;
@@ -79,17 +84,20 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const regen = prog(frame, regenAt, Math.max(12, replaceAt - regenAt - 4));
   // the whole file flies back into the tool
   const back = easeInOut(prog(frame, replaceAt + 6, 12));
+  const eDoc = enterAt(frame, regenAt, { fallback: "rise", dur: 12, from: 0 });
   const docX = BX + 40 + (AX + AW / 2 - 260 - (BX + 40)) * back;
   const docY = BY + 330 + (AY + AH / 2 - 90 - (BY + 330)) * back;
   const sel = frame >= replaceAt && frame < replaceAt + 10;
   const flash = frame >= replaceAt + 18 && frame < replaceAt + 26 ? 1 - (frame - replaceAt - 18) / 8 : 0;
-  const ok = easeOutBack(prog(frame, fixedAt, 12));
+  const eOk = enterAt(frame, fixedAt, { fallback: "rise", dur: 12, from: 0 });
+  // 金章原生是 2→1 快速收缩砸下：zoom-through(from 2) 的减速曲线最接近
+  const eStamp = enterAt(frame, fixedAt, { fallback: "zoom-through", dur: 7, from: 2 });
   const fsP = fitFont(data.prompt.slice(0, 16), 560, 32, 22);
   return (
     <>
       <Heading kicker={data.kicker ?? "DEBUG"} title={data.title} frame={frame} width={width} />
       {/* the tool */}
-      <div style={{ position: "absolute", left: AX, top: AY, transform: `scale(${0.92 + 0.08 * win})`, opacity: clamp(win * 1.4) }}>
+      <div style={{ position: "absolute", left: AX, top: AY, transform: `scale(${eWin.scale}) translate(${eWin.dx}px, ${eWin.dy}px)`, opacity: eWin.opacity }}>
         <MiniApp w={AW} h={AH} frame={frame} app={data.app} fail={failAt} workAt={frame >= fixedAt ? fixedAt : undefined} />
         {sel && <div style={{ position: "absolute", inset: 0, borderRadius: 14, background: alpha(t.primary, 0.35), border: `3px solid ${t.primary}` }} />}
         {flash > 0 && <div style={{ position: "absolute", inset: 0, borderRadius: 14, background: `rgba(255,255,255,${0.7 * flash})` }} />}
@@ -115,7 +123,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         )}
         {/* grab box around the red error */}
         {frame >= errAt && frame < sendAt + 4 && dv > 0.5 && (
-          <div style={{ position: "absolute", left: 4, right: 4, top: AH - PH + 48, height: 58 + (data.errors.length - 1) * 50, border: `4px dashed ${t.accent}`, borderRadius: 10, opacity: errHi, boxShadow: `0 0 20px ${alpha(t.accent, 0.5)}` }} />
+          <div style={{ position: "absolute", left: 4, right: 4, top: AH - PH + 48, height: 58 + (data.errors.length - 1) * 50, border: `4px dashed ${t.accent}`, borderRadius: 10, transform: `translate(${eGrab.dx}px, ${eGrab.dy}px)`, opacity: eGrab.opacity, boxShadow: `0 0 20px ${alpha(t.accent, 0.5)}` }} />
         )}
       </div>
       {/* cursor clicking the dead button */}
@@ -126,7 +134,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         </div>
       )}
       {frame >= failAt + 4 && frame < devAt && (
-        <div style={{ position: "absolute", left: AX + btn.x + 150, top: AY + btn.y - 40, fontFamily: t.font.title, fontWeight: 900, fontSize: 48, color: t.bad, transform: `scale(${easeOutBack(prog(frame, failAt + 4, 10))})`, WebkitTextStroke: "6px #000", paintOrder: "stroke fill" }}>点不动？</div>
+        <div style={{ position: "absolute", left: AX + btn.x + 150, top: AY + btn.y - 40, fontFamily: t.font.title, fontWeight: 900, fontSize: 48, color: t.bad, transform: `scale(${eNo.scale}) translate(${eNo.dx}px, ${eNo.dy}px)`, WebkitTextStroke: "6px #000", paintOrder: "stroke fill" }}>点不动？</div>
       )}
       {/* keycaps */}
       {frame >= devAt - 6 && frame < devAt + 40 && (
@@ -142,7 +150,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       )}
       {/* AI chat */}
       {frame >= sendAt - 10 && (
-        <div style={{ position: "absolute", left: BX, top: BY, width: BW, height: BH, borderRadius: 22, overflow: "hidden", background: `linear-gradient(170deg, ${alpha(t.bg2, 0.96)}, ${alpha(t.bg, 0.94)})`, border: `1.5px solid ${alpha(t.primary, 0.45)}`, boxShadow: `0 0 50px ${alpha(t.primary, 0.18)}`, transform: `scale(${0.9 + 0.1 * chatIn})`, opacity: clamp(chatIn * 1.4) }}>
+        <div style={{ position: "absolute", left: BX, top: BY, width: BW, height: BH, borderRadius: 22, overflow: "hidden", background: `linear-gradient(170deg, ${alpha(t.bg2, 0.96)}, ${alpha(t.bg, 0.94)})`, border: `1.5px solid ${alpha(t.primary, 0.45)}`, boxShadow: `0 0 50px ${alpha(t.primary, 0.18)}`, transform: `scale(${eChat.scale}) translate(${eChat.dx}px, ${eChat.dy}px)`, opacity: eChat.opacity }}>
           <div style={{ height: 70, display: "flex", alignItems: "center", gap: 14, padding: "0 26px", borderBottom: `1px solid ${alpha(t.primary, 0.2)}` }}>
             <div style={{ width: 42, height: 42, borderRadius: 12, background: `linear-gradient(135deg, ${t.primary}, ${t.secondary})`, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Icon name="bot" size={26} color={t.bg} stroke={2.4} />
@@ -167,7 +175,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       )}
       {/* the regenerated full file */}
       {frame >= regenAt && back < 1 && (
-        <div style={{ position: "absolute", left: docX, top: docY, width: 520, height: 180, borderRadius: 16, overflow: "hidden", background: "#0b1220", border: `2px solid ${t.secondary}`, boxShadow: `0 0 40px ${alpha(t.secondary, 0.5)}`, transform: `scale(${easeOutBack(prog(frame, regenAt, 12)) * (1 - back * 0.3)})`, opacity: 1 - back * 0.4 }}>
+        <div style={{ position: "absolute", left: docX, top: docY, width: 520, height: 180, borderRadius: 16, overflow: "hidden", background: "#0b1220", border: `2px solid ${t.secondary}`, boxShadow: `0 0 40px ${alpha(t.secondary, 0.5)}`, transform: `scale(${eDoc.scale * (1 - back * 0.3)}) translate(${eDoc.dx}px, ${eDoc.dy}px)`, opacity: 1 - back * 0.4 }}>
           <div style={{ height: 44, display: "flex", alignItems: "center", gap: 10, padding: "0 16px", background: alpha(t.secondary, 0.25), fontFamily: t.font.mono, fontSize: 20, color: t.text }}>
             <Icon name="doc" size={22} color={t.text} />
             {data.file}
@@ -185,10 +193,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       {/* fixed */}
       {frame >= fixedAt && (
         <>
-          <div style={{ position: "absolute", left: AX + AW - 300, top: AY + AH - 120, display: "flex", alignItems: "center", gap: 10, padding: "10px 22px", borderRadius: 30, background: alpha(t.bg, 0.85), border: `2px solid ${t.primary}`, fontFamily: t.font.title, fontWeight: 900, fontSize: 34, color: t.primary, transform: `scale(${ok})`, boxShadow: `0 0 30px ${alpha(t.primary, 0.5)}` }}>
+          <div style={{ position: "absolute", left: AX + AW - 300, top: AY + AH - 120, display: "flex", alignItems: "center", gap: 10, padding: "10px 22px", borderRadius: 30, background: alpha(t.bg, 0.85), border: `2px solid ${t.primary}`, fontFamily: t.font.title, fontWeight: 900, fontSize: 34, color: t.primary, transform: `scale(${eOk.scale}) translate(${eOk.dx}px, ${eOk.dy}px)`, boxShadow: `0 0 30px ${alpha(t.primary, 0.5)}` }}>
             <Icon name="check" size={34} color={t.primary} stroke={3} />0 报错
           </div>
-          <div style={{ position: "absolute", left: BX + 150, top: BY + 360, transform: `rotate(-8deg) scale(${frame - fixedAt < 7 ? 2 - easeOut(prog(frame, fixedAt, 7)) : 1})`, padding: "10px 34px", border: `7px solid ${t.accent}`, borderRadius: 16, background: "rgba(0,0,0,.45)", fontFamily: t.font.title, fontWeight: 900, fontSize: 96, color: t.accent, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.accent, 0.6)}` }}>{data.fixed}</div>
+          <div style={{ position: "absolute", left: BX + 150, top: BY + 360, transform: `rotate(-8deg) scale(${eStamp.scale}) translate(${eStamp.dx}px, ${eStamp.dy}px)`, padding: "10px 34px", border: `7px solid ${t.accent}`, borderRadius: 16, background: "rgba(0,0,0,.45)", fontFamily: t.font.title, fontWeight: 900, fontSize: 96, color: t.accent, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.accent, 0.6)}` }}>{data.fixed}</div>
         </>
       )}
       <Sfx name="click" at={failAt} volume={0.4} />
@@ -216,6 +224,7 @@ export const BugFixLoop: CompDef<D> = {
   minSec: 5,
   maxSec: 18,
   tags: ["报错", "F12", "修复", "全量代码", "覆盖", "调试", "Bug"],
+  motion: { kind: "控制台滑出、报错卡片飞向 AI、生成文件飞回覆盖、金章砸下", energy: 3 },
   desc: "左边小工具点按钮没反应（红叉抖动）→ 按 F12 弹出控制台、红色报错被虚线框抓住 → 报错卡片飞进右边 AI 对话框、打出一句硬规则 → AI 生成整份文件（进度滚到 100%）→ Ctrl+A 全选、文件飞回覆盖 → 工具跑通，“0 报错”+ 金色章",
   use: "出错了把错误原样交给 AI、让它整份重做再覆盖：代码报错修复、表格公式出错重算、文档格式乱了整篇重排、配置写错整份替换（errors / prompt / file / app 全可改）",
   schema,

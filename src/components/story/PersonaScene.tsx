@@ -7,6 +7,7 @@ import { Figure, figJoints, gait, mixPose, POSES, type Pose } from "../../lib/fi
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -34,8 +35,9 @@ const minutes = (s: string) => {
   return m ? (+m[1] % 24) * 60 + +m[2] : 18 * 60;
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const roleAt = cueOr(data.roleAt, 10);
   const loopStart = Math.max(8, Math.min(roleAt + 6, dur * 0.2));
@@ -135,7 +137,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const cntVal = cnt ? Math.round(lerp(cnt.from, cnt.to, doneLoops / n)) : 0;
   const cntBump = cnt ? Math.max(0, ...starts.map((s, i) => { const e = s + unit * Math.pow(ratio, i); return frame >= e ? 1 - clamp((frame - e) / 8) : 0; })) : 0;
 
-  const roleP = easeOutBack(prog(frame, roleAt, 14));
+  // 人设标签原生是头顶原位回弹弹出（0→过冲→1，无位移）
+  const eRole = enterAt(frame, roleAt, { fallback: "rise", dur: 14, from: 0, dist: 0 });
   const head = figJoints(pose, h).head;
   const tagX = px + head.x * face;
   const tagY = G + head.y - h * 0.2;
@@ -260,7 +263,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         )}
         {/* role tag over the head */}
         {frame >= roleAt && (
-          <div style={{ position: "absolute", left: tagX, top: tagY, transform: `translate(-50%, -100%) scale(${roleP})`, transformOrigin: "50% 100%", textAlign: "center" }}>
+          <div style={{ position: "absolute", left: tagX, top: tagY, transform: `translate(-50%, -100%) translate(${eRole.dx}px, ${eRole.dy}px) scale(${eRole.scale})`, opacity: eRole.opacity, transformOrigin: "50% 100%", textAlign: "center" }}>
             <div style={{ padding: "10px 28px", borderRadius: 14, background: alpha(t.bg, 0.85), border: `3px solid ${t.accent}`, boxShadow: `0 0 24px ${alpha(t.accent, 0.5)}`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.role, 520, 52, 26), color: t.text, whiteSpace: "nowrap" }}>{data.role}</div>
             {data.roleNote && <div style={{ marginTop: 8, fontFamily: t.font.body, fontWeight: 700, fontSize: 28, color: t.accent, whiteSpace: "nowrap" }}>{data.roleNote}</div>}
             <div style={{ margin: "0 auto", width: 3, height: 26, background: t.accent }} />

@@ -6,6 +6,7 @@ import { listCues } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { Heading, textEm } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -25,8 +26,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const msgs = data.messages;
   const cues = listCues(msgs, 10, Math.max(20, dur * 0.7));
@@ -65,18 +67,20 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             const at = cues[i];
             const me = m.who === "me";
             const typing = frame >= at - 14 && frame < at;
-            const p = easeOutBack(prog(frame, at, 14));
+            // 原生入场：头像/名字先淡入（无位移），气泡在 at 处原位回弹放大（0→过冲→1）
+            const eHead = enterAt(frame, at - 14, { fallback: "rise", dur: 8 });
+            const eB = enterAt(frame, at, { fallback: "rise", dur: 14, from: 0, dist: 0 });
             if (frame < at - 14) return null;
             const col = me ? t.primary : t.secondary;
             const since = frame - at;
             const shake = m.punch && since >= 0 && since < 16 ? noise1(frame * 3, seed + i) * 14 * (1 - since / 16) : 0;
             return (
               <div key={i} style={{ position: "absolute", top: ys[i], left: 0, right: 0, display: "flex", flexDirection: me ? "row-reverse" : "row", alignItems: "flex-start", gap: 18 }}>
-                <div style={{ flex: "none", width: 72, height: 72, borderRadius: "50%", background: `linear-gradient(135deg, ${alpha(col, 0.7)}, ${alpha(col, 0.25)})`, border: `2px solid ${col}`, display: "flex", alignItems: "center", justifyContent: "center", opacity: clamp(prog(frame, at - 14, 8)) }}>
+                <div style={{ flex: "none", width: 72, height: 72, borderRadius: "50%", background: `linear-gradient(135deg, ${alpha(col, 0.7)}, ${alpha(col, 0.25)})`, border: `2px solid ${col}`, display: "flex", alignItems: "center", justifyContent: "center", opacity: eHead.opacity }}>
                   <Icon name={me ? "mic" : "user"} size={36} color="#fff" />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: me ? "flex-end" : "flex-start", maxWidth: maxText }}>
-                  <div style={{ fontFamily: t.font.body, fontSize: 22, color: t.dim, marginBottom: 8, opacity: clamp(prog(frame, at - 14, 8)) }}>{me ? data.me : data.them}</div>
+                  <div style={{ fontFamily: t.font.body, fontSize: 22, color: t.dim, marginBottom: 8, opacity: eHead.opacity }}>{me ? data.me : data.them}</div>
                   {typing ? (
                     <div style={{ padding: "22px 30px", borderRadius: 26, background: alpha(col, 0.14), border: `1.5px solid ${alpha(col, 0.4)}`, display: "flex", gap: 10 }}>
                       {[0, 1, 2].map((k) => (
@@ -86,7 +90,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
                   ) : (
                     <div
                       style={{
-                        transform: `translateX(${shake}px) scale(${p})`,
+                        transform: `translateX(${shake}px) translate(${eB.dx}px, ${eB.dy}px) scale(${eB.scale})`,
+                        opacity: eB.opacity,
                         transformOrigin: me ? "right top" : "left top",
                         padding: m.punch ? "20px 40px" : "18px 30px",
                         borderRadius: 26,
@@ -127,7 +132,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           })}
         </div>
       </div>
-      <div style={{ position: "absolute", left: x0, width: colW, top: bottom + 12, height: 2, background: `linear-gradient(90deg, transparent, ${alpha(t.primary, 0.4)}, transparent)`, opacity: easeOut(prog(frame, 4, 12)) }} />
+      <div style={{ position: "absolute", left: x0, width: colW, top: bottom + 12, height: 2, background: `linear-gradient(90deg, transparent, ${alpha(t.primary, 0.4)}, transparent)`, opacity: enterAt(frame, 4, { fallback: "rise", dur: 12 }).opacity }} />
     </>
   );
 };
@@ -140,6 +145,7 @@ export const Dialogue: CompDef<D> = {
   minSec: 3,
   maxSec: 12,
   tags: ["有人说", "网友问", "你可能会说", "反驳", "对话"],
+  motion: { kind: "气泡按说话时刻逐条弹出（先“正在输入…”，punch 句大字抖动）", energy: 2 },
   desc: "聊天界面：左边网友、右边你，气泡按说话时刻弹出（先出“正在输入…”），可附视频卡片；最后一句可用 punch 大字抖动怼回去",
   use: "设问/假想对话/网友提问/“有人就说了…快拉倒吧”这种一来一回的段落",
   hideCaptions: true,

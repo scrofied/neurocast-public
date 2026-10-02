@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useMemo, useRef } from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
-import { easeOut, easeOutBack, prog, rng } from "../../lib/anim";
+import { rng } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -14,8 +15,9 @@ const schema = z.object({
 type D = z.infer<typeof schema>;
 
 // particles rain into a glowing funnel; each stage filters a portion out sideways
-const C: React.FC<CompProps<D>> = ({ data, frame, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const ref = useRef<HTMLCanvasElement>(null);
   const st = data.stages;
@@ -66,7 +68,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, seed }) => {
           const y1 = y0 + H - 12;
           const a = wAt(y0) / 2;
           const b = wAt(y1) / 2;
-          const on = easeOutBack(prog(frame, i * 6, 18));
+          // 分层逐条弹出：原生 opacity 就是 easeOutBack 入场进度，e.p（rise）与之等价
+          const e = enterAt(frame, i * 6, { fallback: "rise", dur: 18, seed: i });
           return (
             <polygon
               key={i}
@@ -74,8 +77,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, seed }) => {
               fill={alpha(i === n - 1 ? t.accent : t.primary, 0.06 + i * 0.03)}
               stroke={alpha(i === n - 1 ? t.accent : t.primary, 0.8)}
               strokeWidth={2}
-              opacity={on}
-              style={{ filter: `drop-shadow(0 0 12px ${alpha(t.primary, 0.5)})` }}
+              opacity={e.p}
+              style={{ filter: `drop-shadow(0 0 12px ${alpha(t.primary, 0.5)})`, clipPath: e.clip }}
             />
           );
         })}
@@ -83,9 +86,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, seed }) => {
       <canvas ref={ref} width={width} height={height} style={{ position: "absolute", inset: 0 }} />
       {st.map((s, i) => {
         const y = top + i * H + H / 2 - 30;
-        const p = easeOut(prog(frame, 10 + i * 8, 16));
+        // 数值标签原生从右侧 40px 滑入+淡入，slide-r dist≈40/240 与基线一致
+        const e = enterAt(frame, 10 + i * 8, { fallback: "slide-r", dur: 16, dist: 0.17 });
         return (
-          <div key={i} style={{ position: "absolute", left: cx + wAt(top + i * H) / 2 + 40, top: y, opacity: p, transform: `translateX(${(1 - p) * 40}px)`, display: "flex", alignItems: "baseline", gap: 20 }}>
+          <div key={i} style={{ position: "absolute", left: cx + wAt(top + i * H) / 2 + 40, top: y, opacity: e.opacity, transform: `translate(${e.dx}px, ${e.dy}px)`, display: "flex", alignItems: "baseline", gap: 20 }}>
             <span style={{ fontFamily: t.font.mono, fontSize: 44, fontWeight: 800, color: i === n - 1 ? t.accent : t.primary }}>{s.value ?? ""}</span>
             <span style={{ fontFamily: t.font.body, fontSize: fitFont(s.label, 420, 34), fontWeight: 700, color: t.text }}>{s.label}</span>
           </div>
@@ -104,6 +108,7 @@ export const DataFunnel: CompDef<D> = {
   minSec: 4,
   maxSec: 10,
   tags: ["漏斗", "转化", "筛选", "过滤", "留存", "流量", "成交"],
+  motion: { kind: "粒子雨落入漏斗、逐层被筛向两侧喷出，漏斗分层弹出、数值标签右侧滑入", energy: 2 },
   desc: "发光漏斗，粒子逐层流下，每层标数值（播放→点击→加微信→成交）",
   use: "转化漏斗、层层递减的数量",
   schema,

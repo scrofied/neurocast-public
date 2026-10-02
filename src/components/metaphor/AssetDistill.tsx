@@ -6,6 +6,7 @@ import { cueOr, listCues } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -30,8 +31,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const n = data.fragments.length;
   const refineAt = cueOr(data.refineAt, Math.max(30, dur * 0.46));
@@ -60,8 +62,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const rv = easeOut(prog(frame, refineAt, 16));
   const coreAt = refineAt + 22;
   const core = easeOutBack(prog(frame, coreAt, 18)) * (frame < outAt ? 1 : 0);
-  const tp = easeOutBack(prog(frame, outAt, 22));
-  const pp = easeOutBack(prog(frame, priceAt, 10));
+  // 资产卡原生是「从塔口滑出 + 0.86→1 放大 + 淡入」；rise 的 p 曲线与原来一致，from 保住起始缩放
+  // 卡片的 left/top 就是 (1 - eOut.p) 插出来的（位置由 e.p 驱动）→ 不叠加 e.dx/e.dy，否则会两倍位移
+  const eOut = enterAt(frame, outAt, { fallback: "rise", dur: 22, from: 0.86 });
+  // 价签盖章：原生从 2 倍缩到 1
+  const ePrice = enterAt(frame, priceAt, { fallback: "rise", dur: 10, from: 2 });
+  // 纯淡入的小标签文字
+  const eTowerLbl = enterAt(frame, 6, { fallback: "rise", dur: 12 });
+  const ePileLbl = enterAt(frame, 4, { fallback: "rise", dur: 12 });
   const shake = frame >= refineAt && frame < refineAt + 14 ? Math.sin((frame - refineAt) * 2.1) * 4 * (1 - (frame - refineAt) / 14) : 0;
   const coreY = ty0 + (ty1 - ty0) * 0.46;
 
@@ -128,14 +136,15 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
       <div style={{ position: "absolute", left: cx - 60, top: coreY - 60, width: 120, height: 120, display: "flex", alignItems: "center", justifyContent: "center", opacity: (0.45 + 0.55 * rv) * (frame < outAt ? 1 : 0.35), transform: `scale(${0.9 + 0.1 * Math.sin(frame / 9) * rv})` }}>
         <Icon name={data.towerIcon ?? "shovel"} size={86} color={rv > 0.4 ? t.text : alpha(t.text, 0.7)} stroke={1.8} />
       </div>
-      <div style={{ position: "absolute", left: cx - 190, top: ty1 + 30, width: 380, textAlign: "center", fontFamily: t.font.mono, fontSize: 22, letterSpacing: 8, color: alpha(t.primary, 0.85), opacity: easeOut(prog(frame, 6, 12)) }}>
+      <div style={{ position: "absolute", left: cx - 190, top: ty1 + 30, width: 380, textAlign: "center", fontFamily: t.font.mono, fontSize: 22, letterSpacing: 8, color: alpha(t.primary, 0.85), opacity: eTowerLbl.opacity, transform: `translate(${eTowerLbl.dx}px, ${eTowerLbl.dy}px)`, clipPath: eTowerLbl.clip }}>
         {data.tower}
       </div>
 
       {/* left: the "nothing special" pile */}
-      <div style={{ position: "absolute", left: FX, top: fy0 - 62, fontFamily: t.font.body, fontWeight: 700, fontSize: 26, color: t.dim, opacity: easeOut(prog(frame, 4, 12)) }}>她眼里的杂事</div>
+      <div style={{ position: "absolute", left: FX, top: fy0 - 62, fontFamily: t.font.body, fontWeight: 700, fontSize: 26, color: t.dim, opacity: ePileLbl.opacity, transform: `translate(${ePileLbl.dx}px, ${ePileLbl.dy}px)`, clipPath: ePileLbl.clip }}>她眼里的杂事</div>
       {data.fragments.map((f, i) => {
-        const p = easeOutBack(prog(frame, fCues[i], 12));
+        // 碎卡原生就是从左偏 50px 滑进位（left 里有 (1 - e.p) * -50）：位置由 e.p 驱动，不再叠加 e.dx/e.dy
+        const e = enterAt(frame, fCues[i], { fallback: "rise", dur: 12, from: 0.9 });
         if (frame < fCues[i]) return null;
         const sy = fy0 + i * (fh + gap);
         const gone = rf;
@@ -144,7 +153,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             key={i}
             style={{
               position: "absolute",
-              left: FX + (1 - p) * -50 + gone * (cx - FX - half0 * 0.5) * 0.6,
+              left: FX + (1 - e.p) * -50 + gone * (cx - FX - half0 * 0.5) * 0.6,
               top: sy + gone * (coreY - sy - fh / 2) * 0.85,
               width: FW,
               height: fh,
@@ -155,8 +164,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
               borderRadius: 14,
               background: "rgba(44,44,56,.86)",
               border: "2px solid #6b6b80",
-              transform: `rotate(${(i % 2 ? 1 : -1) * 1.2 * (1 - gone)}deg) scale(${(0.9 + 0.1 * p) * (1 - gone * 0.45)})`,
-              opacity: Math.min(1, p) * (1 - gone * 0.82),
+              transform: `rotate(${(i % 2 ? 1 : -1) * 1.2 * (1 - gone)}deg) scale(${e.scale * (1 - gone * 0.45)})`,
+              opacity: Math.min(1, e.p) * (1 - gone * 0.82),
               filter: `grayscale(${0.5 + gone * 0.5})`,
             }}
           >
@@ -171,17 +180,17 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         <div
           style={{
             position: "absolute",
-            left: ax + (1 - tp) * (cx - ax) * 0.6,
-            top: ay + (1 - tp) * (coreY - ay) * 0.7,
+            left: ax + (1 - eOut.p) * (cx - ax) * 0.6,
+            top: ay + (1 - eOut.p) * (coreY - ay) * 0.7,
             width: aw,
             minHeight: ah,
             padding: "34px 38px",
             borderRadius: 20,
             background: `linear-gradient(155deg, ${alpha(t.gold, 0.2)}, ${alpha(t.bg2, 0.94)} 62%)`,
             border: `3px solid ${alpha(t.gold, 0.85)}`,
-            boxShadow: `0 0 ${40 * tp}px ${alpha(t.gold, 0.45)}, inset 0 0 40px ${alpha(t.gold, 0.08)}`,
-            transform: `scale(${0.86 + 0.14 * tp})`,
-            opacity: Math.min(1, tp * 1.6),
+            boxShadow: `0 0 ${40 * eOut.p}px ${alpha(t.gold, 0.45)}, inset 0 0 40px ${alpha(t.gold, 0.08)}`,
+            transform: `scale(${eOut.scale})`,
+            opacity: Math.min(1, eOut.p * 1.6),
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
@@ -202,7 +211,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             position: "absolute",
             left: ax + aw * 0.46,
             top: ay + ah + 26,
-            transform: `rotate(-6deg) scale(${frame >= priceAt ? 2 - 1 * pp : 0})`,
+            transform: `rotate(-6deg) scale(${frame >= priceAt ? ePrice.scale : 0}) translate(${ePrice.dx}px, ${ePrice.dy}px)`,
+            clipPath: ePrice.clip,
             transformOrigin: "left center",
             padding: "12px 34px",
             border: `5px solid ${t.gold}`,
@@ -213,7 +223,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             fontSize: fitFont(data.price, 560, 66, 34),
             color: t.gold,
             whiteSpace: "nowrap",
-            opacity: clamp(pp * 2),
+            opacity: clamp(ePrice.p * 2),
             boxShadow: `0 0 30px ${alpha(t.gold, 0.5)}`,
           }}
         >
@@ -239,6 +249,7 @@ export const AssetDistill: CompDef<D> = {
   minSec: 3,
   maxSec: 10,
   tags: ["提炼", "沉淀", "杂活", "资产", "可售卖", "SOP"],
+  motion: { kind: "碎卡逐条弹出、被吸入提炼塔（塔内粒子上升），资产卡凝出飞入、价签盖章", energy: 3 },
   desc: "左边一摞被当成杂事的碎卡片，被中间的提炼塔吸进去，塔内粒子向上加速，右边凝出一张金边的资产卡（名字+给谁用），可盖章价签",
   use: "把平常的经历/琐事提炼成能对外交付的东西：三年跟单提炼成催收 SOP、十次客诉提炼成服务话术、五十场面试提炼成面试题库（fragments / asset / price 全可改）",
   schema,

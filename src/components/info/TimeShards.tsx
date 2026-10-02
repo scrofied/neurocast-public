@@ -4,6 +4,7 @@ import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/an
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { guessIcon, Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -24,8 +25,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const nOcc = data.occupied.length;
@@ -83,6 +85,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const shardH = full ? 76 : 44;
   const stackX = full ? W * 0.3 : W * 0.1;
   const piped = frame >= assembleAt;
+  // 结果文字原生是回弹弹出（0→1 scale）；分镜写 motion.enter 才换
+  // dist 压到 0.4：这行贴着画面底部（3 块碎片时 top≈965/1080），rise 的 22px 上浮会把字裁掉
+  const ePayoff = enterAt(frame, payoffAt, { fallback: "rise", dur: 14, from: 0, dist: 0.4 });
 
   return (
     <>
@@ -142,7 +147,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           </svg>
         )}
         {data.payoff && frame >= payoffAt && (
-          <div style={{ position: "absolute", left: stackX, top: stackY + nSh * (shardH + 12) + (full ? 30 : 14), transform: `scale(${easeOutBack(prog(frame, payoffAt, 14))})`, transformOrigin: "0 50%", display: "flex", alignItems: "center", gap: 14 }}>
+          <div style={{ position: "absolute", left: stackX, top: stackY + nSh * (shardH + 12) + (full ? 30 : 14), transform: `scale(${ePayoff.scale}) translate(${ePayoff.dx}px, ${ePayoff.dy}px)`, clipPath: ePayoff.clip, transformOrigin: "0 50%", display: "flex", alignItems: "center", gap: 14 }}>
             <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.payoff, W * 0.5, full ? 66 : 30, 18), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 26px ${alpha(t.gold, 0.7)}, 0 3px 0 #000` }}>{data.payoff}</span>
           </div>
         )}

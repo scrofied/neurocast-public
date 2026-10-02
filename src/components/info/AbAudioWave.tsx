@@ -1,12 +1,13 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, noise1, prog } from "../../lib/anim";
+import { easeInOut, lerp, noise1, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -54,8 +55,9 @@ const wavePath = (w: number, h: number, seed: number, frame: number, playing: nu
   return `M${pts.join(" L")} Z`;
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.clips.length;
@@ -72,6 +74,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const tearK = frame >= revealAt ? easeInOut(prog(frame, revealAt, 18)) : 0;
   // playhead sweeping each wave while it "plays"
   const headX = playing ? ((frame - playAt) * (full ? 9 : 5)) % waveW : 0;
+  // 底部结论：原生从 0 回弹放大 → rise + from:0
+  const eV = enterAt(frame, verdictAt, { fallback: "rise", dur: 14, from: 0 });
 
   return (
     <>
@@ -105,10 +109,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           const fs = full ? 30 : 16;
           const lx = left + waveW + (full ? 40 : 18);
           const lw = full ? W * 0.24 : W * 0.3;
+          // 原生入场：标签淡入（无位移/缩放），所以只接 opacity
+          const eL = enterAt(frame, playAt + i * 4, { fallback: "rise", dur: 12 });
           return (
             <React.Fragment key={i}>
               {/* original label */}
-              <div style={{ position: "absolute", left: lx, top: y + rowH * 0.5 - (full ? 26 : 14), width: lw, height: full ? 52 : 28, transform: `translateX(${-tearK * (full ? 90 : 45)}px) rotate(${tearK * -22}deg)`, transformOrigin: "0 50%", opacity: (1 - tearK) * easeOut(prog(frame, playAt + i * 4, 12)), borderRadius: 10, background: alpha(t.text, 0.1), border: `2px solid ${alpha(t.dim, 0.7)}`, display: "flex", alignItems: "center", justifyContent: "center", gap: full ? 10 : 5 }}>
+              <div style={{ position: "absolute", left: lx, top: y + rowH * 0.5 - (full ? 26 : 14), width: lw, height: full ? 52 : 28, transform: `translateX(${-tearK * (full ? 90 : 45)}px) rotate(${tearK * -22}deg)`, transformOrigin: "0 50%", opacity: (1 - tearK) * eL.opacity, borderRadius: 10, background: alpha(t.text, 0.1), border: `2px solid ${alpha(t.dim, 0.7)}`, display: "flex", alignItems: "center", justifyContent: "center", gap: full ? 10 : 5 }}>
                 <Icon name="mic" size={full ? 24 : 13} color={t.dim} />
                 <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fs, color: t.dim, whiteSpace: "nowrap" }}>{c.label}</span>
               </div>
@@ -120,9 +126,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
               )}
               {/* revealed verdict */}
               {frame >= revealAt + 6 && (() => {
-                const p = easeOutBack(prog(frame, revealAt + 6 + i * 5, 16));
+                // 原生：判词条从 0 回弹放大盖章 → rise + from:0 保住基线
+                const eR = enterAt(frame, revealAt + 6 + i * 5, { fallback: "rise", dur: 16, from: 0 });
                 return (
-                  <div style={{ position: 'absolute', left: lx, top: y + rowH * 0.5 - (full ? 30 : 16), width: lw, height: full ? 60 : 32, transform: `scale(${p}) rotate(${lerp(6, -3, p)}deg)`, transformOrigin: "0 50%", borderRadius: 10, background: alpha(newCol, 0.18), border: `3px solid ${newCol}`, boxShadow: `0 0 28px ${alpha(newCol, 0.6)}`, display: "flex", alignItems: "center", justifyContent: "center", gap: full ? 10 : 5 }}>
+                  <div style={{ position: 'absolute', left: lx, top: y + rowH * 0.5 - (full ? 30 : 16), width: lw, height: full ? 60 : 32, transform: `scale(${eR.scale}) rotate(${lerp(6, -3, eR.p)}deg) translate(${eR.dx}px, ${eR.dy}px)`, transformOrigin: "0 50%", clipPath: eR.clip, opacity: eR.opacity, borderRadius: 10, background: alpha(newCol, 0.18), border: `3px solid ${newCol}`, boxShadow: `0 0 28px ${alpha(newCol, 0.6)}`, display: "flex", alignItems: "center", justifyContent: "center", gap: full ? 10 : 5 }}>
                     <Icon name={isBad ? "bot" : "check"} size={full ? 26 : 14} color={newCol} />
                     <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(c.reveal, lw - (full ? 70 : 40), fs, 12), color: newCol, whiteSpace: "nowrap" }}>{c.reveal}</span>
                   </div>
@@ -136,7 +143,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           <div style={{ position: "absolute", left: left + waveW + (full ? 40 : 18) + 40, top: top + rowH * 0.5 - (full ? 40 : 22), fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 84 : 42, color: alpha(t.gold, 0.5 + 0.5 * Math.sin(frame / 6)) }}>?</div>
         )}
         {data.verdict && frame >= verdictAt && (
-          <div style={{ position: "absolute", left: W / 2, top: top + n * (rowH + (full ? 26 : 12)) + (full ? 20 : 10), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, verdictAt, 14))})`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.8, full ? 50 : 25, 15), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
+          <div style={{ position: "absolute", left: W / 2, top: top + n * (rowH + (full ? 26 : 12)) + (full ? 20 : 10), transform: `translateX(-50%) translate(${eV.dx}px, ${eV.dy}px) scale(${eV.scale})`, clipPath: eV.clip, opacity: eV.opacity, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.verdict, W * 0.8, full ? 50 : 25, 15), color: t.gold, whiteSpace: "nowrap", textShadow: `0 0 24px ${alpha(t.gold, 0.6)}, 0 3px 0 #000` }}>{data.verdict}</div>
         )}
       </div>
       {data.clips.map((_, i) => (

@@ -1,8 +1,9 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeIn, easeOut, easeOutBack, noise1, prog } from "../../lib/anim";
+import { clamp, easeIn, noise1, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Heading } from "../../lib/ui";
@@ -22,8 +23,9 @@ const Ring: React.FC<{ x: number; y: number; p: number; col: string }> = ({ x, y
   <div style={{ position: "absolute", left: x - 90 * p, top: y - 90 * p, width: 180 * p, height: 180 * p, borderRadius: "50%", border: `4px solid ${col}`, opacity: 1 - p }} />
 );
 
-const C: React.FC<CompProps<D>> =({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const full = width >= 900;
   const n = data.steps.length;
@@ -46,7 +48,8 @@ const C: React.FC<CompProps<D>> =({ data, frame, dur, seed }) => {
   const lean = (Math.asin(clamp((step - bw) / bh, 0, 0.98)) * 180) / Math.PI;
   const shakeK = frame >= done && frame < done + 14 ? 1 - (frame - done) / 14 : 0;
   const shx = noise1(frame * 2.9, seed) * 22 * shakeK;
-  const res = easeOutBack(prog(frame, done, 14));
+  // 结果大字原生是回弹砸出（scale 0→1），rise + from:0 与原曲线一致
+  const eRes = enterAt(frame, done, { fallback: "rise", dur: 14, from: 0 });
   return (
     <>
       {full && <Heading kicker={data.kicker} title={data.title} frame={frame} width={width} />}
@@ -58,7 +61,9 @@ const C: React.FC<CompProps<D>> =({ data, frame, dur, seed }) => {
           const ang = f * (i === n - 1 ? 90 : lean);
           const fallen = frame >= cues[i];
           const x = x0 + step * i + step / 2;
-          const k = clamp(0.4 + 0.6 * easeOut(prog(frame, i * 3, 12)));
+          // 骨牌开场逐块弹出：0.4→1 缩放，e.scale（rise from:0.4）接管
+          const eBlk = enterAt(frame, i * 3, { fallback: "rise", dur: 12, from: 0.4, seed: i });
+          const eLbl = enterAt(frame, Math.min(cues[i] - 4, i * 4 + 6), { fallback: "rise", dur: 10 });
           const label = fitFont(s.text, full ? step * 0.92 : step * 1.1, full ? 40 : 18, 12);
           return (
             <React.Fragment key={i}>
@@ -70,7 +75,8 @@ const C: React.FC<CompProps<D>> =({ data, frame, dur, seed }) => {
                   width: bw,
                   height: bh,
                   transformOrigin: "right bottom",
-                  transform: `rotate(${ang}deg) scale(${k})`,
+                  transform: `translate(${eBlk.dx}px, ${eBlk.dy}px) rotate(${ang}deg) scale(${eBlk.scale})`,
+                  clipPath: eBlk.clip,
                   borderRadius: 10,
                   background: fallen ? `linear-gradient(180deg, ${alpha(col, 0.9)}, ${alpha(col, 0.45)})` : `linear-gradient(180deg, ${alpha(t.primary, 0.55)}, ${alpha(t.bg2, 0.95)})`,
                   border: `2px solid ${fallen ? col : t.primary}`,
@@ -92,7 +98,8 @@ const C: React.FC<CompProps<D>> =({ data, frame, dur, seed }) => {
                   fontWeight: 900,
                   fontSize: label,
                   color: fallen ? col : t.text,
-                  opacity: easeOut(prog(frame, Math.min(cues[i] - 4, i * 4 + 6), 10)),
+                  opacity: eLbl.opacity,
+                  transform: `translate(${eLbl.dx}px, ${eLbl.dy}px)`,
                   whiteSpace: "nowrap",
                   textShadow: "0 2px 8px rgba(0,0,0,.8)",
                 }}
@@ -102,12 +109,13 @@ const C: React.FC<CompProps<D>> =({ data, frame, dur, seed }) => {
             </React.Fragment>
           );
         })}
-        {data.result && res > 0 && (
+        {data.result && eRes.p > 0 && (
           <div style={{ position: "absolute", left: 0, right: 0, top: ground - bh - (full ? 130 : 70), textAlign: "center" }}>
             <span
               style={{
                 display: "inline-block",
-                transform: `scale(${res}) rotate(-3deg)`,
+                transform: `translate(${eRes.dx}px, ${eRes.dy}px) scale(${eRes.scale}) rotate(-3deg)`,
+                clipPath: eRes.clip,
                 padding: full ? "10px 34px" : "4px 14px",
                 border: `${full ? 5 : 3}px solid ${col}`,
                 borderRadius: 14,
@@ -141,6 +149,7 @@ export const DominoChain: CompDef<D> = {
   minSec: 2.5,
   maxSec: 9,
   tags: ["连锁反应", "多米诺", "一步错步步错", "崩塌", "导致", "蝴蝶效应"],
+  motion: { kind: "骨牌逐块倒下撞倒下一块（变色+冲击环），末块倒地画面一震砸出结果大字", energy: 3 },
   desc: "一排发光骨牌，每块下面写一步；说到哪步哪块倒下撞倒下一块（变红/金 + 冲击环 + 咔哒声），最后一块倒地时画面一震、砸出结果大字",
   use: "一件小事一步步引发大结果：第一步搞反→内容没人看→账号没权重→放弃；一个好习惯→连锁收益；供应链断一环→全线停工",
   panel: true,

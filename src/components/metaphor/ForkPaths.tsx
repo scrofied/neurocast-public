@@ -1,9 +1,10 @@
 import React from "react";
 import { z } from "zod";
-import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { clamp, easeInOut, easeOut, lerp, prog } from "../../lib/anim";
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Figure, gait, mixPose, POSES } from "../../lib/figure";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
@@ -31,8 +32,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const startAt = cueOr(data.startAt, 6);
@@ -67,6 +69,10 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     if (along > 0 && along < total) trail.push(pos);
   }
   const sh = hitShake(frame, [splitAt, resultAt], full ? 10 : 5, 12, seed);
+  // 岔口牌原生是回弹放大立起（easeOutBack prog 14 帧）；分镜写 motion.enter 才换
+  const ePlate = enterAt(frame, splitAt - 6, { fallback: "rise", dur: 14, from: 0 });
+  const eFork = enterAt(frame, splitAt - 10, { fallback: "rise", dur: 12 });
+  const eStart = enterAt(frame, 4, { fallback: "rise", dur: 14 });
 
   const branch = (p: typeof data.pathA, up: boolean) => {
     const yEnd = up ? yUp : yDn;
@@ -75,6 +81,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
     const xNow = lerp(forkX, xEnd, easeInOut(k));
     const yNow = lerp(y0, yEnd, easeInOut(k));
     const fs = full ? 34 : 18;
+    const eLbl = enterAt(frame, splitAt + 6, { fallback: "rise", dur: 14, seed: up ? 3 : 4 });
     return (
       <g key={p.name}>
         {/* the road */}
@@ -84,13 +91,14 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             <Figure x={xNow} y={yNow} h={figH} pose={frame >= resultAt ? mixPose(POSES.stand, up ? POSES.proud : POSES.slump, easeOut(prog(frame, resultAt, 14))) : walkerPose} color={t.text} glow={col} />
             {/* end card */}
             {frame >= resultAt && (() => {
-              const rp = easeOutBack(prog(frame, resultAt + (up ? 0 : 6), 14));
+              // 结局卡原生是从无到有回弹放大弹出；分镜写 motion.enter 才换
+              const eCard = enterAt(frame, resultAt + (up ? 0 : 6), { fallback: "rise", dur: 14, from: 0, seed: up ? 1 : 2 });
               const cw = full ? W * 0.3 : W * 0.4;
               const cx = xEnd - cw * 0.2;
               const cy = yEnd + (up ? -(full ? 90 : 50) : full ? 30 : 16);
               return (
-                <foreignObject x={cx} y={cy} width={cw} height={full ? 150 : 84}>
-                  <div style={{ transform: `scale(${rp})`, transformOrigin: "0 50%", display: "inline-flex", flexDirection: "column", gap: 4, padding: `${full ? 12 : 6}px ${full ? 24 : 12}px`, borderRadius: 14, background: alpha(t.bg, 0.88), border: `3px solid ${col}`, boxShadow: `0 0 30px ${alpha(col, 0.5)}` }}>
+                <foreignObject x={cx + eCard.dx} y={cy + eCard.dy} width={cw} height={full ? 150 : 84}>
+                  <div style={{ transform: `scale(${eCard.scale})`, opacity: eCard.opacity, clipPath: eCard.clip, transformOrigin: "0 50%", display: "inline-flex", flexDirection: "column", gap: 4, padding: `${full ? 12 : 6}px ${full ? 24 : 12}px`, borderRadius: 14, background: alpha(t.bg, 0.88), border: `3px solid ${col}`, boxShadow: `0 0 30px ${alpha(col, 0.5)}` }}>
                     <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(p.result, cw - 40, fs, 13), color: col, whiteSpace: "nowrap" }}>{p.result}</span>
                     {p.metric && <span style={{ fontFamily: t.font.mono, fontWeight: 900, fontSize: fs * 0.72, color: t.text, whiteSpace: "nowrap" }}>{p.metric}</span>}
                   </div>
@@ -98,8 +106,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
               );
             })()}
             {/* path label along the road */}
-            <foreignObject x={lerp(forkX, xEnd, 0.45)} y={lerp(y0, yEnd, 0.45) + (up ? -(full ? 46 : 26) : full ? 14 : 8)} width={full ? 300 : 170} height={full ? 44 : 26}>
-              <div style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 24 : 13, color: alpha(t.text, 0.75), whiteSpace: "nowrap", opacity: easeOut(prog(frame, splitAt + 6, 14)) }}>{p.name}</div>
+            <foreignObject x={lerp(forkX, xEnd, 0.45) + eLbl.dx} y={lerp(y0, yEnd, 0.45) + (up ? -(full ? 46 : 26) : full ? 14 : 8) + eLbl.dy} width={full ? 300 : 170} height={full ? 44 : 26}>
+              <div style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: full ? 24 : 13, color: alpha(t.text, 0.75), whiteSpace: "nowrap", opacity: eLbl.opacity, clipPath: eLbl.clip }}>{p.name}</div>
             </foreignObject>
           </>
         )}
@@ -121,7 +129,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           ))}
           {/* the fork with the split-word plaque */}
           {frame >= splitAt - 10 && (
-            <g opacity={easeOut(prog(frame, splitAt - 10, 12))}>
+            <g opacity={eFork.opacity} transform={`translate(${eFork.dx} ${eFork.dy})`}>
               <circle cx={forkX} cy={y0} r={full ? 16 : 9} fill={t.bg} stroke={t.gold} strokeWidth={4} style={{ filter: `drop-shadow(0 0 14px ${t.gold})` }} />
             </g>
           )}
@@ -129,7 +137,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
           {branch(data.pathB, false)}
         </svg>
         {/* the shared start banner */}
-        <div style={{ position: "absolute", left: x0 - (full ? 20 : 10), top: y0 + (full ? 26 : 14), opacity: easeOut(prog(frame, 4, 14)) }}>
+        <div style={{ position: "absolute", left: x0 - (full ? 20 : 10), top: y0 + (full ? 26 : 14), opacity: eStart.opacity, transform: `translate(${eStart.dx}px, ${eStart.dy}px)`, clipPath: eStart.clip }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: full ? 10 : 5, padding: `${full ? 8 : 4}px ${full ? 20 : 10}px`, borderRadius: 24, background: alpha(t.primary, 0.14), border: `2px solid ${t.primary}` }}>
             <Icon name="play" size={full ? 22 : 12} color={t.primary} />
             <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 28 : 15, color: t.text, whiteSpace: "nowrap" }}>{data.startAction}</span>
@@ -137,7 +145,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         </div>
         {/* the fork plaque */}
         {data.splitWord && frame >= splitAt - 10 && (
-          <div style={{ position: "absolute", left: forkX, top: y0 - (full ? 130 : 70), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, splitAt - 6, 14))})`, padding: `${full ? 8 : 4}px ${full ? 22 : 11}px`, borderRadius: 12, background: alpha(t.bg, 0.9), border: `3px solid ${t.gold}`, boxShadow: `0 0 26px ${alpha(t.gold, 0.6)}`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.splitWord, W * (full ? 0.3 : 0.5), full ? 40 : 20, 13), color: t.gold, whiteSpace: "nowrap" }}>
+          <div style={{ position: "absolute", left: forkX, top: y0 - (full ? 130 : 70), transform: `translateX(-50%) translate(${ePlate.dx}px, ${ePlate.dy}px) scale(${ePlate.scale})`, opacity: ePlate.opacity, clipPath: ePlate.clip, padding: `${full ? 8 : 4}px ${full ? 22 : 11}px`, borderRadius: 12, background: alpha(t.bg, 0.9), border: `3px solid ${t.gold}`, boxShadow: `0 0 26px ${alpha(t.gold, 0.6)}`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.splitWord, W * (full ? 0.3 : 0.5), full ? 40 : 20, 13), color: t.gold, whiteSpace: "nowrap" }}>
             {data.splitWord}
           </div>
         )}

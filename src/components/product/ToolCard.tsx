@@ -3,6 +3,7 @@ import { z } from "zod";
 import { clamp, easeInOut, easeOut, easeOutBack, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cnNum, cueOr, listCues } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -64,8 +65,9 @@ const Card: React.FC<{ tl: z.infer<typeof tool>; i: number; w: number; h: number
   );
 };
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const tools = data.tools;
   const n = tools.length;
@@ -79,18 +81,23 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const total = n * cw + (n - 1) * gap;
   const x0 = (width - total) / 2;
   const fin = easeInOut(prog(frame, 0, 22));
+  // focus 主卡原生从 0.8 回弹放大到位；hub 标签/总量徽章/底注同理
+  const eFocus = enterAt(frame, 0, { fallback: "rise", dur: 22, from: 0.8 });
+  const eHub = enterAt(frame, 2, { fallback: "rise", dur: 14 });
   const totalAt = data.total ? cueOr(data.total.at, 20) : Infinity;
+  const eTotal = enterAt(frame, totalAt, { fallback: "rise", dur: 16, from: 0 });
   const footAt = data.footer ? cueOr(data.footer.at, dur * 0.65) : Infinity;
+  const eFoot = enterAt(frame, footAt, { fallback: "rise", dur: 14 });
   return (
     <>
       <Heading kicker={data.kicker ?? (data.hub ? data.hub.toUpperCase() : "TOOLS")} title={data.title} frame={frame} width={width} />
       {tools.map((tl, i) => {
         if (lineup) {
           const at = cues[i];
-          const p = easeOutBack(prog(frame, at, 20));
+          const eCard = enterAt(frame, at, { fallback: "rise", dur: 20, from: 0.9, seed: i });
           if (frame < at) return null;
           return (
-            <div key={i} style={{ position: "absolute", left: x0 + i * (cw + gap), top: cy - chh / 2, width: cw, height: chh, transform: `perspective(1400px) translateY(${(1 - clamp(p)) * 120}px) rotateX(${(1 - clamp(p)) * 30}deg) scale(${0.9 + 0.1 * p})`, opacity: clamp(p * 1.5) }}>
+            <div key={i} style={{ position: "absolute", left: x0 + i * (cw + gap), top: cy - chh / 2, width: cw, height: chh, transform: `perspective(1400px) translateY(${(1 - clamp(eCard.p)) * 120}px) rotateX(${(1 - clamp(eCard.p)) * 30}deg) scale(${eCard.scale})`, opacity: clamp(eCard.p * 1.5) }}>
               <Card tl={tl} i={i} w={cw} h={chh} big={false} frame={frame} at={at} hot={false} />
               <Sfx name="pop" at={at} volume={0.3} />
             </div>
@@ -105,19 +112,19 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         const x = isF ? width / 2 - bw / 2 : rel < 0 ? 150 - (far ? 170 : 0) : width - 150 - bw + (far ? 170 : 0);
         const y = cy - bh / 2 + (isF ? 0 : 20);
         return (
-          <div key={i} style={{ position: "absolute", left: x, top: y, width: bw, height: bh, zIndex: isF ? 5 : far ? 0 : 1, opacity: isF ? clamp(fin * 1.4) : (far ? 0.14 : 0.38) * fin, filter: isF ? undefined : `blur(${far ? 4 : 2}px) saturate(0.6)`, transform: isF ? `scale(${0.8 + 0.2 * easeOutBack(prog(frame, 0, 22))})` : `perspective(1200px) rotateY(${rel < 0 ? 18 : -18}deg) scale(${far ? 0.8 : 0.92})` }}>
+          <div key={i} style={{ position: "absolute", left: x, top: y, width: bw, height: bh, zIndex: isF ? 5 : far ? 0 : 1, opacity: isF ? clamp(fin * 1.4) : (far ? 0.14 : 0.38) * fin, filter: isF ? undefined : `blur(${far ? 4 : 2}px) saturate(0.6)`, clipPath: isF ? eFocus.clip : undefined, transform: isF ? `scale(${eFocus.scale}) translate(${eFocus.dx}px, ${eFocus.dy}px)` : `perspective(1200px) rotateY(${rel < 0 ? 18 : -18}deg) scale(${far ? 0.8 : 0.92})` }}>
             <Card tl={tl} i={i} w={bw} h={bh} big={isF} frame={frame} at={isF ? 4 : -100} hot={isF} />
           </div>
         );
       })}
       {data.hub && (
-        <div style={{ position: "absolute", left: 120, top: 200, display: "flex", alignItems: "center", gap: 14, fontFamily: t.font.mono, fontWeight: 700, fontSize: 30, color: t.primary, opacity: lineup ? easeOut(prog(frame, 2, 14)) : 0 }}>
+        <div style={{ position: "absolute", left: 120, top: 200, display: "flex", alignItems: "center", gap: 14, fontFamily: t.font.mono, fontWeight: 700, fontSize: 30, color: t.primary, transform: `translate(${eHub.dx}px, ${eHub.dy}px)`, opacity: lineup ? eHub.opacity : 0 }}>
           <Icon name="grid" size={32} color={t.primary} />
           {data.hub}
         </div>
       )}
       {data.total && frame >= totalAt && (
-        <div style={{ position: "absolute", right: 120, top: 150, transform: `scale(${easeOutBack(prog(frame, totalAt, 16))})`, transformOrigin: "right center", textAlign: "right" }}>
+        <div style={{ position: "absolute", right: 120, top: 150, transform: `scale(${eTotal.scale}) translate(${eTotal.dx}px, ${eTotal.dy}px)`, clipPath: eTotal.clip, transformOrigin: "right center", textAlign: "right" }}>
           <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: 78, color: t.gold, textShadow: `0 0 30px ${alpha(t.gold, 0.6)}` }}>{data.total.value}</div>
           <div style={{ fontFamily: t.font.body, fontWeight: 700, fontSize: 28, color: t.dim }}>{data.total.label}</div>
         </div>
@@ -125,8 +132,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       {(data.badges ?? []).map((b, i) => {
         const at = cueOr(b.at, 30 + i * 12);
         if (frame < at) return null;
+        const eB = enterAt(frame, at, { fallback: "rise", dur: 14, from: 0, seed: i });
         return (
-          <div key={i} style={{ position: "absolute", left: (data.hub ? 440 : 120) + i * 260, top: 186, transform: `rotate(-4deg) scale(${easeOutBack(prog(frame, at, 14))})`, transformOrigin: "left center", padding: "10px 24px", borderRadius: 14, border: `3px solid ${t.primary}`, background: alpha(t.primary, 0.15), color: t.primary, fontFamily: t.font.title, fontWeight: 900, fontSize: 38, display: "flex", alignItems: "center", gap: 10, boxShadow: `0 0 30px ${alpha(t.primary, 0.45)}`, whiteSpace: "nowrap" }}>
+          <div key={i} style={{ position: "absolute", left: (data.hub ? 440 : 120) + i * 260, top: 186, transform: `rotate(-4deg) scale(${eB.scale}) translate(${eB.dx}px, ${eB.dy}px)`, clipPath: eB.clip, transformOrigin: "left center", padding: "10px 24px", borderRadius: 14, border: `3px solid ${t.primary}`, background: alpha(t.primary, 0.15), color: t.primary, fontFamily: t.font.title, fontWeight: 900, fontSize: 38, display: "flex", alignItems: "center", gap: 10, boxShadow: `0 0 30px ${alpha(t.primary, 0.45)}`, whiteSpace: "nowrap" }}>
             <Icon name={b.icon ?? "unlock"} size={36} color={t.primary} stroke={2.6} />
             {b.text}
             <Sfx name="stamp" at={at} volume={0.35} />
@@ -134,7 +142,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
         );
       })}
       {data.footer && frame >= footAt && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: cy + chh / 2 + 40, textAlign: "center", fontFamily: t.font.body, fontWeight: 800, fontSize: 38, color: t.text, opacity: easeOut(prog(frame, footAt, 14)), transform: `translateY(${(1 - easeOut(prog(frame, footAt, 14))) * 20}px)` }}>{data.footer.text}</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: cy + chh / 2 + 40, textAlign: "center", fontFamily: t.font.body, fontWeight: 800, fontSize: 38, color: t.text, opacity: eFoot.opacity, transform: `translateY(${(1 - clamp(eFoot.p)) * 20}px)` }}>{data.footer.text}</div>
       )}
       {!lineup && <Sfx name="whoosh" at={2} volume={0.2} />}
       {!lineup && <Sfx name="tick" at={40} volume={0.3} />}
@@ -150,6 +158,7 @@ export const ToolCard: CompDef<D> = {
   minSec: 2,
   maxSec: 10,
   tags: ["推荐", "工具", "Skill", "插件", "App", "下载量", "第一个", "第二个"],
+  motion: { kind: "卡片带透视逐个飞入阵列（或焦点卡放大居中），下载量计数滚动，属性徽章盖章弹出", energy: 2 },
   desc: "应用商店风的发光卡片：图标、名字、一句话职责、下载量计数滚动、标签。阵列模式并排飞入；focus 模式把第 N 张放大居中、其余虚化到两侧",
   use: "盘点/推荐工具、插件、Skill、产品；“第一个…第二个…”逐个介绍时每个用一次 focus",
   schema,

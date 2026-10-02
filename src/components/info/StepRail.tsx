@@ -4,6 +4,7 @@ import { clamp, easeIn, easeOut, easeOutBack, lerp, prog } from "../../lib/anim"
 import { hitShake } from "../../lib/bits";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -23,8 +24,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width: W, height: H } = useBox();
   const full = W >= 900;
   const n = data.steps.length;
@@ -47,14 +49,17 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
   const sh = hitShake(frame, [settle], full ? 8 : 4, 10, seed);
   const th = data.threshold;
   const thX = th ? lerp(x0, x1, clamp(th.value / 100)) : 0;
-  const thP = th ? easeOutBack(prog(frame, cueOr(th.at, Math.round(total * 0.6)), 14)) : 0;
+  const eTh = enterAt(frame, cueOr(th?.at, Math.round(total * 0.6)), { fallback: "rise", dur: 14 });
+  const thP = th ? eTh.p : 0;
+  const eTitle = enterAt(frame, 4, { fallback: "slide-r", dur: 14 });
+  const eDone = enterAt(frame, settle, { fallback: "rise", dur: 12 });
 
   return (
     <>
       <div style={{ position: "absolute", inset: 0, transform: `translate(${sh.x}px, ${sh.y}px)` }}>
         {/* top-left title, small: this component is a persistent rail, not a full screen */}
         {(data.title || data.kicker) && full && (
-          <div style={{ position: "absolute", left: pad, top: H * 0.1, opacity: easeOut(prog(frame, 4, 14)) }}>
+          <div style={{ position: "absolute", left: pad, top: H * 0.1, opacity: eTitle.p, transform: `translate(${eTitle.dx}px, ${eTitle.dy}px)`, clipPath: eTitle.clip }}>
             {data.kicker && <div style={{ fontFamily: t.font.mono, fontSize: 18, letterSpacing: 5, color: t.primary }}>{data.kicker}</div>}
             {data.title && <div style={{ marginTop: 6, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.title, W * 0.5, 46, 22), color: t.text, whiteSpace: "nowrap" }}>{data.title}</div>}
           </div>
@@ -68,14 +73,15 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
             const x = lerp(x0, x1, n === 1 ? 0 : i / (n - 1));
             const on = frame >= stepCues[i];
             const isCur = i === cur;
-            const p = easeOutBack(prog(frame, stepCues[i], 12));
+            const eN = enterAt(frame, stepCues[i], { fallback: "rise", dur: 12 });
+            const p = eN.p;
             const fs = fitFont(s, (x1 - x0) / n - 18, full ? 26 : 15, 11);
             return (
               <div key={i} style={{ position: "absolute", left: x, top: railY + (full ? 4 : 2.5), transform: "translate(-50%, -50%)" }}>
-                <div style={{ width: full ? (isCur ? 40 : 26) : isCur ? 22 : 15, height: full ? (isCur ? 40 : 26) : isCur ? 22 : 15, borderRadius: "50%", background: on ? (isCur ? t.accent : t.primary) : alpha(t.text, 0.18), border: `3px solid ${on ? t.accent : alpha(t.text, 0.3)}`, boxShadow: on ? `0 0 ${isCur ? 26 : 12}px ${alpha(t.accent, 0.75)}` : undefined, transform: `scale(${on ? p : 1})`, display: "flex", alignItems: "center", justifyContent: "center", transition: "none" }}>
+                <div style={{ width: full ? (isCur ? 40 : 26) : isCur ? 22 : 15, height: full ? (isCur ? 40 : 26) : isCur ? 22 : 15, borderRadius: "50%", background: on ? (isCur ? t.accent : t.primary) : alpha(t.text, 0.18), border: `3px solid ${on ? t.accent : alpha(t.text, 0.3)}`, boxShadow: on ? `0 0 ${isCur ? 26 : 12}px ${alpha(t.accent, 0.75)}` : undefined, transform: `scale(${on ? p : 1})${on ? ` translate(${eN.dx}px, ${eN.dy}px)` : ""}`, clipPath: on ? eN.clip : undefined, display: "flex", alignItems: "center", justifyContent: "center", transition: "none" }}>
                   {frame >= stepCues[i] + 10 && i < cur && <Icon name="check" size={full ? 20 : 12} color={t.bg} stroke={4} />}
                 </div>
-                <div style={{ position: "absolute", left: "50%", top: full ? -58 : -36, transform: "translateX(-50%)", fontFamily: t.font.title, fontWeight: isCur ? 900 : 700, fontSize: fs, color: on ? (isCur ? t.accent : t.text) : t.dim, whiteSpace: "nowrap", opacity: on ? 1 : 0.5, textShadow: "0 2px 0 #000" }}>
+                <div style={{ position: "absolute", left: "50%", top: full ? -58 : -36, transform: `translateX(-50%)${on ? ` translate(${eN.dx}px, ${eN.dy}px)` : ""}`, fontFamily: t.font.title, fontWeight: isCur ? 900 : 700, fontSize: fs, color: on ? (isCur ? t.accent : t.text) : t.dim, whiteSpace: "nowrap", opacity: on ? 1 : 0.5, textShadow: "0 2px 0 #000" }}>
                   {i + 1}. {s}
                 </div>
               </div>
@@ -88,7 +94,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         )}
         {th && (
           <>
-            <div style={{ position: "absolute", left: thX, top: railY - (full ? 78 : 44), transform: `translateX(-50%) scale(${thP})`, transformOrigin: "50% 100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ position: "absolute", left: thX, top: railY - (full ? 78 : 44), transform: `translateX(-50%) scale(${thP}) translate(${eTh.dx}px, ${eTh.dy}px)`, clipPath: eTh.clip, transformOrigin: "50% 100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
               <div style={{ padding: full ? "4px 16px" : "2px 9px", borderRadius: 8, background: alpha(t.bad, 0.9), fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 24 : 14, color: "#fff", whiteSpace: "nowrap" }}>{th.label}</div>
               <div style={{ width: 4, height: full ? 26 : 14, background: t.bad }} />
             </div>
@@ -97,7 +103,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed }) => {
         )}
         {/* finished banner */}
         {frame >= settle && (
-          <div style={{ position: "absolute", left: x1, top: railY - (full ? 120 : 66), transform: `translateX(-50%) scale(${easeOutBack(prog(frame, settle, 12))})`, fontFamily: t.font.mono, fontWeight: 900, fontSize: full ? 28 : 16, color: t.primary, letterSpacing: 4 }}>
+          <div style={{ position: "absolute", left: x1, top: railY - (full ? 120 : 66), transform: `translateX(-50%) scale(${eDone.p}) translate(${eDone.dx}px, ${eDone.dy}px)`, clipPath: eDone.clip, fontFamily: t.font.mono, fontWeight: 900, fontSize: full ? 28 : 16, color: t.primary, letterSpacing: 4 }}>
             ✓ DONE
           </div>
         )}

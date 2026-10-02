@@ -3,6 +3,7 @@ import { z } from "zod";
 import { clamp, easeOut, easeOutBack, noise1, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
+import { useEnter } from "../../lib/enter";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont } from "../../lib/ui";
@@ -20,6 +21,7 @@ type D = z.infer<typeof schema>;
 
 const C: React.FC<CompProps<D>> = ({ data, frame, variant, seed }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const style = data.style ?? (["slam", "stamp", "glitch"] as const)[variant % 3];
   const hit = cueOr(data.hitAt, 4);
@@ -60,7 +62,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, variant, seed }) => {
   const glitchK = style === "glitch" && since < 16 ? 1 - Math.max(0, since) / 16 : 0;
   const ab = (land ? Math.exp(-since / 5) : 1) * 10;
   const wave = land ? prog(frame, hit, 22) : 0;
-  const sub = easeOut(prog(frame, hit + 12, 14));
+  // 砸下/盖章/故障三式是组件主体隐喻（含落后抖动），保留原生；kicker/sub 是随附入场，接入语法层
+  const eKicker = enterAt(frame, hit + 4, { fallback: "rise", dur: 12 });
+  const sub = enterAt(frame, hit + 12, { fallback: "rise", dur: 14, dist: 0.9 });
   const textEl = (dx: number, color?: string, o = 1) => (
     <div style={{ position: "absolute", left: 0, right: 0, top: cy - fs * 0.62, textAlign: "center", whiteSpace: "nowrap", fontFamily: t.font.title, fontWeight: 900, fontSize: fs, lineHeight: 1.25, transform: `translateX(${dx}px)`, opacity: o }}>
       {chars.map((c, i) => (
@@ -109,9 +113,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, variant, seed }) => {
             ))
           : textEl(0)}
       </div>
-      {data.kicker && <div style={{ position: "absolute", left: 0, right: 0, top: cy - fs * 0.62 - 70, textAlign: "center", fontFamily: t.font.mono, fontSize: 22, letterSpacing: 10, color: t.primary, opacity: easeOut(prog(frame, hit + 4, 12)) }}>{data.kicker}</div>}
+      {data.kicker && <div style={{ position: "absolute", left: 0, right: 0, top: cy - fs * 0.62 - 70, textAlign: "center", fontFamily: t.font.mono, fontSize: 22, letterSpacing: 10, color: t.primary, opacity: eKicker.opacity }}>{data.kicker}</div>}
       {data.sub && (
-        <div style={{ position: "absolute", left: 0, right: 0, top: cy + fs * 0.75, textAlign: "center", fontFamily: t.font.body, fontWeight: 700, fontSize: 42, color: t.dim, opacity: sub, transform: `translateY(${(1 - sub) * 20}px)` }}>{data.sub}</div>
+        <div style={{ position: "absolute", left: 0, right: 0, top: cy + fs * 0.75, textAlign: "center", fontFamily: t.font.body, fontWeight: 700, fontSize: 42, color: t.dim, opacity: sub.opacity, transform: `translateY(${sub.dy}px)`, clipPath: sub.clip }}>{data.sub}</div>
       )}
       <Sfx name={style === "stamp" ? "stamp" : style === "glitch" ? "glitch" : "impact"} at={hit} volume={0.45} />
     </>

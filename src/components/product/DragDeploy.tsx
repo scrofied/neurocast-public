@@ -6,6 +6,7 @@ import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 import { MiniApp } from "./MiniApp";
@@ -26,8 +27,9 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width } = useBox();
   const dragAt = cueOr(data.dragAt, 12);
   const dropAt = cueOr(data.dropAt, dragAt + 30);
@@ -42,7 +44,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const ZY = 250;
   const ZW = 820;
   const ZH = 480;
-  const zin = easeOutBack(prog(frame, 0, 16));
+  const eZone = enterAt(frame, 0, { fallback: "rise", dur: 16, from: 0.92 });
   // file travels from the left desktop to the zone centre
   const mv = easeInOut(prog(frame, dragAt, Math.max(8, dropAt - dragAt)));
   const f0 = { x: 170, y: 430 };
@@ -53,18 +55,19 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
   const hover = frame >= dragAt + 4 && !dropped;
   const up = clamp((frame - dropAt) / Math.max(6, doneAt - dropAt));
   const fileGone = easeOut(prog(frame, dropAt, 10));
-  const u = easeOutBack(prog(frame, urlAt, 14));
+  const eUrl = enterAt(frame, urlAt, { fallback: "rise", dur: 14, from: 0 });
   const urlChars = Array.from(data.url);
   const shown = urlChars.slice(0, Math.round(clamp((frame - urlAt) / 16) * urlChars.length)).join("");
   // devices
-  const dIn = easeOutBack(prog(frame, shareAt + 6, 18));
-  const pIn = easeOutBack(prog(frame, shareAt + 14, 18));
+  const eLap = enterAt(frame, shareAt + 6, { fallback: "rise", dur: 18, from: 0 });
+  const ePhone = enterAt(frame, shareAt + 14, { fallback: "rise", dur: 18, from: 0 });
+  const eChips = enterAt(frame, shareAt + 30, { fallback: "rise", dur: 12 });
   return (
     <>
       <Heading kicker={data.kicker ?? "DEPLOY"} title={data.title} frame={frame} width={width} />
       <div style={{ position: "absolute", inset: 0, transform: `translateX(${shiftX}px) scale(${1 - sh * 0.18})`, transformOrigin: "30% 50%", opacity: 1 - sh * 0.15 }}>
         {/* drop zone */}
-        <div style={{ position: "absolute", left: ZX, top: ZY, width: ZW, height: ZH, borderRadius: 26, background: `linear-gradient(160deg, ${alpha(t.bg2, 0.95)}, ${alpha(t.bg, 0.9)})`, border: `1.5px solid ${alpha(t.primary, 0.35)}`, boxShadow: `0 0 50px ${alpha(t.primary, 0.15)}`, transform: `scale(${0.92 + 0.08 * zin})`, opacity: clamp(zin * 1.4) }}>
+        <div style={{ position: "absolute", left: ZX, top: ZY, width: ZW, height: ZH, borderRadius: 26, background: `linear-gradient(160deg, ${alpha(t.bg2, 0.95)}, ${alpha(t.bg, 0.9)})`, border: `1.5px solid ${alpha(t.primary, 0.35)}`, boxShadow: `0 0 50px ${alpha(t.primary, 0.15)}`, transform: `scale(${eZone.scale}) translate(${eZone.dx}px, ${eZone.dy}px)`, clipPath: eZone.clip, opacity: eZone.opacity }}>
           <div style={{ position: "absolute", left: 30, top: 22, display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.title, fontWeight: 900, fontSize: 32, color: t.text }}>
             <Icon name="globe" size={34} color={t.primary} />
             {data.host}
@@ -104,7 +107,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
               </div>
             )}
             {frame >= urlAt && (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, transform: `scale(${u})` }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, transform: `scale(${eUrl.scale}) translate(${eUrl.dx}px, ${eUrl.dy}px)`, clipPath: eUrl.clip }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, fontFamily: t.font.title, fontWeight: 900, fontSize: 36, color: t.primary }}>
                   <Icon name="check" size={40} color={t.primary} stroke={3} />
                   已上线
@@ -135,18 +138,18 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur }) => {
       {/* shared: laptop + phone both open the link */}
       {frame >= shareAt + 6 && (
         <>
-          <div style={{ position: "absolute", left: 1010, top: 250, width: 640, transform: `scale(${dIn})`, transformOrigin: "center bottom" }}>
+          <div style={{ position: "absolute", left: 1010, top: 250, width: 640, transform: `scale(${eLap.scale}) translate(${eLap.dx}px, ${eLap.dy}px)`, clipPath: eLap.clip, transformOrigin: "center bottom" }}>
             <div style={{ padding: 14, borderRadius: "18px 18px 6px 6px", background: "#1c2233", border: `2px solid ${alpha(t.primary, 0.5)}` }}>
               <MiniApp w={612} h={380} frame={frame} app={{ ...data.app, url: data.url }} workAt={shareAt + 30} />
             </div>
             <div style={{ height: 22, margin: "0 -40px", borderRadius: "0 0 20px 20px", background: "#2a3146" }} />
           </div>
-          <div style={{ position: "absolute", left: 1560, top: 420, width: 250, height: 470, borderRadius: 36, padding: 12, background: "#1c2233", border: `3px solid ${alpha(t.primary, 0.6)}`, boxShadow: "0 20px 50px rgba(0,0,0,.6)", transform: `scale(${pIn})`, transformOrigin: "center bottom" }}>
+          <div style={{ position: "absolute", left: 1560, top: 420, width: 250, height: 470, borderRadius: 36, padding: 12, background: "#1c2233", border: `3px solid ${alpha(t.primary, 0.6)}`, boxShadow: "0 20px 50px rgba(0,0,0,.6)", transform: `scale(${ePhone.scale}) translate(${ePhone.dx}px, ${ePhone.dy}px)`, clipPath: ePhone.clip, transformOrigin: "center bottom" }}>
             <div style={{ width: "100%", height: "100%", borderRadius: 26, overflow: "hidden" }}>
               <MiniApp w={226} h={446} frame={frame} app={{ ...data.app, url: data.url }} workAt={shareAt + 36} chrome={false} />
             </div>
           </div>
-          <div style={{ position: "absolute", left: 1010, top: 790, width: 800, display: "flex", justifyContent: "center", gap: 20, opacity: easeOut(prog(frame, shareAt + 30, 12)) }}>
+          <div style={{ position: "absolute", left: 1010, top: 790, width: 800, display: "flex", justifyContent: "center", gap: 20, transform: `translate(${eChips.dx}px, ${eChips.dy}px)`, clipPath: eChips.clip, opacity: eChips.opacity }}>
             {[
               ["users", "发到群里"],
               ["globe", "点开就能用"],
@@ -180,6 +183,7 @@ export const DragDeploy: CompDef<D> = {
   minSec: 4,
   maxSec: 14,
   tags: ["上线", "部署", "托管", "拖进", "网址", "链接", "分享"],
+  motion: { kind: "文件被拖进虚线框、进度条走满逐字吐网址、笔记本手机弹出同开", energy: 3 },
   desc: "文件从桌面被拖进托管平台的虚线框（框变亮）→ 进度条走满 → 专属网址逐字吐出；随后页面让到左边，笔记本和手机弹出，打开同一个网址、工具在两端同时跑起来",
   use: "把做好的东西一键发布出去给别人用：网页拖进托管平台、视频上传出链接、文件丢进网盘分享、App 提交上架（file / host / url / app 全可改）",
   schema,

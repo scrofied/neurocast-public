@@ -1,7 +1,8 @@
 import React from "react";
 import { z } from "zod";
 import { useVideoConfig } from "remotion";
-import { clamp, easeOutBack, easeOutQuint, prog } from "../../lib/anim";
+import { clamp, easeOutBack } from "../../lib/anim";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Glass, Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -12,6 +13,7 @@ type D = z.infer<typeof schema>;
 // cards fly from deep space into a fanned arc; the "current" one lifts forward in turn
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
+  const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
   const it = data.items;
   const n = it.length;
@@ -25,7 +27,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   return (
     <>
       {it.map((c, i) => {
-        const p = easeOutQuint(prog(frame, 4 + i * 5, 26));
+        // 原生入场：卡片从深空穿到面前（easeOutQuint + perspective）→ zoom-through 的 p 与原生等价
+        const e = enterAt(frame, 4 + i * 5, { fallback: "zoom-through", dur: 26, seed: i });
+        const p = e.p;
         const mid = (n - 1) / 2;
         const arc = variant === 1 ? Math.abs(i - mid) * 30 : 0;
         const rot = variant === 1 ? (i - mid) * 4 : 0;
@@ -42,7 +46,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
               top: y,
               width: cw,
               height: ch,
-              transform: `perspective(1400px) translateZ(${(1 - p) * -1600 + lift * 80}px) rotateY(${(1 - p) * 60}deg) rotateZ(${rot}deg)`,
+              transform: `perspective(1400px) translateZ(${(1 - p) * -1600 + lift * 80}px) rotateY(${(1 - p) * 60}deg) rotateZ(${rot}deg) translate(${e.dx}px, ${e.dy}px)`,
+              clipPath: e.clip,
               opacity: clamp(p * 1.4),
             }}
           >
@@ -72,6 +77,7 @@ export const CardStack: CompDef<D> = {
   minSec: 4,
   maxSec: 12,
   tags: ["几个", "三个", "五个", "清单", "列表", "盘点", "推荐", "第一", "第二"],
+  motion: { kind: "卡片从深空依次穿入排成一排 + 当前卡片抬起前推", energy: 3 },
   desc: "几张玻璃卡片从深空飞入排成一排（变体 1 扇形），按节奏依次抬起高亮",
   use: "并列的几项（A、B、C），一次性盘点；需要逐条跟读的要点用 bullet-cards",
   schema,
