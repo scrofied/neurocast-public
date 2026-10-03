@@ -12,7 +12,7 @@ import { plan as planLegacy, PlanError, styleFor, VARIANTS } from "./lib/planner
 import { parseTimedScript } from "./lib/script.mjs";
 import { beatsMarkdown, planTimed, splitOpening, TimedError } from "./lib/timed.mjs";
 import { wordsOf } from "./lib/align.mjs";
-import { checkKindParity, checkTransitionParity, normThrough } from "./lib/motion.mjs";
+import { checkKindParity, checkTransitionParity, normPost, normThrough } from "./lib/motion.mjs";
 import { loadRegistry, validateShot } from "./lib/registry-node.mjs";
 import { slotAssetRefs } from "./lib/detect.mjs";
 import { load as loadUsage, shotsOf, record as recordUsage, crossVideoReport, statsOf, bodyComps } from "./lib/usage.mjs";
