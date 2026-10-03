@@ -871,6 +871,35 @@
         "盖章",
         "价值承诺前置"
       ]
+    },
+    {
+      "id": "opening-workbuddy-pay",
+      "date": "2026-10-03",
+      "status": "trial",
+      "usedBy": [
+        "../../../neurocast-workbuddy-pay"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 收益先行（首帧能收钱大字 → 4+4数字牌 → 几十分钟 → 已到账盖章）",
+      "file": "src/openings/2026-10-03-workbuddy-pay/Opening.tsx",
+      "desc": "第 0 帧 kicker「用 WorkBuddy 变现」+ 大字「做出一个能收钱的产品」（能收钱烧金色）砸下闪白；两块数字牌「4 个 Skill / 4 个步骤」依次擦出；金色胶囊「几十分钟」砸入；收据卡盖章「第一笔 · 已到账 ✓」+ 冲击环",
+      "script": "../../../neurocast-workbuddy-pay",
+      "hook": "收益先行+数字冲击",
+      "techniques": [
+        "首帧大字",
+        "闪白+冲击音",
+        "数字牌依次擦出",
+        "金色胶囊砸入",
+        "收据盖章",
+        "冲击环+ding",
+        "收益承诺前置"
+      ],
+      "preview": "openings/previews/opening-workbuddy-pay.mp4"
     }
   ]
 }
