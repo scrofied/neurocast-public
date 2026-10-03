@@ -16,8 +16,8 @@ const SKINS = ["aurora", "violet", "amber", "matrix", "arctic"];
 const FONTS = ["yahei", "noto", "deng"];
 const WORLDS = ["grid", "tunnel", "stars"];
 // 随机转场池：cut（无入场硬切）留给开场与分镜的显式声明，不参与随机——
-// 随机硬切会让节奏失控。渲染层实际支持 6 种，此前池子只有 4 个且只取 3 个，
-// 等于一半的转场能力闲置。
+// 随机硬切会让节奏失控。池子 = motion.mjs 的 TRANSITIONS 去掉 cut，渲染层加一种它就自动多一种
+// （现在是 10 种：fade/fly/warp/iris/flood/glitch + 形状连续那四种 zoom/push/wipe/grid）。
 const RANDOM_TRANSITIONS = TRANSITIONS.filter((t) => t !== "cut");
 
 export const VARIANTS = { neural: 3, agents: 3, prompt: 2, funnel: 1, vault: 1, assembly: 1, number: 2, code: 3, flow: 3, timeline: 2, versus: 2, growth: 2, cards: 2, screen: 3, quote: 2, chapter: 2, narration: 2, hook: 1, outro: 1 };

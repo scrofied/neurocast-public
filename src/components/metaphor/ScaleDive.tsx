@@ -240,14 +240,16 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
         <div style={{ position: "absolute", left: 0, top: rTop - 46, width: "100%", fontFamily: t.font.mono, fontSize: 16, letterSpacing: 3, color: alpha(t.dim, 0.9) }}>
           {d.unitFrom ?? fmtScale(d.layers[0].scale)}
         </div>
-        <div style={{ position: "absolute", left: 44, top: cursorY - 22, width: "100%", fontFamily: t.font.mono, fontWeight: 700, fontSize: full ? 34 : 24, color: t.accent, textShadow: `0 0 18px ${alpha(t.accent, 0.6)}`, whiteSpace: "nowrap" }}>
+        {/* 当前读数：放在刻度文字右侧的空白列里。以前挂在 x=44，正好压在「10 cm / 1 μm」那一列上，
+            钻过某个刻度时两组字咬在一起 */}
+        <div style={{ position: "absolute", left: full ? 150 : 118, top: cursorY - 22, width: "100%", fontFamily: t.font.mono, fontWeight: 700, fontSize: full ? 34 : 20, color: t.accent, textShadow: `0 0 18px ${alpha(t.accent, 0.6)}`, whiteSpace: "nowrap" }}>
           {fmtScale(nowScale)}
         </div>
       </div>
 
       {/* 当前层的名字与说明：每穿一层换一次，读数就在旁边。结论落地时它让位（底部只留一句话） */}
       {!(d.endNote && frame >= endAt) && (
-        <div style={{ position: "absolute", left: full ? 96 : 26, top: height - 250, width: full ? 620 : 420, opacity: eLab.opacity, transform: `translate(${eLab.dx}px, ${eLab.dy}px)`, pointerEvents: "none" }}>
+        <div style={{ position: "absolute", left: full ? 96 : 26, top: height - 305, width: full ? 620 : 420, opacity: eLab.opacity, transform: `translate(${eLab.dx}px, ${eLab.dy}px)`, pointerEvents: "none" }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
             <span style={{ fontFamily: t.font.mono, fontSize: 20, letterSpacing: 3, color: colOf(ki) }}>
               {String(ki + 1).padStart(2, "0")}/{String(n).padStart(2, "0")}

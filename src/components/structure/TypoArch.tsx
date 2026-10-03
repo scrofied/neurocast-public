@@ -53,7 +53,9 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
   const dropAt = Math.round(finalAt + 12); // 结论长到位、把这栋楼压下去的那一下
 
   const cx = v1 ? width * 0.68 : width / 2;
-  const gy = height * 0.88;
+  // 地平线：整栋楼从这条线往上长。0.845 而不是 0.88 —— 地基那条横条的底边落在 913，
+  // 再往下就压进逐字字幕带（y935~1028）了
+  const gy = height * 0.845;
   const BW = Math.min(v1 ? 860 : 1160, width * (v1 ? 0.42 : 0.6));
   const stageY = height * 0.15;
 

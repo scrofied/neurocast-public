@@ -331,10 +331,10 @@ node scripts/openings.mjs status opening-comment-mining keep
    - 时间：每个“出现/变化”给一个 `at` 类字段（schema 里 `z.number().optional()`，组件收到的是帧），缺省时用 `cueOr` / `listCues`（`src/lib/cue.ts`）自动错开。不要用写死的帧号排整段动画。
    - 音效：`<Sfx name="pop" at={cue} volume={0.3} />`，名字见 `src/lib/sfx.tsx`；音量 0.2~0.45；不要循环音效（会盖住人声）。
    - 文字：长文本用 `fitFont` 缩字号 + `whiteSpace: "nowrap"`；中文按 1em、英文数字按 0.58em 估宽。
-   - 安全区：顶部 90px 是 HUD，底部约 150px 是字幕；标题用 `Heading`（自适应 Headline）。
+   - 安全区：顶部 90px 是 HUD，**底部 y≥935 是逐字字幕带（1080 高时字幕条占 940~1028），任何元素的最下沿都要停在 935 以上** —— 别只盯着「容器的 top」，一个 `top: height-250` 的块里叠三行文字就已经压进去了；贴底边摆的东西（读数、批注、地平线、结论句）一律按「块顶 + 块高 ≤ height-145」算。标题用 `Heading`（自适应 Headline）。
    - SVG 里水平/垂直直线加发光时用 `<GlowDefs user />`（否则 bbox 高度为 0，线会消失）。
 4. 在 `src/components/registry.ts` 注册。
-5. `node scripts/preview.mjs <id>` 看静帧，溢出/重叠/太空都要修到满意。
+5. `node scripts/preview.mjs <id>` 看静帧，溢出/重叠/太空都要修到满意。注意：静帧拼图里**不画逐字字幕**，字幕带那条冲突肉眼看不见，得按上一条的算法自己核一遍。
 6. `node scripts/catalog.mjs` 重新生成 CATALOG.md。
 7. 可选：在 `scripts/lib/detect.mjs` 加检测器，让自动模式也能选到它。
 8. 新图标加在 `src/lib/icons.tsx`；新音效放 `public/sfx/<name>.wav` 并在 `src/lib/sfx.tsx` 的 `SFX` 表登记时长（帧）。

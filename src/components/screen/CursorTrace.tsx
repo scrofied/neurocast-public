@@ -150,11 +150,14 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
   const { width, height } = useBox();
   const ar = d.aspect && d.aspect > 0.05 ? d.aspect : 16 / 10;
   const boxW = Math.min(width - 250, 1320);
-  const boxH = Math.min(height - 300, boxW / ar);
+  // 底图下边界：有结论句时抬到 height-235（结论挂在 height-225，两者不能叠），没有结论句再往下吃满；
+  // 无论哪种，底图都不许越过 y935 那条逐字字幕带
+  const bottomCap = height - (d.conclusion ? 235 : 175);
+  const boxH = Math.min(bottomCap - 235, boxW / ar);
   const sw = Math.min(boxW, boxH * ar);
   const sh = sw / ar;
   const fx = (width - sw) / 2;
-  const fy = (height - sh) / 2 + 46;
+  const fy = 235;
 
   const start = 4;
   const cues = listCues(d.strokes.map((s) => ({ at: s.at })), start + 18, Math.max(start + 60, dur - 40));
@@ -174,6 +177,34 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
   const src = assetUrl(d.src);
   const isVideo = d.kind === "video";
   const e = enterAt(frame, start, { fallback: "rise", dur: 20, from: 0.93, dist: 0.5 });
+
+  // 批注位置一次算完（渲染只管画）。三件事：
+  //  1) 下边界两道闸 —— 字幕带顶 height-145；有结论句时结论句自己挂在 height-225，别压它；
+  //  2) 笔迹在底部放不下就翻到笔迹上方；
+  //  3) 同一帧里两条批注撞在一起（笔迹挨得近就会撞）就按出现顺序往下让位。
+  const CH = 62;
+  const labels = hasAsset(d.src)
+    ? (() => {
+        const lim = (d.conclusion ? height - 225 : height - 145) - CH;
+        const out: { i: number; label: string; la: number; lx: number; ly: number; wl: number; col: string }[] = [];
+        d.strokes.forEach((s, i) => {
+          if (!s.label) return;
+          const la = cueOr(s.labelAt, doneOf(i).end + 4);
+          if (frame < la) return;
+          const pts = buildPts(s.shape, px(s.x), py(s.y), s.w * sw, s.h * sh, i * 13 + 5);
+          const nib = at(pts, 0.985);
+          const wl = Math.max(200, Math.min(430, s.label.length * 30 + 76));
+          const right = nib.x < width * 0.6;
+          const lx = right ? clamp(nib.x + 34, 0, width - wl - 16) : clamp(nib.x - 34 - wl, 16, width - wl - 16);
+          const below = s.shape === "underline" ? fy + sh + 22 : nib.y - 26;
+          let ly = clamp(below > lim ? nib.y - 26 - CH - 10 : below, fy + 6, lim);
+          const hit = () => out.some((p) => lx < p.lx + p.wl && lx + wl > p.lx && ly < p.ly + CH && ly + CH > p.ly);
+          for (let g = 0; g < 6 && hit(); g++) ly = clamp(ly + CH + 10, fy + 6, lim);
+          out.push({ i, label: s.label, la, lx, ly, wl, col: s.color ?? COLS[i % COLS.length] });
+        });
+        return out;
+      })()
+    : [];
 
   return (
     <>
@@ -255,27 +286,15 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
         </svg>
       )}
 
-      {/* 批注：这一笔画完才弹出来，跟画面里正在画的笔一起走 */}
-      {hasAsset(d.src) &&
-        d.strokes.map((s, i) => {
-          if (!s.label) return null;
-          const info = doneOf(i);
-          const la = cueOr(s.labelAt, info.end + 4);
-          if (frame < la) return null;
-          const el = enterAt(frame, la, { fallback: "drop", dur: 14, from: 0, dist: 0.6 });
-          const col = s.color ?? COLS[i % COLS.length];
-          const pts = buildPts(s.shape, px(s.x), py(s.y), s.w * sw, s.h * sh, i * 13 + 5);
-          const nib = at(pts, 0.985);
-          const wl = Math.max(200, Math.min(430, s.label.length * 30 + 76));
-          const right = nib.x < width * 0.6;
-          const lx = right ? clamp(nib.x + 34, 0, width - wl - 16) : clamp(nib.x - 34 - wl, 16, width - wl - 16);
-          const ly = s.shape === "underline" ? fy + sh + 22 : clamp(nib.y - 26, fy + 6, fy + sh - 66);
-          return (
-            <div key={`l${i}`} style={{ position: "absolute", left: lx, top: ly, width: wl, padding: "12px 18px", borderRadius: 14, background: alpha(t.bg, 0.92), border: `2px solid ${col}`, boxShadow: `0 0 30px ${alpha(col, 0.4)}`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(s.label, wl - 44, 27, 18), color: t.text, transform: `translateY(${el.dy}px) scale(${el.scale})`, opacity: el.opacity, pointerEvents: "none" }}>
-              {s.label}
-            </div>
-          );
-        })}
+      {/* 批注：这一笔画完才弹出来，跟画面里正在画的笔一起走（位置见上面 labels） */}
+      {labels.map(({ i, label, la, lx, ly, wl, col }) => {
+        const el = enterAt(frame, la, { fallback: "drop", dur: 14, from: 0, dist: 0.6 });
+        return (
+          <div key={`l${i}`} style={{ position: "absolute", left: lx, top: ly, width: wl, padding: "12px 18px", borderRadius: 14, background: alpha(t.bg, 0.92), border: `2px solid ${col}`, boxShadow: `0 0 30px ${alpha(col, 0.4)}`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(label, wl - 44, 27, 18), color: t.text, transform: `translateY(${el.dy}px) scale(${el.scale})`, opacity: el.opacity, pointerEvents: "none" }}>
+            {label}
+          </div>
+        );
+      })}
 
       {d.conclusion && hasAsset(d.src) && frame >= concAt && (() => {
         const ec = enterAt(frame, concAt, { fallback: "slam", dur: 16, dist: 0.7 });

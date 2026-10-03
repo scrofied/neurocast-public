@@ -192,9 +192,10 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, seed, variant }) => {
           })}
         <Flash frame={frame} at={burstAt} len={10} peak={0.7} color={alpha(col, 0.9)} />
 
-        {/* ⑤ 揭晓：数字从 from 滚到 to */}
+        {/* ⑤ 揭晓：数字从 from 滚到 to。0.6 而不是 0.56：等级名（CharPop 84 号 + 描边）压到 591，
+            再高一点大字就会和它咬在一起；往下到 851 仍在逐字字幕带（935）以上 */}
         {post && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: height * 0.56, textAlign: "center", opacity: eNum.opacity, transform: `translate(${eNum.dx}px, ${eNum.dy}px) scale(${eNum.scale})`, clipPath: eNum.clip }}>
+          <div style={{ position: "absolute", left: 0, right: 0, top: height * 0.6, textAlign: "center", opacity: eNum.opacity, transform: `translate(${eNum.dx}px, ${eNum.dy}px) scale(${eNum.scale})`, clipPath: eNum.clip }}>
             <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", fontFamily: t.font.title, fontWeight: 900, color: t.text, whiteSpace: "nowrap", ...outline(t.bg, 8) }}>
               <span style={{ fontSize: numFs, lineHeight: 1, fontVariantNumeric: "tabular-nums", textShadow: `0 0 46px ${alpha(col, 0.75)}` }}>{vStr}</span>
               {unit && <span style={{ fontSize: numFs * 0.4, marginLeft: 12, color: col }}>{unit}</span>}
