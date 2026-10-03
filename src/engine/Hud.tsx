@@ -92,27 +92,5 @@ export const Captions: React.FC<{ captions: Caption[]; hidden?: (f: number) => b
   );
 };
 
-// film grain + vignette + subtle scanlines for the premium look
-export const PostFx: React.FC<{ seed: number }> = ({ seed }) => {
-  const f = useCurrentFrame();
-  const t = useTheme();
-  return (
-    <>
-      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse at 50% 45%, transparent 55%, ${alpha(t.bg, 0.85)} 100%)`, pointerEvents: "none" }} />
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: "repeating-linear-gradient(0deg, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 3px)",
-          pointerEvents: "none",
-        }}
-      />
-      <svg width="100%" height="100%" style={{ position: "absolute", inset: 0, opacity: 0.07, mixBlendMode: "overlay", pointerEvents: "none" }}>
-        <filter id="grain">
-          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed={(f + seed) % 97} />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#grain)" />
-      </svg>
-    </>
-  );
-};
+// 颗粒 / 暗角 / 扫描线搬到了 engine/PostPass.tsx：现在它们和撕裂、闪白是同一层，
+// 强度可以由 storyboard 的 meta.post 调。这里不再保留旧的 PostFx。

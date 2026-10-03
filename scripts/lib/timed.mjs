@@ -3,7 +3,7 @@
 //           -> beats (sentences) -> shots (storyboard anchors, or auto detectors) -> cues -> captions
 import { alignText, audioTrimStart, captionLines, isPunct, sentenceSpans, spanTime } from "./align.mjs";
 import { DETECTORS, detectMetaphor, keywords, clean, short } from "./detect.mjs";
-import { autoEnterFor, validateMotion } from "./motion.mjs";
+import { autoEnterFor, normThrough, validateMotion } from "./motion.mjs";
 import { sectionText } from "./script.mjs";
 
 const LEAD = 0.12; // visuals lead the voice a little
@@ -500,6 +500,9 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
       text,
       data,
       transition: tr,
+      // 分镜写了 through 才带上（形状连续转场钻的位置）；没写留给渲染层用默认位置。
+      // 注意非法值这里返回 null，必须转成 undefined，否则 make.mjs 会把「没写」当成「写错」报警告。
+      through: s.through ? normThrough(s.through) || undefined : undefined,
       motion,
       hideCaptions: s.captions === false ? true : s.captions === true ? false : undefined,
       auto: !!s.auto,

@@ -362,8 +362,58 @@ export const SLOT_SPEC = {
     },
   },
   金句: { alias: "原文" },
+  流程: {
+    type: "screen-morph",
+    // [流程: 首页.png 打开榜单, 榜单.png 换到 AGENTIC, 结果.png 导出] —— 同一个界面一路演进，每格必须是真截图
+    run: (v) => {
+      const toks = String(v || "").split(/[,，、;；|｜]|\s+/).map((t) => t.trim()).filter(Boolean);
+      const states = [];
+      for (const t of toks) {
+        if (isPath(t)) states.push({ src: t, label: undefined });
+        else if (states.length && !states[states.length - 1].label) states[states.length - 1].label = short(t, 8);
+      }
+      if (states.length < 2) return null; // 少于两格谈不上「演进」
+      return { states: states.slice(0, 6).map((s, i) => ({ src: s.src, label: s.label || `第 ${i + 1} 步` })) };
+    },
+  },
+  路径: { alias: "流程" },
+  层层: {
+    type: "infinite-zoom",
+    // [层层: 主界面.png 0.3,0.36 总榜, 明细.png 0.5,0.16 单个模型] —— 每格 = 真图 + 洞口坐标（可选）+ 小标签
+    // 行分隔符是 ;／；或「逗号后面不是数字」——坐标里的逗号（0.3,0.36）不能被当成换行
+    run: (v) => {
+      const rows = String(v || "").split(/[;；]|,(?!\s*[\d.])/).map((x) => x.trim()).filter(Boolean).slice(0, 5);
+      const worlds = rows
+        .map((r) => {
+          const toks = pipe(r);
+          const src = toks.find(isPath);
+          if (!src) return null;
+          const xy = (toks.find((t) => /^\d[\d.]*[,,，]\d/.test(t)) || "").split(/[,,，]/).map(Number);
+          const label = short(toks.find((t) => t !== src && !/^\d[\d.]*[,,，]\d/.test(t)) || base(src), 8);
+          const portal = xy.length === 2 && xy.every((n) => Number.isFinite(n) && n >= 0 && n <= 1) ? { x: xy[0], y: xy[1], r: 0.12 } : undefined;
+          return { src, label, ...(portal ? { portal } : {}) };
+        })
+        .filter(Boolean);
+      return worlds.length >= 2 ? { worlds } : null; // 一层不叫「穿门」
+    },
+  },
+  圈注: {
+    type: "cursor-trace",
+    // [圈注: 报表.png 0.42,0.31 成本占九成] —— 在真截图上把这一处圈出来（半径按图给默认值）
+    run: (v) => {
+      const toks = pipe(v);
+      const src = toks.find(isPath);
+      if (!src) return null;
+      const xy = (toks.find((t) => /^\d[\d.]*[,,，]\d/.test(t)) || "").split(/[,,，]/).map(Number);
+      const label = short(toks.find((t) => t !== src && !/^\d[\d.]*[,,，]\d/.test(t)) || "", 12);
+      if (xy.length !== 2 || !xy.every((n) => Number.isFinite(n) && n >= 0 && n <= 1)) return null; // 没坐标就别画，画在猜的位置上等于骗人
+      return { src, strokes: [{ shape: "circle", x: clamp01(xy[0] - 0.16), y: clamp01(xy[1] - 0.06), w: 0.32, h: 0.12, label: label || undefined }] };
+    },
+  },
 };
 const sp = (s, sep = "[,，、;；]") => String(s || "").split(new RegExp(sep)).map((x) => x.trim()).filter(Boolean);
+// 圈注的框不能超出图外：留 0.1 的边，画到边上就收住
+const clamp01 = (v) => Math.max(0, Math.min(0.9, v));
 // 一条记录内部的字段：写了 | 就按 | 分（评论/头像那种一条一个东西），没写就按空格分（出处那种标题+地址+日期）
 const pipe = (s) => (/[|｜]/.test(s) ? String(s).split(/[|｜]/) : String(s).split(/\s+/)).map((x) => String(x).trim()).filter(Boolean);
 const isPath = (x) => (/[\/\\]|\.(png|jpe?g|webp|gif|md|txt|pdf|mp4|mov|webm|svg)$/i.test(x) && !isUrl(x));

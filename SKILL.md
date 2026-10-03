@@ -22,20 +22,48 @@ node scripts/make.mjs examples/comment-mining/input.json --out output/从评论�
 需要 Node 22+、ffmpeg、Python 3 + `faster-whisper`（时间轴识别）+ `rapidocr_onnxruntime`（截图按钮定位，可选），首次在项目目录执行 `npm install`。
 Windows 上如果 `node` 不在 PATH：`$env:Path = "$env:USERPROFILE\.workbuddy\binaries\node\versions\22.22.2-3;$env:Path"`。
 
+## 一条视频 = 一个独立项目目录（硬规则）
+
+**母 skill 目录只放基础设施**（`src/` 组件与引擎、`scripts/` 管线、`CATALOG.md`、三个台账）。单条视频的文案、配音、截图、分镜、成片、静帧，一律落在自己的工作目录里，不许混进母 skill 目录——混进去下次就分不清哪条片是哪条片，母目录也会越来越乱。
+
+每条片的家：`<工作区>/neurocast-<片名>/`
+
+```
+neurocast-我的新片/
+  文案.md            讲稿 + [口播:] [出处:] [流程:] [圈注:] 这些槽位标记（见「素材槽位」）
+  input.json         管线入口（路径都相对这个目录写）
+  storyboard.json    分镜
+  assets/            配音 voice.mp3、口播 mp4、截图、录屏——都放这儿
+  assets_todo.md     管线生成的采集清单（缺哪张素材、上哪一镜），照它去截图
+  out/               成片、beats.md、静帧拼图自动落这里（gitignore 覆盖，不用管）
+```
+
+创建：
+
+```bash
+node scripts/new-video.mjs 我的新片                 # 中文片名即可
+node scripts/new-video.mjs 我的新片 my-new-video    # 第二个参数是开场的 ascii id（中文名必须给）
+```
+
+它会建好上面这套目录，顺手在 `src/openings/<日期>-<id>/Opening.tsx` 生成这条片的**专属开场骨架**并登记进 `src/openings/index.ts`（开场是组件资产，留在 skill 里；`--plan-only` 前不用手工接线）。工作区默认取当前目录往上找到的第一个含 `neurocast-*` 的目录，也可用 `--at <目录>` 或环境变量 `NEUROCAST_WORKSPACE` 指定。
+
+判据（管线自动识别，无需参数）：`input.json` 在 skill 目录外 → 它所在目录就是这条片的家，所有产物落 `<片目录>/out/`，任务名取片目录名（不再是一串 `input_2026…`）。`examples/` 里的历史示例照旧落 `ROOT/out`，行为不变。
+
 ## 工作流程（调用模型照做）
 
 | 步骤 | 命令 | 产出 |
 |---|---|---|
-| 1 准备 | 写 `input.json` + `文案.md`（写法见下） | |
-| 2 节拍表 | `node scripts/make.mjs input.json --beats` | `beats.md`：每句台词的真实时间、口播/配音分段、匹配率 |
-| 3 写分镜 | 读 `beats.md` + `CATALOG.md`，先看 `node scripts/pick.mjs --recent` 避开上几条片的老面孔，写 `storyboard.json` | |
-| 3.5 写开场 | 为这条视频新写 `src/openings/<日期-主题>/Opening.tsx`（见「专属开场」），`node scripts/openings.mjs sync` | 开场库 +1 |
-| 4 校验 | `node scripts/make.mjs input.json --plan-only` | 镜头表；锚点找不到、数据不合 schema、本片内重复、**跨片重复**都会逐条列出 |
-| 5 看静帧 | `node scripts/make.mjs input.json --stills` | `out/<名>_stills.jpg`：每个镜头一张，先看再渲染 |
-| 6 渲染 | `node scripts/make.mjs input.json --out 成片.mp4` | 2.5 分钟视频约 7 分钟；成功后自动写用量台账 |
+| 1 建片目录 | `node scripts/new-video.mjs <片名> [ascii-id]` → 往里放文案.md / 配音 / 截图，写 `input.json` | 独立项目目录 + 专属开场骨架 |
+| 2 节拍表 | `node scripts/make.mjs <片目录>/input.json --beats` | `<片目录>/out/…beats.md`：每句台词的真实时间、口播/配音分段、匹配率 |
+| 3 写分镜 | 读 `beats.md` + `CATALOG.md`，先看 `node scripts/pick.mjs --recent` 避开上几条片的老面孔，写 `<片目录>/storyboard.json` | |
+| 3.5 定制开场 | 改步骤 1 生成的 `src/openings/<日期>-<id>/Opening.tsx`（首帧钩子按这条片重写，见「专属开场」），`node scripts/openings.mjs sync` | 开场库 +1 |
+| 4 校验 | `node scripts/make.mjs <片目录>/input.json --plan-only` | 镜头表；锚点找不到、数据不合 schema、本片内重复、**跨片重复**都会逐条列出 |
+| 5 看静帧 | `node scripts/make.mjs <片目录>/input.json --stills` | `<片目录>/out/<名>_stills.jpg`：每个镜头一张，先看再渲染 |
+| 5.5 逐帧查转场 | 改了 `ShotFrame.tsx` / `PostPass.tsx` 或第一次用 zoom/push/wipe/grid 时：`node scripts/qa/transitions.mjs` | `out/qa/transitions.jpg`：每个边界一行（上一镜尾巴 / 入场 +2 / +6 / +10 / 稳定帧）+ 开/关后期均差。**稳定帧和首帧必须是 0**（滤镜没挂上、开场第 0 帧干净），换镜帧应明显 >0 |
+| 6 渲染 | `node scripts/make.mjs <片目录>/input.json` | 2.5 分钟视频约 7 分钟，成片落 `<片目录>/out/`；成功后自动写用量台账 |
 | 7 补资产 | 某段现有组件表达不好 → 先 `pick.mjs --fresh` 在没上过的组件里找，找不到再新建（见「扩展组件资产」） | 组件库越用越丰富 |
 
-`beats.md` 里匹配率低于 90% 说明文案和配音对不上（配音不是按这份文案生成的），先把文案改成配音实际念的内容。
+命令都在 skill 目录里执行（`scripts/` 在那儿）；`input.json` 和素材路径相对**它自己所在的片目录**写，所以同一份 `input.json` 换台机器也能跑。`beats.md` 里匹配率低于 90% 说明文案和配音对不上（配音不是按这份文案生成的），先把文案改成配音实际念的内容。
 
 ## input.json
 
@@ -46,7 +74,7 @@ Windows 上如果 `node` 不在 PATH：`$env:Path = "$env:USERPROFILE\.workbuddy
 | `audio_timeline` | 否 | 配音的时间轴 JSON（`asr_words.py` 输出的 `{words:[{start,end,text}]}`，或 `{segments:[…]}`）。不给就自动识别并缓存到 `.cache/asr` |
 | `clip_timelines` | 否 | 口播视频的时间轴 `{ "talk.mp4": "talk_asr.json" }`，不给就自动识别 |
 | `opening_video` | 否 | 开场口播视频。文案里没写 `[口播:]` 时用它：自动找出它讲到文案哪里，那部分归口播 |
-| `presenter` | 否 | **全片只用 TTS 配音**时的真人画面层：`{ "video": "talk.mp4", "timeline": "talk_asr.json", "full": 2 }`。真人静音，按口型自动对齐 TTS（算偏移），前 `full` 秒全屏，之后收进右上角小窗，一直播到视频素材结束。可选 `offset`（秒，手动偏移）、`focusX/focusY`、`hideFrom`（秒，提前收起） |
+| `presenter` | 否 | **全片只用 TTS 配音**时的真人画面层：`{ "video": "talk.mp4", "timeline": "talk_asr.json", "full": 2 }`。真人静音，按口型自动对齐 TTS：逐字拟合，语速差非线性时自动用 ffmpeg setpts 把真人视频重排到 TTS 时钟（两段变速，日志会打「✓ 真人分段变速」），前 `full` 秒全屏，之后收进右上角小窗，一直播到视频素材结束。可选 `offset`（秒，手动偏移）、`rate`（手动变速，给了就跳过分段）、`focusX/focusY`、`hideFrom`（秒，提前收起） |
 | `storyboard` | 推荐 | 分镜文件。不给 = 自动模式（规则检测，效果一般） |
 | `title` | 否 | 视频标题（口播标题条、HUD） |
 | `seed` | 否 | 换 seed = 换一套配色/3D 背景/字体/转场组合 |
@@ -56,6 +84,7 @@ Windows 上如果 `node` 不在 PATH：`$env:Path = "$env:USERPROFILE\.workbuddy
 | `captions` | 否 | `false` 关字幕 |
 | `sfx` | 否 | `false` 关音效（或命令行 `--no-sfx`） |
 | `bgm` | 否 | 背景音乐文件（音量 0.14，约 -17 dB） |
+| `post` | 否 | 全片后期层强度（`src/engine/PostPass.tsx`）：`{ "grain": 0.07, "vign": 0.95, "scan": 1, "chroma": 1, "tear": 1, "flashOnCut": true }`。`chroma`/`tear` 是倍率（0~2，0 = 关掉 RGB 分离 / 画面撕裂），其余 0~1。撕裂和闪白**只发生在换镜那 12 帧**，稳定帧与首帧恒定干净；讲严肃数据、不想看着「花」的片子写 `"chroma": 0, "tear": 0` |
 | `tail` | 否 | 最后一句话之后留几秒，默认 1.6 |
 
 ## 文案写法
@@ -93,6 +122,9 @@ Windows 上如果 `node` 不在 PATH：`$env:Path = "$env:USERPROFILE\.workbuddy
 [评论墙: 小明|这招真有用 1.2万, …]  [评论: …]                      → comment-wall（≥3 条）
 [原文: “Everything is a function of the current frame.” ——官方文档 · Models]  → brand-quote-card
 [金句: …]
+[流程: 首页.png 打开榜单, 榜单.png 换到 AGENTIC, 结果.png 导出]        → screen-morph（一镜到底，2~6 格真截图）
+[层层: 主界面.png 0.3,0.36 总榜, 明细.png 0.5,0.16 单个模型]           → infinite-zoom（穿门无限缩放，洞口坐标可选）
+[圈注: 报表.png 0.42,0.31 成本占九成]                                  → cursor-trace（在真截图上一笔笔画出来）
 ```
 
 - 一行一个标记，**不朗读、不进字幕**，挂在紧跟的那段正文上；一段里多个标记 = 多个镜头（每个标记切一刀）。
@@ -122,7 +154,14 @@ Windows 上如果 `node` 不在 PATH：`$env:Path = "$env:USERPROFILE\.workbuddy
 4. **按意思选组件，不按关键词**：先问“这句话在讲一个什么场景/关系”，再去 CATALOG 找对应画面（先后顺序反了 → logic-flip；大 vs 小 → scale-gap；以前 vs 现在 → before-after；逐个推荐工具 → tool-card focus）。出现“AI”两个字不等于要用 neural。
 5. **画面里的字比台词短**：标题、标签、数字、关键词；不要把整句台词再抄一遍（底部已有字幕）。画面本身就在“说台词”的组件（dialogue / chat-command / punch-text）会自动关字幕，可用 `"captions": true/false` 覆盖。
 6. **节奏**：一镜 2~8 秒为宜；< 1.5 秒的短句并进相邻镜头（比如“快拉倒吧”做成对话最后一条 punch 气泡）；超过 10 秒的镜头必须有 3 个以上内部锚点。同一组件不要连用超过 2 次（逐个介绍的系列除外）。
-7. 可选字段：`transition`（fly / warp / iris / glitch / fade / cut）、`variant`、`captions`。
+7. 可选字段：`transition`（fly / warp / iris / glitch / fade / cut / flood / zoom / push / wipe / grid）、`through`、`variant`、`captions`。
+   - **flood**「一镜到底」：一块黑形状涨满吞掉上一场，再收缩成圆点把下一场吐出来（不剪、不淡出，下一场像从上一场里长出来的），适合连续推同一件事。
+   - **形状连续转场 zoom / push / wipe / grid**（移植自 opus-video-skills 的真代码，见 `docs/OPUS55_ANIMATIONS.md` 一·b）：上一镜不淡出、不剪走，下一镜从上一镜画面里的**一个形状**长出来盖满全屏。写在**入场**那一镜上；A/B 两侧靠镜头重叠的 12 帧各算同一个 k，视觉上就是同一扇门在放大。
+     - `zoom`：从 `through` 指定的位置钻出来放大铺满。`"through": [中心x, 中心y, 宽, 高]`，全部 0~1 归一化（例：`[0.78, 0.3, 0.16, 0.22]` = 右上那块）。**洞要对准上一镜里正在讲的那个东西**——上一镜是仪表盘，就把洞开在那块表上，观众的视线是被「带着走」而不是被切过去的。不写 `through` 用画面中上默认位。
+     - `push`：整块画面被下一镜推走；推进方向 = `variant % 4`（0 右 / 1 下 / 2 左 / 3 上），讲「并列两块内容」「下一步」时用。
+     - `wipe`：从左推过去的擦除，前缘一条强调色亮边；讲「切换到下一个对象」用。
+     - `grid`：16×9 格子按对角线依次弹起强调色块再被画面顶替；适合章节切换、总结页、信息密度高的下一镜。
+   - 选转场的标准是**语义**不是好看：`cut` 只给口播首镜和「必须立刻看清」的硬转折；连续推同一件事优先 zoom/push/wipe/grid/flood；`fade` 留给时间/场景真的跳了一段的地方。随机池（不写 `transition` 时）由 seed 挑 4 种。
 8. 写完跑 `--plan-only`：报「锚点找不到」就换成台词里真实存在的字；报 schema 错误就照 CATALOG 改字段。再跑 `--stills` 看每镜静帧。
 9. 字幕每行 ≤ 12 字（自动断行），黑描边，不用管。
 
@@ -166,7 +205,7 @@ Windows 上如果 `node` 不在 PATH：`$env:Path = "$env:USERPROFILE\.workbuddy
 **做法**：
 
 1. 读文案第一句 + 看口播第一帧（`ffmpeg -ss 0.5 -i talk.mp4 -frames:v 1 f.jpg`：人在画面哪边、背景亮不亮），定钩子类型和画面动作。
-2. 新建 `src/openings/<日期-主题>/Opening.tsx`，`layer: "opening"`、`noGallery: true`，写 `opening: { script, hook, techniques }` 元信息；在 `src/openings/index.ts` 注册。
+2. 改 `node scripts/new-video.mjs` 生成的 `src/openings/<日期>-<id>/Opening.tsx`（骨架已带 `layer: "opening"`、`noGallery: true`、`opening: { script, hook, techniques }` 元信息，也已登记进 `src/openings/index.ts`），把首帧钩子按这条片重写。手工新建也行，但要自己补 index.ts 那一行。
 3. 用电影感工具包 `src/lib/cine/` 拼：
    - `Type.tsx`：`Slam` 砸字、`CharPop` 逐字弹出、`Wipe` 擦出、`Stamp` 盖章、`Strike` 划掉、`Counter` 数字滚动、`outline()` 描边
    - `Flash.tsx`：`Flash` 闪白、`RingBurst` 冲击环、`SpeedLines` 速度线、`Scrim` 压暗一侧保证字可读
@@ -204,7 +243,7 @@ node scripts/openings.mjs status opening-comment-mining keep
 - 渲染成功后管线自动记账；`--plan-only` / `--stills` 不记账，`--dry-run` 全流程也不记账。调试老素材不想被记账/检查：`--no-usage-check`；想改片子身份：`--video 片名`。
 - 台账是资产不是负担：`usage/library.json` 要提交，换机器/重新 clone 后跨片记忆才还在。历史片第一次建库用 `node scripts/usage.mjs backfill <分镜或时间轴路径…>`。
 
-**入场语法：每条正片镜头都显式写 `motion.enter`。** 现在 92 个正片组件全部接了 `src/lib/enter.tsx`（273 处入场调用点），分镜写什么就用什么运动：`rise / slam / slide-l / slide-r / wipe / assemble / zoom-through / drop`，可配 `energy: 1|2|3`。
+**入场语法：每条正片镜头都显式写 `motion.enter`。** 现在 100 个正片组件全部接了 `src/lib/enter.tsx`（`node scripts/motion-audit.mjs` 报「待迁移 0」），分镜写什么就用什么运动：`rise / slam / slide-l / slide-r / wipe / assemble / zoom-through / drop`，可配 `energy: 1|2|3`。
 
 ```json
 { "type": "leaderboard", "motion": { "enter": "slide-l", "energy": 2 }, "data": { … } }
@@ -226,7 +265,7 @@ node scripts/openings.mjs status opening-comment-mining keep
 
 ### 采集清单：缺什么，一目了然
 
-`--plan-only` / 渲染后都会打印，并写一份到任务目录 `public/jobs/<任务>/assets_todo.md`：哪一镜、哪个组件、缺哪些字段、讲稿里点名的文件名是什么。只列「真会空着」的行（讲稿点名了文件却没找到，或这个组件的素材字段本来就必填——必填由 schema 探测得出）。博主照着这张表去截图/录屏，回来重跑就补齐。
+`--plan-only` / 渲染后都会打印，并写两份：任务目录 `public/jobs/<任务>/assets_todo.md`（一次性构建产物）+ **片目录根 `assets_todo.md`**（跟文案同级，跟着这条片走）。哪一镜、哪个组件、缺哪些字段、讲稿里点名的文件名是什么。只列「真会空着」的行（讲稿点名了文件却没找到，或这个组件的素材字段本来就必填——必填由 schema 探测得出）。博主照着这张表去截图/录屏，把文件放进 `<片目录>/assets/`，回来重跑就补齐。
 
 ### 素材台账：`assets/library.json`
 
@@ -259,7 +298,7 @@ node scripts/openings.mjs status opening-comment-mining keep
   - **技术类通用 6 招**（`tech-opening-01`~`06`，`src/openings/tech.tsx`）：按第一句话的手法选（慢慢放大做悬疑 / 出其不意按节奏变形 / 蒙版缩圈 / 身后飞标题 / 文字干货先出现 / 极简闪白），只改字段就能用。参考《开场手法素材》招数表。
   - **20 个按钩子类型的模板**（`op-t01`~`op-t20`，`src/openings/templates/`）：按文案第一句的钩子类型（反问/数字/反常识/痛点/悬念/点名/对比/警告/揭秘/倒计时/收益/结果先行/VS/清单/私信/稀缺/快讯/放大镜/打赌/故障打断）挑一个，只改字段。选型表在 `openings/TEMPLATES.md`，预览在 `openings/previews/op-t*.mp4`。
   - 同一个模板不要连着用；要大改就复制成专属开场。
-- 目前 92 个正片组件（结构 8 / 信息图 25 / 概念隐喻 30 / 叙事场景 9 / 产品 11 / 截图录屏 9），另有 32 个开场（`src/openings/`，不计入）。最新加入的是**真实素材那一层**（`src/lib/asset.tsx` 的 MissingAsset、`src/lib/source.tsx` 的 SourceBadge、`src/lib/brands.ts` 的真 logo）：
+- 目前 100 个正片组件（结构 10 / 信息图 28 / 概念隐喻 31 / 叙事场景 9 / 产品 11 / 截图录屏 11），另有 32 个开场（`src/openings/`，不计入）。**以 `node scripts/catalog.mjs` 生成的 CATALOG.md 为准**（这里的手写分类只是给个量感）。最新加入的两批：
   - **真标识**：logo-wall（品牌墙，牌子上过 `public/brands/` 的真 svg，查不到退成通用图标）、brand-quote-card（引用官方原话 + 真地址 + 采集时间，逐字打出来）。
   - **真凭据**：citation-strip（出处清单：真 url + 真日期 + 可选截图缩略，写不出地址的条目直接不收）、evidence-zoom（在真截图上圈一个点放大，坐标来自 OCR 或人量的，不猜）。
   - **真界面**：real-doc-scroll（长文档/表格逐页滚动 + 当前行高亮 + 进度轨）、screen-versus（两三张真结果并排，各自标来源与采集时间）。
@@ -300,6 +339,12 @@ node scripts/openings.mjs status opening-comment-mining keep
 7. 可选：在 `scripts/lib/detect.mjs` 加检测器，让自动模式也能选到它。
 8. 新图标加在 `src/lib/icons.tsx`；新音效放 `public/sfx/<name>.wav` 并在 `src/lib/sfx.tsx` 的 `SFX` 表登记时长（帧）。
 
+**不知道加什么的时候，去别人的动画里挖**：`docs/OPUS55_ANIMATIONS.md` 是移植台账，**两个来源分开记**：
+- **一、** `awesome-opus5-5-videos`（MIT）——那仓库**只有 prompt 没有代码**，所以这一路的「移植」是把别人描述的机制参数化成我们的组件。已移植 9 条（flood 转场、screen-morph、cursor-trace、infinite-zoom、scale-dive、fill-build、inplace-evolve、reward-beat、typo-arch）都标了 slug 和 @author，待移植的按 P1/P2/P3 排好了，还有一份「一条镜头只讲一件事、最后一个画面 = 下一个画面的起点、能不切就不切」这类通用原则。
+- **一·b、** `tuzhechen2005/opus-video-skills`（MIT © tuzhechen2005，部分文件双版权 © John Heibel）——**这一路是 Opus 写好的真代码**，已移植：全片后期层（`src/engine/PostPass.tsx`）+ 形状连续转场 zoom/push/wipe/grid（`src/engine/ShotFrame.tsx`）。每帧是时间的纯函数、无头 Chrome 逐帧渲染，和我们是同一套约束，所以机制能直接对译。
+
+要新增组件先去看这张表，别从空白开始想；移植完回来把表更新（勾掉 + 写组件 id/落地位置 + 出处）。**外部仓库只读不入库**：临时目录里 clone 来看，别把它拷进 skill 或 git。
+
 ## 音效
 
 实际音效只有 `public/sfx/*.wav` 这 15 个（`scripts/gen_sfx.py` 程序合成，无版权问题；旧文档里的 `assets/sfx/*.mp3` 语义化音效和“组件专属映射表”并不存在，已作废）：
@@ -316,13 +361,14 @@ node scripts/openings.mjs status opening-comment-mining keep
 | typing / bubbles | 40 / 45 | 打字、聊天气泡 |
 | sparkle / success | 30 / 30 | 完成、好结果 |
 
-换成自己的素材：同名覆盖即可。音量：人声响度统一到 -16 LUFS，BGM 0.14（约 -17 dB，规范 -12~-18 dB），音效 0.2~0.55。转场音效自动加（fly/warp → whoosh，iris → swish，glitch → glitch，音量 0.16）；组件内部音效在各组件里声明。`--no-sfx` 全关。
+换成自己的素材：同名覆盖即可。音量：人声响度统一到 -16 LUFS，BGM 0.14（约 -17 dB，规范 -12~-18 dB），音效 0.2~0.55。转场音效自动加（fly/warp/zoom → whoosh，iris/push/wipe → swish，glitch/grid → glitch，flood → impact，音量 0.16）；组件内部音效在各组件里声明。`--no-sfx` 全关。
 
 ## 命令
 
 | 命令 | 作用 |
 |---|---|
-| `node scripts/make.mjs in.json` | 出片（默认输出 `out/<名>_seed<N>.mp4`，`--out` 指定） |
+| `node scripts/new-video.mjs <片名> [ascii-id]` | 建这条片的独立项目目录 + 专属开场骨架（见「一条视频 = 一个独立项目目录」） |
+| `node scripts/make.mjs in.json` | 出片（默认落 `<片目录>/out/<名>_seed<N>.mp4`，历史示例仍落 `ROOT/out`；`--out` 指定） |
 | `--beats` | 只生成节拍表 `beats.md` |
 | `--plan-only` | 只分镜 + 校验，打印镜头表 |
 | `--stills` | 每个镜头渲一张静帧拼图 |
@@ -337,6 +383,7 @@ node scripts/openings.mjs status opening-comment-mining keep
 | `node scripts/usage.mjs backfill [路径…]` / `record <timeline.json>` | 历史分镜回填建库 / 手工补记一条片子 |
 | `node scripts/brands.mjs sync / check / missing` | 品牌库：生成组件用的映射 / 校验 / 看还缺哪些 logo（详见「真实素材」） |
 | `node scripts/preview.mjs <id>[,<id>]` | 组件静帧 QA |
+| `node scripts/qa/transitions.mjs [kinds] [偏移]` | 转场 + 全片后期层 QA：出边界拼图 + 开/关后期的像素均差（稳定帧/首帧须为 0） |
 | `node scripts/catalog.mjs` | 重新生成 CATALOG.md |
 | `node scripts/openings.mjs sync / list / metric / status / preview` | 开场库：登记、看数据、录数据、保留/淘汰、出 5 秒预览 |
 | `python scripts/gen_sfx.py` | 重新生成音效库 |
@@ -372,6 +419,7 @@ scripts/lib/detect.mjs      自动模式的内容检测器 + 素材槽位表（S
 scripts/lib/registry-node.mjs  在 Node 里加载组件库做 schema 校验
 scripts/lib/assets.mjs      素材台账读写：占比、采集清单、按原始路径记账
 scripts/assets.mjs          素材台账命令（report / unused / dup / check / record / harvest）
+scripts/new-video.mjs       一条片的独立项目目录脚手架（建目录 + 生成并登记专属开场骨架）
 scripts/brands.mjs          品牌库命令（sync / check / missing）
 src/components/…            组件资产（registry.ts 注册）
 src/lib/asset.tsx           素材路径解析 + MissingAsset 缺素材占位
@@ -388,9 +436,12 @@ brands/library.json         品牌库：文案叫法 → public/brands/ 里的�
 public/brands/              真 logo 文件（svg/png）；空文件不算，见 brands.mjs check
 scripts/usage.mjs           用量台账命令（backfill / report / unused / recent）
 scripts/openings.mjs        开场库命令
-src/engine/                 Video（音轨/镜头/字幕）、ShotFrame（转场）、Hud（字幕/章节）
+scripts/qa/transitions.mjs  转场 + 后期层的像素验证（出 out/qa/transitions.jpg 拼图 + 开/关后期均差）
+src/engine/                 Video（音轨/镜头/字幕）、ShotFrame（转场）、PostPass（全片后期层）、Hud（字幕/章节）
 src/lib/                    theme / box / cue / sfx / icons / ui / anim
 CATALOG.md                  组件目录（自动生成）
+docs/OPUS55_ANIMATIONS.md   外部动画移植台账：一、prompt 语料的机制移植；一·b、opus-video-skills 真代码移植（含 MIT + John Heibel 双版权署名）
 examples/comment-mining/    完整示例：文案.md、storyboard.json、input.json、口播和配音
+<工作区>/neurocast-<片名>/   不在这个目录里：每条视频自己的文案/素材/成片都在这里（见「一条视频 = 一个独立项目目录」）
 _deprecated/                旧版不可用的脚本和文档（仅留档）
 ```

@@ -9,10 +9,15 @@ import { alpha, ThemeProvider, useTheme } from "../lib/theme";
 import { Sfx, SfxProvider, type SfxName } from "../lib/sfx";
 import type { Shot, Timeline } from "../types";
 import { World } from "../world/World";
-import { Captions, PostFx, ProgressHud } from "./Hud";
+import { Captions, ProgressHud } from "./Hud";
+import { fxAt, postCfgOf, PostDefs, PostOverlays, postFilter } from "./PostPass";
 import { OVERLAP, ShotFrame } from "./ShotFrame";
 
-const TRANSITION_SFX: Record<string, SfxName | undefined> = { fly: "whoosh", warp: "whoosh", iris: "swish", glitch: "glitch" };
+// 转场音效：形状连续转场里 zoom/push 是「整块画面在动」→ whoosh；wipe/grid 是「扫过去/一格格铺开」→ swish / glitch
+const TRANSITION_SFX: Record<string, SfxName | undefined> = {
+  fly: "whoosh", warp: "whoosh", iris: "swish", glitch: "glitch", flood: "impact",
+  zoom: "whoosh", push: "swish", wipe: "swish", grid: "glitch",
+};
 
 const src = (p: string) => (/^https?:/.test(p) ? p : staticFile(p));
 
@@ -22,14 +27,24 @@ export const withDefaults = (def: CompDef, data: any) => {
   return r.success ? r.data : data;
 };
 
-const ShotView: React.FC<{ shot: Shot; seed: number }> = ({ shot, seed }) => {
+const ShotView: React.FC<{ shot: Shot; next?: Shot; seed: number }> = ({ shot, next, seed }) => {
   const f = useCurrentFrame();
   const def = BY_ID[shot.type] ?? BY_ID.narration;
   const data = useMemo(() => withDefaults(def, shot.data), [def, shot.data]);
   const C = def.C;
   const tsfx = TRANSITION_SFX[shot.transition];
   return (
-    <ShotFrame frame={f} dur={shot.dur} transition={shot.transition} seed={seed + shot.start}>
+    <ShotFrame
+      frame={f}
+      dur={shot.dur}
+      transition={shot.transition}
+      seed={seed + shot.start}
+      nextTransition={next?.transition}
+      variant={shot.variant}
+      nextVariant={next?.variant}
+      through={shot.through}
+      nextThrough={next?.through}
+    >
       <MotionProvider spec={shot.motion}>
         <C data={data} frame={f} dur={shot.dur} variant={shot.variant % Math.max(1, def.variants)} seed={seed + shot.start} text={shot.text} />
       </MotionProvider>
@@ -152,6 +167,9 @@ const OpeningOverlay: React.FC<{ o: OpeningLive; seed: number }> = ({ o, seed })
 
 export const Video: React.FC<{ timeline: Timeline }> = ({ timeline }) => {
   const { meta, shots, chapters, captions, durationInFrames, audioClips } = timeline;
+  const f = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  const post = useMemo(() => postCfgOf(meta), [meta]);
   const op = timeline.opening;
   const odef = op ? BY_ID[op.type] : undefined;
   const opening = useMemo<OpeningLive | null>(() => {
@@ -160,6 +178,8 @@ export const Video: React.FC<{ timeline: Timeline }> = ({ timeline }) => {
     const to = Math.round(op.until ?? from + 75);
     return to > from ? { def: odef, data: withDefaults(odef, op.data), from, to } : null;
   }, [op, odef]);
+  // 后期量只在换镜的 12 帧重叠窗上有峰值，稳定帧返回全 0 → 滤镜根本不挂载
+  const fx = fxAt(shots, f, post, !!opening);
   const hideAt = (f: number) => {
     if (opening && f >= opening.from && f < opening.to) return true;
     const s = shots.find((x) => f >= x.start && f < x.start + x.dur);
@@ -173,16 +193,20 @@ export const Video: React.FC<{ timeline: Timeline }> = ({ timeline }) => {
       <SfxProvider enabled={meta.sfx !== false}>
         <AbsoluteFill style={{ overflow: "hidden" }}>
           <Backdrop />
-          <AbsoluteFill style={{ transform: meta.mirror ? "scaleX(-1)" : undefined }}>
-            <World shots={shots} seed={meta.seed} variant={meta.world} />
+          <PostDefs fx={fx} width={width} height={height} />
+          {/* 撕裂/RGB 分离挂在这一层：只包背景+镜头组，HUD 与字幕不进滤镜（否则逐字字幕会被扯花） */}
+          <AbsoluteFill style={postFilter(fx)}>
+            <AbsoluteFill style={{ transform: meta.mirror ? "scaleX(-1)" : undefined }}>
+              <World shots={shots} seed={meta.seed} variant={meta.world} />
+            </AbsoluteFill>
+            {shots.map((s, i) => (
+              // overlap so exit and entry transitions cross
+              <Sequence key={s.id} from={s.start} durationInFrames={s.dur + OVERLAP} name={`${s.type}:${s.text.slice(0, 12)}`}>
+                <ShotView shot={{ ...s, dur: s.dur + OVERLAP }} next={shots[i + 1]} seed={meta.seed} />
+              </Sequence>
+            ))}
           </AbsoluteFill>
-          {shots.map((s) => (
-            // overlap so exit and entry transitions cross
-            <Sequence key={s.id} from={s.start} durationInFrames={s.dur + OVERLAP} name={`${s.type}:${s.text.slice(0, 12)}`}>
-              <ShotView shot={{ ...s, dur: s.dur + OVERLAP }} seed={meta.seed} />
-            </Sequence>
-          ))}
-          <PostFx seed={meta.seed} />
+          <PostOverlays fx={fx} cfg={post} seed={meta.seed} />
           {meta.presenter && <PresenterLayer p={meta.presenter} opening={opening} />}
           {opening && (
             <Sequence from={opening.from} durationInFrames={opening.to - opening.from} name={`opening:${opening.def.id}`} layout="none">

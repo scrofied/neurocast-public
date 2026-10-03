@@ -34,6 +34,8 @@ import { CitationStrip } from "./screen/CitationStrip";
 import { ScreenVersus } from "./screen/ScreenVersus";
 import { EvidenceZoom } from "./screen/EvidenceZoom";
 import { RealDocScroll } from "./screen/RealDocScroll";
+import { ScreenMorph } from "./screen/ScreenMorph";
+import { CursorTrace } from "./screen/CursorTrace";
 import { PhoneFeed } from "./story/PhoneFeed";
 import { SwordForge } from "./story/SwordForge";
 import { Dialogue } from "./story/Dialogue";
@@ -61,6 +63,9 @@ import { TimeShards } from "./info/TimeShards";
 import { MeasureRuler } from "./info/MeasureRuler";
 import { CounterExample } from "./info/CounterExample";
 import { VersionLanes } from "./info/VersionLanes";
+import { FillBuild } from "./info/FillBuild";
+import { InplaceEvolve } from "./info/InplaceEvolve";
+import { RewardBeat } from "./info/RewardBeat";
 import { CaseReplay } from "./info/CaseReplay";
 import { RingAssembly } from "./metaphor/RingAssembly";
 import { SpinnerReasoning } from "./metaphor/SpinnerReasoning";
@@ -70,6 +75,7 @@ import { SurfaceCore } from "./metaphor/SurfaceCore";
 import { OneFishFourPlates } from "./metaphor/OneFishFourPlates";
 import { AbAudioWave } from "./info/AbAudioWave";
 import { WalledGarden } from "./metaphor/WalledGarden";
+import { ScaleDive } from "./metaphor/ScaleDive";
 import { Painkiller } from "./metaphor/Painkiller";
 import { TimeCeiling } from "./metaphor/TimeCeiling";
 import { CarryOrDig } from "./metaphor/CarryOrDig";
@@ -92,6 +98,8 @@ import { Hook } from "./structure/Hook";
 import { Outro } from "./structure/Outro";
 import { TalkingHeadStage } from "./structure/TalkingHeadStage";
 import { HeadPip } from "./structure/HeadPip";
+import { TypoArch } from "./structure/TypoArch";
+import { InfiniteZoom } from "./structure/InfiniteZoom";
 import { OPENINGS } from "../openings";
 
 // The asset library. Every entry is one reusable animated component; add new ones here
@@ -106,6 +114,8 @@ export const REGISTRY: CompDef[] = [
   Outro,
   TalkingHeadStage,
   HeadPip,
+  TypoArch,
+  InfiniteZoom,
   // info
   ParticleNumber,
   CodeEditor,
@@ -132,6 +142,9 @@ export const REGISTRY: CompDef[] = [
   VersionLanes,
   AbAudioWave,
   CaseReplay,
+  FillBuild,
+  InplaceEvolve,
+  RewardBeat,
   // metaphor
   NeuralNet,
   AgentSwarm,
@@ -153,6 +166,7 @@ export const REGISTRY: CompDef[] = [
   SafetyBrake,
   TeardownLens,
   WalledGarden,
+  ScaleDive,
   Painkiller,
   TimeCeiling,
   CarryOrDig,
@@ -195,6 +209,8 @@ export const REGISTRY: CompDef[] = [
   ScreenVersus,
   EvidenceZoom,
   RealDocScroll,
+  ScreenMorph,
+  CursorTrace,
   // per-script openings
   ...OPENINGS,
 ];

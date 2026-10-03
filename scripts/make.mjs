@@ -12,7 +12,7 @@ import { plan as planLegacy, PlanError, styleFor, VARIANTS } from "./lib/planner
 import { parseTimedScript } from "./lib/script.mjs";
 import { beatsMarkdown, planTimed, splitOpening, TimedError } from "./lib/timed.mjs";
 import { wordsOf } from "./lib/align.mjs";
-import { checkKindParity } from "./lib/motion.mjs";
+import { checkKindParity, checkTransitionParity, normThrough } from "./lib/motion.mjs";
 import { loadRegistry, validateShot } from "./lib/registry-node.mjs";
 import { slotAssetRefs } from "./lib/detect.mjs";
 import { load as loadUsage, shotsOf, record as recordUsage, crossVideoReport, statsOf, bodyComps } from "./lib/usage.mjs";
@@ -28,11 +28,13 @@ const fail = (code, msg) => {
   process.exit(1);
 };
 
-// 入场语法列表在渲染侧（src/lib/enter.tsx）和脚本侧（scripts/lib/motion.mjs）各有一份，
-// 这里比对，防止两处漂移后静默失效
+// 入场语法 / 转场列表在渲染侧（TSX）和脚本侧（motion.mjs）各有一份，
+// 这里比对，防止两处漂移后静默失效（转场漂移会让分镜掉进 glitch 兜底，看着「能动」其实全错）
 {
   const _parity = checkKindParity(fs.readFileSync(path.join(ROOT, "src/lib/enter.tsx"), "utf8"));
   if (_parity) fail("E_MOTION_PARITY", _parity);
+  const _tp = checkTransitionParity(fs.readFileSync(path.join(ROOT, "src/engine/ShotFrame.tsx"), "utf8"));
+  if (_tp) fail("E_TRANSITION_PARITY", _tp);
 }
 const warnings = [];
 const warn = (m) => {
@@ -65,11 +67,24 @@ const readJson = (p, code = "E_JSON") => {
 const input = readJson(inputPath);
 const baseDir = path.dirname(path.resolve(inputPath));
 const resolveIn = (p, dir = baseDir) => (path.isAbsolute(p) ? p : path.resolve(dir, p));
+
+// 一条片子 = 一个独立项目目录（<工作区>/neurocast-<片名>/：文案、input.json、storyboard、素材、成片）。
+// 判据：input.json 不在 skill 目录里 → 它所在的目录就是这条片的家，产物落 <片目录>/out/，
+// 母 skill 目录只剩基础设施（src / scripts / CATALOG / 台账），不再堆单条片的一次性文件。
+// examples/ 里的历史示例仍在 skill 内，行为不变（产物照旧落 ROOT/out）。
+const isUnder = (dir, root) => {
+  const rel = path.relative(root, dir);
+  return rel !== "" && !rel.startsWith("..") && !path.isAbsolute(rel);
+};
+const videoDir = isUnder(baseDir, ROOT) ? null : baseDir;
+const workOut = videoDir ? path.join(videoDir, "out") : path.join(ROOT, "out");
 if (opt["--seed"]) input.seed = +opt["--seed"];
 if (opt["--no-sfx"]) input.sfx = false;
 if (input.timeline && !input.audio_timeline) input.audio_timeline = input.timeline;
-const KNOWN = new Set(["script", "script_file", "title", "subtitle", "seed", "skin", "audio", "audio_timeline", "timeline", "opening_video", "opening_timeline", "clip_timelines", "storyboard", "captions", "sfx", "bgm", "cta", "outroTitle", "keywords", "tail", "assets", "tts", "voice", "presenter"]);
+const KNOWN = new Set(["script", "script_file", "title", "subtitle", "seed", "skin", "audio", "audio_timeline", "timeline", "opening_video", "opening_timeline", "clip_timelines", "storyboard", "captions", "sfx", "bgm", "post", "cta", "outroTitle", "keywords", "tail", "assets", "tts", "voice", "presenter"]);
 for (const k of Object.keys(input)) if (!KNOWN.has(k)) warn(`未知字段 "${k}" 已忽略（可用：${[...KNOWN].join(", ")}）`);
+// 全片后期层强度：input.post 或 storyboard.post 都行，input 优先；非法字段警告后丢掉
+let postCfg = normPost(input.post, warn);
 let scriptDir = baseDir;
 if (input.script_file) {
   const p = resolveIn(input.script_file);
@@ -80,7 +95,9 @@ if (input.script_file) {
 if (typeof input.script !== "string" || !input.script.trim()) fail("E_EMPTY", "缺少 script（讲稿全文）或 script_file");
 if (input.skin && !["aurora", "violet", "amber", "matrix", "arctic"].includes(input.skin)) warn(`skin "${input.skin}" 不存在，改为按 seed 选择（可用：aurora/violet/amber/matrix/arctic）`);
 
-const slug = path.basename(inputPath, path.extname(inputPath)).replace(/[^\w一-龥-]+/g, "_").slice(0, 40) || "job";
+// 片目录里的 input.json 都叫同一个名字，任务名要认目录，不然 jobs/ 下全是 input_2026… 分不清是谁
+const rawSlug = path.basename(inputPath, path.extname(inputPath));
+const slug = (/^input$/i.test(rawSlug) && videoDir ? path.basename(videoDir) : rawSlug).replace(/[^\w一-龥-]+/g, "_").slice(0, 40) || "job";
 const d = new Date();
 const stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}-${String(d.getHours()).padStart(2, "0")}${String(d.getMinutes()).padStart(2, "0")}${String(d.getSeconds()).padStart(2, "0")}`;
 const jobDir = path.join(PUB, "jobs", `${slug}_${stamp}`);
@@ -268,6 +285,7 @@ const runTimed = async () => {
     if (!fs.existsSync(p)) fail("E_STORYBOARD", `storyboard 文件不存在：${p}`);
     storyboard = readJson(p, "E_STORYBOARD");
     if (Array.isArray(storyboard)) storyboard = { shots: storyboard };
+    if (!postCfg) postCfg = normPost(storyboard?.post, warn); // 分镜也能带后期强度，input.post 优先
   }
   // 素材引用有三个来源：文案里的 [图/录屏] 标记、[槽位: …] 点名要的真文件，和分镜里
   // 任何声明了 assetFields 的组件（board-proof 这类以前只能手写 public/ 路径的，现在也会被 prepAssets 收到并补上 aspect/OCR/来源）
@@ -577,8 +595,15 @@ const assetReport = (tl, reg) => {
     console.log(`  采集清单（${miss.length} 个镜头点名要真素材但手上没有）：`);
     for (const m of miss) console.log(`    ${m.id.padEnd(4)} ${m.type.padEnd(19)} ${m.fields.join(",")} ${m.missing.length ? `← ${m.missing.join(" ")}` : "←（分镜里没填路径）"}  「${m.text.slice(0, 18)}」`);
     const p = path.join(jobDir, "assets_todo.md");
-    fs.writeFileSync(p, ["# 采集清单", "", `分镜点名要真素材、但当前没有文件的镜头（${miss.length} 个）。补齐后重跑同一条命令即可。`, "", ...miss.map((m) => `- [ ] **${m.id} ${m.type}** · 字段 ${m.fields.join(", ")}`), "", ...miss.map((m) => `  - 台词：${m.text}`)].join("\n"), "utf8");
-    console.log(`    清单已写出：${p}`);
+    const todo = ["# 采集清单", "", `分镜点名要真素材、但当前没有文件的镜头（${miss.length} 个）。补齐后重跑同一条命令即可。`, "", ...miss.map((m) => `- [ ] **${m.id} ${m.type}** · 字段 ${m.fields.join(", ")}`), "", ...miss.map((m) => `  - 台词：${m.text}`)].join("\n");
+    fs.writeFileSync(p, todo, "utf8");
+    // 片目录下再放一份：截图是人在片目录里干活时要照着做的清单，不该去 public/jobs 的临时目录里翻
+    let shown = p;
+    if (videoDir) {
+      fs.writeFileSync(path.join(videoDir, "assets_todo.md"), todo, "utf8");
+      shown = path.join(videoDir, "assets_todo.md");
+    }
+    console.log(`    清单已写出：${shown}`);
   }
   if (missingAssets.length) console.log(`  本次降级跳过的素材：${missingAssets.join(" ")}`);
   return r;
@@ -702,11 +727,22 @@ const main = async () => {
     }
     tl.meta.sfx = input.sfx !== false;
   }
+  // 后期层强度：input.post 或 storyboard.post，缺省由渲染层用默认（观感和老片子一致）
+  if (postCfg) tl.meta.post = postCfg;
 
   // ---------- validate every shot against its component schema ----------
   const errors = [];
   let openingUsed = null;
   for (const s of tl.shots) {
+    // 形状连续转场的「洞」：写法错了就退回默认位置，别让整条分镜报错停下
+    if (s.through !== undefined) {
+      const th = normThrough(s.through);
+      if (th) s.through = th;
+      else {
+        warn(`${s.id} 的 through 要写成 [x, y, 宽, 高]（0~1 归一化，例如 [0.5, 0.42, 0.26, 0.3]），已改用默认位置`);
+        delete s.through;
+      }
+    }
     const v = validateShot(reg, s.type, s.data);
     if (!v.ok) {
       if (storyboardMode && !s.auto) errors.push(`${s.id} ${s.type}：${v.issues.join("；")}`);
@@ -781,7 +817,7 @@ const main = async () => {
   }
   if (opt["--stills"]) {
     const { renderStills } = await import("./lib/stills.mjs");
-    const sheet = path.resolve(opt["--out"] ? opt["--out"].replace(/\.\w+$/, "") + "_stills.jpg" : path.join(ROOT, "out", `${slug}_stills.jpg`));
+    const sheet = path.resolve(opt["--out"] ? opt["--out"].replace(/\.\w+$/, "") + "_stills.jpg" : path.join(workOut, `${slug}_stills.jpg`));
     fs.mkdirSync(path.dirname(sheet), { recursive: true });
     console.log(`▶ 渲染每个镜头的静帧（${tl.shots.length} 张）`);
     await renderStills({ root: ROOT, timeline: tl, out: sheet });
@@ -790,7 +826,7 @@ const main = async () => {
   }
 
   // ---------- render ----------
-  const out = path.resolve(opt["--out"] || path.join(ROOT, "out", `${slug}_seed${tl.meta.seed}.mp4`));
+  const out = path.resolve(opt["--out"] || path.join(workOut, `${slug}_seed${tl.meta.seed}.mp4`));
   fs.mkdirSync(path.dirname(out), { recursive: true });
   const propsPath = path.join(jobDir, "props.json");
   fs.writeFileSync(propsPath, JSON.stringify({ timeline: tl }));
