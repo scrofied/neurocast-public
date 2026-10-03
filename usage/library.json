@@ -200,14 +200,13 @@
    "id": "用WorkBuddy变现：4个Skill+4个步骤",
    "title": "用WorkBuddy变现：4个Skill+4个步骤",
    "date": "2026-10-03",
-   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/input_20261003-142819/timeline.json",
-   "shots": 29,
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-workbuddy-pay_20261003-200613/timeline.json",
+   "shots": 36,
    "types": {
-    "board-proof": 8,
-    "screen": 7,
-    "step-rail": 1,
+    "evidence-zoom": 20,
+    "screen": 3,
     "bullet-cards": 1,
-    "checklist": 1,
+    "board-proof": 2,
     "ui-replica": 1,
     "safety-brake": 1,
     "chat-command": 1,
@@ -215,7 +214,6 @@
     "measure-ruler": 1,
     "teardown-lens": 1,
     "walled-garden": 1,
-    "domino-chain": 1,
     "logic-flip": 1,
     "flywheel": 1
    }
@@ -778,7 +776,7 @@
    ]
   },
   "screen": {
-   "count": 17,
+   "count": 13,
    "videos": [
     "AI 是怎么替你干活的",
     "别再让AI每次从零开始",
@@ -834,17 +832,11 @@
      "date": "2026-10-03",
      "shots": [
       "s1",
-      "s5",
-      "s7",
-      "s10",
-      "s13",
-      "s17",
-      "s28"
+      "s16",
+      "s35"
      ],
      "enters": [
       "rise",
-      "slide-l",
-      "zoom-through",
       "wipe",
       "slide-r"
      ]
@@ -1001,7 +993,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s4"
+      "s5"
      ],
      "enters": [
       "rise"
@@ -1029,7 +1021,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s24"
+      "s30"
      ],
      "enters": [
       "wipe"
@@ -1285,7 +1277,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s12"
+      "s15"
      ],
      "enters": [
       "zoom-through"
@@ -1436,13 +1428,12 @@
    ]
   },
   "checklist": {
-   "count": 8,
+   "count": 7,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用Opus做AI剪辑=浪费90%成本"
    ],
    "lastDate": "2026-10-03",
    "history": [
@@ -1485,16 +1476,6 @@
       "zoom-through",
       "drop",
       "rise"
-     ]
-    },
-    {
-     "video": "用WorkBuddy变现：4个Skill+4个步骤",
-     "date": "2026-10-03",
-     "shots": [
-      "s6"
-     ],
-     "enters": [
-      "zoom-through"
      ]
     }
    ]
@@ -1713,7 +1694,7 @@
    ]
   },
   "board-proof": {
-   "count": 11,
+   "count": 5,
    "videos": [
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
@@ -1747,22 +1728,12 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s0",
-      "s3",
-      "s9",
-      "s16",
-      "s18",
-      "s21",
-      "s23",
-      "s26"
+      "s7",
+      "s23"
      ],
      "enters": [
       "slam",
-      "wipe",
-      "slide-r",
-      "assemble",
-      "zoom-through",
-      "rise"
+      "assemble"
      ]
     }
    ]
@@ -1896,11 +1867,10 @@
    ]
   },
   "step-rail": {
-   "count": 3,
+   "count": 2,
    "videos": [
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用Opus做AI剪辑=浪费90%成本"
    ],
    "lastDate": "2026-10-03",
    "history": [
@@ -1919,16 +1889,6 @@
      "date": "2026-10-02",
      "shots": [
       "s8"
-     ],
-     "enters": [
-      "slide-r"
-     ]
-    },
-    {
-     "video": "用WorkBuddy变现：4个Skill+4个步骤",
-     "date": "2026-10-03",
-     "shots": [
-      "s2"
      ],
      "enters": [
       "slide-r"
@@ -1958,7 +1918,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s19"
+      "s24"
      ],
      "enters": [
       "drop"
@@ -1999,7 +1959,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s27"
+      "s34"
      ],
      "enters": [
       "rise"
@@ -2069,7 +2029,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s8"
+      "s11"
      ],
      "enters": [
       "assemble"
@@ -2109,7 +2069,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s11"
+      "s14"
      ],
      "enters": [
       "rise"
@@ -2128,8 +2088,8 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s14",
-      "s25"
+      "s17",
+      "s31"
      ],
      "enters": [
       "slam",
@@ -2149,7 +2109,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s15"
+      "s19"
      ],
      "enters": [
       "drop"
@@ -2168,7 +2128,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s20"
+      "s25"
      ],
      "enters": [
       "slam"
@@ -2177,7 +2137,13 @@
    ]
   },
   "domino-chain": {
-   "count": 1,
+   "count": 0,
+   "videos": [],
+   "lastDate": "2026-10-03",
+   "history": []
+  },
+  "evidence-zoom": {
+   "count": 20,
    "videos": [
     "用WorkBuddy变现：4个Skill+4个步骤"
    ],
@@ -2187,10 +2153,35 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s22"
+      "s0",
+      "s2",
+      "s3",
+      "s4",
+      "s6",
+      "s8",
+      "s9",
+      "s10",
+      "s12",
+      "s13",
+      "s18",
+      "s20",
+      "s21",
+      "s22",
+      "s26",
+      "s27",
+      "s28",
+      "s29",
+      "s32",
+      "s33"
      ],
      "enters": [
-      "wipe"
+      "slam",
+      "wipe",
+      "slide-r",
+      "slide-l",
+      "rise",
+      "zoom-through",
+      "assemble"
      ]
     }
    ]

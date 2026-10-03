@@ -44,23 +44,30 @@
   {
    "id": "用WorkBuddy变现：4个Skill+4个步骤",
    "date": "2026-10-03",
-   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/input_20261003-142819/timeline.json",
-   "assetSec": 113.1,
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-workbuddy-pay_20261003-200613/timeline.json",
+   "assetSec": 139,
    "totalSec": 209.6,
-   "ratio": 0.539,
+   "ratio": 0.663,
    "refs": [
     "D:/qord/neurocast-workbuddy-pay/dhome.png",
     "D:/qord/neurocast-workbuddy-pay/px_pay.mp4",
+    "D:/qord/neurocast-workbuddy-pay/dopen.png",
     "D:/qord/neurocast-workbuddy-pay/sk1.png",
+    "D:/qord/neurocast-workbuddy-pay/dpersonal.png",
     "D:/qord/neurocast-workbuddy-pay/dvp.png",
-    "D:/qord/neurocast-workbuddy-pay/px_scan.mp4",
+    "D:/qord/neurocast-workbuddy-pay/dcond.png",
+    "D:/qord/neurocast-workbuddy-pay/didcard.png",
+    "D:/qord/neurocast-workbuddy-pay/daudit.png",
     "D:/qord/neurocast-workbuddy-pay/sk2.png",
-    "D:/qord/neurocast-workbuddy-pay/dvp2.png",
+    "D:/qord/neurocast-workbuddy-pay/dagent.png",
     "D:/qord/neurocast-workbuddy-pay/px_ok.mp4",
+    "D:/qord/neurocast-workbuddy-pay/dvp2.png",
     "D:/qord/neurocast-workbuddy-pay/sk3.png",
     "D:/qord/neurocast-workbuddy-pay/dquick.png",
     "D:/qord/neurocast-workbuddy-pay/denv.png",
+    "D:/qord/neurocast-workbuddy-pay/dkey3.png",
     "D:/qord/neurocast-workbuddy-pay/sk4.png",
+    "D:/qord/neurocast-workbuddy-pay/dflow.png",
     "D:/qord/neurocast-workbuddy-pay/dhttp.png",
     "D:/qord/neurocast-workbuddy-pay/dpush.png",
     "D:/qord/neurocast-workbuddy-pay/dvp4.png",
@@ -234,11 +241,11 @@
    "kind": "image",
    "aspect": 0.8,
    "md5": "b48064e9b4d5",
-   "source": null,
+   "source": "腾讯云 CloudBase 文档",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "board-proof"
+    "evidence-zoom"
    ],
    "shows": [
     {
@@ -254,7 +261,7 @@
    "kind": "video",
    "aspect": 1.78,
    "md5": "bb5f862e0cec",
-   "source": null,
+   "source": "本机录屏",
    "capturedAt": null,
    "note": null,
    "used_in": [
@@ -270,15 +277,36 @@
     }
    ]
   },
+  "D:/qord/neurocast-workbuddy-pay/dopen.png": {
+   "kind": "image",
+   "aspect": 3.87,
+   "md5": "0c8a8c5cd330",
+   "source": "微信官方文档/小程序后台",
+   "capturedAt": null,
+   "note": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "用WorkBuddy变现：4个Skill+4个步骤",
+     "date": "2026-10-03",
+     "shots": [
+      "s2",
+      "s8"
+     ]
+    }
+   ]
+  },
   "D:/qord/neurocast-workbuddy-pay/sk1.png": {
    "kind": "image",
    "aspect": 0.8,
    "md5": "4f412fd53b0e",
-   "source": null,
+   "source": "SkillHub",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "board-proof"
+    "evidence-zoom"
    ],
    "shows": [
     {
@@ -290,35 +318,55 @@
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/dvp.png": {
+  "D:/qord/neurocast-workbuddy-pay/dpersonal.png": {
    "kind": "image",
-   "aspect": 0.8,
-   "md5": "f2095e9a22eb",
-   "source": null,
+   "aspect": 6.34,
+   "md5": "66352782b7f8",
+   "source": "微信官方文档/小程序后台",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "screen"
+    "evidence-zoom"
    ],
    "shows": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s5"
+      "s4"
      ]
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/px_scan.mp4": {
-   "kind": "video",
-   "aspect": 1.78,
-   "md5": "c927d2856e09",
+  "D:/qord/neurocast-workbuddy-pay/dvp.png": {
+   "kind": "image",
+   "aspect": 0.8,
+   "md5": "f2095e9a22eb",
+   "source": "微信官方文档",
+   "capturedAt": null,
+   "note": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "用WorkBuddy变现：4个Skill+4个步骤",
+     "date": "2026-10-03",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-workbuddy-pay/dcond.png": {
+   "kind": "image",
+   "aspect": 2.32,
+   "md5": "4448b92f80cc",
    "source": null,
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "screen"
+    "board-proof"
    ],
    "shows": [
     {
@@ -330,15 +378,15 @@
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/sk2.png": {
+  "D:/qord/neurocast-workbuddy-pay/didcard.png": {
    "kind": "image",
-   "aspect": 0.8,
-   "md5": "7002dea8bb98",
-   "source": null,
+   "aspect": 2.41,
+   "md5": "f62463520862",
+   "source": "微信官方文档/小程序后台",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "board-proof"
+    "evidence-zoom"
    ],
    "shows": [
     {
@@ -350,15 +398,15 @@
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/dvp2.png": {
+  "D:/qord/neurocast-workbuddy-pay/daudit.png": {
    "kind": "image",
-   "aspect": 0.8,
-   "md5": "cd0ca813a81e",
-   "source": null,
+   "aspect": 1.61,
+   "md5": "1cf21d16a88d",
+   "source": "微信官方文档/小程序后台",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "screen"
+    "evidence-zoom"
    ],
    "shows": [
     {
@@ -370,15 +418,35 @@
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/px_ok.mp4": {
-   "kind": "video",
-   "aspect": 1.78,
-   "md5": "48d0fd20975d",
-   "source": null,
+  "D:/qord/neurocast-workbuddy-pay/sk2.png": {
+   "kind": "image",
+   "aspect": 0.8,
+   "md5": "7002dea8bb98",
+   "source": "SkillHub",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "screen"
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "用WorkBuddy变现：4个Skill+4个步骤",
+     "date": "2026-10-03",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-workbuddy-pay/dagent.png": {
+   "kind": "image",
+   "aspect": 3.53,
+   "md5": "c5597d12a131",
+   "source": "微信官方文档",
+   "capturedAt": null,
+   "note": null,
+   "used_in": [
+    "evidence-zoom"
    ],
    "shows": [
     {
@@ -390,15 +458,15 @@
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/sk3.png": {
-   "kind": "image",
-   "aspect": 0.8,
-   "md5": "e47f1a80c60a",
-   "source": null,
+  "D:/qord/neurocast-workbuddy-pay/px_ok.mp4": {
+   "kind": "video",
+   "aspect": 1.78,
+   "md5": "48d0fd20975d",
+   "source": "本机录屏",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "board-proof"
+    "screen"
    ],
    "shows": [
     {
@@ -410,35 +478,15 @@
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/dquick.png": {
+  "D:/qord/neurocast-workbuddy-pay/dvp2.png": {
    "kind": "image",
    "aspect": 0.8,
-   "md5": "dd736a64dac2",
-   "source": null,
+   "md5": "cd0ca813a81e",
+   "source": "微信官方文档",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "用WorkBuddy变现：4个Skill+4个步骤",
-     "date": "2026-10-03",
-     "shots": [
-      "s17"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-workbuddy-pay/denv.png": {
-   "kind": "image",
-   "aspect": 0.8,
-   "md5": "0fa92c2a6f79",
-   "source": null,
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "board-proof"
+    "evidence-zoom"
    ],
    "shows": [
     {
@@ -450,15 +498,35 @@
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/sk4.png": {
+  "D:/qord/neurocast-workbuddy-pay/sk3.png": {
    "kind": "image",
    "aspect": 0.8,
-   "md5": "d264449c5abf",
-   "source": null,
+   "md5": "e47f1a80c60a",
+   "source": "SkillHub",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "board-proof"
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "用WorkBuddy变现：4个Skill+4个步骤",
+     "date": "2026-10-03",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-workbuddy-pay/dquick.png": {
+   "kind": "image",
+   "aspect": 0.8,
+   "md5": "dd736a64dac2",
+   "source": "腾讯云 CloudBase 文档",
+   "capturedAt": null,
+   "note": null,
+   "used_in": [
+    "evidence-zoom"
    ],
    "shows": [
     {
@@ -470,10 +538,30 @@
     }
    ]
   },
-  "D:/qord/neurocast-workbuddy-pay/dhttp.png": {
+  "D:/qord/neurocast-workbuddy-pay/denv.png": {
    "kind": "image",
    "aspect": 0.8,
-   "md5": "cd681ac21959",
+   "md5": "0fa92c2a6f79",
+   "source": "腾讯云 CloudBase 文档",
+   "capturedAt": null,
+   "note": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "用WorkBuddy变现：4个Skill+4个步骤",
+     "date": "2026-10-03",
+     "shots": [
+      "s22"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-workbuddy-pay/dkey3.png": {
+   "kind": "image",
+   "aspect": 2.07,
+   "md5": "61cb2e413421",
    "source": null,
    "capturedAt": null,
    "note": null,
@@ -486,6 +574,66 @@
      "date": "2026-10-03",
      "shots": [
       "s23"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-workbuddy-pay/sk4.png": {
+   "kind": "image",
+   "aspect": 0.8,
+   "md5": "d264449c5abf",
+   "source": "SkillHub",
+   "capturedAt": null,
+   "note": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "用WorkBuddy变现：4个Skill+4个步骤",
+     "date": "2026-10-03",
+     "shots": [
+      "s26"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-workbuddy-pay/dflow.png": {
+   "kind": "image",
+   "aspect": 1.25,
+   "md5": "b64aaeb5b741",
+   "source": "微信官方文档",
+   "capturedAt": null,
+   "note": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "用WorkBuddy变现：4个Skill+4个步骤",
+     "date": "2026-10-03",
+     "shots": [
+      "s27"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-workbuddy-pay/dhttp.png": {
+   "kind": "image",
+   "aspect": 0.8,
+   "md5": "cd681ac21959",
+   "source": "腾讯云 CloudBase 文档",
+   "capturedAt": null,
+   "note": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "用WorkBuddy变现：4个Skill+4个步骤",
+     "date": "2026-10-03",
+     "shots": [
+      "s28"
      ]
     }
    ]
@@ -494,18 +642,18 @@
    "kind": "image",
    "aspect": 0.8,
    "md5": "e86a76fa6f1b",
-   "source": null,
+   "source": "微信官方文档",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "board-proof"
+    "evidence-zoom"
    ],
    "shows": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s23"
+      "s29"
      ]
     }
    ]
@@ -514,18 +662,18 @@
    "kind": "image",
    "aspect": 0.8,
    "md5": "2cacce8e07ef",
-   "source": null,
+   "source": "微信官方文档",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "board-proof"
+    "evidence-zoom"
    ],
    "shows": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s26"
+      "s32"
      ]
     }
    ]
@@ -534,18 +682,18 @@
    "kind": "image",
    "aspect": 0.8,
    "md5": "daa0764370f1",
-   "source": null,
+   "source": "微信官方文档",
    "capturedAt": null,
    "note": null,
    "used_in": [
-    "board-proof"
+    "evidence-zoom"
    ],
    "shows": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s26"
+      "s33"
      ]
     }
    ]
@@ -554,7 +702,7 @@
    "kind": "video",
    "aspect": 1.78,
    "md5": "9cded58c33a0",
-   "source": null,
+   "source": "本机录屏",
    "capturedAt": null,
    "note": null,
    "used_in": [
@@ -565,7 +713,7 @@
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
      "date": "2026-10-03",
      "shots": [
-      "s28"
+      "s35"
      ]
     }
    ]
