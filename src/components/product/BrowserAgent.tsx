@@ -14,7 +14,7 @@ const step = z.object({ text: z.string(), at: z.number().optional() });
 const schema = z.object({
   title: z.string().optional(),
   kicker: z.string().optional(),
-  url: z.string().default("douyin.com/video/7394…"),
+  url: z.string().default("").describe("智能体打开的页面地址。必须写真的（默认空，空着就显示占位而不编一个假链接）"),
   items: z.array(z.string()).default(["求新手教程！", "这个怎么做的？", "哈哈哈哈", "有没有平价替代", "为什么我总失败", "蹲一个后续", "能讲讲避坑吗", "学到了"]).describe("页面里滚动的评论"),
   target: z.number().default(500).describe("最终保存条数"),
   unit: z.string().default("条评论"),
@@ -65,7 +65,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
           ))}
           <div style={{ marginLeft: 20, flex: 1, height: 38, borderRadius: 19, background: alpha(t.text, 0.08), display: "flex", alignItems: "center", gap: 10, padding: "0 16px", fontFamily: t.font.mono, fontSize: 22, color: t.text }}>
             <Icon name="lock" size={18} color={t.dim} />
-            {typed(data.url, frame, openAt, urlDone)}
+            {data.url ? typed(data.url, frame, openAt, urlDone) : <span style={{ color: t.dim, opacity: 0.7 }}>（分镜里没写 url：智能体打开的是哪个真页面？）</span>}
             {frame < urlDone + 4 && Math.floor(frame / 6) % 2 === 0 && <span style={{ color: t.primary }}>▍</span>}
           </div>
           <div style={{ padding: "6px 14px", borderRadius: 10, background: alpha(t.primary, 0.2), color: t.primary, fontFamily: t.font.mono, fontSize: 18, display: "flex", alignItems: "center", gap: 6 }}>
@@ -169,8 +169,8 @@ export const BrowserAgent: CompDef<D> = {
   tags: ["自己打开", "自己往下翻", "自动", "采集", "抓取", "浏览器"],
   motion: { kind: "AI 光标打字打开页面 → 评论流滚动、光块飞入文件计数上涨 → 步骤逐条点亮打勾", energy: 2 },
   desc: "浏览器里 AI 光标自己输网址、打开页面、加速往下翻评论；评论被抓取后化成光块飞进右侧文件，计数滚到 500；右侧三个动作依次打勾",
-  use: "AI/Agent 自动完成网页操作、采集、下载、整理（“它自己打开页面，自己往下翻，自己存好”）",
+  use: "AI/Agent 自动完成网页操作、采集、下载、整理（“它自己打开页面，自己往下翻，自己存好”）。url 要写当条片子真在用的那个页面地址",
   schema,
-  example: { target: 500, steps: [{ text: "自己打开页面", at: 6 }, { text: "自己往下翻", at: 40 }, { text: "自己存好", at: 90 }] },
+  example: { url: "douyin.com", target: 500, steps: [{ text: "自己打开页面", at: 6 }, { text: "自己往下翻", at: 40 }, { text: "自己存好", at: 90 }] },
   C,
 };

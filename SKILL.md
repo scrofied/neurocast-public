@@ -78,6 +78,29 @@ Windows 上如果 `node` 不在 PATH：`$env:Path = "$env:USERPROFILE\.workbuddy
 - 文案必须是**配音实际念的内容**。同一段话不要写两遍（旧版示例就是把开场写了两次，导致口播和配音重复）。
 - 代码块 ``` 不参与对齐（配音一般不念代码）。
 
+### 素材槽位：一行标记点名「用真素材 + 用哪个组件」
+
+写文案时手上有真东西（截图、榜单、 logo、评论、原话），别去写 storyboard——直接在文案里挂一行槽位标记，自动分镜就会点名对应组件并把文件拷进任务目录：
+
+```markdown
+[logo: Claude, 剪映, 小红书, GitHub]        → logo-wall（品牌库里有真 svg 就上真的）
+[品牌墙: …]  [出处: LMArena 榜单 https://lmarena.ai 2026-09-30]  [来源: …]   → citation-strip
+[文档: 长截图.png]  [文档: p1.png, p2.png]  [表格: …]             → real-doc-scroll（逐页滚动）
+[对比: 改之前.png 手写; 改之后.png 装了 skill]  [vs: a.png b.png]  → screen-versus
+[证据: 报表.png 0.42,0.31 成本占90%]                              → evidence-zoom（圈选放大）
+[证据: 报表.png 成本占90%]                                        → 没坐标就退成 screen，让管线 OCR 定位（坐标必须是量出来的）
+[头像: 头像1.png 小王|做了 3 年运营, 阿月|自媒体]                  → photo-wall（≥2 人）
+[评论墙: 小明|这招真有用 1.2万, …]  [评论: …]                      → comment-wall（≥3 条）
+[原文: “Everything is a function of the current frame.” ——官方文档 · Models]  → brand-quote-card
+[金句: …]
+```
+
+- 一行一个标记，**不朗读、不进字幕**，挂在紧跟的那段正文上；一段里多个标记 = 多个镜头（每个标记切一刀）。
+- 名字必须在这几个里（`SLOT_NAMES`），否则当成正文。写得再详细也不会念出来。
+- 组件字段要求不满足（比如 `[出处]` 里没写真地址、`[评论墙]` 只有两条）→ 这条标记作废，退回通用检测器，不硬凑假素材。
+- 标记里点名的文件找不到 = `E_ASSET` 硬失败；草稿阶段先看分镜用 `--allow-missing-assets` 降级（画面渲染「缺素材 · 字段」占位，并在采集清单里记账）。
+
+
 ## 分镜 storyboard.json
 
 ```json
@@ -181,7 +204,7 @@ node scripts/openings.mjs status opening-comment-mining keep
 - 渲染成功后管线自动记账；`--plan-only` / `--stills` 不记账，`--dry-run` 全流程也不记账。调试老素材不想被记账/检查：`--no-usage-check`；想改片子身份：`--video 片名`。
 - 台账是资产不是负担：`usage/library.json` 要提交，换机器/重新 clone 后跨片记忆才还在。历史片第一次建库用 `node scripts/usage.mjs backfill <分镜或时间轴路径…>`。
 
-**入场语法：每条正片镜头都显式写 `motion.enter`。** 现在 84 个正片组件全部接了 `src/lib/enter.tsx`（252 处入场调用点），分镜写什么就用什么运动：`rise / slam / slide-l / slide-r / wipe / assemble / zoom-through / drop`，可配 `energy: 1|2|3`。
+**入场语法：每条正片镜头都显式写 `motion.enter`。** 现在 92 个正片组件全部接了 `src/lib/enter.tsx`（273 处入场调用点），分镜写什么就用什么运动：`rise / slam / slide-l / slide-r / wipe / assemble / zoom-through / drop`，可配 `energy: 1|2|3`。
 
 ```json
 { "type": "leaderboard", "motion": { "enter": "slide-l", "energy": 2 }, "data": { … } }
@@ -192,14 +215,56 @@ node scripts/openings.mjs status opening-comment-mining keep
 - 例外：隐喻主体的运动轨迹（骨牌倒下、药片下落、传送带、曲线生长、翻牌角度）不由 enter 决定，那些是组件的内容；enter 只管元素怎么进场。
 - 新增组件时必须接 `useEnter(variant)` 并消费 `e.p / e.opacity / e.scale / e.dx / e.dy / e.clip`，只换 `e.p` 不算接完（`node scripts/motion-audit.mjs` 查得出）。
 
+## 真实素材：信任度的硬指标
+
+全片都是代码动画 → 观众不信。所以「真东西上屏多少秒」是一条硬指标，和用量台账同级：
+
+- **素材占比 = 用了真素材/真标识/真出处的镜头时长 ÷ 全片时长**，`rules.minRatio = 0.2`（`assets/library.json`）。低于 20% 时 `--plan-only` 和每次渲染都会 `⚠` 提醒。做新片默认按 ≥20% 排镜头。
+- 真标识（`public/brands/*.svg`）和真地址（citation-strip 的 url）**不计进占比**：它们不是文件素材，占比只量「真的截图/录屏/头像上屏多久」。
+- 每个组件的素材字段用 `assetFields` 声明（`"src"` / `"video.src"` / `"boards[].src"` / `"pages[]"` 四种写法），管线据此自动拷贝文件、量宽高比、必要时 OCR 定位——组件里读 `data.aspect / data.kind / data.frames / data.focus` 就行，这些字段由管线填，别手写。允许哪些字段上屏由 schema 探测得出（`assetMeta` 可覆盖）。
+- **真素材镜头必须写 `data.source`**（平台 / url / capturedAt / note 任选）。没写会警告「N 个镜头上了真素材但没写 data.source」——上了真东西却不标来源，等于白上。组件用 `src/lib/source.tsx` 的 `SourceBadge` 把它显示出来。
+
+### 采集清单：缺什么，一目了然
+
+`--plan-only` / 渲染后都会打印，并写一份到任务目录 `public/jobs/<任务>/assets_todo.md`：哪一镜、哪个组件、缺哪些字段、讲稿里点名的文件名是什么。只列「真会空着」的行（讲稿点名了文件却没找到，或这个组件的素材字段本来就必填——必填由 schema 探测得出）。博主照着这张表去截图/录屏，回来重跑就补齐。
+
+### 素材台账：`assets/library.json`
+
+按**原始文件路径**记账（不是 `public/jobs/…` 那种一次性副本名，靠任务目录里的 `assets.json` 对照表还原）：md5、宽高比、出镜历史（哪条片子、哪个组件、哪一镜）。命令：
+
+| 命令 | 作用 |
+|---|---|
+| `node scripts/assets.mjs report` | 台账总览：多少张图、占比、只用过一次的老素材 |
+| `node scripts/assets.mjs unused` | 从没上过屏 / 只上过一次的素材 |
+| `node scripts/assets.mjs dup` | md5 重复（同一张图两个文件名） |
+| `node scripts/assets.mjs check` | 台账里的文件还在不在 |
+| `node scripts/assets.mjs record <timeline.json> [--video 名]` | 手工补记一条片子 |
+| `node scripts/assets.mjs harvest <成片asr/timeline…>` | 把历史片子里用过的素材回填进台账 |
+
+### 品牌库：`brands/library.json` + `public/brands/`
+
+`brands/library.json` 是「文案里的叫法 → 真 svg 文件」的映射（35 个牌子，含中别名）。放文件：把官方 svg 存成 `public/brands/<file>`，然后
+
+- `node scripts/brands.mjs sync` → 生成 `src/lib/brands.generated.ts`（**只包含文件真的存在的牌子**，缺文件的条目上屏会让 Remotion 报缺静态文件；0 字节/小于 120 字节的空文件不算 logo，会单独警告）
+- `node scripts/brands.mjs check` / `missing` → 看哪些牌子还缺文件、文案里可能叫什么
+
+组件（logo-wall / citation-strip / brand-quote-card）通过 `src/lib/brands.ts` 查这张表；查不到就退化成通用图标，绝不画假 logo。
+
 ## 组件资产库
+
+
 
 - 全部组件、字段、适用场景：**`CATALOG.md`**（由 `node scripts/catalog.mjs` 从 registry 自动生成，不要手改）。
 - **开场模板库**：
   - **技术类通用 6 招**（`tech-opening-01`~`06`，`src/openings/tech.tsx`）：按第一句话的手法选（慢慢放大做悬疑 / 出其不意按节奏变形 / 蒙版缩圈 / 身后飞标题 / 文字干货先出现 / 极简闪白），只改字段就能用。参考《开场手法素材》招数表。
   - **20 个按钩子类型的模板**（`op-t01`~`op-t20`，`src/openings/templates/`）：按文案第一句的钩子类型（反问/数字/反常识/痛点/悬念/点名/对比/警告/揭秘/倒计时/收益/结果先行/VS/清单/私信/稀缺/快讯/放大镜/打赌/故障打断）挑一个，只改字段。选型表在 `openings/TEMPLATES.md`，预览在 `openings/previews/op-t*.mp4`。
   - 同一个模板不要连着用；要大改就复制成专属开场。
-- 目前 84 个正片组件（结构 7 / 信息图 25 / 概念隐喻 30 / 叙事场景 8 / 产品 11 / 屏幕 3），另有 31 个开场（`src/openings/`，不计入）。最新加入的通用组件：
+- 目前 92 个正片组件（结构 8 / 信息图 25 / 概念隐喻 30 / 叙事场景 9 / 产品 11 / 截图录屏 9），另有 32 个开场（`src/openings/`，不计入）。最新加入的是**真实素材那一层**（`src/lib/asset.tsx` 的 MissingAsset、`src/lib/source.tsx` 的 SourceBadge、`src/lib/brands.ts` 的真 logo）：
+  - **真标识**：logo-wall（品牌墙，牌子上过 `public/brands/` 的真 svg，查不到退成通用图标）、brand-quote-card（引用官方原话 + 真地址 + 采集时间，逐字打出来）。
+  - **真凭据**：citation-strip（出处清单：真 url + 真日期 + 可选截图缩略，写不出地址的条目直接不收）、evidence-zoom（在真截图上圈一个点放大，坐标来自 OCR 或人量的，不猜）。
+  - **真界面**：real-doc-scroll（长文档/表格逐页滚动 + 当前行高亮 + 进度轨）、screen-versus（两三张真结果并排，各自标来源与采集时间）。
+  - **真人临场**：head-pip（满屏真截图/录屏 + 一角真人口播窗，REC 亮点闪）、photo-wall（真头像墙，没图的退成姓名首字并标「姓名占位」）、comment-wall 升级版（`video.src` 真封面、`comments[].src` 真头像、`count` 写截图里的真条数）。
+  早期加入的通用组件：
   - **处境人设**：persona-scene（无脸剪影 + 工位/屏幕/两头跑，循环动作越转越快 + 时钟转深夜 + 台灯亮起 + 最后瘫倒）。共用 `src/lib/figure.tsx` 无脸人物骨架（关节角度驱动，可插值：stand/work/stare/slump/despair/proud/fall/dig/look/cheer/raise/handsUp/sit/reach/turn + gait 步态）。
   - **反转拍**：blame-strike（连环劈掉假因 → 真因砸下）、fork-paths（同一起点 → 岔路两种结局）、counter-example（正例 + 反例对照）。
   - **体量/危机**：pile-crush（堆成山 → 一板压扁）、unread-flood（未读轰炸 → AI 接手清零）、pit-trap（透视路面的坑 + 安全路线）、walled-garden（高墙花园）、safety-brake（紧急制动 / 保险丝）。
@@ -264,11 +329,13 @@ node scripts/openings.mjs status opening-comment-mining keep
 | `--frames 0-900` | 只渲一段（配合 `--out`）；试渲染，不写用量台账 |
 | `--video 片名` / `--dry-run` / `--no-usage-check` | 改台账里的片子身份 / 全流程但不落账 / 连跨片检查一起跳过 |
 | `--seed N` / `--no-sfx` / `--concurrency 16` / `--asr-model medium` | 换风格 / 关音效 / 并发 / 识别模型 |
+| `--allow-missing-assets` | 草稿：讲稿点名的素材文件缺失时不硬失败，渲染占位并记进采集清单 |
 | `node scripts/pick.mjs "语义"` | 组件吻合度，带每行的用量标注 |
 | `node scripts/pick.mjs --storyboard <f>` | 逐镜体检：该新增组件的位置 + 本片首次使用组件数 |
 | `node scripts/pick.mjs --fresh ["语义"]` / `--recent [--n 3]` / `--avoid a,b` | 只在没上片的组件里选 / 看近几条片用了什么 / 排除指定组件 |
 | `node scripts/usage.mjs report / unused / list / recent` | 用量台账：覆盖率、高频、从未上片的池子 |
 | `node scripts/usage.mjs backfill [路径…]` / `record <timeline.json>` | 历史分镜回填建库 / 手工补记一条片子 |
+| `node scripts/brands.mjs sync / check / missing` | 品牌库：生成组件用的映射 / 校验 / 看还缺哪些 logo（详见「真实素材」） |
 | `node scripts/preview.mjs <id>[,<id>]` | 组件静帧 QA |
 | `node scripts/catalog.mjs` | 重新生成 CATALOG.md |
 | `node scripts/openings.mjs sync / list / metric / status / preview` | 开场库：登记、看数据、录数据、保留/淘汰、出 5 秒预览 |
@@ -287,7 +354,7 @@ node scripts/openings.mjs status opening-comment-mining keep
 | E_EMPTY / E_SCRIPT_FILE | 没有文案，或 script_file 找不到 |
 | E_AUDIO / E_TIMELINE | 配音或时间轴文件不存在 / 格式不对 |
 | E_TIMELINE_EXTRACT | 自动识别失败：`pip install faster-whisper` |
-| E_ASSET | 口播视频、截图等素材找不到或 ffmpeg 处理失败 |
+| E_ASSET | 口播视频、截图等素材找不到或 ffmpeg 处理失败。只想先看分镜：`--allow-missing-assets` 降级（正式出片别带这个跑） |
 | E_STORYBOARD | 分镜问题：锚点在文案里找不到、口播段里放了别的组件、数据不符合 schema（会逐条列出） |
 | E_CODE_FENCE | 代码块 ``` 没闭合 |
 | E_DEPS | 缺依赖：`npm install` |
@@ -298,18 +365,27 @@ node scripts/openings.mjs status opening-comment-mining keep
 ```
 scripts/make.mjs            入口：准备素材 → 对齐 → 分镜 → 校验 → 渲染
 scripts/lib/align.mjs       文案↔ASR 逐字对齐、句子节拍、字幕断行
-scripts/lib/script.mjs      文案解析（章节 / 口播 / 截图 / 备注）
+scripts/lib/script.mjs      文案解析（章节 / 口播 / 截图 / 素材槽位 / 备注）
 scripts/lib/timed.mjs       时间轴驱动分镜：分段、锚点、字幕、音轨
 scripts/lib/planner.mjs     无配音时的估算草稿模式 + 风格（seed）
-scripts/lib/detect.mjs      自动模式的内容检测器
+scripts/lib/detect.mjs      自动模式的内容检测器 + 素材槽位表（SLOT_SPEC：[logo:] [出处:] …→ 组件与 data）
 scripts/lib/registry-node.mjs  在 Node 里加载组件库做 schema 校验
+scripts/lib/assets.mjs      素材台账读写：占比、采集清单、按原始路径记账
+scripts/assets.mjs          素材台账命令（report / unused / dup / check / record / harvest）
+scripts/brands.mjs          品牌库命令（sync / check / missing）
 src/components/…            组件资产（registry.ts 注册）
+src/lib/asset.tsx           素材路径解析 + MissingAsset 缺素材占位
+src/lib/source.tsx          sourceSchema / SourceBadge：真素材的来源角标（平台 · 日期 · 地址）
+src/lib/brands.ts           文案叫法 → 真 logo（查 brands.generated.ts）
 src/openings/<日期-主题>/    每条视频的专属开场（index.ts 注册）
 src/openings/tech.tsx       技术类通用开场模板（6 招）
 src/openings/templates/     按时长分组的预制开场（t01-t20.tsx）
 src/lib/cine/               开场电影感工具包（砸字、闪白、抖动、推镜头…）
 openings/library.json       开场库：钩子、手法、预览、数据、保留/淘汰
 usage/library.json          正片组件用量台账：每条片用了什么、入场用过哪几种
+assets/library.json         素材台账：每张真素材的尺寸/md5/上过哪条片哪一镜 + 素材占比规则（minRatio）
+brands/library.json         品牌库：文案叫法 → public/brands/ 里的真 logo 文件
+public/brands/              真 logo 文件（svg/png）；空文件不算，见 brands.mjs check
 scripts/usage.mjs           用量台账命令（backfill / report / unused / recent）
 scripts/openings.mjs        开场库命令
 src/engine/                 Video（音轨/镜头/字幕）、ShotFrame（转场）、Hud（字幕/章节）

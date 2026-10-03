@@ -1,6 +1,8 @@
 import React from "react";
 import { z } from "zod";
+import { Img } from "remotion";
 import { clamp, easeInOut, easeOut, easeOutBack, prog } from "../../lib/anim";
+import { assetUrl } from "../../lib/asset";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Icon } from "../../lib/icons";
@@ -10,12 +12,20 @@ import { useEnter } from "../../lib/enter";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
-const comment = z.object({ user: z.string().optional(), text: z.string(), likes: z.string().optional(), gold: z.boolean().optional().describe("真实需求/痛点，聚焦后发金光"), tag: z.string().optional() });
+const comment = z.object({ user: z.string().optional(), text: z.string(), likes: z.string().optional(), gold: z.boolean().optional().describe("真实需求/痛点，聚焦后发金光"), tag: z.string().optional(), src: z.string().optional().describe("这条评论的真头像（相对 public/）；没有就退成网名首字") });
 const schema = z.object({
   title: z.string().optional(),
   kicker: z.string().optional(),
-  video: z.object({ title: z.string(), views: z.string().optional(), label: z.string().optional() }).default({ title: "大博主的爆款视频", views: "386万播放" }),
+  video: z
+    .object({
+      title: z.string(),
+      views: z.string().optional().describe("播放数：写截图里的真数字，没有就别编"),
+      label: z.string().optional(),
+      src: z.string().optional().describe("这条视频的真封面/真截图（相对 public/）。给了就上真的，不给才退化成色块"),
+    })
+    .default({ title: "大博主的爆款视频" }),
   comments: z.array(comment).min(3).max(12),
+  count: z.string().optional().describe("评论区条数，写截图里的真数字（如「评论 · 12.8w」）；不写就不显示"),
   focusAt: z.number().optional().describe("镜头从视频转向评论区的时刻（锚点，如“评论区”）"),
   badge: z.string().default("秘密在评论区"),
   handoff: z.object({ text: z.string(), at: z.number().optional() }).optional().describe("底部交接条，如“挖评论 → 交给 AI”"),
@@ -67,6 +77,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           opacity: eVid.opacity,
         }}
       >
+        {data.video.src && <Img src={assetUrl(data.video.src)} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />}
+        {data.video.src && <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${alpha("#000000", 0.1)}, ${alpha("#000000", 0.72)})` }} />}
         <div style={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%,-50%)" }}>
           <Icon name="play" size={110} color="#fff" fill={alpha("#ffffff", 0.35)} />
         </div>
@@ -83,7 +95,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
       <div style={{ position: "absolute", left: px, top: py, width: pw, height: ph, borderRadius: 24, background: `linear-gradient(170deg, ${alpha(t.bg2, 0.92)}, ${alpha(t.bg, 0.88)})`, border: `2px solid ${alpha(fp > 0.5 ? t.gold : t.primary, 0.3 + fp * 0.5)}`, boxShadow: `0 0 ${20 + fp * 60}px ${alpha(fp > 0.5 ? t.gold : t.primary, 0.15 + fp * 0.3)}`, overflow: "hidden", transform: `scale(${1 + fp * 0.03})`, opacity: ePanel.opacity }}>
         <div style={{ height: 76, display: "flex", alignItems: "center", gap: 14, padding: "0 30px", borderBottom: `1px solid ${alpha(t.primary, 0.2)}`, fontFamily: t.font.body, fontWeight: 800, fontSize: 30, color: t.text }}>
           <Icon name="chat" size={30} color={t.primary} />
-          评论 · 12.8w
+          {data.count ?? "评论区"}
         </div>
         <div style={{ position: "absolute", left: 0, right: 0, top: 76, bottom: 0, overflow: "hidden" }}>
           {list.map((c, i) => {
@@ -93,11 +105,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
             const g = gold ? easeOut(prog(frame, focusAt + 12 + (i % data.comments.length) * 3, 12)) : 0;
             return (
               <div key={i} style={{ position: "absolute", left: 16, right: 16, top: y + 8, height: rowH - 16, borderRadius: 16, display: "flex", alignItems: "center", gap: 16, padding: "0 18px", background: gold ? alpha(t.gold, 0.12 * g) : "transparent", border: gold ? `2px solid ${alpha(t.gold, 0.8 * g)}` : "2px solid transparent", boxShadow: gold ? `0 0 24px ${alpha(t.gold, 0.35 * g)}` : undefined, opacity: fp > 0.5 && !c.gold ? 0.45 : 1 }}>
-                <div style={{ flex: "none", width: 54, height: 54, borderRadius: 27, background: alpha(t.secondary, 0.35), border: `1.5px solid ${alpha(t.secondary, 0.6)}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Icon name="user" size={28} color={t.text} />
+                <div style={{ flex: "none", width: 54, height: 54, borderRadius: 27, overflow: "hidden", background: c.src ? "#0b0f17" : alpha(t.secondary, 0.35), border: `1.5px solid ${alpha(t.secondary, 0.6)}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: t.font.title, fontWeight: 900, fontSize: 22, color: t.text }}>
+                  {c.src ? <Img src={assetUrl(c.src)} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : (c.user ?? "用").replace(/^@/, "").trim().slice(0, 1)}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: t.font.body, fontSize: 20, color: t.dim }}>{c.user ?? `用户${(i * 37) % 900 + 100}`}</div>
+                  <div style={{ fontFamily: t.font.body, fontSize: 20, color: t.dim }}>{c.user ?? "匿名用户"}</div>
                   <div style={{ fontFamily: t.font.body, fontWeight: 700, fontSize: fitFont(c.text, pw - 260, 30, 18), color: gold ? t.gold : t.text, whiteSpace: "nowrap" }}>{c.text}</div>
                 </div>
                 {c.tag && gold && <div style={{ flex: "none", padding: "4px 12px", borderRadius: 8, background: t.gold, color: t.bg, fontFamily: t.font.body, fontWeight: 900, fontSize: 20, opacity: g }}>{c.tag}</div>}
@@ -140,9 +152,10 @@ export const CommentWall: CompDef<D> = {
   maxSec: 12,
   tags: ["评论区", "留言", "用户需求", "痛点", "真实反馈"],
   motion: { kind: "评论区持续滚动 + 聚光灯从视频移到评论区 + 金标/交接条回弹弹出", energy: 2 },
-  desc: "左边大博主的爆款视频，右边滚动的评论区；说到“评论区”时视频变灰、聚光灯移到评论区，真实需求评论发金光并打上标签，可在底部接一条交接提示",
-  use: "真正有价值的东西不在表面、藏在反馈里：评论区的需求、差评里的改进点、客服记录里的痛点、问卷的开放题（video 换成任何“表面”，comments 换成任何反馈）",
+  desc: "左边大博主的爆款视频（可放真封面截图），右边滚动的评论区；说到“评论区”时视频变灰、聚光灯移到评论区，真实需求评论发金光并打上标签。头像有真图用真图，没有就退成网名首字",
+  use: "真正有价值的东西不在表面、藏在反馈里：评论区的需求、差评里的改进点、客服记录里的痛点、问卷的开放题（video 换成任何“表面”，comments 换成任何反馈）。video.src 给真封面，comments[].src 给真头像，count 写截图里的真条数",
   schema,
+  assetFields: ["video.src", "comments[].src"],
   example: {
     comments: [
       { text: "哈哈哈哈哈笑死", likes: "2.1w" },

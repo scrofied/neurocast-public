@@ -1,12 +1,14 @@
 import React from "react";
 import { z } from "zod";
-import { Img, staticFile } from "remotion";
+import { Img } from "remotion";
+import { assetUrl, MissingAsset } from "../../lib/asset";
 import { clamp, easeIn, easeInOut, easeOut, easeOutBack, prog } from "../../lib/anim";
 import { useEnter } from "../../lib/enter";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
+import { SourceBadge, sourceSchema } from "../../lib/source";
 import { Corners, fitFont } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -16,6 +18,7 @@ import type { CompDef, CompProps } from "../types";
 const board = z.object({
   src: z.string().describe("截图路径（相对 public/），如 assets/arena-rank-overall.png"),
   note: z.string().optional().describe("这张图按什么排 / 在讲什么，显示在卡片左上角，如「按 OVERALL 排」"),
+  source: sourceSchema,
 });
 const schema = z.object({
   kicker: z.string().optional().describe("卡片外的小标签"),
@@ -77,7 +80,20 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
       >
         {/* 竖向叠两张：滑切读起来就是「同一张榜被重新排序」 */}
         <div style={{ position: "absolute", left: 0, top: 0, width: bw, height: bh * n, transform: `translateY(${-slide * bh}px)` }}>
-          {d.boards.map((b, i) => <Img key={i} src={staticFile(b.src)} style={{ width: "100%", height: bh, objectFit: "cover", display: "block" }} />)}
+          {d.boards.map((b, i) => (
+            <div key={i} style={{ position: "relative", width: bw, height: bh, overflow: "hidden" }}>
+              {b.src ? (
+                <Img src={assetUrl(b.src)} style={{ width: "100%", height: bh, objectFit: "cover", display: "block" }} />
+              ) : (
+                // 素材没到位（草稿模式清空了路径）：演「缺素材」，别让 404 把整次渲染打挂
+                <MissingAsset field="boards[].src" hint="举证要用真截图，画出来的不算数" w={bw} h={bh} frame={frame} />
+              )}
+              {/* 每张图自己的来源：平台 + 采集时间（不写就不渲染） */}
+              <div style={{ position: "absolute", right: 0, bottom: 18, paddingRight: 20 }}>
+                <SourceBadge source={b.source} frame={frame} y={0} />
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* 停留期间镜头在动 */}
@@ -142,14 +158,15 @@ export const BoardProof: CompDef<D> = {
   maxSec: 20,
   tags: ["截图", "榜单", "举证", "排名", "真实数据"],
   motion: { kind: "整屏砸入（透视缩放）+ 竖直滑切 + 扫描线", energy: 2 },
-  desc: "把一张真截图放大盖满画面当证据（边框 + 扫描线 + 高亮带 + LIVE），给 2 张时竖直滑切换图（同一张榜换个排序，左上角标签跟着换），讲完自动撤走露出真人",
-  use: "用真实截图证明一个会变/会涨会跌的东西：大模型榜单换个排序就换第一、后台数据看板前后对比、价格页调整前后的截图、搜索结果页的变化（boards / aspect / swapAt 全可改）",
+  desc: "把一张真截图放大盖满画面当证据（边框 + 扫描线 + 高亮带 + LIVE），给 2 张时竖直滑切换图；每张图右下角可挂「真实素材 | 平台 · 采集时间」来源角标",
+  use: "用真实截图证明一个会变/会涨会跌的东西：大模型榜单换个排序就换第一、后台数据看板前后对比、价格页调整前后的截图（boards / aspect / swapAt 全可改）。用了真图就写 source，不然观众分不清真假",
   schema,
+  assetFields: ["boards[].src"],
   example: {
     kicker: "同一张榜，换个排序",
     boards: [
-      { src: "assets/arena-rank-overall.png", note: "按 OVERALL 排" },
-      { src: "assets/arena-rank-agentic.png", note: "按 AGENTIC CODING 排" },
+      { src: "assets/arena-rank-overall.png", note: "按 OVERALL 排", source: { platform: "LMArena", url: "lmarena.ai", capturedAt: "2026-09-30" } },
+      { src: "assets/arena-rank-agentic.png", note: "按 AGENTIC CODING 排", source: { platform: "LMArena", url: "lmarena.ai", capturedAt: "2026-09-30" } },
     ],
     aspect: 2.13,
     badge: "LIVE",

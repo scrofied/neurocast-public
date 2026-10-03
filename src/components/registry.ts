@@ -28,6 +28,12 @@ import { DayClock } from "./info/DayClock";
 import { ScreenDemo } from "./screen/ScreenDemo";
 import { BoardProof } from "./screen/BoardProof";
 import { UiReplica } from "./screen/UiReplica";
+import { LogoWall } from "./screen/LogoWall";
+import { BrandQuoteCard } from "./screen/BrandQuoteCard";
+import { CitationStrip } from "./screen/CitationStrip";
+import { ScreenVersus } from "./screen/ScreenVersus";
+import { EvidenceZoom } from "./screen/EvidenceZoom";
+import { RealDocScroll } from "./screen/RealDocScroll";
 import { PhoneFeed } from "./story/PhoneFeed";
 import { SwordForge } from "./story/SwordForge";
 import { Dialogue } from "./story/Dialogue";
@@ -36,6 +42,7 @@ import { CommentWall } from "./story/CommentWall";
 import { SignalMap } from "./story/SignalMap";
 import { Reframe } from "./story/Reframe";
 import { PersonaScene } from "./story/PersonaScene";
+import { PhotoWall } from "./story/PhotoWall";
 import { BlameStrike } from "./info/BlameStrike";
 import { PileCrush } from "./metaphor/PileCrush";
 import { PitTrap } from "./metaphor/PitTrap";
@@ -84,6 +91,7 @@ import { Narration } from "./structure/Narration";
 import { Hook } from "./structure/Hook";
 import { Outro } from "./structure/Outro";
 import { TalkingHeadStage } from "./structure/TalkingHeadStage";
+import { HeadPip } from "./structure/HeadPip";
 import { OPENINGS } from "../openings";
 
 // The asset library. Every entry is one reusable animated component; add new ones here
@@ -97,6 +105,7 @@ export const REGISTRY: CompDef[] = [
   PunchText,
   Outro,
   TalkingHeadStage,
+  HeadPip,
   // info
   ParticleNumber,
   CodeEditor,
@@ -163,6 +172,7 @@ export const REGISTRY: CompDef[] = [
   SignalMap,
   Reframe,
   PersonaScene,
+  PhotoWall,
   // product
   ToolCard,
   ChatCommand,
@@ -179,6 +189,12 @@ export const REGISTRY: CompDef[] = [
   ScreenDemo,
   BoardProof,
   UiReplica,
+  LogoWall,
+  BrandQuoteCard,
+  CitationStrip,
+  ScreenVersus,
+  EvidenceZoom,
+  RealDocScroll,
   // per-script openings
   ...OPENINGS,
 ];

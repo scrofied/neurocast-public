@@ -14,7 +14,9 @@ import { beatsMarkdown, planTimed, splitOpening, TimedError } from "./lib/timed.
 import { wordsOf } from "./lib/align.mjs";
 import { checkKindParity } from "./lib/motion.mjs";
 import { loadRegistry, validateShot } from "./lib/registry-node.mjs";
+import { slotAssetRefs } from "./lib/detect.mjs";
 import { load as loadUsage, shotsOf, record as recordUsage, crossVideoReport, statsOf, bodyComps } from "./lib/usage.mjs";
+import { ratioOf, shotAssets, checklist as assetChecklist, record as recordAssets, load as loadAssetLedger } from "./lib/assets.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUB = path.join(ROOT, "public");
@@ -140,19 +142,48 @@ const loadTimeline = (p, what) => {
 // 「点击"按钮名"」in the text right after the marker is located by local OCR -> camera push + simulated click
 const focusTargets = (ref) => {
   const i = input.script.indexOf(ref);
-  const after = input.script.slice(i, i + 400).split(/\n\s*\n|\[(?:图|截图|录屏|视频|口播)/)[0];
+  if (i < 0) return [];
   const out = [];
+  // [槽位: 文件.png 报表里那行成本] ——槽位里的说明文字就是要在图上圈出来的东西，拿去给 OCR 定位
+  const line = ((input.script.slice(0, i).match(/[^\n]*$/) || [""])[0] + input.script.slice(i).split("\n")[0]).trim();
+  const slot = line.match(/^\[[^\]:：]{1,6}[:：]\s*([^\]]+)\]$/);
+  if (slot)
+    for (const t of slot[1].split(/[,，、|；;]/)) {
+      const q = t.trim();
+      if (q && !/^\d/.test(q) && !/[\/\\]|\.(png|jpe?g|webp|gif|mp4|mov|md|pdf|txt)$/i.test(q) && Array.from(q).length >= 2 && Array.from(q).length <= 8) out.push(q);
+    }
+  const after = input.script.slice(i, i + 400).split(/\n\s*\n|\[(?:图|截图|录屏|视频|口播|logo|出处|来源|文档|表格|对比|vs|头像|评论|原文|金句|证据)/i)[0];
   for (const m of after.matchAll(/(?:点击|点一下|点开|打开|选择|选中|找到|进入|切换到|输入|勾选)\s*[“"「]?([^，。！？”"」\s]{2,8})/g)) out.push(m[1]);
   return [...new Set(out)].slice(0, 4);
+};
+const missingAssets = [];
+// jobs 副本路径 -> 素材原始路径。素材台账要知道「这张图上过哪条片」，
+// 而 timeline 里只剩 public/jobs/…/a3.png 这种一次性副本名。
+const ASSET_ORIGIN = {};
+// 素材路径有两种写法：讲稿/分镜旁边的相对路径（相对讲稿目录），和组件 example、CATALOG 里那种
+// public/ 相对路径（assets/xxx.png）。两处都找，都找不到才算缺素材。
+const assetAbs = (ref) => {
+  const a = resolveIn(ref, scriptDir);
+  if (fs.existsSync(a)) return a;
+  const b = path.join(PUB, ref);
+  return fs.existsSync(b) ? b : a;
 };
 const prepAssets = (refs) => {
   const out = {};
   refs.forEach((ref, k) => {
-    const abs = resolveIn(ref, scriptDir);
-    if (!fs.existsSync(abs)) fail("E_ASSET", `讲稿引用的素材不存在：${ref}（解析为 ${abs}）`);
+    const abs = assetAbs(ref);
+    if (!fs.existsSync(abs)) {
+      // 默认硬失败：正式出片不能带着「缺素材」的占位画面出去。
+      // --allow-missing-assets（草稿/看分镜）时降级：记下名字、继续往下走，组件自己渲染「缺素材 · 字段」占位。
+      if (!opt["--allow-missing-assets"]) fail("E_ASSET", `讲稿引用的素材不存在：${ref}（解析为 ${abs}）`);
+      missingAssets.push(ref);
+      warn(`素材缺失，已降级：${ref}`);
+      return;
+    }
     const name = `a${k}${path.extname(abs).toLowerCase()}`;
     fs.copyFileSync(abs, path.join(jobDir, name));
-    const a = { ...(input.assets?.[ref] || {}), src: pubRel(path.join(jobDir, name)) };
+    const relOrigin = path.relative(ROOT, abs).replace(/\\/g, "/");
+    const a = { ...(input.assets?.[ref] || {}), src: pubRel(path.join(jobDir, name)), origin: relOrigin.startsWith("..") ? abs.replace(/\\/g, "/") : relOrigin };
     if (/\.(png|jpe?g|webp|bmp)$/i.test(abs)) {
       a.kind = "image";
       const targets = focusTargets(ref);
@@ -173,9 +204,15 @@ const prepAssets = (refs) => {
       const p = probe(abs);
       a.aspect = a.aspect ?? (p.video ? p.video.width / p.video.height : 16 / 9);
       a.kind = "video";
+      // 素材组件（head-pip 之类）要知道剪辑能走到第几帧，超出就得冻在最后一片
+      if (p.duration) a.frames = Math.floor(p.duration * FPS);
     }
     out[ref] = a;
+    ASSET_ORIGIN[a.src] = a.origin;
   });
+  // 落一份对照表：时间轴里的素材只剩 jobs/xxx/a3.png 这种一次性副本名，
+  // 台账（node scripts/assets.mjs harvest/record）要靠这张表才知道原图在哪。
+  fs.writeFileSync(path.join(jobDir, "assets.json"), JSON.stringify(out, null, 1));
   return out;
 };
 
@@ -225,9 +262,6 @@ const runTimed = async () => {
     const dur = probe(norm).duration;
     media.clips[ref] = { src: pubRel(path.join(jobDir, name)), duration: dur, frames: Math.floor(dur * FPS), words: wordsOf(tl) };
   });
-  const assetRefs = [...new Set(parsed.sections.flatMap((s) => s.paras.map((p) => p.asset).filter(Boolean)))];
-  media.assets = prepAssets(assetRefs);
-
   let storyboard = null;
   if (input.storyboard && !opt["--beats"]) {
     const p = resolveIn(input.storyboard);
@@ -235,10 +269,15 @@ const runTimed = async () => {
     storyboard = readJson(p, "E_STORYBOARD");
     if (Array.isArray(storyboard)) storyboard = { shots: storyboard };
   }
+  // 素材引用有三个来源：文案里的 [图/录屏] 标记、[槽位: …] 点名要的真文件，和分镜里
+  // 任何声明了 assetFields 的组件（board-proof 这类以前只能手写 public/ 路径的，现在也会被 prepAssets 收到并补上 aspect/OCR/来源）
+  const assetRefs = [...new Set([...parsed.sections.flatMap((s) => s.paras.map((p) => p.asset).filter(Boolean)), ...slotAssetRefs(parsed), ...storyboardAssetRefs(storyboard)])];
+  media.assets = prepAssets(assetRefs);
+  media.assetsMissing = missingAssets; // 降级模式下缺的那些：注入时把路径清空，组件演占位而不是 404 崩掉渲染
 
   let out;
   try {
-    out = planTimed({ parsed, media, storyboard, input, fps: FPS, warn, style: { seed: style.seed, transitions: style.transitions, variants: VARIANTS_ALL, meta: { seed: style.seed, skin: style.skin, font: style.font, world: style.world, mirror: style.mirror } } });
+    out = planTimed({ parsed, media, storyboard, input, fps: FPS, warn, assetFields: ASSET_FIELDS, assetMeta: ASSET_META, style: { seed: style.seed, transitions: style.transitions, variants: VARIANTS_ALL, meta: { seed: style.seed, skin: style.skin, font: style.font, world: style.world, mirror: style.mirror } } });
   } catch (e) {
     if (e instanceof TimedError) fail(e.code, e.message);
     throw e;
@@ -443,13 +482,163 @@ const crossVideoCheck = (tl, reg) => {
   }
 };
 
+// ---------- 素材占比（assets/library.json）：真素材是信任度，不是装饰 ----------
+// antiPpt / varietyCheck / crossVideoCheck 都只管「画面重不重复」，这一项管的是另一件事：
+// 观众能不能从画面里看出「博主真的用过这个东西」。
+// 口径：上了真素材（jobs/ 副本或 http 外链）的镜头时长 ÷ 全片时长。
+// 组件的 schema 里有没有 source 字段（有 SourceBadge 能力的组件才该被提醒去填）。
+// 照旧不抠 zod 内部结构：往 example 上补一个 source 过一遍 schema，键活下来就说明组件会读它。
+const hasSourceField = (def) => {
+  const r = def?.schema?.safeParse({ ...(def.example ?? {}), source: { platform: "试" } });
+  return !!r?.success && r.data?.source !== undefined;
+};
+
+// 侧栏槽位（talking-head-stage 的 left/right）可能是数组、也可能是单个对象（versus 那类），
+// 直接展开对象会炸（TypeError: object is not iterable），先归一成数组。
+const slotList = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+
+const assetReport = (tl, reg) => {
+  const ledger = loadAssetLedger();
+  const r = ratioOf(tl, ASSET_FIELDS);
+  const min = ledger.rules.minRatio;
+  const pct = (r.pct * 100).toFixed(1);
+  const want = `${pct}%（${r.assetShots}/${r.shots} 镜 · ${(r.asset / FPS).toFixed(0)}/${(r.total / FPS).toFixed(0)} 秒有真素材）`;
+  if (r.pct >= min) console.log(`  素材占比 ${want} ≥${(min * 100).toFixed(0)}% ✓`);
+  else warn(`素材占比 ${want} 低于 ${(min * 100).toFixed(0)}%：这条片子基本全是代码动画，观众没有一样东西可以「看见是真的」。去补真截图/真录屏/真 logo/真头像，或把镜头让给素材组件（node scripts/pick.mjs --need 素材）`);
+  // 真标识 / 真出处这类镜头不吃文件（logo 来自品牌库、地址是数据），不计进占比，但要知道它们在场
+  const noFile = shotAssets(tl, ASSET_FIELDS).filter((m) => m.fields.length && !m.got.length && !m.missing.length && !m.fields.some((f) => (ASSET_REQUIRED[m.type] || {})[f]));
+  if (noFile.length) console.log(`  另有 ${noFile.length} 镜（${(noFile.reduce((a, m) => a + (m.dur || 0), 0) / FPS).toFixed(0)} 秒）用真标识/真出处（品牌库与地址不是文件，不计进上面的占比）：${[...new Set(noFile.map((m) => m.type))].join(" ")}`);
+  // C1：真素材要带出处角标，否则和「代码画了一张像截图的图」没有区别
+  const rows = new Map(shotAssets(tl, ASSET_FIELDS).map((x) => [x.id, x]));
+  const bare = [];
+  for (const s of tl.shots) {
+    if (!(rows.get(s.id)?.got || []).length) continue;
+    // 镜头自己或它侧栏槽位里的素材组件，只要有一个写了 source 就算过了
+    const canCheck = [s, ...slotList(s.data?.left), ...slotList(s.data?.right)].filter((x) => x && ASSET_FIELDS[x.type] && hasSourceField(reg.byId[x.type]));
+    if (!canCheck.length) continue;
+    const ok = canCheck.some((x) => {
+      const o = x.data?.source;
+      return o && (o.platform || o.url || o.capturedAt || o.author);
+    });
+    if (!ok) bare.push(`${s.id} ${s.type}`);
+  }
+  if (bare.length) warn(`${bare.length} 个镜头上了真素材但没写 data.source（平台 / 采集时间 / 出处）：${bare.join("、")}。补上出处角标，观众才知道这不是画出来的（见 CATALOG「素材来源」）`);
+  // 只列「真会空着」的：讲稿点名了文件却没找到，或这个组件的素材字段本来就必填（logo 墙少张缩略图不算事）
+  const miss = assetChecklist(tl, ASSET_FIELDS).filter((m) => m.missing.length || m.fields.some((f) => (ASSET_REQUIRED[m.type] || {})[f]));
+  if (miss.length) {
+    console.log(`  采集清单（${miss.length} 个镜头点名要真素材但手上没有）：`);
+    for (const m of miss) console.log(`    ${m.id.padEnd(4)} ${m.type.padEnd(19)} ${m.fields.join(",")} ${m.missing.length ? `← ${m.missing.join(" ")}` : "←（分镜里没填路径）"}  「${m.text.slice(0, 18)}」`);
+    const p = path.join(jobDir, "assets_todo.md");
+    fs.writeFileSync(p, ["# 采集清单", "", `分镜点名要真素材、但当前没有文件的镜头（${miss.length} 个）。补齐后重跑同一条命令即可。`, "", ...miss.map((m) => `- [ ] **${m.id} ${m.type}** · 字段 ${m.fields.join(", ")}`), "", ...miss.map((m) => `  - 台词：${m.text}`)].join("\n"), "utf8");
+    console.log(`    清单已写出：${p}`);
+  }
+  if (missingAssets.length) console.log(`  本次降级跳过的素材：${missingAssets.join(" ")}`);
+  return r;
+};
+
+// 这个素材字段是不是「非给不可」：把组件 example 里的这个字段拿掉，schema 不认 → 必填。
+// 采集清单靠它分轻重：evidence-zoom 没 src 就是空画面，logo-wall 没缩略图照样有真 logo，别混在一起刷屏。
+let ASSET_REQUIRED = {};
+const dropField = (data, f) => {
+  const seed = JSON.parse(JSON.stringify(data ?? {}));
+  const arr = /^([\w.]+)\[\]\.(.+)$/.exec(f);
+  const bare = /^([\w.]+)\[\]$/.exec(f);
+  if (arr) {
+    (seed[arr[1]] || []).forEach((el) => delete el[arr[2].split(".").pop()]);
+    return seed;
+  }
+  if (bare) {
+    delete seed[bare[1]];
+    return seed;
+  }
+  const parts = f.split(".");
+  const leaf = parts.pop();
+  const holder = parts.length ? dig(seed, parts.join(".")) : seed;
+  if (holder && typeof holder === "object") delete holder[leaf];
+  return seed;
+};
+const assetRequiredFor = (reg, def) => Object.fromEntries((def.assetFields || []).map((f) => [f, !validateShot(reg, def.id, dropField(def.example, f)).ok]));
+
 // component variant counts come from the registry (so new assets need no planner edit)
 let VARIANTS_ALL = { ...VARIANTS };
+// id -> CompDef.assetFields。素材注入（timed.mjs）和素材引用收集（storyboardAssetRefs）都读它，
+// 所以新增一个吃素材的组件只要在 CompDef 上声明 assetFields，流水线不用改。
+let ASSET_FIELDS = {};
+// id -> { 字段: [允许的元数据键] }。prepAssets 量出来的 kind/aspect/focus/frames 只有在组件
+// schema 声明过的那个键才留得住（validateShot 用解析结果覆盖 data，没声明的静默丢掉）。
+// 与其去抠 zod 内部结构（v4 的 _def 和 v3 不一样，还会随版本变），直接拿组件自己的 example 试：
+// 把某个键补到素材所在的那一层，过一遍 schema，活下来的就是组件真会读的。
+// 于是新增吃素材的组件依然零流水线改动——声明 assetFields 就够了。
+const META_PROBE = { kind: "image", aspect: 1.7778, frames: 300, focus: [{ x: 0.5, y: 0.42, w: 0.26, label: "示例", click: true }] };
+let ASSET_META = {};
+const putDeep = (obj, p, val) => {
+  if (!p) return { ...(obj || {}), ...val };
+  const [head, ...rest] = p.split(".");
+  const cur = obj?.[head];
+  const merged = rest.length ? putDeep(cur, rest.join("."), val) : { ...(cur || {}), ...val };
+  return { ...(obj || {}), [head]: merged };
+};
+const assetMetaFor = (reg, def) => {
+  const per = {};
+  const ex = def.example ?? {};
+  for (const f of def.assetFields || []) {
+    const arr = /^([\w.]+)\[\]\.(.+)$/.exec(f); // 元数据并进数组项（boards[].src）
+    const bare = /^([\w.]+)\[\]$/.exec(f); // pages[]：fillAssets 只往 data 顶层铺 aspect
+    const holder = arr ? null : bare ? "" : f.split(".").slice(0, -1).join(".");
+    const live = [];
+    for (const [k, v] of Object.entries(META_PROBE)) {
+      if (bare && k !== "aspect") continue;
+      let seed;
+      let survived;
+      if (arr) {
+        const list = (dig(ex, arr[1]) || []).map((el) => ({ ...el, [k]: v }));
+        if (!list.length) break; // example 里没有可试的项：宁可什么都不铺，也别铺一半被丢一半
+        seed = { ...ex, [arr[1]]: list };
+        survived = (d) => d[arr[1]]?.[0]?.[k] !== undefined;
+      } else {
+        seed = putDeep(ex, holder, { [k]: v });
+        survived = (d) => ((holder ? dig(d, holder) : d) ?? {})[k] !== undefined;
+      }
+      const r = validateShot(reg, def.id, seed);
+      if (r.ok && survived(r.data)) live.push(k);
+    }
+    per[f] = live;
+  }
+  // 组件自己点名「这个字段只铺这几个键」（同一层挤了两个素材字段时才需要）
+  for (const [f, only] of Object.entries(def.assetMeta || {})) per[f] = (per[f] || []).filter((k) => only.includes(k));
+  return per;
+};
+const dig = (obj, p) => p.split(".").reduce((a, k) => (a == null ? a : a[k]), obj);
+const refOf = (data, field) => {
+  const m = /^([\w.]+)\[\]\.(.+)$/.exec(field);
+  if (m) {
+    return (data?.[m[1]] || []).map((el) => (typeof dig(el, m[2]) === "string" ? dig(el, m[2]) : null)).filter(Boolean);
+  }
+  const bare = /^([\w.]+)\[\]$/.exec(field); // "pages[]"：整个字段就是素材路径数组
+  if (bare) return (data?.[bare[1]] || []).filter((v) => typeof v === "string" && v);
+  const v = dig(data, field); // "src" 或嵌套的 "video.src"
+  return typeof v === "string" ? [v] : [];
+};
+const collectRefs = (node, out) => {
+  if (Array.isArray(node)) return node.forEach((v) => collectRefs(v, out));
+  if (!node || typeof node !== "object") return;
+  if (typeof node.type === "string") for (const f of ASSET_FIELDS[node.type] || []) refOf(node.data ?? node, f).forEach((r) => out.push(r));
+  Object.values(node).forEach((v) => v && typeof v === "object" && collectRefs(v, out));
+};
+const storyboardAssetRefs = (sb) => {
+  if (!sb) return [];
+  const out = [];
+  collectRefs(sb, out);
+  return out.filter((r) => !/^https?:/.test(r));
+};
 
 // =====================================================================
 const main = async () => {
   const reg = await loadRegistry();
   VARIANTS_ALL = { ...VARIANTS, ...Object.fromEntries(reg.list.map((c) => [c.id, c.variants])) };
+  ASSET_FIELDS = Object.fromEntries(reg.list.filter((c) => c.assetFields?.length).map((c) => [c.id, c.assetFields]));
+  ASSET_META = Object.fromEntries(reg.list.filter((c) => c.assetFields?.length).map((c) => [c.id, assetMetaFor(reg, c)]));
+  ASSET_REQUIRED = Object.fromEntries(reg.list.filter((c) => c.assetFields?.length).map((c) => [c.id, assetRequiredFor(reg, c)]));
   let tl;
   let storyboardMode = false;
   if (input.audio || input.audio_timeline) ({ tl, storyboardMode } = await runTimed());
@@ -534,6 +723,7 @@ const main = async () => {
   console.log(`✓ 分镜完成：${tl.shots.length} 个镜头，${(tl.durationInFrames / FPS).toFixed(1)} 秒，${tl.chapters.length} 章${storyboardMode ? "（按 storyboard）" : "（自动）"}`);
   console.log(`  风格：皮肤 ${tl.meta.skin} · 世界 ${tl.meta.world} · 字体 ${tl.meta.font}${tl.meta.mirror ? " · 镜像" : ""} · seed ${tl.meta.seed}${tl.meta.sfx === false ? " · 无音效" : ""}`);
   console.log(`  画面分布：${Object.entries(counts).map(([k, v]) => `${k}×${v}`).join(" ")}`);
+  assetReport(tl, reg);
   crossVideoCheck(tl, reg);
   if (opt["--plan-only"]) {
     const fmt = (f) => `${Math.floor(f / FPS / 60)}:${((f / FPS) % 60).toFixed(1).padStart(4, "0")}`;
@@ -564,9 +754,15 @@ const main = async () => {
   const r = spawnSync(process.execPath, rargs, { cwd: ROOT, stdio: "inherit" });
   if (r.status !== 0) fail("E_RENDER", `Remotion 渲染失败（退出码 ${r.status}），时间轴已保存在 ${tlPath}，可用 npm run studio 打开排查`);
   // --frames 只渲了部分帧、--dry-run 明确不落账，都是试渲染，不进跨片记忆
-  const rec = opt["--frames"] || opt["--dry-run"] ? null : recordUsage(tl, { video: opt["--video"] || tl.meta?.title, file: path.join(jobDir, "timeline.json"), date: new Date().toISOString().slice(0, 10) });
+  const draft = opt["--frames"] || opt["--dry-run"];
+  const video = opt["--video"] || tl.meta?.title;
+  const rec = draft ? null : recordUsage(tl, { video, file: tlPath, date: new Date().toISOString().slice(0, 10) });
   if (rec?.video) console.log(`  用量台账：已记录「${rec.video.id}」（${rec.video.shots} 镜 / ${Object.keys(rec.video.types).length} 种组件）→ usage/library.json`);
   else if (opt["--dry-run"]) console.log(`  用量台账：--dry-run，未写入（画面重复度按真实规则照常检查）`);
+  // 素材台账同一套规矩：真出片才记账，重跑同一条片子覆盖旧记录
+  const arec = draft ? null : recordAssets(tl, { video, file: tlPath, assetFields: ASSET_FIELDS, originOf: (v) => ASSET_ORIGIN[v] || v, date: new Date().toISOString().slice(0, 10) });
+  if (arec?.files) console.log(`  素材台账：${arec.files} 个真素材、素材占比 ${(arec.ratio * 100).toFixed(1)}% → assets/library.json（node scripts/assets.mjs report）`);
+  else if (!draft) console.log(`  素材台账：本片没有真素材，未记录`);
   console.log(`\n✓ 完成：${out}${warnings.length ? `（${warnings.length} 条警告，见上）` : ""}`);
 };
 

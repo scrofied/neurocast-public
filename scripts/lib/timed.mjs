@@ -146,10 +146,13 @@ const buildBeats = (runs, M) => {
       for (let k = 0; k + 1 < starts.length; k++) {
         const a = run.g0 + starts[k];
         const b = run.g0 + starts[k + 1];
+        // 一段可能跨好几个镜头：槽位只管这一段的第一句，不然一整章的镜头全换成同一个素材组件
+        let firstSpan = true;
         for (const [x, y] of sentenceSpans(M.chars, M.times, a, b)) {
           const tt = spanTime(M.chars, M.times, x, y);
           if (!tt) continue;
-          beats.push({ id: `b${beats.length}`, a: x, b: y, start: tt.start, end: tt.end, chapter: part.chapter, kind: run.kind, run: runs.indexOf(run), para: k, text: M.chars.slice(x, y).join("").trim(), asset: part.paras[k]?.asset });
+          beats.push({ id: `b${beats.length}`, a: x, b: y, start: tt.start, end: tt.end, chapter: part.chapter, kind: run.kind, run: runs.indexOf(run), para: k, text: M.chars.slice(x, y).join("").trim(), asset: part.paras[k]?.asset, slots: firstSpan ? part.paras[k]?.slots : undefined });
+          firstSpan = false;
         }
       }
     });
@@ -197,8 +200,8 @@ const cueSeconds = (v, ctx, baseSec, where, warn) => {
 };
 
 // ---------- 5. auto shot choice (no storyboard) ----------
-const chooseAuto = (text, recent, r, asset) => {
-  const seg = { raw: asset ? `[图: ${asset}]\n${text}` : text, spoken: text };
+const chooseAuto = (text, recent, r, asset, slots) => {
+  const seg = { raw: asset ? `[图: ${asset}]\n${text}` : text, spoken: text, text, slots };
   const cands = [];
   for (const d of DETECTORS) {
     const c = d(seg);
@@ -243,8 +246,90 @@ const autoTalkPanels = (beats) => {
   return { left: slot(left), right: slot(right) };
 };
 
+// ---------- real-material injection ----------
+// 组件在 CompDef.assetFields 里声明自己哪些字段吃素材文件（"src" / "boards[].src"），
+// 这里按声明把 prepAssets 的产物（src / aspect / kind / OCR focus / 来源）并进 shot.data。
+// 以前是写死 s.type === "screen"，新素材组件必须改这里才能拿到素材——现在不用了。
+const setDeep = (obj, path, val) => {
+  const [head, ...rest] = path.split(".");
+  const o = obj && typeof obj === "object" ? obj : {};
+  if (!rest.length) return { ...o, [head]: val };
+  return { ...o, [head]: setDeep(o[head], rest.join("."), val) };
+};
+const getDeep = (obj, path) => path.split(".").reduce((a, k) => (a == null ? a : a[k]), obj);
+// prepAssets 的元数据只有组件 schema 里声明过的键才并进来：
+// 没声明的键会在 make.mjs 的 schema 校验里被静默丢掉（validateShot 用 parsed 结果覆盖 data），
+// 与其塞一半丢一半，不如只给这个组件真的会读的那些（kind / aspect / focus / frames）。
+// allow 可以是扁平数组（整个组件一套），也可以是 { "src": […], "boards[].src": […] } 按字段给。
+const ASSET_META = ["kind", "aspect", "focus", "frames"];
+const metaOf = (a, allow) => {
+  const o = {};
+  for (const k of allow || ASSET_META) if (a[k] !== undefined) o[k] = a[k];
+  return o;
+};
+export const fillAssets = (data, fields, assets, allow, missing) => {
+  if (!data || !assets) return data;
+  // 讲稿点名了这张图、但文件确实不在（--allow-missing-assets 草稿模式）：把路径清空，
+  // 让组件渲染「缺素材 · 字段」占位。留着原路径上屏 = Remotion 加载 404 直接崩掉整次渲染。
+  const gone = missing && missing.length ? new Set(missing) : null;
+  const blank = (el, leaf) => ({ ...el, [leaf]: "" });
+  let out = data;
+  for (const f of fields || []) {
+    const al = Array.isArray(allow) ? allow : allow?.[f];
+    const m = /^([\w.]+)\[\]\.(.+)$/.exec(f); // "boards[].src"：数组里每项一个素材
+    if (m) {
+      const list = getDeep(out, m[1]);
+      if (!Array.isArray(list)) continue;
+      const leaf = m[2].split(".").pop();
+      // 数组项一般铺成统一格子；项 schema 声明了 aspect/kind 时元数据才并得进去（ASSET_META 由 make.mjs 按 schema 算）
+      const patched = list.map((el) => {
+        const ref = el && getDeep(el, m[2]);
+        const a = ref && assets[ref];
+        if (!a) return gone && typeof ref === "string" && gone.has(ref) ? blank(el, leaf) : el;
+        return { ...el, ...metaOf(a, al), [leaf]: a.src };
+      });
+      out = setDeep(out, m[1], patched);
+      continue;
+    }
+    const bare = /^([\w.]+)\[\]$/.exec(f); // "pages[]"：整个字段就是素材路径数组（多页文档）
+    if (bare) {
+      const list = getDeep(out, bare[1]);
+      if (!Array.isArray(list)) continue;
+      const first = assets[list[0]];
+      // 缺的那一页直接丢掉（全丢光就退成空数组 → 组件演「缺素材」占位）：留个空字符串上屏会让渲染 404 崩掉
+      out = setDeep(out, bare[1], list.map((p) => (assets[p] ? assets[p].src : gone && gone.has(p) ? "" : p)).filter(Boolean));
+      if (first && out.aspect === undefined && first.aspect && (!al || al.includes("aspect"))) out.aspect = first.aspect;
+      continue;
+    }
+    const parts = f.split(".");
+    const leaf = parts.pop();
+    const holder = parts.length ? getDeep(out, parts.join(".")) : out; // "video.src"：素材挂在嵌套对象里
+    const ref = holder && holder[leaf];
+    if (typeof ref !== "string") continue;
+    const a = assets[ref];
+    if (!a) {
+      if (gone && gone.has(ref)) out = parts.length ? setDeep(out, parts.join("."), { ...holder, [leaf]: "" }) : { ...out, [leaf]: "" };
+      continue;
+    }
+    // 素材元数据（aspect / kind / OCR focus / 时长帧数）铺在素材所属的那一层上，路径换成 job 目录里的文件名
+    const meta = metaOf(a, al);
+    if (parts.length) out = setDeep(out, parts.join("."), { ...holder, ...meta, [leaf]: a.src });
+    else out = { ...meta, ...out, [leaf]: a.src };
+  }
+  return out;
+};
+// 侧栏/插图里嵌套的组件（talking-head-stage 的 left/right/inserts 形如 {type, data}）同样按声明注入
+const fillSlots = (val, assetFields, assets, assetMeta, missing) => {
+  if (Array.isArray(val)) return val.map((v) => fillSlots(v, assetFields, assets, assetMeta, missing));
+  if (!val || typeof val !== "object") return val;
+  const o = {};
+  for (const [k, v] of Object.entries(val)) o[k] = fillSlots(v, assetFields, assets, assetMeta, missing);
+  if (typeof o.type === "string" && o.data && assetFields[o.type]) o.data = fillAssets(o.data, assetFields[o.type], assets, assetMeta[o.type], missing);
+  return o;
+};
+
 // ---------- main ----------
-export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, warn = () => {} }) => {
+export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, warn = () => {}, assetFields = {}, assetMeta = {} }) => {
   const r = rngOf((style.seed || 1) * 7919 + 13);
   const runs = buildRuns(parsed);
   const total = alignRuns(runs, media, warn);
@@ -293,7 +378,7 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
       const flush = () => {
         if (!grp.length) return;
         const text = grp.map((b) => b.text).join("");
-        const c = chooseAuto(text, recent, r, grp.find((b) => b.asset)?.asset);
+        const c = chooseAuto(text, recent, r, grp.find((b) => b.asset)?.asset, grp.flatMap((b) => b.slots || []));
         recent.push(c.type);
         if (recent.length > 4) recent.shift();
         skel.push({ type: c.type, g: grp[0].a, data: c.data, auto: true });
@@ -384,7 +469,7 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
       data = { ...data, video: clip.src, videoFrames: clip.frames, audioUntil: dur };
       if (data.title === undefined && (input.title || parsed.title)) data.title = input.title || parsed.title;
     }
-    if (s.type === "screen" && data.src && media.assets?.[data.src]) data = { ...media.assets[data.src], ...data, src: media.assets[data.src].src };
+    data = fillSlots(fillAssets(data, assetFields[s.type], media.assets, assetMeta[s.type], media.assetsMissing), assetFields, media.assets, assetMeta, media.assetsMissing);
     const mo = s.motion ?? {};
     let tr = mo.transition ?? s.transition;
     if (!tr) {

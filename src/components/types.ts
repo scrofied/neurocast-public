@@ -66,6 +66,17 @@ export type CompDef<D = any> = {
   // 为 true 时 Gallery 不单独生成预览（例如依赖外部视频素材）
   noGallery?: boolean;
   schema: z.ZodType<D>;
+  // 哪些字段吃真实素材文件（截图/录屏/照片/真 logo）。
+  // 引擎按这个声明把 prepAssets 的结果（aspect / kind / frames / OCR focus / 来源）注入 shot.data，
+  // 所以新素材组件不用再改 timed.mjs 里的硬判据。四种写法：
+  //   "src"            顶层字段（素材元数据铺在 data 上）
+  //   "video.src"      嵌套对象里的字段（元数据铺在那个对象上）
+  //   "boards[].src"   数组每项一个素材
+  //   "pages[]"        整个字段就是路径数组（多页文档，只铺 data 顶层的 aspect）
+  assetFields?: string[];
+  // 少数组件的素材字段共用同一层（head-pip：主画面 src + 真人 video），元数据键会互相盖。
+  // 这里按字段点名「这个字段只准铺哪几个键」，make.mjs 探测出来的默认值以它为准。
+  assetMeta?: Record<string, string[]>;
   // gallery / catalog example; fields with zod defaults may be omitted
   example: Partial<D>;
   C: React.FC<CompProps<D>>;

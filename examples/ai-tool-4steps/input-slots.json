@@ -1,0 +1,10 @@
+{
+  "script_file": "slots.md",
+  "audio": "voice.mp3",
+  "audio_timeline": "voice_asr.json",
+  "title": "20 分钟用 AI 做出你的第一个小软件",
+  "seed": 7,
+  "skin": "aurora",
+  "cta": "评论区留言 · 我帮你写指令",
+  "keywords": ["AI", "HTML", "F12", "产品经理", "四步法"]
+}

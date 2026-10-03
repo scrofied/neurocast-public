@@ -1,4 +1,6 @@
 import React from "react";
+import { Img, staticFile } from "remotion";
+import { brandForName, findBrand } from "./brands";
 
 // Minimal stroke icon set (24x24, feather-like). Add new names here; components reference icons by name,
 // storyboards can pass `icon: "<name>"` wherever a component accepts one.
@@ -295,6 +297,13 @@ const P: Record<string, React.ReactNode> = {
 
 export const ICONS = Object.keys(P);
 
+// 真品牌标识：内置线条图标查不到时，先看这个名字是不是某个「有真 logo 文件」的产品
+// （brands/library.json + public/brands/，由 scripts/brands.mjs sync 生成）。
+// 讲 Claude / 剪映 / 小红书时上它自己的 logo，而不是一个通用符号 —— 这是信任度的底座。
+const BrandMark: React.FC<{ src: string; size: number; style?: React.CSSProperties }> = ({ src, size, style }) => (
+  <Img src={/^https?:/.test(src) ? src : staticFile(src)} width={size} height={size} style={{ objectFit: "contain", display: "block", ...style }} />
+);
+
 export const Icon: React.FC<{ name?: string; size?: number; color?: string; stroke?: number; fill?: string; style?: React.CSSProperties }> = ({
   name,
   size = 28,
@@ -303,6 +312,8 @@ export const Icon: React.FC<{ name?: string; size?: number; color?: string; stro
   fill = "none",
   style,
 }) => {
+  const brand = name && !P[name] ? brandForName(name) : undefined;
+  if (brand) return <BrandMark src={`brands/${brand.file}`} size={size} style={style} />;
   if (!name || !P[name]) return null;
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color} strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" style={style}>
@@ -315,7 +326,10 @@ export const Icon: React.FC<{ name?: string; size?: number; color?: string; stro
 export const IconPaths: React.FC<{ name?: string }> = ({ name }) => (name && P[name] ? <>{P[name]}</> : null);
 
 // pick a sensible icon from a Chinese label (封面 -> image, 正文 -> doc ...)
+// 文案里点了某个产品的名，且它有自己的真 logo 文件时，优先上真标识（brand:key）
 export const guessIcon = (label: string): string | undefined => {
+  const brand = findBrand(label);
+  if (brand) return `brand:${brand.key}`;
   const rules: [RegExp, string][] = [
     [/封面|图片|截图|海报/, "image"],
     [/正文|文案|文本|文档|讲稿|脚本/, "doc"],

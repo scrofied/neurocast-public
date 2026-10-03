@@ -225,5 +225,186 @@ export const detectNoReach = (seg) => {
 };
 
 // talking-head clips are handled by the timed pipeline (talking-head-stage), not by a detector
-export const DETECTORS = [detectCode, detectImage, detectToolIntro, detectSameDay, detectDeliverables, detectNoReach, detectTimeline, detectFunnel, detectSteps, detectVersus, detectNumbers, detectList, detectQuote];
+// ---------- 素材槽位：讲稿里用 [出处: …] [logo: …] 直接点名「这一镜要放真东西」 ----------
+// 自动分镜（--beats / 没写 storyboard）以前只会挑代码动画，观众看到的永远是我们画的界面。
+// 槽位给了一条最短路径：写一行标记，这一镜就换成对应组件，缺的文件顺带进采集清单（管线#8）。
+//
+// 每条 run 的返回值必须喂得起对应组件的 schema：凑不齐必填字段就返回 null（这一镜退回给别的检测器，
+// 而不是生成一个必被 validateShot 打回的镜头）。约定：{ type, data } = 换组件，纯对象 = 用 k.type。
+export const SLOT_SPEC = {
+  logo: {
+    type: "logo-wall",
+    // [logo: Claude, 剪映|我自己剪片子] → 真标识方阵（public/brands/ 有登记的用自己的 logo，没有的退成通用图标）
+    run: (v) => {
+      const items = sp(v)
+        .slice(0, 9)
+        .map((r) => {
+          const toks = pipe(r);
+          const src = toks.find(isPath);
+          const brand = short(toks.find((t) => t !== src) || base(src || ""), 16);
+          const note = toks.find((t) => t !== src && t !== brand);
+          return brand ? { brand, note: note ? short(note, 18) : undefined, src } : null;
+        })
+        .filter(Boolean);
+      return items.length >= 2 ? { items } : null; // logo-wall 要 2-9 枚，只点名一个牌子就别用整面墙
+    },
+  },
+  品牌墙: { alias: "logo" },
+  出处: {
+    type: "citation-strip",
+    // [出处: LMArena 榜单 https://lmarena.ai 2026-09-30 | 另一篇 www.xxx.com/a]
+    run: (v) => {
+      const items = sp(v)
+        .slice(0, 4)
+        .map((r) => {
+          const toks = pipe(r);
+          const url = toks.find(isUrl);
+          if (!url) return null; // 写不出真地址就不该上这条（组件自己的规矩）
+          const src = toks.find(isImg);
+          const date = (r.match(/\d{4}-\d{2}(-\d{2})?/) || [])[0];
+          const title = short(toks.find((t) => t !== url && t !== src && !/\d{4}-\d{2}/.test(t)) || url, 24);
+          return { title, url, date, src, at: undefined };
+        })
+        .filter(Boolean);
+      return items.length ? { items } : null;
+    },
+  },
+  来源: { alias: "出处" },
+  文档: {
+    type: "real-doc-scroll",
+    // [文档: 长截图.png] 单页 / [文档: p1.png, p2.png, p3.png] 逐页
+    run: (v, text) => {
+      const pages = pipe(v).filter(isPath);
+      if (!pages.length) return null;
+      const title = short(sp(text)[0] || "", 14) || undefined;
+      return pages.length > 1 ? { pages, title } : { src: pages[0], title };
+    },
+  },
+  表格: { alias: "文档" },
+  对比: {
+    type: "screen-versus",
+    // [对比: 之前.png 手写的那版; 之后.png 装了 skill]，也可以 [对比: a.png, b.png]
+    run: (v, text) => {
+      const toks = String(v || "").split(/[,，、;；|｜]|\s+/).map((t) => t.trim()).filter(Boolean);
+      const panes = [];
+      for (const t of toks) {
+        if (isPath(t)) panes.push({ src: t, label: undefined });
+        else if (panes.length && !panes[panes.length - 1].label) panes[panes.length - 1].label = t; // 紧跟路径的那个词就是这张图的说明
+      }
+      if (panes.length < 2 || panes.length > 3) return null; // 一前一后两张才有得比
+      const notes = sp(text);
+      return { panes: panes.map((p, i) => ({ src: p.src, label: short(p.label || (i ? "之后" : "之前"), 12), note: short(notes[i] || "", 20) || undefined })) };
+    },
+  },
+  vs: { alias: "对比" },
+  证据: {
+    type: "evidence-zoom",
+    // 带坐标 [证据: 报表.png 0.42,0.31 成本占90%] → 圈选放大；
+    // 没坐标 → 换成 screen：让管线去真截图里 OCR 定位（坐标必须是量出来的，不能猜）
+    run: (v, text) => {
+      const toks = pipe(v);
+      const src = toks.find(isPath);
+      if (!src) return null;
+      const label = short(toks.find((t) => t !== src && !/^\d[\d.]*[,,，]\d/.test(t)) || sp(text)[0] || "", 16);
+      const xy = (toks.find((t) => /^\d[\d.]*[,,，]\d/.test(t)) || "").split(/[,,，]/).map(Number);
+      if (xy.length === 2 && xy.every((n) => Number.isFinite(n) && n >= 0 && n <= 1)) return { type: "evidence-zoom", data: { src, kicker: "看这里", marks: [{ x: xy[0], y: xy[1], label: label || "就是这里", at: 12 }] } };
+      return { type: "screen", data: { src, kind: /\.(mp4|mov|webm|mkv)$/i.test(src) ? "video" : "image", kicker: "看这里", title: label || undefined } };
+    },
+  },
+  头像: {
+    type: "photo-wall",
+    // [头像: 小王|做了 3 年运营, 阿月|自媒体] ——路径可选：[头像: 头像1.png|小王|运营]
+    run: (v) => {
+      const items = sp(v)
+        .slice(0, 14)
+        .map((r) => {
+          const toks = pipe(r);
+          const src = toks.find(isPath);
+          const name = short(toks.find((t) => t !== src) || base(src || ""), 12);
+          const tag = toks.find((t) => t !== src && t !== name);
+          return name ? { name, tag: tag ? short(tag, 18) : undefined, src } : null;
+        })
+        .filter(Boolean);
+      return items.length >= 2 ? { items } : null;
+    },
+  },
+  评论墙: {
+    type: "comment-wall",
+    // [评论墙: 小明|这招真有用|1.2万；阿月|求教程]，条目之间用 ; ／  字段之间用 |，≥3 条才成立
+    run: (v) => {
+      const comments = sp(v, "[;；]")
+        .slice(0, 12)
+        .map((r) => {
+          const toks = pipe(r);
+          const [user, ...rest] = toks;
+          const body = rest.filter((t) => !isPath(t)).join(" ");
+          const likes = (body.match(/(\d[\d.]*[万千]?\+?)\s*$/) || [])[1];
+          const text = short(body.replace(/(\d[\d.]*[万千]?\+?)\s*$/, "").trim() || user || "", 40);
+          return { user: short(user || base(rest.find(isPath) || ""), 12), text, likes, src: rest.find(isPath) };
+        })
+        .filter((c) => c.text);
+      return comments.length >= 3 ? { comments } : null;
+    },
+  },
+  评论: { alias: "评论墙" },
+  原文: {
+    type: "brand-quote-card",
+    // [原文: “原话逐字打出来” ——官方文档 · Models]，可带截图：[原文: “…” ——出处, 公告.png]
+    run: (v, text) => {
+      const body = String(v || "").split(/——|―/);
+      let head = body[0] || "";
+      const src = (head.match(/[^\s,，、;；|｜]+\.(png|jpe?g|webp|gif|mp4|mov|webm)\b/i) || [])[0];
+      if (src) head = head.replace(src, "");
+      const quote = head.trim().replace(/^["“「]|["”」]$/g, ""); // 原话里带逗号很正常，整段照收
+      if (Array.from(quote).length < 4) return null; // 没有原话就不是「引用原文」，交给 quote（金句）组件
+      const cite = short(body[1] || "", 20) || undefined;
+      return { quote, cite, src, brand: short(sp(text)[0] || "", 10) || undefined, title: short(quote, 14) };
+    },
+  },
+  金句: { alias: "原文" },
+};
+const sp = (s, sep = "[,，、;；]") => String(s || "").split(new RegExp(sep)).map((x) => x.trim()).filter(Boolean);
+// 一条记录内部的字段：写了 | 就按 | 分（评论/头像那种一条一个东西），没写就按空格分（出处那种标题+地址+日期）
+const pipe = (s) => (/[|｜]/.test(s) ? String(s).split(/[|｜]/) : String(s).split(/\s+/)).map((x) => String(x).trim()).filter(Boolean);
+const isPath = (x) => (/[\/\\]|\.(png|jpe?g|webp|gif|md|txt|pdf|mp4|mov|webm|svg)$/i.test(x) && !isUrl(x));
+const isImg = (x) => /\.(png|jpe?g|webp|gif)$/i.test(x);
+const isUrl = (x) => /^(https?:\/\/|www\.)/i.test(x) || /^[a-z0-9][a-z0-9-]*(\.[a-z0-9-]+)*\.(com|cn|ai|io|org|net|cc|co|dev|app|xyz|top|me|tv)(\/|$)/i.test(x);
+const base = (p) => String(p || "").split(/[\/\\]/).pop().replace(/\.\w+$/, "");
+export const detectSlot = (seg) => {
+  const slots = seg?.slots;
+  if (!slots || !slots.length) return null;
+  for (const s of slots) {
+    let k = SLOT_SPEC[s.name];
+    if (!k) continue;
+    while (k.alias) k = SLOT_SPEC[k.alias];
+    const out = k.run(s.value, seg.text || seg.spoken || "");
+    if (!out) continue;
+    const pick = out.data ? out : { type: k.type, data: out };
+    return { type: pick.type, score: 100, data: pick.data };
+  }
+  return null;
+};
+/** 讲稿槽位里点名的素材文件（喂给 prepAssets：拷贝、量比例、OCR）——只收 src/pages，url 是网址不是文件 */
+export const slotAssetRefs = (parsed) => {
+  const out = [];
+  const walk = (node) => {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (!node || typeof node !== "object") return;
+    for (const [k, v] of Object.entries(node)) {
+      if (typeof v === "string" && (k === "src" || k === "pages") && isPath(v)) out.push(v);
+      else if (k === "pages" && Array.isArray(v)) v.forEach((p) => typeof p === "string" && isPath(p) && out.push(p));
+      else walk(v);
+    }
+  };
+  for (const sec of parsed?.sections || [])
+    for (const p of sec.paras || []) for (const s of p.slots || []) {
+      let k = SLOT_SPEC[s.name];
+      if (!k) continue;
+      while (k.alias) k = SLOT_SPEC[k.alias];
+      walk(k.run(s.value, p.text || ""));
+    }
+  return [...new Set(out)];
+};
+
+export const DETECTORS = [detectSlot, detectCode, detectImage, detectToolIntro, detectSameDay, detectDeliverables, detectNoReach, detectTimeline, detectFunnel, detectSteps, detectVersus, detectNumbers, detectList, detectQuote];
 export { clean, short, cnToInt };

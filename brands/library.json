@@ -1,0 +1,288 @@
+{
+  "rules": {
+    "dir": "public/brands/",
+    "howToAdd": "1) 把真图标文件放进 public/brands/（svg 或 200px 以上的 png，透明底最佳）2) 在下面 brands 里补一条（label 显示名 / file 文件名 / aliases 文案里会出现的叫法）3) node scripts/brands.mjs sync —— 只有文件真的存在才会进组件",
+    "whyGenerated": "组件在浏览器里没法列目录，所以 src/lib/brands.generated.ts 由 sync 从这份 json + 磁盘上的实际文件生成；没放文件的牌子上屏会让 Remotion 报缺静态文件",
+    "note": "aliases 用你文案里的真实叫法（中英、简称、俗称都要写），匹配是「去掉空格和连字符后的小写包含」",
+    "alias_policy": "别名匹配走「精确优先，其次包含」；裸短 ASCII（<=2 字符）和通用中文词（仓库/广场/表格）不要当别名，会把知识仓库这种词误判成产品"
+  },
+  "brands": {
+    "claude": {
+      "label": "Claude",
+      "file": "claude.svg",
+      "aliases": [
+        "claude",
+        "克劳德",
+        "anthropic",
+        "opus"
+      ]
+    },
+    "chatgpt": {
+      "label": "ChatGPT",
+      "file": "chatgpt.svg",
+      "aliases": [
+        "chatgpt",
+        "gpt",
+        "openai",
+        "gpt-4",
+        "gpt4"
+      ]
+    },
+    "gemini": {
+      "label": "Gemini",
+      "file": "gemini.svg",
+      "aliases": [
+        "gemini",
+        "谷歌ai"
+      ]
+    },
+    "deepseek": {
+      "label": "DeepSeek",
+      "file": "deepseek.svg",
+      "aliases": [
+        "deepseek",
+        "深度求索"
+      ]
+    },
+    "qoder": {
+      "label": "Qoder",
+      "file": "qoder.svg",
+      "aliases": [
+        "qoder"
+      ]
+    },
+    "workbuddy": {
+      "label": "Workbuddy",
+      "file": "workbuddy.svg",
+      "aliases": [
+        "workbuddy",
+        "工作搭子"
+      ]
+    },
+    "cursor": {
+      "label": "Cursor",
+      "file": "cursor.svg",
+      "aliases": [
+        "cursor"
+      ]
+    },
+    "vscode": {
+      "label": "VS Code",
+      "file": "vscode.svg",
+      "aliases": [
+        "vscode",
+        "visualstudiocode",
+        "vscode编辑器"
+      ]
+    },
+    "figma": {
+      "label": "Figma",
+      "file": "figma.svg",
+      "aliases": [
+        "figma"
+      ]
+    },
+    "canva": {
+      "label": "Canva",
+      "file": "canva.svg",
+      "aliases": [
+        "canva"
+      ]
+    },
+    "jianying": {
+      "label": "剪映",
+      "file": "jianying.svg",
+      "aliases": [
+        "剪映",
+        "capcut"
+      ]
+    },
+    "premiere": {
+      "label": "Premiere",
+      "file": "premiere.svg",
+      "aliases": [
+        "premiere",
+        "pr 剪辑"
+      ]
+    },
+    "davinci": {
+      "label": "DaVinci Resolve",
+      "file": "davinci.svg",
+      "aliases": [
+        "davinci",
+        "达芬奇"
+      ]
+    },
+    "feishu": {
+      "label": "飞书",
+      "file": "feishu.svg",
+      "aliases": [
+        "飞书",
+        "lark"
+      ]
+    },
+    "notion": {
+      "label": "Notion",
+      "file": "notion.svg",
+      "aliases": [
+        "notion"
+      ]
+    },
+    "yuque": {
+      "label": "语雀",
+      "file": "yuque.svg",
+      "aliases": [
+        "语雀"
+      ]
+    },
+    "wecom": {
+      "label": "企业微信",
+      "file": "wecom.svg",
+      "aliases": [
+        "企业微信",
+        "企微",
+        "wechatwork"
+      ]
+    },
+    "wechat": {
+      "label": "微信",
+      "file": "wechat.svg",
+      "aliases": [
+        "微信",
+        "公众号",
+        "视频号",
+        "微信群"
+      ]
+    },
+    "douyin": {
+      "label": "抖音",
+      "file": "douyin.svg",
+      "aliases": [
+        "抖音",
+        "douyin",
+        "tiktok"
+      ]
+    },
+    "xiaohongshu": {
+      "label": "小红书",
+      "file": "xiaohongshu.svg",
+      "aliases": [
+        "小红书",
+        "小红书笔记"
+      ]
+    },
+    "bilibili": {
+      "label": "哔哩哔哩",
+      "file": "bilibili.svg",
+      "aliases": [
+        "b站",
+        "哔哩哔哩",
+        "bilibili"
+      ]
+    },
+    "youtube": {
+      "label": "YouTube",
+      "file": "youtube.svg",
+      "aliases": [
+        "youtube",
+        "油管"
+      ]
+    },
+    "github": {
+      "label": "GitHub",
+      "file": "github.svg",
+      "aliases": [
+        "github"
+      ]
+    },
+    "huggingface": {
+      "label": "Hugging Face",
+      "file": "huggingface.svg",
+      "aliases": [
+        "huggingface",
+        "hf 镜像"
+      ]
+    },
+    "midjourney": {
+      "label": "Midjourney",
+      "file": "midjourney.svg",
+      "aliases": [
+        "midjourney"
+      ]
+    },
+    "suno": {
+      "label": "Suno",
+      "file": "suno.svg",
+      "aliases": [
+        "suno"
+      ]
+    },
+    "n8n": {
+      "label": "n8n",
+      "file": "n8n.svg",
+      "aliases": [
+        "n8n"
+      ]
+    },
+    "dify": {
+      "label": "Dify",
+      "file": "dify.svg",
+      "aliases": [
+        "dify"
+      ]
+    },
+    "wps": {
+      "label": "WPS / Excel",
+      "file": "wps.svg",
+      "aliases": [
+        "wps",
+        "excel"
+      ]
+    },
+    "taobao": {
+      "label": "淘宝",
+      "file": "taobao.svg",
+      "aliases": [
+        "淘宝",
+        "天猫"
+      ]
+    },
+    "jd": {
+      "label": "京东",
+      "file": "jd.svg",
+      "aliases": [
+        "京东"
+      ]
+    },
+    "meituan": {
+      "label": "美团",
+      "file": "meituan.svg",
+      "aliases": [
+        "美团"
+      ]
+    },
+    "remotion": {
+      "label": "Remotion",
+      "file": "remotion.svg",
+      "aliases": [
+        "remotion"
+      ]
+    },
+    "motionface": {
+      "label": "Motion Face",
+      "file": "motionface.svg",
+      "aliases": [
+        "motionface"
+      ]
+    },
+    "twitter": {
+      "label": "X / 推特",
+      "file": "twitter.svg",
+      "aliases": [
+        "推特",
+        "twitter",
+        "x平台"
+      ]
+    }
+  }
+}

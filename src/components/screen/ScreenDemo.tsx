@@ -1,9 +1,11 @@
 import React from "react";
 import { z } from "zod";
-import { Img, OffthreadVideo, staticFile, useVideoConfig } from "remotion";
+import { Img, OffthreadVideo, useVideoConfig } from "remotion";
 import { clamp, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
+import { assetUrl, MissingAsset } from "../../lib/asset";
 import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
+import { SourceBadge, sourceSchema } from "../../lib/source";
 import { Headline } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
@@ -14,10 +16,11 @@ const schema = z.object({
   kind: z.enum(["image", "video"]).optional(),
   aspect: z.number().optional(), // width / height of source
   frameStyle: z.enum(["browser", "laptop", "float"]).optional(),
-  url: z.string().optional(),
+  url: z.string().optional().describe("真地址栏文案，如 arena.ai/leaderboard。写不出真地址就别用 browser 外框（会自动退成 float）"),
   title: z.string().optional(),
   kicker: z.string().optional(),
   focus: z.array(focusSchema).max(5).optional(),
+  source: sourceSchema,
 });
 type D = z.infer<typeof schema>;
 
@@ -31,7 +34,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
   const enterAt = useEnter(variant);
   const { width, height } = useVideoConfig();
-  const style = data.frameStyle ?? (["browser", "laptop", "float"] as const)[variant % 3];
+  const styleOf = data.frameStyle ?? (["browser", "laptop", "float"] as const)[variant % 3];
+  // 浏览器外框里那行地址是最容易露馅的：写不出真地址就退成无边框悬浮，不编一个假域名
+  const style = styleOf === "browser" && !data.url ? "float" : styleOf;
   const aspect = data.aspect ?? 16 / 10;
   // fit screen into a 1320x760 box
   const boxW = 1320;
@@ -94,7 +99,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const tiltY = style === "float" ? -14 : -8;
   const rot = (1 - eFrame.p) * 30 + tiltY * (1 - zoomP) * (frame < settle ? 1 : 0.35);
 
-  const src = data.src.startsWith("http") ? data.src : staticFile(data.src);
+  // 讲稿点名的素材没找到（--allow-missing-assets 草稿模式）时路径会被清空 → 演占位；空路径直接上屏会让渲染 404 崩掉
+  const has = !!data.src;
+  const src = has ? assetUrl(data.src) : "";
 
   return (
     <>
@@ -121,17 +128,22 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
                 <div key={c} style={{ width: 13, height: 13, borderRadius: 7, background: c }} />
               ))}
               <div style={{ marginLeft: 16, flex: 1, height: 28, borderRadius: 14, background: "#0b0f17", color: "#8b97ad", fontFamily: t.font.mono, fontSize: 15, display: "flex", alignItems: "center", padding: "0 16px" }}>
-                🔒 {data.url ?? "app.example.com"}
+                🔒 {data.url}
               </div>
             </div>
           )}
           {style === "laptop" && <div style={{ height: chrome, background: "#10141c", display: "flex", justifyContent: "center", alignItems: "center" }}><div style={{ width: 8, height: 8, borderRadius: 4, background: "#222" }} /></div>}
           <div style={{ position: "relative", width: sw, height: viewH, overflow: "hidden" }}>
-            {data.kind === "video" ? (
+            {!has && <MissingAsset field="src" hint="这里要一张真截图或一段真录屏" w={sw} h={viewH} frame={frame} />}
+            {has && (data.kind === "video" ? (
               <OffthreadVideo src={src} muted style={{ width: sw, height: sh }} />
             ) : (
               <Img src={src} style={{ position: "absolute", left: 0, top: -scroll, width: sw, height: sh }} />
-            )}
+            ))}
+            {/* 素材来源角标：平台 + 采集时间 + 出处（不填 source 就不渲染） */}
+            <div style={{ position: "absolute", right: 0, bottom: 14, paddingRight: 18 }}>
+              <SourceBadge source={data.source} frame={frame} />
+            </div>
           </div>
         </div>
         {style === "laptop" && (
@@ -204,9 +216,10 @@ export const ScreenDemo: CompDef<D> = {
   maxSec: 20,
   tags: ["点击", "打开", "界面", "操作", "设置", "按钮", "菜单", "页面", "截图", "录屏"],
   motion: { kind: "设备框带透视摆正入画，鼠标弧线移动点击+涟漪，镜头推近聚焦点、标签回弹弹出", energy: 2 },
-  desc: "截图/录屏装进浏览器或笔记本外框，镜头推到 OCR 定位到的按钮并模拟鼠标点击",
-  use: "文案里 [图: x.png] / [录屏: x.mp4] 的操作演示；说明写「点击\"按钮名\"」会自动定位",
+  desc: "截图/录屏装进浏览器或笔记本外框，镜头推到 OCR 定位到的按钮并模拟鼠标点击；右下角可挂「真实素材 | 平台 · 采集时间」来源角标",
+  use: "文案里 [图: x.png] / [录屏: x.mp4] 的操作演示；说明写「点击\"按钮名\"」会自动定位。上真截图就写 source（平台+采集日期），写不出真 url 就别用 browser 外框",
   schema,
-  example: { src: "assets/demo-shot.png", aspect: 1400 / 3200, frameStyle: "browser", url: "kb.example.com", focus: [{ x: 0.5, y: 0.1, label: "打开知识库" }, { x: 0.5, y: 0.45, label: "上传文档" }] },
+  assetFields: ["src"],
+  example: { src: "assets/demo-shot.png", aspect: 1400 / 3200, frameStyle: "browser", url: "lmarena.ai/leaderboard", source: { platform: "LMArena", url: "lmarena.ai", capturedAt: "2026-09-30" }, focus: [{ x: 0.5, y: 0.1, label: "打开知识库" }, { x: 0.5, y: 0.45, label: "上传文档" }] },
   C,
 };
