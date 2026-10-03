@@ -297,7 +297,7 @@ const runTimed = async () => {
     if (!fs.existsSync(abs)) fail("E_ASSET", `presenter.video 不存在：${abs}`);
     const norm = derived(abs, "presenter", "mp4", (f) => sh("ffmpeg", ["-v", "error", "-y", "-i", abs, "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-pix_fmt", "yuv420p", "-movflags", "+faststart", f], "E_ASSET"));
     fs.copyFileSync(norm, path.join(jobDir, "presenter.mp4"));
-    const dur = probe(norm).duration;
+    let dur = probe(norm).duration;
     // poster = the clip's first frame: held on screen during the alignment offset so the shot
     // underneath is never exposed before the (delayed) person video starts.
     let poster;
@@ -305,27 +305,75 @@ const runTimed = async () => {
       sh("ffmpeg", ["-v", "error", "-y", "-i", path.join(jobDir, "presenter.mp4"), "-frames:v", "1", path.join(jobDir, "presenter-poster.png")], "E_ASSET");
       poster = pubRel(path.join(jobDir, "presenter-poster.png"));
     } catch { /* fall back to a frozen video frame in the player */ }
-    // align the person's lips to the TTS: median of (tts - talk) over identical words spoken in both
-    let offset = pr.offset;
-    if (offset == null && media.tts && (pr.timeline || !opt["--no-asr"])) {
+    // align the person's lips to the TTS: word-level diffs only give a constant offset, but the two
+    // voices also differ slightly in pace — character-level monotonic match + least squares fits
+    // s ≈ a + b·t (t = person clock, s = TTS clock) → start at a, play at rate 1/b (clamped ±10%).
+    let offset = pr.offset, rate = pr.rate;
+    if ((offset == null || rate == null) && media.tts && (pr.timeline || !opt["--no-asr"])) {
       const tw = wordsOf(pr.timeline ? loadTimeline(pr.timeline, "真人") : asrWords(abs, "真人"));
-      const key = (s) => String(s).replace(/[\s，。！？、,.!?“”"]/g, "");
-      const diffs = [];
-      for (const w of tw) {
-        const k = key(w.text);
-        if (k.length < 2) continue;
-        const hit = media.tts.words.filter((x) => key(x.text) === k && Math.abs(x.start - w.start) < 6);
-        if (hit.length) diffs.push(hit.reduce((a, b) => (Math.abs(b.start - w.start) < Math.abs(a.start - w.start) ? b : a)).start - w.start);
+      const clean = (s) => String(s).replace(/[^\p{L}\p{N}]/gu, "").toLowerCase();
+      const expand = (ws) => { const o = []; for (const w of ws) { const t = +w.start; for (const c of clean(w.text)) o.push({ c, t }); } return o; };
+      const A = expand(tw), B = expand(media.tts.words);
+      const pairs = [];
+      let i = 0, j = 0;
+      while (i < A.length && j < B.length) {
+        if (A[i].c === B[j].c) { pairs.push([A[i].t, B[j].t]); i++; j++; }
+        else {
+          let k = 0; for (let d = 1; d <= 12; d++) if (j + d < B.length && B[j + d].c === A[i].c) { k = d; break; }
+          if (k) { j += k; continue; }
+          let m = 0; for (let d = 1; d <= 8; d++) if (i + d < A.length && A[i + d].c === B[j].c) { m = d; break; }
+          if (m) i += m; else { i++; j++; }
+        }
       }
-      diffs.sort((a, b) => a - b);
-      offset = diffs.length >= 3 ? diffs[diffs.length >> 1] : 0;
-      console.log(`✓ 真人对齐 TTS：偏移 ${offset.toFixed(2)} 秒（${diffs.length} 个词匹配）`);
+      if (pairs.length >= 8) {
+        const fit = (ps) => { const n = ps.length; let sx = 0, sy = 0, sxx = 0, sxy = 0; for (const [t, s] of ps) { sx += t; sy += s; sxx += t * t; sxy += t * s; } const b = (n * sxy - sx * sy) / (n * sxx - sx * sx || 1); return { a: (sy - b * sx) / n, b }; };
+        let f1 = fit(pairs);
+        const keep = pairs.filter(([t, s]) => Math.abs(s - (f1.a + f1.b * t)) < 0.6);
+        if (keep.length >= 8) f1 = fit(keep);
+        if (offset == null) offset = Math.min(2, Math.max(0, f1.a));
+        if (rate == null) rate = Math.min(1.1, Math.max(0.9, 1 / f1.b));
+        console.log(`✓ 真人对齐 TTS：偏移 ${offset.toFixed(2)} 秒、变速 ×${rate.toFixed(3)}（${pairs.length} 字匹配${keep.length !== pairs.length ? `，去离群后 ${keep.length}` : ""}）`);
+        // 语速差非线性（真人前段快后段慢）时单速率修不掉中段漂移：两段拟合，
+        // 用 ffmpeg setpts 把真人视频直接重排到 TTS 时钟上（渲染侧 rate=1 + 偏移 a1）。
+        if (pr.offset == null && pr.rate == null && keep.length >= 16) {
+          const rms = (fn) => Math.sqrt(keep.reduce((r, [t, s]) => r + (s - fn(t)) ** 2, 0) / keep.length);
+          const g1 = (t) => f1.a + f1.b * t;
+          let best2 = null;
+          for (let kk = 6; kk <= 16; kk += 0.5) {
+            const s1 = keep.filter((p) => p[0] <= kk), s2 = keep.filter((p) => p[0] > kk);
+            if (s1.length < 8 || s2.length < 8) continue;
+            const f1s = fit(s1), f2s = fit(s2);
+            const c2 = f1s.a + f1s.b * kk - f2s.b * kk; // 边界连续
+            const r = rms((t) => (t <= kk ? f1s.a + f1s.b * t : c2 + f2s.b * t));
+            if (!best2 || r < best2.r) best2 = { kk, f1s, f2s, r };
+          }
+          if (best2 && best2.r < rms(g1) * 0.92) {
+            const { kk, f1s, f2s } = best2;
+            try {
+              const w = path.join(jobDir, "presenter-warp.mp4");
+              sh("ffmpeg", ["-v", "error", "-y", "-i", norm, "-filter_complex",
+                `[0:v]trim=start=0:end=${kk},setpts=${f1s.b.toFixed(6)}*PTS[s1];[0:v]trim=start=${kk},setpts=${f2s.b.toFixed(6)}*(PTS-STARTPTS)[s2];[s1][s2]concat=n=2:v=1:a=0,fps=${FPS},format=yuv420p[v]`,
+                "-map", "[v]", "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-movflags", "+faststart", w], "E_ASSET");
+              fs.copyFileSync(w, path.join(jobDir, "presenter.mp4"));
+              dur = probe(w).duration;
+              offset = Math.min(2, Math.max(0, f1s.a)); rate = 1;
+              sh("ffmpeg", ["-v", "error", "-y", "-i", path.join(jobDir, "presenter.mp4"), "-frames:v", 1, path.join(jobDir, "presenter-poster.png")], "E_ASSET");
+              console.log(`✓ 真人分段变速：拐点 ${kk}s 前×${f1s.b.toFixed(4)} 后×${f2s.b.toFixed(4)}，偏移 ${offset.toFixed(2)}s（残差 ${best2.r.toFixed(3)}s < 单速率 ${rms(g1).toFixed(3)}s）`);
+            } catch (e) { console.log(`⚠ 真人分段变速失败，回退单速率：${e.message}`); }
+          }
+        }
+      } else {
+        if (offset == null) offset = 0;
+        if (rate == null) rate = 1;
+        console.log(`⚠ 真人对齐：匹配字数太少（${pairs.length}），偏移按 ${offset.toFixed(2)}s、速率 ×${rate.toFixed(3)}`);
+      }
     }
     out.timeline.meta.presenter = {
       src: pubRel(path.join(jobDir, "presenter.mp4")),
       poster,
       frames: Math.floor(dur * FPS),
       offset: Math.round((offset || 0) * FPS),
+      rate: Number((rate ?? 1).toFixed(4)),
       full: Math.round((pr.full ?? 2) * FPS),
       focusX: pr.focusX ?? 0.5,
       focusY: pr.focusY ?? 0.3,

@@ -82,7 +82,8 @@ const PresenterLayer: React.FC<{ p: PresenterMeta; opening: OpeningLive | null }
   const f = useCurrentFrame();
   const t = useTheme();
   const { width, height } = useVideoConfig();
-  const end = Math.min(p.offset + p.frames - 1, p.hideFrom ?? Infinity);
+  const rate = p.rate ?? 1; // 真人语速与 TTS 不完全一致：线性拟合给一个 ~±3% 的播放速率，配合 offset 让口型全程跟住
+  const end = Math.min(p.offset + p.frames / rate - 1, p.hideFrom ?? Infinity);
   if (f >= end) return null;
   // the person's lips are delayed by `offset` to match the TTS (Sequence from={offset}); during the
   // first `offset` frames the clip has no frame yet, so we hold its poster (first frame) to cover the
@@ -121,7 +122,7 @@ const PresenterLayer: React.FC<{ p: PresenterMeta; opening: OpeningLive | null }
           <OffthreadVideo src={src(p.src)} muted startFrom={0} endAt={1} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `${p.focusX * 100}% ${p.focusY * 100}%` }} />
         ))}
         <Sequence from={p.offset} layout="none">
-          <OffthreadVideo src={src(p.src)} muted style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `${p.focusX * 100}% ${p.focusY * 100}%` }} />
+          <OffthreadVideo src={src(p.src)} muted playbackRate={rate} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `${p.focusX * 100}% ${p.focusY * 100}%` }} />
         </Sequence>
       </div>
       {cam.tint && (cam.tintOpacity ?? 0) > 0.001 && <div style={{ position: "absolute", inset: 0, background: cam.tint, opacity: cam.tintOpacity, mixBlendMode: "multiply" }} />}

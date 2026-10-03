@@ -47,7 +47,7 @@ export type Timeline = {
     sfx?: boolean;
     chapterFlash?: boolean;
     // muted talking-head clip: full screen for `full` frames, then a picture-in-picture box
-    presenter?: { src: string; poster?: string; frames: number; offset: number; full: number; focusX: number; focusY: number; hideFrom?: number };
+    presenter?: { src: string; poster?: string; frames: number; offset: number; rate?: number; full: number; focusX: number; focusY: number; hideFrom?: number };
   };
   durationInFrames: number;
   chapters: Chapter[];
