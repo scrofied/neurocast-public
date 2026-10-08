@@ -77,11 +77,17 @@ export type CompDef<D = any> = {
   // 少数组件的素材字段共用同一层（head-pip：主画面 src + 真人 video），元数据键会互相盖。
   // 这里按字段点名「这个字段只准铺哪几个键」，make.mjs 探测出来的默认值以它为准。
   assetMeta?: Record<string, string[]>;
+  // 组件的 xxxAt / at / until 锚点解析完之后用什么时基。缺省 = "frame"（引擎契约：帧）。
+  // 标 "sec" 的组件（如 PRO 开场模板这类自带秒制时间模型的独立资产）拿到的是「相对本段开始的秒数」，
+  // 写分镜时同样可以直接填台词锚点字符串，timed.mjs 只是不再乘 fps。
+  cueUnit?: "frame" | "sec";
   // gallery / catalog example; fields with zod defaults may be omitted
   example: Partial<D>;
   C: React.FC<CompProps<D>>;
   // openings only: drives the talking-head video under the overlay (frame is relative to the opening start)
   camera?: (data: D, frame: number, dur: number) => Cam;
   // openings only: archive info for openings/library.json
-  opening?: { script: string; hook: string; techniques: string[]; template?: boolean };
+  // selfBg: 开场自己画不透明背景（assetFields 里的图），没有 input.presenter 时首帧也不会露出正片残帧
+  // sec: 模板推荐的开场时长（秒）——内部节奏按它编的，storyboard 的 until 别砍得太短
+  opening?: { script: string; hook: string; techniques: string[]; template?: boolean; selfBg?: boolean; sec?: number };
 };

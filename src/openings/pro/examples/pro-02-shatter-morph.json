@@ -1,0 +1,12 @@
+{
+  "duration": 3.4,
+  "data": {
+    "look": "acid",
+    "line1": "用 AI 写周报",
+    "line2": "是把印钞机当打字机",
+    "hl": "印钞机",
+    "crackAt": 1.65,
+    "punchAt": 2.4
+  },
+  "_note": "_note：真人素材没随包（上游的 public/pro/demo 是作者自己的口播样片，*.mp4 也不进仓库）。在本 skill 里要露脸就在 storyboard 的 opening.data 里加 person：{\"src\": \"assets/talk.mp4\", \"kind\": \"video\", \"audio\": false, \"focusX\": 0.5, \"focusY\": 0.34}，src 走 assetFields 自动拷进 job；pro-04 想要抠像层再加 person.matte（webm）。"
+}

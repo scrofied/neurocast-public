@@ -1,0 +1,13 @@
+{
+  "duration": 3.6,
+  "data": {
+    "look": "ice",
+    "title": "AI 四步法",
+    "sub": "小白 20 分钟做出第一个小软件",
+    "tag": "EP.01",
+    "lockAt": 1.4,
+    "steps": 4,
+    "irisMin": 0.3
+  },
+  "_note": "_note：真人素材没随包（上游的 public/pro/demo 是作者自己的口播样片，*.mp4 也不进仓库）。在本 skill 里要露脸就在 storyboard 的 opening.data 里加 person：{\"src\": \"assets/talk.mp4\", \"kind\": \"video\", \"audio\": false, \"focusX\": 0.5, \"focusY\": 0.34}，src 走 assetFields 自动拷进 job；pro-04 想要抠像层再加 person.matte（webm）。"
+}

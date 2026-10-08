@@ -900,6 +900,230 @@
         "收益承诺前置"
       ],
       "preview": "openings/previews/opening-workbuddy-pay.mp4"
+    },
+    {
+      "id": "opening-opus55-4things",
+      "date": "2026-10-04",
+      "status": "trial",
+      "usedBy": [
+        "../../../neurocast-opus55-4things"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 数字悬念（首帧不会告诉你 → 四张小卡 → 475滚动 → 收藏盖章）",
+      "file": "src/openings/2026-10-04-opus55-4things/Opening.tsx",
+      "desc": "第 0 帧 kicker 逐字 + 大字「绝对不会告诉你的四件事」砸下闪白；四张悬念小卡依次擦出；「475 条」数字滚动（背景切成 100 条成片墙推近）；金章「先收藏起来」盖章+冲击环。无真人层时自带不透明背景（真实成片帧快切→成片墙）",
+      "script": "../../../neurocast-opus55-4things",
+      "hook": "数字冲击+悬念",
+      "techniques": [
+        "首帧大字",
+        "闪白+冲击音",
+        "悬念小卡依次擦出",
+        "数字滚动",
+        "真实素材铺底",
+        "盖章+冲击环+ding"
+      ]
+    },
+    {
+      "id": "opening-workbuddy-10tips",
+      "date": "2026-10-05",
+      "status": "trial",
+      "usedBy": [
+        "../../../neurocast-workbuddy-10tips"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 插话痛点反问（想补充两句→怕打断→划掉翻案→10 个→盖章）",
+      "file": "src/openings/2026-10-05-workbuddy-10tips/Opening.tsx",
+      "desc": "第 0 帧 kicker 逐字 +「想补充两句？」砸下；红字「怕打断？」入场；锚「今天」红线划掉 + 金字「不用停！」翻案 + 队列小胶囊；「10 个」Counter 金色砸出 +「高频使用技巧」擦出；金章「你用到几个？」盖章+冲击环",
+      "script": "../../../neurocast-workbuddy-10tips",
+      "hook": "痛点反问+反常识翻案+数字",
+      "techniques": [
+        "首帧大字",
+        "闪白+冲击音",
+        "划掉翻案",
+        "数字滚动",
+        "盖章+冲击环+ding"
+      ],
+      "preview": "openings/previews/opening-workbuddy-10tips.mp4"
+    },
+    {
+      "id": "opening-codex-100x",
+      "date": "2026-10-06",
+      "status": "trial",
+      "usedBy": [
+        "../../../neurocast-codex-5skills"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 大字对比钩子f0砸出+100倍大数字→划掉甩出→Codex 官方图标单独镜头→真人全屏2秒→代码窗口锁50%",
+      "file": "src/openings/2026-10-06-codex-100x/Opening.tsx",
+      "desc": "0~5.3s 不透明层：「比通用大模型强大」砸出、右侧「100倍」大数字锚「100 倍」砸出；锚「不会」划掉、revAt+12 整层甩出；锚「一定」Codex Codex 官方图标居中砸出单独镜头；锚「今天」揭幕真人全屏（仅 ~1.2s+收窗），「今天给大家分享」；锚「5 个」收右上 LIVE，舞台层计数 + 代码窗口打字、进度条锁 50% 隐喻「只用了一半的能力」",
+      "script": "../../../neurocast-codex-5skills",
+      "hook": "数字冲击+对比翻案+代码隐喻（不点名真实产品）",
+      "techniques": [
+        "大数字砸出",
+        "划掉甩出转场",
+        "单独镜头砸图标",
+        "代码窗口打字",
+        "进度条锁50%"
+      ]
+    },
+    {
+      "id": "opening-webppt-now",
+      "date": "2026-10-08",
+      "status": "trial",
+      "usedBy": [
+        "../../../opus55-web-ppt"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 首帧大字压在真实演示视频上+加分项/扣分项盖章评分",
+      "file": "src/openings/2026-10-08-webppt-now/Opening.tsx",
+      "desc": "第一句全屏直接铺真实演示视频（assetFields 注入）+大字砸出；锚「以前」标题退场、视频滑到右列成面板，与引擎画的左列真人窗（presenter.stage）构成左右布局，遮罩盖住其余底层；f0「现在的PPT」砸出+闪白冲击，锚「做成这样」金色问句逐字弹出；锚「做得好」绿胶囊「加分项」弹出、「加分项$」绿色 +1 大印章砸在面板上+光环；锚「撑场面」红胶囊「扣分项」弹出、「扣分项$」红色 -1 盖章整层抖动、+1 灰化；收尾面板+遮罩淡出（同一路视频无缝交还正片）",
+      "script": "../../../opus55-web-ppt",
+      "hook": "反问钩子+加减分盖章（首屏即真实演示视频）",
+      "techniques": [
+        "首帧大字",
+        "闪白+冲击音",
+        "逐字弹出",
+        "胶囊弹出",
+        "盖章评分",
+        "光环+叮",
+        "盖章抖动灰化",
+        "甩出退场"
+      ]
+    },
+    {
+      "id": "pro-01-dolly-suspense",
+      "date": "2026-10-08",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "PRO 01 · 慢推悬疑",
+      "file": "src/openings/pro/nc.tsx",
+      "desc": "镜头从黑里推出、加速推近人脸，心跳越来越快、画面越来越暗越冷；悬疑句逐字浮现、答案用发光色块遮住；揭晓时上扬音戛然而止 → 闪白 + 咚 + 冲击环 + 火花，答案巨字砸出发光（第1招 慢慢放大 + 做悬疑。专有字段：kicker 顶小字 · line 悬疑句（▇▇ = 被遮住的答案）· reveal 答案 · sub · revealAt 揭晓（秒/锚点）· zoomTo）",
+      "script": "template",
+      "hook": "悬念 / 揭露",
+      "techniques": [
+        "第1招 慢慢放大 + 做悬疑"
+      ],
+      "sec": 3.6
+    },
+    {
+      "id": "pro-02-shatter-morph",
+      "date": "2026-10-08",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "PRO 02 · 碎屏突变",
+      "file": "src/openings/pro/nc.tsx",
+      "desc": "第一句砸在画面下方；说到转折词时画面定格出裂纹、玻璃碎成几十块带着画面翻飞；碎片在空中重组成倾斜的三竖条分屏（左冷右热、中间光缝），第二句（真相）砸在光缝上 + 冲击环 + 火花（第2招 出其不意 + 按节奏变形。专有字段：line1 以为的 · line2 真相 · hl 发光词 · crackAt 裂开（卡转折词）· punchAt 第二句砸出 · tilt 分屏倾角）",
+      "script": "template",
+      "hook": "反常识 / 转折",
+      "techniques": [
+        "第2招 出其不意 + 按节奏变形"
+      ],
+      "sec": 3.4
+    },
+    {
+      "id": "pro-03-iris-title",
+      "date": "2026-10-08",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "PRO 03 · 光圈片名",
+      "file": "src/openings/pro/nc.tsx",
+      "desc": "六片金属叶片的机械光圈把画面包住，一格一格咔哒收紧、聚焦到人脸，外围 HUD 刻度圈转动、读数 f/1.4→f/16；锁定瞬间闪光 + 咚 + 叮，片名从中线向两侧展开（字距收拢）、副标题补位；最后光圈猛地张开交给正片（第3招 蒙版缩圈 + 开篇主题。专有字段：title 片名 · sub 副标题 · tag 期数/系列 · lockAt 光圈锁定 · steps 咔哒几格 · irisMin 最小半径 · openAt 张开）",
+      "script": "template",
+      "hook": "主题揭示 / 系列片头",
+      "techniques": [
+        "第3招 蒙版缩圈 + 开篇主题"
+      ],
+      "sec": 3.4
+    },
+    {
+      "id": "pro-04-depth-title",
+      "date": "2026-10-08",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "PRO 04 · 身后巨字",
+      "file": "src/openings/pro/nc.tsx",
+      "desc": "三层景深：背景真人压暗虚化 → 巨型标题从极远处呼啸飞入、穿到人身后落定 → 前景是抠出来的人（轮廓被背光勾亮）。落定瞬间冲击环 + 火花 + 镜头抖；lead 小字在上、副标题色条从下方补位。没有抠像素材时自动退化为柔边人像窗 + 巨字压下半身（第4招 身后飞个大标题 + 抠像 + 副标题。专有字段：lead 小字 · title 巨字（≤6 字，\\n 换行）· sub · flyAt 飞入 · subAt 副标题 · outline 空心字 · titleY · fgScale · fgDrop）",
+      "script": "template",
+      "hook": "观点输出 / 个人 IP",
+      "techniques": [
+        "第4招 身后飞个大标题 + 抠像 + 副标题"
+      ],
+      "sec": 3.2
+    },
+    {
+      "id": "pro-05-info-first",
+      "date": "2026-10-08",
+      "status": "trial",
+      "usedBy": [
+        "template"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "PRO 05 · 干货先行",
+      "file": "src/openings/pro/nc.tsx",
+      "desc": "纯黑透视网格上，干货要点一条一条在画面中间全屏砸出（背后巨型序号、荧光马克笔底），下一条来时上一条缩小飞进侧边清单落位；全部落位后闪白 + 叮，一道斜切光刃劈开画面、真人从另一侧入画，清单留作本期目录并逐条高亮（第5招 文字干货先出现，找好节奏再露脸 + 闪白叮。专有字段：title · points 2~5 条要点 · at 第一条秒 · gap 每条间隔 · personAt 真人入画 · side 清单在哪侧）",
+      "script": "template",
+      "hook": "干货 / 知识 / 清单",
+      "techniques": [
+        "第5招 文字干货先出现，找好节奏再露脸 + 闪白叮"
+      ],
+      "sec": 3.4
     }
   ]
 }

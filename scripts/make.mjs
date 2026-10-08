@@ -295,7 +295,7 @@ const runTimed = async () => {
 
   let out;
   try {
-    out = planTimed({ parsed, media, storyboard, input, fps: FPS, warn, assetFields: ASSET_FIELDS, assetMeta: ASSET_META, style: { seed: style.seed, transitions: style.transitions, variants: VARIANTS_ALL, meta: { seed: style.seed, skin: style.skin, font: style.font, world: style.world, mirror: style.mirror } } });
+    out = planTimed({ parsed, media, storyboard, input, fps: FPS, warn, assetFields: ASSET_FIELDS, assetMeta: ASSET_META, cueSec: CUE_SEC, style: { seed: style.seed, transitions: style.transitions, variants: VARIANTS_ALL, meta: { seed: style.seed, skin: style.skin, font: style.font, world: style.world, mirror: style.mirror } } });
   } catch (e) {
     if (e instanceof TimedError) fail(e.code, e.message);
     throw e;
@@ -348,7 +348,7 @@ const runTimed = async () => {
         let f1 = fit(pairs);
         const keep = pairs.filter(([t, s]) => Math.abs(s - (f1.a + f1.b * t)) < 0.6);
         if (keep.length >= 8) f1 = fit(keep);
-        if (offset == null) offset = Math.min(2, Math.max(0, f1.a));
+        if (offset == null) offset = Math.min(8, Math.max(0, f1.a)); // 钳制 8s：真人口播可能从第 2~3 句才开始（showFrom/stage 配套），别把拟合出的真实偏移截断
         if (rate == null) rate = Math.min(1.1, Math.max(0.9, 1 / f1.b));
         console.log(`✓ 真人对齐 TTS：偏移 ${offset.toFixed(2)} 秒、变速 ×${rate.toFixed(3)}（${pairs.length} 字匹配${keep.length !== pairs.length ? `，去离群后 ${keep.length}` : ""}）`);
         // 语速差非线性（真人前段快后段慢）时单速率修不掉中段漂移：两段拟合，
@@ -374,7 +374,7 @@ const runTimed = async () => {
                 "-map", "[v]", "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-movflags", "+faststart", w], "E_ASSET");
               fs.copyFileSync(w, path.join(jobDir, "presenter.mp4"));
               dur = probe(w).duration;
-              offset = Math.min(2, Math.max(0, f1s.a)); rate = 1;
+              offset = Math.min(8, Math.max(0, f1s.a)); rate = 1;
               sh("ffmpeg", ["-v", "error", "-y", "-i", path.join(jobDir, "presenter.mp4"), "-frames:v", 1, path.join(jobDir, "presenter-poster.png")], "E_ASSET");
               console.log(`✓ 真人分段变速：拐点 ${kk}s 前×${f1s.b.toFixed(4)} 后×${f2s.b.toFixed(4)}，偏移 ${offset.toFixed(2)}s（残差 ${best2.r.toFixed(3)}s < 单速率 ${rms(g1).toFixed(3)}s）`);
             } catch (e) { console.log(`⚠ 真人分段变速失败，回退单速率：${e.message}`); }
@@ -396,6 +396,11 @@ const runTimed = async () => {
       focusX: pr.focusX ?? 0.5,
       focusY: pr.focusY ?? 0.3,
       hideFrom: pr.hideFrom != null ? Math.round(pr.hideFrom * FPS) : undefined,
+      corner: pr.corner === "left" ? "left" : "right",
+      // showFrom：小窗晚于第 0 帧才出现（开场全屏素材期间不露脸）。"align" = 与对齐偏移同帧（真人开口那一刻才入画）
+      showFrom: pr.showFrom === "align" ? Math.round((offset || 0) * FPS) : pr.showFrom != null ? Math.round(pr.showFrom * FPS) : undefined,
+      // stage：某时段真人窗固定在画面某个矩形（左右布局的左列），时段结束后动画收进 corner 小窗
+      stage: pr.stage ? { from: pr.stage.from === "align" ? Math.round((offset || 0) * FPS) : Math.round((pr.stage.from ?? 0) * FPS), to: Math.round(pr.stage.to * FPS), x: pr.stage.x, y: pr.stage.y, w: pr.stage.w, h: pr.stage.h } : undefined,
     };
   }
   fs.writeFileSync(path.join(jobDir, "beats.md"), md);
@@ -410,13 +415,14 @@ const runTimed = async () => {
   return { tl: out.timeline, storyboardMode: !!storyboard };
 };
 
-// ---------- opening library: every script gets its own opening, never a repeat ----------
+// ---------- opening library: 专属开场不能重样；模板（opening.template）本来就是拿来挑的 ----------
 const LIB = path.join(ROOT, "openings", "library.json");
 const checkOpening = (used, tl) => {
   const lib = fs.existsSync(LIB) ? readJson(LIB, "E_OPENING") : { openings: [] };
   const talk0 = tl.shots[0]?.type === "talking-head-stage";
+  const tpl = !!used?.def?.opening?.template;
   if (!used) {
-    if (talk0) warn(`第一个镜头是口播但没有专属开场（data.opening）：前 2 秒只有真人，建议按 SKILL.md「专属开场」做一个`);
+    if (talk0) warn(`第一个镜头是口播但没有专属开场（data.opening）：前 2 秒只有真人，建议按 SKILL.md「选一个开场模板再改」做一个`);
     return;
   }
   const e = lib.openings.find((o) => o.id === used.id);
@@ -425,11 +431,17 @@ const checkOpening = (used, tl) => {
     if (e.status === "retired") warn(`开场 ${used.id} 已被数据淘汰（status=retired），不建议再用`);
     const me = path.relative(ROOT, baseDir).replace(/\\/g, "/");
     const other = (e.usedBy || []).filter((x) => x !== me);
-    if (other.length) warn(`开场 ${used.id} 已经用在 ${other.join("、")}：开场不能重样，请为这条文案单独做一个`);
+    // 模板可以反复用（换文案换调色就是新开场）；专属开场不能重样
+    if (other.length && !tpl) warn(`开场 ${used.id} 已经用在 ${other.join("、")}：开场不能重样，请为这条文案单独做一个`);
   }
   const r = used.range ?? used.shot.data.opening;
   const d = (r.until ?? used.shot?.data.shrinkAt ?? 90) - (r.at ?? 0);
-  if (d < 60 || d > 105) warn(`开场时长 ${(d / FPS).toFixed(1)} 秒，建议 2~3 秒（钩子要短）`);
+  // 模板的内部节奏按 ~3.4 秒编的，砍太短动画做不完；给足上限，但别拖到 4 秒以上
+  const lo = tpl ? 45 : 60;
+  const hi = tpl ? 120 : 105;
+  if (d < lo || d > hi) warn(`开场时长 ${(d / FPS).toFixed(1)} 秒，建议 ${(lo / FPS).toFixed(1)}~${(hi / FPS).toFixed(1)} 秒（钩子要短）`);
+  const rec = used.def?.opening?.sec;
+  if (tpl && rec && d < rec * FPS * 0.8) warn(`${used.id} 的画面按 ${rec} 秒编排，现在只给 ${(d / FPS).toFixed(1)} 秒：动画会做不完（until 给到 ${Math.round(rec * FPS)} 帧左右）`);
 };
 
 // ---------- anti-PPT: too many text-only shots in a row is exactly the "reading slides" feel ----------
@@ -637,6 +649,9 @@ let VARIANTS_ALL = { ...VARIANTS };
 // id -> CompDef.assetFields。素材注入（timed.mjs）和素材引用收集（storyboardAssetRefs）都读它，
 // 所以新增一个吃素材的组件只要在 CompDef 上声明 assetFields，流水线不用改。
 let ASSET_FIELDS = {};
+// id -> CompDef.cueUnit === "sec"。锚点解析的产物时基：缺省是帧，声明 sec 的组件（PRO 开场模板
+// 这类自带「秒」时间模型的独立资产）拿到的是相对本段开始的秒数。写分镜时两种都能填台词锚点字符串。
+let CUE_SEC = {};
 // id -> { 字段: [允许的元数据键] }。prepAssets 量出来的 kind/aspect/focus/frames 只有在组件
 // schema 声明过的那个键才留得住（validateShot 用解析结果覆盖 data，没声明的静默丢掉）。
 // 与其去抠 zod 内部结构（v4 的 _def 和 v3 不一样，还会随版本变），直接拿组件自己的 example 试：
@@ -712,6 +727,7 @@ const main = async () => {
   ASSET_FIELDS = Object.fromEntries(reg.list.filter((c) => c.assetFields?.length).map((c) => [c.id, c.assetFields]));
   ASSET_META = Object.fromEntries(reg.list.filter((c) => c.assetFields?.length).map((c) => [c.id, assetMetaFor(reg, c)]));
   ASSET_REQUIRED = Object.fromEntries(reg.list.filter((c) => c.assetFields?.length).map((c) => [c.id, assetRequiredFor(reg, c)]));
+  CUE_SEC = Object.fromEntries(reg.list.filter((c) => c.cueUnit === "sec").map((c) => [c.id, true]));
   let tl;
   let storyboardMode = false;
   if (input.audio || input.audio_timeline) ({ tl, storyboardMode } = await runTimed());
@@ -789,7 +805,7 @@ const main = async () => {
     if (!ov.ok) errors.push(`opening ${tl.opening.type}：${ov.issues.join("；")}`);
     else {
       if (ov.def.layer !== "opening") warn(`opening：${tl.opening.type} 不是开场组件（layer=${ov.def.layer}）`);
-      if (!tl.meta.presenter) warn(`storyboard.opening 需要 input.presenter（真人画面层），否则开场下面没有真人`);
+      if (!tl.meta.presenter && !ov.def.opening?.selfBg) warn(`storyboard.opening 需要 input.presenter（真人画面层），否则开场下面没有真人；开场组件声明 opening.selfBg 可自带不透明背景`);
       tl.opening.data = ov.data;
       openingUsed = { id: tl.opening.type, def: ov.def, range: tl.opening };
     }

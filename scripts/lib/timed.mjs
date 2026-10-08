@@ -163,8 +163,10 @@ const buildBeats = (runs, M) => {
 // ---------- 4. anchors inside shot data ----------
 const isCueKey = (k) => k === "at" || k === "until" || /[a-z]At$/.test(k);
 
-const resolveCues = (obj, ctx, baseSec, path, warn) => {
-  if (Array.isArray(obj)) return obj.map((v, i) => resolveCues(v, ctx, baseSec, `${path}[${i}]`, warn));
+// useSec=true：解析产物保持「相对本段开始的秒数」（组件在 CompDef.cueUnit 里声明，如 PRO 开场模板）；
+// 缺省 false → 帧（引擎契约）。cueSec 是 id -> true 的表，嵌套 slot 按它自己的 type 重新判定。
+const resolveCues = (obj, ctx, baseSec, path, warn, useSec = false, cueSec = {}) => {
+  if (Array.isArray(obj)) return obj.map((v, i) => resolveCues(v, ctx, baseSec, `${path}[${i}]`, warn, useSec, cueSec));
   if (!obj || typeof obj !== "object") return obj;
   const out = {};
   // a nested component slot ({ type, data, at }) — its data cues are relative to the slot's own start
@@ -173,13 +175,14 @@ const resolveCues = (obj, ctx, baseSec, path, warn) => {
   for (const [k, v] of Object.entries(obj)) {
     if (isCueKey(k) && (typeof v === "string" || typeof v === "number")) {
       const sec = cueSeconds(v, ctx, baseSec, `${path}.${k}`, warn);
-      out[k] = sec === undefined ? undefined : Math.round((sec - baseSec) * ctx.fps);
-    } else if (!(isSlot && k === "data")) out[k] = resolveCues(v, ctx, baseSec, `${path}.${k}`, warn);
+      out[k] = sec === undefined ? undefined : useSec ? Math.round((sec - baseSec) * 1000) / 1000 : Math.round((sec - baseSec) * ctx.fps);
+    } else if (!(isSlot && k === "data")) out[k] = resolveCues(v, ctx, baseSec, `${path}.${k}`, warn, useSec, cueSec);
   }
   if (isSlot) {
-    const slotSec = typeof out.at === "number" ? baseSec + out.at / ctx.fps : baseSec;
+    const slotSec = typeof out.at === "number" ? baseSec + (useSec ? out.at : out.at / ctx.fps) : baseSec;
     ctx.cursor = ctx.g0; // the slot's own until may have moved the cursor past its first anchors
-    out.data = resolveCues(obj.data, ctx, slotSec, `${path}.data`, warn);
+    // 外壳的 at/until 永远是帧（引擎读它），data 里的时基看这个 slot 自己声明的 cueUnit
+    out.data = resolveCues(obj.data, ctx, slotSec, `${path}.data`, warn, !!cueSec[obj.type], cueSec);
   }
   return out;
 };
@@ -329,7 +332,7 @@ const fillSlots = (val, assetFields, assets, assetMeta, missing) => {
 };
 
 // ---------- main ----------
-export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, warn = () => {}, assetFields = {}, assetMeta = {} }) => {
+export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, warn = () => {}, assetFields = {}, assetMeta = {}, cueSec = {} }) => {
   const r = rngOf((style.seed || 1) * 7919 + 13);
   const runs = buildRuns(parsed);
   const total = alignRuns(runs, media, warn);
@@ -462,7 +465,7 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
     const gEnd = s.talk !== undefined ? runs[s.talk].g1 : next ? (next.talk !== undefined ? runs[next.talk].g0 : next.g) : M.chars.length;
     const text = M.chars.slice(gStart, gEnd).join("").replace(/\s+/g, " ").trim();
     const ctx = { M, fps, shotStart: startSec, cursor: gStart, g0: gStart, g1: gEnd, shotId: `s${i}` };
-    let data = resolveCues(JSON.parse(JSON.stringify(s.data ?? {})), ctx, startSec, s.type, warn);
+    let data = resolveCues(JSON.parse(JSON.stringify(s.data ?? {})), ctx, startSec, s.type, warn, !!cueSec[s.type], cueSec);
     if (s.type === "talking-head-stage") {
       const run = runs[s.talk];
       const clip = media.clips[run.clip];
@@ -563,7 +566,9 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
   let opening;
   if (storyboard?.opening?.type) {
     const ctx = { M, fps, shotStart: 0, cursor: 0, g0: 0, g1: M.chars.length, shotId: "opening" };
-    opening = resolveCues(JSON.parse(JSON.stringify(storyboard.opening)), ctx, 0, "opening", warn);
+    opening = resolveCues(JSON.parse(JSON.stringify(storyboard.opening)), ctx, 0, "opening", warn, false, cueSec);
+    // 开场组件声明的素材字段（如垫底背景图）和正片镜头一样按 assetFields 注入 job 路径
+    if (opening?.data && assetFields[opening.type]) opening.data = fillAssets(opening.data, assetFields[opening.type], media.assets, assetMeta[opening.type], media.assetsMissing);
   }
 
   return {

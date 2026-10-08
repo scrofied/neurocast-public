@@ -74,6 +74,8 @@ if (cmd === "sync") {
       script: c.opening?.script ?? e.script,
       hook: c.opening?.hook ?? e.hook,
       techniques: c.opening?.techniques ?? e.techniques ?? [],
+      // 模板的推荐时长（秒）：专属开场没有这个字段，挑模板时用来配 until
+      sec: c.opening?.sec ?? e.sec,
     });
     if (e.script && !e.usedBy.includes(e.script)) e.usedBy.push(e.script);
     const prev = path.join("openings", "previews", `${c.id}.mp4`);
@@ -89,7 +91,7 @@ if (cmd === "sync") {
     const m = o.metrics || {};
     const pct = (v) => (v == null ? "—" : `${(v * 100).toFixed(0)}%`);
     console.log(`${o.status.padEnd(7)} ${o.id}  [${o.hook}]  2s跳出 ${pct(m.bounce2s)} · 5s完播 ${pct(m.finish5s)} · 播放 ${m.plays ?? "—"}  → ${verdict(o, lib.rules)}`);
-    console.log(`        ${o.date} · ${o.usedBy.join(", ")} · ${o.techniques.join(" / ")}`);
+    console.log(`        ${o.date} · ${o.usedBy.join(", ")} · ${o.techniques.join(" / ")}${o.sec ? ` · 推荐 ${(o.sec).toFixed(1)}s（until 别砍到 ${(o.sec * 0.8).toFixed(1)}s 以内）` : ""}`);
   }
 } else if (cmd === "metric") {
   const [id, ...kv] = rest;
