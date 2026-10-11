@@ -72,8 +72,39 @@ export const valuesOf = (data, field) => entriesOf(data, field).map((e) => e.v);
 // 没到手的字段留的是分镜里写的原话，等于「点名了但没截图」。
 export const isReal = (v) => /^https?:/i.test(v) || /^jobs[\/\\]/i.test(v);
 
-/** 每个镜头的素材情况：{ id, type, text, fields, got:[路径], gotE:[{v,origin}], missing:[路径] } */
-export const shotAssets = (tl, assetFields = {}) =>
+// ---------- 库存（stock）素材：从 Pexels / Pixabay / Mixkit / Iconify 抓来的现成画面 ----------
+// 它们是「示意画面」，不是证据。所以两件事必须分开算：
+//   ① 不计进素材占比 —— 那个指标量的是「观众能不能看见真的东西」，让氛围镜头也能刷分它就废了；
+//   ② 不许出现在证据类槽位（真截图/真数据/模型回复）—— make.mjs 那边直接报错。
+// 判据：scripts/stock.mjs 的固定去处 assets/stock/<站>/…（视频图片）和 assets/icons/…（矢量图标）。
+export const STOCK_RE = /(^|\/)assets\/(stock|icons)\//i;
+export const isStock = (v) => typeof v === "string" && STOCK_RE.test(v);
+
+let stockIdx; // 出处表（stock.mjs get 写的），只读一次
+const loadStockIdx = () => {
+  if (stockIdx === undefined) {
+    stockIdx = {};
+    for (const f of ["stock-index.json", "icons-index.json"]) {
+      try {
+        const j = JSON.parse(readText(path.join(ROOT, "assets", f)));
+        Object.assign(stockIdx, j.items || j); // stock-index 用 {items:{…}}，icons-index 直接平铺
+      } catch {
+        /* 没抓过素材 = 没有这张表，正常 */
+      }
+    }
+  }
+  return stockIdx;
+};
+/** 库存素材的出处（站点 / 作者 / license / 该不该署名）；查不到返回 null。make.mjs 用它自动补角标字段 */
+export const stockMetaOf = (origin) => {
+  const k = String(origin).replace(/\\/g, "/").replace(/^.*?(assets\/(stock|icons)\/)/, "$1");
+  return loadStockIdx()[k] || null;
+};
+
+/** 每个镜头的素材情况：{ id, type, text, fields, got:[路径], gotE:[{v,origin}], missing, real:[真素材], stock:[库存] }
+ *  originOf：把时间轴里的 jobs/… 副本名换回原始路径 —— 库存素材落在 assets/stock/ 下，
+ *  不还原就会把 Pexels 氛围镜头当成真素材计进占比。 */
+export const shotAssets = (tl, assetFields = {}, originOf) =>
   (tl.shots || []).map((s, i) => {
     const fields = assetFields[s.type] || [];
     const gotE = [];
@@ -81,7 +112,7 @@ export const shotAssets = (tl, assetFields = {}) =>
     const scan = (data, type) => {
       for (const f of assetFields[type] || [])
         for (const e of entriesOf(data, f)) {
-          if (isReal(e.v)) gotE.push(e);
+          if (isReal(e.v)) gotE.push({ ...e, origin: originOf?.(e.v) || e.origin || e.v });
           else missing.push(e.v);
         }
     };
@@ -91,15 +122,18 @@ export const shotAssets = (tl, assetFields = {}) =>
       const slot = s.data?.[side];
       for (const x of Array.isArray(slot) ? slot : slot ? [slot] : []) scan(x?.data, x?.type);
     }
-    return { id: s.id || `s${i}`, type: s.type, text: s.text || "", start: s.start, dur: s.dur, fields, got: gotE.map((e) => e.v), gotE, missing };
+    const real = gotE.filter((e) => !isStock(e.origin)).map((e) => e.v);
+    const stock = gotE.filter((e) => isStock(e.origin)).map((e) => e.v);
+    return { id: s.id || `s${i}`, type: s.type, text: s.text || "", start: s.start, dur: s.dur, fields, got: gotE.map((e) => e.v), gotE, missing, real, stock };
   });
 
-/** 素材占比：上了真素材的镜头时长 / 全片时长 */
-export const ratioOf = (tl, assetFields = {}) => {
-  const rows = shotAssets(tl, assetFields);
+/** 素材占比：上了「真素材」（非库存）的镜头时长 / 全片时长 */
+export const ratioOf = (tl, assetFields = {}, originOf) => {
+  const rows = shotAssets(tl, assetFields, originOf);
   const total = rows.reduce((a, r) => a + (r.dur || 0), 0);
-  const withAsset = rows.filter((r) => r.got.length);
+  const withAsset = rows.filter((r) => r.real.length);
   const asset = withAsset.reduce((a, r) => a + (r.dur || 0), 0);
+  const stockRows = rows.filter((r) => r.stock.length && !r.real.length);
   return {
     total,
     asset,
@@ -107,6 +141,9 @@ export const ratioOf = (tl, assetFields = {}) => {
     shots: rows.length,
     assetShots: withAsset.length,
     files: [...new Set(withAsset.flatMap((r) => r.got))],
+    stockFiles: [...new Set(rows.flatMap((r) => r.stock))],
+    stockOnlyShots: stockRows.length,
+    stockOnlySec: stockRows.reduce((a, r) => a + (r.dur || 0), 0) / ((tl.meta?.fps || 30) || 30),
     minRatio: load().rules.minRatio,
   };
 };
@@ -146,13 +183,14 @@ const dateOf = (s) => {
  */
 export const record = (tl, { video, file, date, assetFields = {}, originOf, ledger } = {}) => {
   const j = ledger || load();
-  const rows = shotAssets(tl, assetFields);
-  const used = rows.filter((r) => r.got.length);
+  const rows = shotAssets(tl, assetFields, originOf);
+  const used = rows.filter((r) => r.got.length); // 库存镜头也记（署名义务要跟着走），但不计占比
+  const counted = rows.filter((r) => r.real.length);
   const vid = video || tl?.meta?.title || path.basename(path.dirname(file || "video"));
   const day = date || dateOf(file || "") || new Date().toISOString().slice(0, 10);
   const total = rows.reduce((a, r) => a + (r.dur || 0), 0);
-  const asset = used.reduce((a, r) => a + (r.dur || 0), 0);
-  const fps = tl?.fps || 30;
+  const asset = counted.reduce((a, r) => a + (r.dur || 0), 0);
+  const fps = tl?.fps || tl?.meta?.fps || 30;
 
   const prev = j.videos.findIndex((v) => v.id === vid);
   if (prev >= 0) {
@@ -175,7 +213,13 @@ export const record = (tl, { video, file, date, assetFields = {}, originOf, ledg
       refs.push(origin);
       const cand = [/^https?:/i.test(v) ? null : path.join(ROOT, "public", v), !/^https?:/i.test(origin) && (path.isAbsolute(origin) ? origin : path.join(ROOT, origin))].filter(Boolean);
       const abs = cand.find((p) => fs.existsSync(p)) || null;
-      const a = (j.assets[origin] ||= { kind: null, aspect: null, md5: null, source: null, capturedAt: null, note: null, used_in: [], shows: [] });
+      const a = (j.assets[origin] ||= { kind: null, aspect: null, md5: null, source: null, capturedAt: null, note: null, stock: null, used_in: [], shows: [] });
+      // 库存素材：把出处（站点/作者/license/署名义务）钉在台账条目上，出片后要查得到
+      const sm = isStock(origin) ? stockMetaOf(origin) : null;
+      if (sm) {
+        a.stock = { site: sm.site, page: sm.page || null, author: sm.author || null, license: sm.license || null, attribution: !!sm.attribution };
+        if (!a.source) a.source = sm.site;
+      }
       // 没对照表（assets.json）的历史片子只能记到 jobs 副本上，而 public/jobs/ 不进仓库、随时会被清掉。
       // 与其让它看起来像一条正常记录，明确标注「原始路径未知」，用的时候一眼就知道。
       if (/^jobs[\/\\]/i.test(origin) && !a.note) a.note = "原始路径未知：这条片子出片时还没有 assets.json 对照表";
@@ -242,6 +286,12 @@ export const report = (j = load()) => {
   }
   const anon = ids.filter((k) => j.assets[k].note || /^jobs[\/\\]/i.test(k)).length;
   if (anon) lines.push(`\n  ? 原始路径未知（出片时还没有 assets.json 对照表）：${anon} 个。这类素材下次重跑片子就会自动归到真名下。`);
+  const stock = ids.filter((k) => j.assets[k].stock);
+  if (stock.length) {
+    const must = stock.filter((k) => j.assets[k].stock.attribution);
+    lines.push(`\n  库存素材（示意画面，不计入占比）：${stock.length} 个 · ${[...new Set(stock.map((k) => j.assets[k].stock.site))].join(" ")}`);
+    lines.push(`    必须署名：${must.length ? must.map((k) => `${path.basename(k)}(${j.assets[k].stock.author || "?"})`).join("、") : "无"}`);
+  }
   return lines.join("\n");
 };
 

@@ -1,0 +1,32 @@
+{
+ "assets/icons/tabler-brain.svg": {
+  "site": "iconify",
+  "collection": "tabler",
+  "name": "brain",
+  "color": "00E5FF",
+  "license": "MIT",
+  "attribution": false,
+  "bytes": 462,
+  "fetchedAt": "2026-10-10"
+ },
+ "assets/icons/tabler-robot.svg": {
+  "site": "iconify",
+  "collection": "tabler",
+  "name": "robot",
+  "color": "00E5FF",
+  "license": "MIT",
+  "attribution": false,
+  "bytes": 322,
+  "fetchedAt": "2026-10-10"
+ },
+ "assets/icons/tabler-cpu-2.svg": {
+  "site": "iconify",
+  "collection": "tabler",
+  "name": "cpu-2",
+  "color": "00E5FF",
+  "license": "MIT",
+  "attribution": false,
+  "bytes": 376,
+  "fetchedAt": "2026-10-10"
+ }
+}

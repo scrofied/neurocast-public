@@ -15,7 +15,7 @@ const schema = z.object({
   src: z.string(),
   kind: z.enum(["image", "video"]).optional(),
   aspect: z.number().optional(), // width / height of source
-  frameStyle: z.enum(["browser", "laptop", "float"]).optional(),
+  frameStyle: z.enum(["browser", "laptop", "float", "full"]).optional().describe('full = 真录屏原样全屏展出（不装设备框、不画鼠标、不推镜头、不加聚焦标签），只在左上留一行小字标题、右上留来源角标'),
   url: z.string().optional().describe("真地址栏文案，如 arena.ai/leaderboard。写不出真地址就别用 browser 外框（会自动退成 float）"),
   title: z.string().optional(),
   kicker: z.string().optional(),
@@ -38,6 +38,65 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   // 浏览器外框里那行地址是最容易露馅的：写不出真地址就退成无边框悬浮，不编一个假域名
   const style = styleOf === "browser" && !data.url ? "float" : styleOf;
   const aspect = data.aspect ?? 16 / 10;
+
+  // full：真录屏原样全屏展出——不装设备框、不画鼠标、不推镜头、不加聚焦标签。
+  // 素材按 contain 铺满 1920×1080（宽高比不足处留黑边）；录屏本身逐帧静止（首帧就位），
+  // 环境慢推镜由 ShotFrame 的 steady 一并关掉；只有左上小字标题和右上来源角标带入场淡入。
+  if (style === "full") {
+    const eFull = enterAt(frame, 0, { fallback: "rise", dur: 18 });
+    const fw = aspect >= width / height ? width : height * aspect;
+    const fh = fw / aspect;
+    const ffx = (width - fw) / 2;
+    const ffy = (height - fh) / 2;
+    const hasFull = !!data.src;
+    return (
+      <>
+        <div
+          style={{
+            position: "absolute",
+            left: ffx,
+            top: ffy,
+            width: fw,
+            height: fh,
+            overflow: "hidden",
+            background: "#04060a",
+          }}
+        >
+          {!hasFull && <MissingAsset field="src" hint="这里要一段真录屏（原样全屏展出）" w={fw} h={fh} frame={frame} />}
+          {hasFull && (data.kind === "video" ? (
+            <OffthreadVideo src={assetUrl(data.src)} muted style={{ width: fw, height: fh }} />
+          ) : (
+            <Img src={assetUrl(data.src)} style={{ width: fw, height: fh }} />
+          ))}
+        </div>
+        {(data.kicker || data.title) && (
+          <div
+            style={{
+              position: "absolute",
+              left: 26,
+              top: 10,
+              display: "flex",
+              alignItems: "baseline",
+              gap: 12,
+              padding: "6px 16px",
+              borderRadius: 9,
+              background: "rgba(6,10,18,.8)",
+              border: `1.2px solid ${alpha(t.primary, 0.5)}`,
+              opacity: clamp(eFull.p * 1.6),
+              whiteSpace: "nowrap",
+            }}
+          >
+            {data.kicker && <span style={{ fontFamily: t.font.mono, fontSize: 15, letterSpacing: 1.5, color: t.accent }}>{data.kicker}</span>}
+            {data.title && <span style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: 20, color: "#fff" }}>{data.title}</span>}
+          </div>
+        )}
+        <div style={{ position: "absolute", right: 26, top: 10, opacity: clamp(eFull.p * 1.6) }}>
+          <SourceBadge source={data.source} frame={frame} />
+        </div>
+      </>
+    );
+  }
+
   // fit screen into a 1320x760 box
   const boxW = 1320;
   const boxH = 720;
@@ -216,8 +275,8 @@ export const ScreenDemo: CompDef<D> = {
   maxSec: 20,
   tags: ["点击", "打开", "界面", "操作", "设置", "按钮", "菜单", "页面", "截图", "录屏"],
   motion: { kind: "设备框带透视摆正入画，鼠标弧线移动点击+涟漪，镜头推近聚焦点、标签回弹弹出", energy: 2 },
-  desc: "截图/录屏装进浏览器或笔记本外框，镜头推到 OCR 定位到的按钮并模拟鼠标点击；右下角可挂「真实素材 | 平台 · 采集时间」来源角标",
-  use: "文案里 [图: x.png] / [录屏: x.mp4] 的操作演示；说明写「点击\"按钮名\"」会自动定位。上真截图就写 source（平台+采集日期），写不出真 url 就别用 browser 外框",
+  desc: "截图/录屏装进浏览器或笔记本外框，镜头推到 OCR 定位到的按钮并模拟鼠标点击；frameStyle:\"full\" 则原样全屏展出、不加工；右下角可挂「真实素材 | 平台 · 采集时间」来源角标",
+  use: "文案里 [图: x.png] / [录屏: x.mp4] 的操作演示；说明写「点击\"按钮名\"」会自动定位。上真截图就写 source（平台+采集日期），写不出真 url 就别用 browser 外框；给了成段录屏要给观众看原片时用 frameStyle:\"full\"",
   schema,
   assetFields: ["src"],
   example: { src: "assets/demo-shot.png", aspect: 1400 / 3200, frameStyle: "browser", url: "lmarena.ai/leaderboard", source: { platform: "LMArena", url: "lmarena.ai", capturedAt: "2026-09-30" }, focus: [{ x: 0.5, y: 0.1, label: "打开知识库" }, { x: 0.5, y: 0.45, label: "上传文档" }] },

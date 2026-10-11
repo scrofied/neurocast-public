@@ -36,10 +36,15 @@ const readTl = (p) => {
   return { tl: JSON.parse(fs.readFileSync(abs, "utf8").replace(/^﻿/, "")), abs };
 };
 
-const printRatio = (tl) => {
-  const r = ratioOf(tl, ASSET_FIELDS);
+const printRatio = (tl, abs) => {
+  // 时间轴里的素材是 jobs/xxx/a3.mp4 这种一次性副本名，必须靠同目录的 assets.json 还原成原始路径，
+  // 否则 Pexels/Mixkit 抓来的「示意画面」会被当成真素材计进占比 —— 那个指标量的是可信度，不是文件数。
+  const originOf = originResolver(abs);
+  const r = ratioOf(tl, ASSET_FIELDS, originOf);
   const pct = (r.pct * 100).toFixed(1);
   console.log(`素材占比 ${pct}%（${r.assetShots}/${r.shots} 个镜头上了真素材，共 ${r.files.length} 个文件）· 台账要求 ≥${(r.minRatio * 100).toFixed(0)}%`);
+  if (r.stockFiles?.length)
+    console.log(`库存素材（示意画面）：${r.stockOnlyShots} 镜 · ${r.stockOnlySec.toFixed(0)} 秒 · ${r.stockFiles.length} 个文件 —— 按口径不计进上面的占比`);
   const miss = checklist(tl, ASSET_FIELDS);
   if (miss.length) {
     console.log(`\n素材字段空着的镜头（${miss.length} 个）——这些位置本来可以放真截图/真 logo/真头像：`);
@@ -60,8 +65,8 @@ if (cmd === "report") {
   if (!d.length) console.log("没有发现重复素材 ✓");
   for (const g of d) console.log(`  ${g.md5}:\n    ${g.origins.join("\n    ")}`);
 } else if (cmd === "check") {
-  const { tl } = readTl(argv[1]);
-  printRatio(tl);
+  const { tl, abs } = readTl(argv[1]);
+  printRatio(tl, abs);
 } else if (cmd === "record") {
   const { tl, abs } = readTl(argv[1]);
   const r = record(tl, { video: val("video"), file: abs, assetFields: ASSET_FIELDS, date: val("date"), originOf: originResolver(abs) });

@@ -217,6 +217,195 @@
     "logic-flip": 1,
     "flywheel": 1
    }
+  },
+  {
+   "id": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+   "title": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+   "date": "2026-10-04",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-opus55-4things_20261004-152816/timeline.json",
+   "shots": 26,
+   "types": {
+    "board-proof": 10,
+    "screen": 6,
+    "evidence-zoom": 7,
+    "screen-versus": 1,
+    "pit-trap": 1,
+    "punch-text": 1
+   }
+  },
+  {
+   "id": "WorkBuddy 的 10 个高频使用技巧",
+   "title": "WorkBuddy 的 10 个高频使用技巧",
+   "date": "2026-10-05",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-workbuddy-10tips_20261005-192258/timeline.json",
+   "shots": 24,
+   "types": {
+    "dialogue": 1,
+    "logic-flip": 1,
+    "screen": 4,
+    "evidence-zoom": 6,
+    "cursor-trace": 1,
+    "punch-text": 1,
+    "tier-grid": 1,
+    "quote": 1,
+    "walled-garden": 1,
+    "pit-trap": 1,
+    "chat-command": 2,
+    "checklist": 1,
+    "lever-lift": 1,
+    "board-proof": 1,
+    "bullet-cards": 1
+   }
+  },
+  {
+   "id": "Codex 必装的 5 个神级 Skill",
+   "title": "Codex 必装的 5 个神级 Skill",
+   "date": "2026-10-07",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-5skills_20261007-135654/timeline.json",
+   "shots": 27,
+   "types": {
+    "ring-assembly": 1,
+    "prompt": 1,
+    "evidence-zoom": 5,
+    "screen": 7,
+    "board-proof": 5,
+    "chat-command": 2,
+    "ui-replica": 1,
+    "punch-text": 1,
+    "asset-distill": 1,
+    "real-doc-scroll": 1,
+    "tool-card": 1,
+    "dusty-shelf": 1
+   }
+  },
+  {
+   "id": "现在的PPT，都做成这样了",
+   "title": "现在的PPT，都做成这样了",
+   "date": "2026-10-08",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/opus55-web-ppt_20261008-144351/timeline.json",
+   "shots": 20,
+   "types": {
+    "screen": 10,
+    "ui-replica": 1,
+    "chat-command": 1,
+    "file-launch": 1,
+    "drag-deploy": 1,
+    "board-proof": 1,
+    "before-after": 1,
+    "open-ledger": 1,
+    "reveal-cards": 1,
+    "blame-strike": 1,
+    "step-rail": 1
+   }
+  },
+  {
+   "id": "做重大决策，让AI竭尽全力唱反调",
+   "title": "做重大决策，让AI竭尽全力唱反调",
+   "date": "2026-10-09",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/dbs-decision_20261009-141455/timeline.json",
+   "shots": 26,
+   "types": {
+    "ui-replica": 2,
+    "fork-paths": 1,
+    "step-rail": 2,
+    "chat-command": 5,
+    "real-doc-scroll": 3,
+    "teardown-lens": 1,
+    "bullet-cards": 1,
+    "open-ledger": 1,
+    "evidence-zoom": 3,
+    "reveal-cards": 1,
+    "scope-shrink": 1,
+    "dusty-shelf": 1,
+    "infinite-zoom": 1,
+    "screen-morph": 1,
+    "ring-assembly": 1,
+    "punch-text": 1
+   }
+  },
+  {
+   "id": "怎样用AI控制AI",
+   "title": "怎样用AI控制AI",
+   "date": "2026-10-09",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/ai-console_20261009-173410/timeline.json",
+   "shots": 42,
+   "types": {
+    "screen": 18,
+    "persona-scene": 1,
+    "agent-relay": 2,
+    "bullet-cards": 2,
+    "blame-strike": 3,
+    "relay-parallel": 2,
+    "before-after": 2,
+    "step-rail": 1,
+    "tier-grid": 1,
+    "pit-trap": 1,
+    "measure-ruler": 1,
+    "punch-text": 2,
+    "spec-matrix": 1,
+    "tool-card": 3,
+    "labor-takeover": 1,
+    "quote": 1
+   }
+  },
+  {
+   "id": "什么是AI控制AI",
+   "title": "什么是AI控制AI",
+   "date": "2026-10-09",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai-ai_20261010-030503/timeline.json",
+   "shots": 37,
+   "types": {
+    "side-brand-fx": 1,
+    "screen": 14,
+    "fill-build": 2,
+    "tier-grid": 1,
+    "measure-ruler": 1,
+    "persona-scene": 1,
+    "spinner-reasoning": 1,
+    "spec-matrix": 1,
+    "fork-paths": 1,
+    "scale-dive": 1,
+    "agent-relay": 2,
+    "domino-chain": 1,
+    "quote": 1,
+    "pit-trap": 1,
+    "surface-vs-core": 1,
+    "relay-parallel": 2,
+    "vet-card": 1,
+    "unread-flood": 1,
+    "scope-shrink": 1,
+    "labor-takeover": 1,
+    "typo-arch": 1
+   }
+  },
+  {
+   "id": "Codex和WorkBuddy怎么选",
+   "title": "Codex和WorkBuddy怎么选",
+   "date": "2026-10-10",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-workbuddy_20261011-014021/timeline.json",
+   "shots": 34,
+   "types": {
+    "side-brand-fx": 1,
+    "screen": 13,
+    "cards": 2,
+    "versus": 1,
+    "dialogue": 1,
+    "pile-crush": 1,
+    "fill-build": 1,
+    "case-replay": 1,
+    "cursor-trace": 1,
+    "tool-card": 1,
+    "code": 1,
+    "open-ledger": 2,
+    "surface-vs-core": 1,
+    "race-lanes": 1,
+    "evidence-zoom": 1,
+    "checklist": 1,
+    "safety-brake": 1,
+    "reveal-cards": 1,
+    "scale-gap": 1,
+    "ring-assembly": 1
+   }
   }
  ],
  "comps": {
@@ -485,7 +674,7 @@
    ]
   },
   "quote": {
-   "count": 35,
+   "count": 38,
    "videos": [
     "workbuddy必装的三大神级skill，附保姆级教程",
     "如何做出爆款内容",
@@ -493,9 +682,12 @@
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "workbuddy必装的三大神级skill，附保姆级教程",
@@ -585,16 +777,47 @@
      "enters": [
       "wipe"
      ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s41"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "cards": {
-   "count": 3,
+   "count": 5,
    "videos": [
     "workbuddy必装的三大神级skill，附保姆级教程",
-    "AI 是怎么替你干活的"
+    "AI 是怎么替你干活的",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "workbuddy必装的三大神级skill，附保姆级教程",
@@ -612,19 +835,32 @@
       "s7"
      ],
      "enters": []
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s2",
+      "s32"
+     ],
+     "enters": [
+      "slam",
+      "wipe"
+     ]
     }
    ]
   },
   "versus": {
-   "count": 6,
+   "count": 7,
    "videos": [
     "如何做出爆款内容",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "如何做出爆款内容",
@@ -673,6 +909,16 @@
       "zoom-through",
       "drop"
      ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-l"
+     ]
     }
    ]
   },
@@ -694,12 +940,13 @@
    ]
   },
   "prompt": {
-   "count": 2,
+   "count": 3,
    "videos": [
     "AI 是怎么替你干活的",
-    "用 AI 挖出你身上的隐藏资产"
+    "用 AI 挖出你身上的隐藏资产",
+    "Codex 必装的 5 个神级 Skill"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-07",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -717,6 +964,16 @@
      ],
      "enters": [
       "slide-l"
+     ]
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "wipe"
      ]
     }
    ]
@@ -776,14 +1033,21 @@
    ]
   },
   "screen": {
-   "count": 13,
+   "count": 85,
    "videos": [
     "AI 是怎么替你干活的",
     "别再让AI每次从零开始",
     "用Opus做AI剪辑=浪费90%成本",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "Codex 必装的 5 个神级 Skill",
+    "现在的PPT，都做成这样了",
+    "怎样用AI控制AI",
+    "什么是AI控制AI",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -840,6 +1104,181 @@
       "wipe",
       "slide-r"
      ]
+    },
+    {
+     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+     "date": "2026-10-04",
+     "shots": [
+      "s1",
+      "s3",
+      "s5",
+      "s8",
+      "s10",
+      "s17"
+     ],
+     "enters": [
+      "wipe",
+      "slide-r",
+      "zoom-through",
+      "rise"
+     ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s2",
+      "s6",
+      "s15",
+      "s19"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "zoom-through",
+      "drop"
+     ]
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s3",
+      "s4",
+      "s7",
+      "s13",
+      "s14",
+      "s18",
+      "s22"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "zoom-through",
+      "drop",
+      "rise",
+      "slam",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s0",
+      "s1",
+      "s2",
+      "s3",
+      "s8",
+      "s9",
+      "s10",
+      "s11",
+      "s15",
+      "s18"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "zoom-through",
+      "drop",
+      "rise",
+      "slam",
+      "slide-l",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s0",
+      "s2",
+      "s7",
+      "s8",
+      "s9",
+      "s11",
+      "s12",
+      "s13",
+      "s14",
+      "s17",
+      "s18",
+      "s19",
+      "s26",
+      "s27",
+      "s29",
+      "s36",
+      "s37",
+      "s39"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "zoom-through",
+      "drop",
+      "rise",
+      "slam",
+      "slide-l",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s1",
+      "s2",
+      "s7",
+      "s12",
+      "s18",
+      "s19",
+      "s21",
+      "s23",
+      "s24",
+      "s25",
+      "s26",
+      "s28",
+      "s29",
+      "s30"
+     ],
+     "enters": [
+      "rise",
+      "slide-l",
+      "zoom-through",
+      "drop",
+      "slam",
+      "slide-r",
+      "wipe",
+      "assemble"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s1",
+      "s4",
+      "s7",
+      "s8",
+      "s9",
+      "s11",
+      "s13",
+      "s14",
+      "s20",
+      "s22",
+      "s23",
+      "s25",
+      "s27"
+     ],
+     "enters": [
+      "slide-l",
+      "wipe",
+      "drop",
+      "slide-r",
+      "assemble",
+      "rise",
+      "slam",
+      "zoom-through"
+     ]
     }
    ]
   },
@@ -861,11 +1300,12 @@
    ]
   },
   "code": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "AI 是怎么替你干活的"
+    "AI 是怎么替你干活的",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -874,6 +1314,16 @@
       "s15"
      ],
      "enters": []
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
@@ -932,16 +1382,19 @@
    ]
   },
   "bullet-cards": {
-   "count": 6,
+   "count": 10,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
     "用Opus做AI剪辑=浪费90%成本",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "做重大决策，让AI竭尽全力唱反调",
+    "怎样用AI控制AI"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -998,16 +1451,49 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s5",
+      "s10"
+     ],
+     "enters": [
+      "slide-l",
+      "wipe"
+     ]
     }
    ]
   },
   "logic-flip": {
-   "count": 2,
+   "count": 3,
    "videos": [
     "从评论区挖掘爆款选题",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "WorkBuddy 的 10 个高频使用技巧"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-05",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1022,6 +1508,16 @@
      "date": "2026-10-03",
      "shots": [
       "s30"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s1"
      ],
      "enters": [
       "wipe"
@@ -1047,12 +1543,17 @@
    ]
   },
   "punch-text": {
-   "count": 4,
+   "count": 10,
    "videos": [
     "从评论区挖掘爆款选题",
-    "用 AI 挖出你身上的隐藏资产"
+    "用 AI 挖出你身上的隐藏资产",
+    "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "Codex 必装的 5 个神级 Skill",
+    "做重大决策，让AI竭尽全力唱反调",
+    "怎样用AI控制AI"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1075,17 +1576,71 @@
       "wipe",
       "assemble"
      ]
+    },
+    {
+     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+     "date": "2026-10-04",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s25"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s25",
+      "s38"
+     ],
+     "enters": [
+      "wipe",
+      "assemble"
+     ]
     }
    ]
   },
   "dialogue": {
-   "count": 3,
+   "count": 5,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
-    "用 AI 挖出你身上的隐藏资产"
+    "用 AI 挖出你身上的隐藏资产",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1112,16 +1667,37 @@
      "enters": [
       "slide-l"
      ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "scale-gap": {
-   "count": 2,
+   "count": 3,
    "videos": [
     "从评论区挖掘爆款选题",
-    "用 AI 挖出你身上的隐藏资产"
+    "用 AI 挖出你身上的隐藏资产",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1139,6 +1715,16 @@
      ],
      "enters": [
       "slide-r"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s31"
+     ],
+     "enters": [
+      "zoom-through"
      ]
     }
    ]
@@ -1189,11 +1775,14 @@
    ]
   },
   "tool-card": {
-   "count": 4,
+   "count": 9,
    "videos": [
-    "从评论区挖掘爆款选题"
+    "从评论区挖掘爆款选题",
+    "Codex 必装的 5 个神级 Skill",
+    "怎样用AI控制AI",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1205,20 +1794,58 @@
       "s16"
      ],
      "enters": []
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s25"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s33",
+      "s34",
+      "s35"
+     ],
+     "enters": [
+      "rise",
+      "slam",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "wipe"
+     ]
     }
    ]
   },
   "chat-command": {
-   "count": 10,
+   "count": 20,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
     "用Opus做AI剪辑=浪费90%成本",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "Codex 必装的 5 个神级 Skill",
+    "现在的PPT，都做成这样了",
+    "做重大决策，让AI竭尽全力唱反调"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1282,6 +1909,58 @@
      "enters": [
       "zoom-through"
      ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s12",
+      "s18"
+     ],
+     "enters": [
+      "zoom-through",
+      "drop"
+     ]
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s8",
+      "s24"
+     ],
+     "enters": [
+      "zoom-through",
+      "drop"
+     ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s3",
+      "s7",
+      "s10",
+      "s18",
+      "s21"
+     ],
+     "enters": [
+      "rise",
+      "slide-l",
+      "wipe",
+      "drop",
+      "assemble"
+     ]
     }
    ]
   },
@@ -1303,15 +1982,17 @@
    ]
   },
   "before-after": {
-   "count": 8,
+   "count": 11,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "现在的PPT，都做成这样了",
+    "怎样用AI控制AI"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1361,6 +2042,28 @@
      ],
      "enters": [
       "zoom-through"
+     ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s16",
+      "s31"
+     ],
+     "enters": [
+      "wipe",
+      "assemble"
      ]
     }
    ]
@@ -1428,14 +2131,16 @@
    ]
   },
   "checklist": {
-   "count": 7,
+   "count": 9,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1475,6 +2180,26 @@
      "enters": [
       "zoom-through",
       "drop",
+      "rise"
+     ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
       "rise"
      ]
     }
@@ -1565,11 +2290,13 @@
    ]
   },
   "scope-shrink": {
-   "count": 1,
+   "count": 3,
    "videos": [
-    "20 分钟用 AI 做出你的第一个小软件"
+    "20 分钟用 AI 做出你的第一个小软件",
+    "做重大决策，让AI竭尽全力唱反调",
+    "什么是AI控制AI"
    ],
-   "lastDate": "2026-09-29",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "20 分钟用 AI 做出你的第一个小软件",
@@ -1578,6 +2305,26 @@
       "s7"
      ],
      "enters": []
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s33"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
@@ -1599,13 +2346,14 @@
    ]
   },
   "file-launch": {
-   "count": 3,
+   "count": 4,
    "videos": [
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "现在的PPT，都做成这样了"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-08",
    "history": [
     {
      "video": "20 分钟用 AI 做出你的第一个小软件",
@@ -1634,6 +2382,16 @@
      "enters": [
       "wipe"
      ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "wipe"
+     ]
     }
    ]
   },
@@ -1655,13 +2413,14 @@
    ]
   },
   "drag-deploy": {
-   "count": 3,
+   "count": 4,
    "videos": [
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "现在的PPT，都做成这样了"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-08",
    "history": [
     {
      "video": "20 分钟用 AI 做出你的第一个小软件",
@@ -1690,17 +2449,31 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "board-proof": {
-   "count": 5,
+   "count": 22,
    "videos": [
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "Codex 必装的 5 个神级 Skill",
+    "现在的PPT，都做成这样了"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-08",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -1735,16 +2508,80 @@
       "slam",
       "assemble"
      ]
+    },
+    {
+     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+     "date": "2026-10-04",
+     "shots": [
+      "s0",
+      "s2",
+      "s4",
+      "s6",
+      "s12",
+      "s14",
+      "s18",
+      "s20",
+      "s22",
+      "s25"
+     ],
+     "enters": [
+      "slam",
+      "rise",
+      "assemble",
+      "slide-l",
+      "drop",
+      "slide-r",
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s5",
+      "s10",
+      "s12",
+      "s19",
+      "s23"
+     ],
+     "enters": [
+      "assemble",
+      "zoom-through",
+      "drop",
+      "rise",
+      "slam"
+     ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "assemble"
+     ]
     }
    ]
   },
   "asset-distill": {
-   "count": 2,
+   "count": 3,
    "videos": [
     "别再让AI每次从零开始",
-    "用 AI 挖出你身上的隐藏资产"
+    "用 AI 挖出你身上的隐藏资产",
+    "Codex 必装的 5 个神级 Skill"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-07",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -1764,6 +2601,16 @@
      ],
      "enters": [
       "assemble"
+     ]
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "zoom-through"
      ]
     }
    ]
@@ -1788,12 +2635,14 @@
    ]
   },
   "blame-strike": {
-   "count": 2,
+   "count": 6,
    "videos": [
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "现在的PPT，都做成这样了",
+    "怎样用AI控制AI"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -1813,17 +2662,44 @@
      ],
      "enters": [
       "rise"
+     ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s6",
+      "s20",
+      "s28"
+     ],
+     "enters": [
+      "drop",
+      "wipe",
+      "slide-r"
      ]
     }
    ]
   },
   "open-ledger": {
-   "count": 2,
+   "count": 6,
    "videos": [
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "现在的PPT，都做成这样了",
+    "做重大决策，让AI竭尽全力唱反调",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -1843,6 +2719,38 @@
      ],
      "enters": [
       "wipe"
+     ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s18",
+      "s30"
+     ],
+     "enters": [
+      "assemble",
+      "slam"
      ]
     }
    ]
@@ -1867,12 +2775,15 @@
    ]
   },
   "step-rail": {
-   "count": 2,
+   "count": 6,
    "videos": [
     "别再让AI每次从零开始",
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "现在的PPT，都做成这样了",
+    "做重大决策，让AI竭尽全力唱反调",
+    "怎样用AI控制AI"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -1893,16 +2804,49 @@
      "enters": [
       "slide-r"
      ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s2",
+      "s24"
+     ],
+     "enters": [
+      "slide-r",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "teardown-lens": {
-   "count": 2,
+   "count": 3,
    "videos": [
     "别再让AI每次从零开始",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "做重大决策，让AI竭尽全力唱反调"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -1919,6 +2863,16 @@
      "date": "2026-10-03",
      "shots": [
       "s24"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s5"
      ],
      "enters": [
       "drop"
@@ -1968,11 +2922,15 @@
    ]
   },
   "pit-trap": {
-   "count": 1,
+   "count": 5,
    "videos": [
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "用Opus做AI剪辑=浪费90%成本",
@@ -1982,6 +2940,46 @@
      ],
      "enters": [
       "drop"
+     ]
+    },
+    {
+     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+     "date": "2026-10-04",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s23"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "wipe"
      ]
     }
    ]
@@ -2006,12 +3004,15 @@
    ]
   },
   "ui-replica": {
-   "count": 3,
+   "count": 7,
    "videos": [
     "用Opus做AI剪辑=浪费90%成本",
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "Codex 必装的 5 个神级 Skill",
+    "现在的PPT，都做成这样了",
+    "做重大决策，让AI竭尽全力唱反调"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "用Opus做AI剪辑=浪费90%成本",
@@ -2033,6 +3034,38 @@
      ],
      "enters": [
       "assemble"
+     ]
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s0",
+      "s17"
+     ],
+     "enters": [
+      "drop",
+      "rise"
      ]
     }
    ]
@@ -2059,11 +3092,12 @@
    ]
   },
   "safety-brake": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -2074,15 +3108,28 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s28"
+     ],
+     "enters": [
+      "slide-l"
+     ]
     }
    ]
   },
   "tier-grid": {
-   "count": 2,
+   "count": 5,
    "videos": [
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -2095,15 +3142,47 @@
       "slam",
       "slide-l"
      ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "measure-ruler": {
-   "count": 1,
+   "count": 3,
    "videos": [
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-09",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -2114,15 +3193,36 @@
      "enters": [
       "drop"
      ]
+    },
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "assemble"
+     ]
     }
    ]
   },
   "walled-garden": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "WorkBuddy 的 10 个高频使用技巧"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-05",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -2133,21 +3233,49 @@
      "enters": [
       "slam"
      ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "slam"
+     ]
     }
    ]
   },
   "domino-chain": {
-   "count": 0,
-   "videos": [],
-   "lastDate": "2026-10-03",
-   "history": []
+   "count": 1,
+   "videos": [
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "drop"
+     ]
+    }
+   ]
   },
   "evidence-zoom": {
-   "count": 20,
+   "count": 42,
    "videos": [
-    "用WorkBuddy变现：4个Skill+4个步骤"
+    "用WorkBuddy变现：4个Skill+4个步骤",
+    "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+    "WorkBuddy 的 10 个高频使用技巧",
+    "Codex 必装的 5 个神级 Skill",
+    "做重大决策，让AI竭尽全力唱反调",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-03",
+   "lastDate": "2026-10-10",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -2182,6 +3310,771 @@
       "rise",
       "zoom-through",
       "assemble"
+     ]
+    },
+    {
+     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+     "date": "2026-10-04",
+     "shots": [
+      "s7",
+      "s9",
+      "s13",
+      "s16",
+      "s19",
+      "s21",
+      "s23"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "rise",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s3",
+      "s9",
+      "s14",
+      "s17",
+      "s21",
+      "s23"
+     ],
+     "enters": [
+      "slam",
+      "slide-l",
+      "slide-r",
+      "wipe",
+      "assemble",
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s2",
+      "s6",
+      "s11",
+      "s15",
+      "s20"
+     ],
+     "enters": [
+      "slam",
+      "slide-l",
+      "slide-r",
+      "wipe",
+      "assemble"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s11",
+      "s19",
+      "s22"
+     ],
+     "enters": [
+      "slam",
+      "wipe",
+      "rise"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "drop"
+     ]
+    }
+   ]
+  },
+  "screen-versus": {
+   "count": 1,
+   "videos": [
+    "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事"
+   ],
+   "lastDate": "2026-10-04",
+   "history": [
+    {
+     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
+     "date": "2026-10-04",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "slam"
+     ]
+    }
+   ]
+  },
+  "cursor-trace": {
+   "count": 2,
+   "videos": [
+    "WorkBuddy 的 10 个高频使用技巧",
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "lever-lift": {
+   "count": 1,
+   "videos": [
+    "WorkBuddy 的 10 个高频使用技巧"
+   ],
+   "lastDate": "2026-10-05",
+   "history": [
+    {
+     "video": "WorkBuddy 的 10 个高频使用技巧",
+     "date": "2026-10-05",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "ring-assembly": {
+   "count": 3,
+   "videos": [
+    "Codex 必装的 5 个神级 Skill",
+    "做重大决策，让AI竭尽全力唱反调",
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s33"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "real-doc-scroll": {
+   "count": 4,
+   "videos": [
+    "Codex 必装的 5 个神级 Skill",
+    "做重大决策，让AI竭尽全力唱反调"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s4",
+      "s8",
+      "s23"
+     ],
+     "enters": [
+      "wipe",
+      "rise",
+      "slide-r"
+     ]
+    }
+   ]
+  },
+  "dusty-shelf": {
+   "count": 2,
+   "videos": [
+    "Codex 必装的 5 个神级 Skill",
+    "做重大决策，让AI竭尽全力唱反调"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "Codex 必装的 5 个神级 Skill",
+     "date": "2026-10-07",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "reveal-cards": {
+   "count": 3,
+   "videos": [
+    "现在的PPT，都做成这样了",
+    "做重大决策，让AI竭尽全力唱反调",
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "现在的PPT，都做成这样了",
+     "date": "2026-10-08",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s29"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "fork-paths": {
+   "count": 2,
+   "videos": [
+    "做重大决策，让AI竭尽全力唱反调",
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "infinite-zoom": {
+   "count": 1,
+   "videos": [
+    "做重大决策，让AI竭尽全力唱反调"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "screen-morph": {
+   "count": 1,
+   "videos": [
+    "做重大决策，让AI竭尽全力唱反调"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "做重大决策，让AI竭尽全力唱反调",
+     "date": "2026-10-09",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "drop"
+     ]
+    }
+   ]
+  },
+  "persona-scene": {
+   "count": 2,
+   "videos": [
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "drop"
+     ]
+    }
+   ]
+  },
+  "agent-relay": {
+   "count": 4,
+   "videos": [
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s3",
+      "s4"
+     ],
+     "enters": [
+      "slam",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s13",
+      "s15"
+     ],
+     "enters": [
+      "rise",
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "relay-parallel": {
+   "count": 4,
+   "videos": [
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s15",
+      "s30"
+     ],
+     "enters": [
+      "slide-r",
+      "wipe"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s27",
+      "s34"
+     ],
+     "enters": [
+      "drop",
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "spec-matrix": {
+   "count": 2,
+   "videos": [
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s32"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "labor-takeover": {
+   "count": 2,
+   "videos": [
+    "怎样用AI控制AI",
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "怎样用AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s40"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s35"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "side-brand-fx": {
+   "count": 2,
+   "videos": [
+    "什么是AI控制AI",
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "fill-build": {
+   "count": 3,
+   "videos": [
+    "什么是AI控制AI",
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s3",
+      "s22"
+     ],
+     "enters": [
+      "slam",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "drop"
+     ]
+    }
+   ]
+  },
+  "spinner-reasoning": {
+   "count": 1,
+   "videos": [
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "scale-dive": {
+   "count": 1,
+   "videos": [
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "surface-vs-core": {
+   "count": 2,
+   "videos": [
+    "什么是AI控制AI",
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "slam"
+     ]
+    }
+   ]
+  },
+  "vet-card": {
+   "count": 1,
+   "videos": [
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s31"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "unread-flood": {
+   "count": 1,
+   "videos": [
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s32"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    }
+   ]
+  },
+  "typo-arch": {
+   "count": 1,
+   "videos": [
+    "什么是AI控制AI"
+   ],
+   "lastDate": "2026-10-09",
+   "history": [
+    {
+     "video": "什么是AI控制AI",
+     "date": "2026-10-09",
+     "shots": [
+      "s36"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "pile-crush": {
+   "count": 1,
+   "videos": [
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "drop"
+     ]
+    }
+   ]
+  },
+  "case-replay": {
+   "count": 1,
+   "videos": [
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "race-lanes": {
+   "count": 1,
+   "videos": [
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-10",
+   "history": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-10",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "zoom-through"
      ]
     }
    ]

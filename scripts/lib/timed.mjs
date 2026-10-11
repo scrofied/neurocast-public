@@ -508,6 +508,8 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
       through: s.through ? normThrough(s.through) || undefined : undefined,
       motion,
       hideCaptions: s.captions === false ? true : s.captions === true ? false : undefined,
+      // over: true = 这一镜渲染在 presenter 真人层「之上」（真人全屏讲话时的两侧动效）
+      over: s.over === true || undefined,
       auto: !!s.auto,
     });
   });

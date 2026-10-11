@@ -16,7 +16,7 @@ import { checkKindParity, checkTransitionParity, normPost, normThrough } from ".
 import { loadRegistry, validateShot } from "./lib/registry-node.mjs";
 import { slotAssetRefs } from "./lib/detect.mjs";
 import { load as loadUsage, shotsOf, record as recordUsage, crossVideoReport, statsOf, bodyComps } from "./lib/usage.mjs";
-import { ratioOf, shotAssets, checklist as assetChecklist, record as recordAssets, load as loadAssetLedger } from "./lib/assets.mjs";
+import { ratioOf, shotAssets, isStock, entriesOf, stockMetaOf, checklist as assetChecklist, record as recordAssets, load as loadAssetLedger } from "./lib/assets.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUB = path.join(ROOT, "public");
@@ -223,6 +223,21 @@ const prepAssets = (refs) => {
       a.kind = "video";
       // 素材组件（head-pip 之类）要知道剪辑能走到第几帧，超出就得冻在最后一片
       if (p.duration) a.frames = Math.floor(p.duration * FPS);
+      // 开头冻结检测：v10 那种「首镜开头垫 N 秒冻结帧」的特制切段被复用到普通镜头时，
+      // 画面会整段卡住。取第 0 帧和第 1.5 帧（-ss 在 -i 后=精确）比灰度差，近零=开头是静帧。
+      if (p.duration > 2) {
+        try {
+          const grab = (t) => execFileSync("ffmpeg", ["-v", "error", "-i", abs, "-ss", String(t), "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "gray", "-s", "320x180", "-"], { encoding: null, maxBuffer: 8 << 20 });
+          const f0 = grab(0), f1 = grab(1.5);
+          if (f0?.length && f1?.length && f0.length === f1.length) {
+            let sad = 0;
+            for (let i = 0; i < f0.length; i++) sad += Math.abs(f0[i] - f1[i]);
+            sad /= f0.length;
+            a.headSad = +sad.toFixed(2);
+            if (sad < 0.3) warn(`录屏素材 ${ref} 开头 ≥1.5 秒是静帧（SAD=${sad.toFixed(2)}）——若是给「首镜被开场压住」垫过头的切段，复用到普通镜头前要从原始录屏重切`);
+          }
+        } catch { /* 探测失败不挡渲染 */ }
+      }
     }
     out[ref] = a;
     ASSET_ORIGIN[a.src] = a.origin;
@@ -575,14 +590,83 @@ const hasSourceField = (def) => {
 // 直接展开对象会炸（TypeError: object is not iterable），先归一成数组。
 const slotList = (v) => (Array.isArray(v) ? v : v ? [v] : []);
 
+// 证据类组件：这些镜头上的是「观众会当成真实截图/真实数据/真人」的画面。
+// 库存素材（Pexels/Pixabay/Mixkit 抓来的氛围镜头）一旦进这里，就是拿假东西冒充证据
+// —— v3 那条片子正是这么被打回的，所以直接失败，不给过。
+// photo-wall 也算：它底部写着「真头像 n/n」，塞一张库存里随便抓的人像 = 拿假人冒充真人。
+const EVIDENCE_TYPES = new Set(["screen", "evidence-zoom", "real-doc-scroll", "board-proof", "cursor-trace", "screen-morph", "screen-versus", "citation-strip", "brand-quote-card", "comment-wall", "head-pip", "infinite-zoom", "photo-wall"]);
+
+// 库存素材自动署名（口径②）：只要这个组件的字段里落的是 assets/stock|icons 的文件，
+// 就把出处写进它的 source 角标，让画面上长出「示意画面 · 站点/@作者」。
+// 署名不该指望人记得填 —— 出处的原始记录在 assets/stock-index.json（stock.mjs get 写的），这里查出来自动补。
+// 已经有 platform 的（自己截的图混在同一镜头里）不动，只补 kind 和缺的字段。
+const stampStockBadge = (tl, reg) => {
+  let n = 0;
+  for (const s of tl.shots || []) {
+    const nodes = [{ type: s.type, data: s.data }, ...slotList(s.data?.left).filter((x) => x?.type), ...slotList(s.data?.right).filter((x) => x?.type)];
+    if (s.data?.opening?.type) nodes.push({ type: s.data.opening.type, data: s.data.opening.data });
+    for (const x of nodes) {
+      const fields = ASSET_FIELDS[x.type] || [];
+      if (!fields.length || !x.data || !hasSourceField(reg.byId[x.type])) continue;
+      let hit = null;
+      for (const f of fields)
+        for (const e of entriesOf(x.data, f)) {
+          const origin = ASSET_ORIGIN[e.v] || e.v;
+          if (isStock(origin)) hit = stockMetaOf(origin) || { site: /^(?:public\/)?assets\/stock\/([\w-]+)/i.exec(origin)?.[1] || "库存站" };
+        }
+      if (!hit) continue;
+      const cur = x.data.source || {};
+      x.data.source = {
+        ...cur,
+        kind: "stock",
+        platform: cur.platform || (hit.site ? String(hit.site).replace(/^./, (c) => c.toUpperCase()) : "库存素材"),
+        author: cur.author || hit.author || undefined,
+        url: cur.url || hit.page || undefined,
+      };
+      n++;
+    }
+  }
+  if (n) console.log(`  库存素材自动署名：${n} 处角标改成「示意画面」（出处取自 assets/stock-index.json）`);
+};
+
 const assetReport = (tl, reg) => {
   const ledger = loadAssetLedger();
-  const r = ratioOf(tl, ASSET_FIELDS);
+  const originOf = (v) => ASSET_ORIGIN[v] || v; // jobs/a3.mp4 → assets/stock/pexels/x.mp4
+  const r = ratioOf(tl, ASSET_FIELDS, originOf);
   const min = ledger.rules.minRatio;
   const pct = (r.pct * 100).toFixed(1);
   const want = `${pct}%（${r.assetShots}/${r.shots} 镜 · ${(r.asset / FPS).toFixed(0)}/${(r.total / FPS).toFixed(0)} 秒有真素材）`;
   if (r.pct >= min) console.log(`  素材占比 ${want} ≥${(min * 100).toFixed(0)}% ✓`);
   else warn(`素材占比 ${want} 低于 ${(min * 100).toFixed(0)}%：这条片子基本全是代码动画，观众没有一样东西可以「看见是真的」。去补真截图/真录屏/真 logo/真头像，或把镜头让给素材组件（node scripts/pick.mjs --need 素材）`);
+  // ---------- 库存素材（示意画面）：不计占比、不许冒充证据、必须带出处 ----------
+  const rowsForStock = shotAssets(tl, ASSET_FIELDS, originOf);
+  const stockShots = rowsForStock.filter((m) => m.stock.length);
+  if (stockShots.length) {
+    console.log(`  库存素材（示意画面）：${stockShots.length} 镜 · ${(stockShots.reduce((a, m) => a + (m.dur || 0), 0) / FPS).toFixed(0)} 秒 · ${[...new Set(stockShots.flatMap((m) => m.stock))].length} 个文件 —— 按口径不计进上面的占比`);
+    // 逐组件查：镜头本体 + 侧栏槽位，谁的字段里是库存文件就报谁（别把整镜的素材混在一起猜）
+    const bad = [];
+    const noSrc = [];
+    for (const s of tl.shots) {
+      const nodes = [{ type: s.type, data: s.data }, ...slotList(s.data?.left).filter((x) => x?.type), ...slotList(s.data?.right).filter((x) => x?.type)];
+      const stockHere = [];
+      for (const x of nodes) {
+        for (const f of ASSET_FIELDS[x.type] || [])
+          for (const e of entriesOf(x.data, f)) {
+            const origin = originOf(e.v);
+            if (!isStock(origin)) continue;
+            stockHere.push(origin);
+            if (EVIDENCE_TYPES.has(x.type)) bad.push(`${s.id} ${x.type} ← ${origin}`);
+          }
+      }
+      if (!stockHere.length) continue;
+      const canCheck = nodes.filter((x) => ASSET_FIELDS[x.type] && hasSourceField(reg.byId[x.type]));
+      if (canCheck.length && !canCheck.some((x) => x.data?.source?.platform || x.data?.source?.author || x.data?.source?.url))
+        noSrc.push(`${s.id} ${s.type}`);
+    }
+    if (bad.length)
+      fail("E_STOCK", `库存素材冒充了真实证据（${[...new Set(bad)].length} 处）：\n    ${[...new Set(bad)].join("\n    ")}\n  讲操作步骤/数据/模型回复/真人的镜头必须用真东西（自己截的、录的、要来的）；库存画面只配当「示意画面」用在 stock-broll 这类氛围位。`);
+    if (noSrc.length) warn(`库存素材没写 data.source（站点 + 作者）：${noSrc.join("、")}。要渲成「示意画面 · Pexels/@作者」这种角标，不能挂「真实素材」（node scripts/stock.mjs license 查出处）`);
+  }
   // 真标识 / 真出处这类镜头不吃文件（logo 来自品牌库、地址是数据），不计进占比，但要知道它们在场
   const noFile = shotAssets(tl, ASSET_FIELDS).filter((m) => m.fields.length && !m.got.length && !m.missing.length && !m.fields.some((f) => (ASSET_REQUIRED[m.type] || {})[f]));
   if (noFile.length) console.log(`  另有 ${noFile.length} 镜（${(noFile.reduce((a, m) => a + (m.dur || 0), 0) / FPS).toFixed(0)} 秒）用真标识/真出处（品牌库与地址不是文件，不计进上面的占比）：${[...new Set(noFile.map((m) => m.type))].join(" ")}`);
@@ -745,6 +829,8 @@ const main = async () => {
   }
   // 后期层强度：input.post 或 storyboard.post，缺省由渲染层用默认（观感和老片子一致）
   if (postCfg) tl.meta.post = postCfg;
+  // 库存素材自动署名（在 schema 校验之前，这样补出来的 source 会被一起校验、也一定进得了 timeline.json）
+  stampStockBadge(tl, reg);
 
   // ---------- validate every shot against its component schema ----------
   const errors = [];

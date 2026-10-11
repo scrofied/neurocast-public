@@ -23,6 +23,8 @@ export type Shot = {
   through?: [number, number, number, number];
   motion?: Motion;
   hideCaptions?: boolean;
+  // true = 渲染在 presenter 真人层之上（真人全屏讲话时的两侧叠加动效，如 side-brand-fx）
+  over?: boolean;
 };
 
 // t: absolute start frame of every displayed char (karaoke highlight follows the real voice)
@@ -68,7 +70,7 @@ export type Timeline = {
     // 全片后期层：不写用默认（观感和老片子一致）
     post?: PostSettings;
     // muted talking-head clip: full screen for `full` frames, then a picture-in-picture box
-    presenter?: { src: string; poster?: string; frames: number; offset: number; rate?: number; full: number; focusX: number; focusY: number; hideFrom?: number };
+    presenter?: { src: string; poster?: string; frames: number; offset: number; rate?: number; full: number; focusX: number; focusY: number; hideFrom?: number; corner?: "left" | "right"; showFrom?: number; stage?: { from: number; to: number; x: number; y: number; w: number; h: number } };
   };
   durationInFrames: number;
   chapters: Chapter[];

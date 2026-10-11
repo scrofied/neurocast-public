@@ -1,0 +1,39 @@
+{
+ "rule": "库存素材：只当示意画面，不计入素材占比，署名要求见 attribution",
+ "items": {
+  "assets/stock/mixkit/test-library.mp4": {
+   "site": "mixkit",
+   "kind": "video",
+   "id": "50722",
+   "url": "https://assets.mixkit.co/videos/50722/50722-720.mp4",
+   "page": "https://mixkit.co/free-stock-video/50722/",
+   "author": "Mixkit",
+   "license": "Mixkit Stock Video Free License",
+   "monetize": true,
+   "attribution": false,
+   "bytes": 4642749,
+   "md5": "6b81ea1f8a9a",
+   "fetchedAt": "2026-10-10",
+   "width": 1280,
+   "height": 720,
+   "duration": 14.597917
+  },
+  "assets/stock/pexels/test-ai.mp4": {
+   "site": "pexels",
+   "kind": "video",
+   "id": "6153734",
+   "url": "https://videos.pexels.com/video-files/6153734/6153734-hd_1366_720_25fps.mp4",
+   "page": "https://www.pexels.com/video/woman-with-futuristic-technology-on-her-artificial-arm-6153734/",
+   "author": "cottonbro studio",
+   "license": "Pexels License",
+   "monetize": true,
+   "attribution": false,
+   "bytes": 1515856,
+   "md5": "bdb8212252b1",
+   "fetchedAt": "2026-10-10",
+   "width": 1366,
+   "height": 720,
+   "duration": 14.32
+  }
+ }
+}

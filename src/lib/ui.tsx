@@ -128,7 +128,9 @@ export const Scan: React.FC<{ frame: number; color: string; speed?: number; styl
 );
 
 // top-left heading used by most shots
-export const Headline: React.FC<{ kicker?: string; title?: string; frame: number; x?: number; y?: number; size?: number; align?: "left" | "center" }> = ({
+// capW：大字的可用宽度。默认按整屏排（1500），但右侧要让给一块画面时得传进来，
+// 否则 nowrap 的 Title 会一路铺过头像墙/取景框上面。
+export const Headline: React.FC<{ kicker?: string; title?: string; frame: number; x?: number; y?: number; size?: number; align?: "left" | "center"; capW?: number }> = ({
   kicker,
   title,
   frame,
@@ -136,6 +138,7 @@ export const Headline: React.FC<{ kicker?: string; title?: string; frame: number
   y = 96,
   size = 54,
   align = "left",
+  capW = 1500,
 }) => {
   const t = useTheme();
   const p = easeOut(prog(frame, 2, 18));
@@ -151,7 +154,7 @@ export const Headline: React.FC<{ kicker?: string; title?: string; frame: number
       )}
       {title && (
         <div style={{ position: "absolute", top: y + 34, ...wrap }}>
-          <Title text={title} frame={frame} delay={5} size={fitFont(title, 1500, size)} style={{ position: "relative" }} />
+          <Title text={title} frame={frame} delay={5} size={fitFont(title, capW, size)} style={{ position: "relative" }} />
         </div>
       )}
     </>
@@ -167,9 +170,9 @@ export const fitFont = (s: string, maxW: number, base: number, min = 20) => Math
 
 // Headline that adapts to the box: full-size shots get the standard top-left headline,
 // side panels (compact boxes) get a small header with padding
-export const Heading: React.FC<{ kicker?: string; title?: string; frame: number; width: number; align?: "left" | "center" }> = ({ kicker, title, frame, width, align = "left" }) => {
+export const Heading: React.FC<{ kicker?: string; title?: string; frame: number; width: number; align?: "left" | "center"; capW?: number }> = ({ kicker, title, frame, width, align = "left", capW }) => {
   const t = useTheme();
-  if (width >= 900) return <Headline kicker={kicker} title={title} frame={frame} align={align} />;
+  if (width >= 900) return <Headline kicker={kicker} title={title} frame={frame} align={align} capW={capW} />;
   const p = easeOut(prog(frame, 2, 16));
   return (
     <div style={{ position: "absolute", left: 22, right: 22, top: 18, opacity: p, textAlign: align }}>

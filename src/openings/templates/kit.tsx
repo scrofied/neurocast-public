@@ -128,6 +128,7 @@ export const tpl = <D,>(o: {
   techniques: string[];
   schema: z.ZodType<D>;
   example?: Partial<D>;
+  assetFields?: string[];
   C: React.FC<CompProps<D>>;
   camera?: (data: D, frame: number, dur: number) => Cam;
 }): CompDef<D> => ({
@@ -142,6 +143,7 @@ export const tpl = <D,>(o: {
   use: o.use,
   schema: o.schema,
   example: o.example ?? {},
+  ...(o.assetFields?.length ? { assetFields: o.assetFields } : {}),
   C: o.C,
   camera: o.camera,
   opening: { script: "template", hook: o.hook, techniques: o.techniques, template: true },

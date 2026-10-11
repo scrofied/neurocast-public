@@ -43,8 +43,10 @@ import { Sink } from "./story/Sink";
 import { CommentWall } from "./story/CommentWall";
 import { SignalMap } from "./story/SignalMap";
 import { Reframe } from "./story/Reframe";
+import { SideBrandFx } from "./story/SideBrandFx";
 import { PersonaScene } from "./story/PersonaScene";
 import { PhotoWall } from "./story/PhotoWall";
+import { StockBroll } from "./story/StockBroll";
 import { BlameStrike } from "./info/BlameStrike";
 import { PileCrush } from "./metaphor/PileCrush";
 import { PitTrap } from "./metaphor/PitTrap";
@@ -80,6 +82,8 @@ import { Painkiller } from "./metaphor/Painkiller";
 import { TimeCeiling } from "./metaphor/TimeCeiling";
 import { CarryOrDig } from "./metaphor/CarryOrDig";
 import { ForkPaths } from "./metaphor/ForkPaths";
+import { AgentRelay } from "./metaphor/AgentRelay";
+import { RelayParallel } from "./metaphor/RelayParallel";
 import { ToolCard } from "./product/ToolCard";
 import { ChatCommand } from "./product/ChatCommand";
 import { BrowserAgent } from "./product/BrowserAgent";
@@ -171,6 +175,8 @@ export const REGISTRY: CompDef[] = [
   TimeCeiling,
   CarryOrDig,
   ForkPaths,
+  AgentRelay,
+  RelayParallel,
   RingAssembly,
   SpinnerReasoning,
   DustyShelf,
@@ -185,8 +191,10 @@ export const REGISTRY: CompDef[] = [
   CommentWall,
   SignalMap,
   Reframe,
+  SideBrandFx,
   PersonaScene,
   PhotoWall,
+  StockBroll,
   // product
   ToolCard,
   ChatCommand,

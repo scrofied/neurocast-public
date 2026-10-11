@@ -312,6 +312,7 @@ node scripts/openings.mjs status opening-comment-mining keep
 - 真标识（`public/brands/*.svg`）和真地址（citation-strip 的 url）**不计进占比**：它们不是文件素材，占比只量「真的截图/录屏/头像上屏多久」。
 - 每个组件的素材字段用 `assetFields` 声明（`"src"` / `"video.src"` / `"boards[].src"` / `"pages[]"` 四种写法），管线据此自动拷贝文件、量宽高比、必要时 OCR 定位——组件里读 `data.aspect / data.kind / data.frames / data.focus` 就行，这些字段由管线填，别手写。允许哪些字段上屏由 schema 探测得出（`assetMeta` 可覆盖）。
 - **真素材镜头必须写 `data.source`**（平台 / url / capturedAt / note 任选）。没写会警告「N 个镜头上了真素材但没写 data.source」——上了真东西却不标来源，等于白上。组件用 `src/lib/source.tsx` 的 `SourceBadge` 把它显示出来。
+- Pexels / Mixkit 这类现成抓来的画面是**库存素材**，不算这里说的「真素材」：不计占比、角标写「示意画面」、不许进证据类槽位，见下一节「库存素材（示意画面）」。
 
 ### 采集清单：缺什么，一目了然
 
@@ -338,6 +339,30 @@ node scripts/openings.mjs status opening-comment-mining keep
 - `node scripts/brands.mjs check` / `missing` → 看哪些牌子还缺文件、文案里可能叫什么
 
 组件（logo-wall / citation-strip / brand-quote-card）通过 `src/lib/brands.ts` 查这张表；查不到就退化成通用图标，绝不画假 logo。
+
+### 库存素材（示意画面）：`scripts/stock.mjs` + `public/assets/stock/`
+
+Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来的矢量图标，统称**库存素材**。它们只配演「氛围」，不配演「证据」，所以三条口径是硬规则（`--plan-only` 直接把关）：
+
+1. **不计进素材占比。** 占比量的是「观众能看见多少真东西」，让氛围镜头刷分这条指标就废了。`--plan-only` 会单打一行的：`库存素材（示意画面）：N 镜 · X 秒 · Y 个文件 —— 按口径不计进上面的占比`。
+2. **右下角永远是「示意画面 · 站点/@作者」，绝不写「真实素材」。** `SourceBadge` 按 `data.source.kind` 分两条线：`real`（默认）画成主题色实线胶囊 + 「真实素材」；`stock` 画成灰字虚线、不写「采集时间」（库存没有采集这回事），文案是「示意画面」。出处不用人记：`stock.mjs get` 把站点/页面/作者写进 `assets/stock-index.json`，`make.mjs` 出分镜时自动补进 `data.source` 并打印「库存素材自动署名：N 处」。
+3. **证据类槽位出现库存素材 = `E_STOCK` 硬失败。** `screen / evidence-zoom / real-doc-scroll / board-proof / cursor-trace / screen-morph / screen-versus / citation-strip / brand-quote-card / comment-wall / head-pip / infinite-zoom / photo-wall` 上的是「观众会当成真截图/真数据/真人」的画面，v3 那条片子就是拿氛围镜头冒充界面被打回的。要演这些请用 `stock-broll` 之外的真素材；`photo-wall` 也算（它底部写着「真头像 n/n」）。
+
+命令（判据、license 与实测记录见 `docs/STOCK_SITES.md`）：
+
+| 命令 | 作用 |
+|---|---|
+| `node scripts/stock.mjs sites` | 站点能力表：要不要 key、license、能不能变现、是否必须署名 |
+| `node scripts/stock.mjs search <站> <关键词> [--type video] [--n 12] [--landscape] [--min 1920]` | 只列候选 + 缩略图，不下载 |
+| `node scripts/stock.mjs get <站:id \| 直链> [--res 1080] [--as 名字]` | 下载到 `public/assets/stock/<站>/`，出处写 `assets/stock-index.json` |
+| `node scripts/stock.mjs icons <合集> <名字…> [--color HEX]` | 从 Iconify（lucide / tabler / mdi / ph / solar）抽 SVG 存 `public/assets/icons/`，一次缓存之后离线用 |
+| `node scripts/stock.mjs brands [--only-missing] [--dry]` | 用 Simple Icons 补齐 `public/brands/` 缺的真 logo（映射表在品牌库里） |
+| `node scripts/stock.mjs license [关键词]` | 出片前核对某条素材的署名义务 |
+
+- **key 只从环境变量读**（`PEXELS_API_KEY` / `PIXABAY_API_KEY` / `UNSPLASH_ACCESS_KEY`），或仓库外的 `~/.neurocast/stock.env`；任何输出都不回显 key，凭证不进仓库。没 key 时零 key 源（Mixkit / Iconify / Simple Icons）照常用。
+- **下载物不进 git**：`public/assets/stock/` 已在 `.gitignore` 里，`assets/stock-index.json`（只有出处，没有内容）进 git。
+- 组件：`stock-broll`（库存视频/静帧当氛围垫底，`layout: full/card/split`、静帧也能 `move: push/pan`、素材比镜头短自动慢放铺满、长则裁掉用不到的尾巴）。凡是讲步骤、讲数据、引用模型回复的句子别用它。
+- 沿用既有红线：**真人姓名/形象一律不上屏**（平台连驳两次），库存视频里带清晰正脸说话人的也别选。
 
 ## 组件资产库
 
@@ -433,6 +458,7 @@ node scripts/openings.mjs status opening-comment-mining keep
 | `node scripts/usage.mjs report / unused / list / recent` | 用量台账：覆盖率、高频、从未上片的池子 |
 | `node scripts/usage.mjs backfill [路径…]` / `record <timeline.json>` | 历史分镜回填建库 / 手工补记一条片子 |
 | `node scripts/brands.mjs sync / check / missing` | 品牌库：生成组件用的映射 / 校验 / 看还缺哪些 logo（详见「真实素材」） |
+| `node scripts/stock.mjs sites / search / get / icons / brands / license` | 库存素材：查站点能力、找画面、下载、抽矢量图标、补品牌 logo、核署名义务（详见「库存素材（示意画面）」） |
 | `node scripts/preview.mjs <id>[,<id>]` | 组件静帧 QA |
 | `node scripts/qa/transitions.mjs [kinds] [偏移]` | 转场 + 全片后期层 QA：出边界拼图 + 开/关后期的像素均差（稳定帧/首帧须为 0） |
 | `node scripts/catalog.mjs` | 重新生成 CATALOG.md |
@@ -454,6 +480,7 @@ node scripts/openings.mjs status opening-comment-mining keep
 | E_TIMELINE_EXTRACT | 自动识别失败：`pip install faster-whisper` |
 | E_ASSET | 口播视频、截图等素材找不到或 ffmpeg 处理失败。只想先看分镜：`--allow-missing-assets` 降级（正式出片别带这个跑） |
 | E_STORYBOARD | 分镜问题：锚点在文案里找不到、口播段里放了别的组件、数据不符合 schema（会逐条列出） |
+| E_STOCK | 库存素材（Pexels / Mixkit / Iconify 抓来的）被放进了证据类槽位（真截图/真数据/真人头像）。换成自己截的真素材，或把这句改写成氛围铺垫用 `stock-broll`（详见「库存素材（示意画面）」） |
 | E_CODE_FENCE | 代码块 ``` 没闭合 |
 | E_DEPS | 缺依赖：`npm install` |
 | E_RENDER | 渲染失败；时间轴已保存在 `public/jobs/<任务>/timeline.json`，可 `npm run studio` 排查 |
@@ -472,6 +499,7 @@ scripts/lib/assets.mjs      素材台账读写：占比、采集清单、按原�
 scripts/assets.mjs          素材台账命令（report / unused / dup / check / record / harvest）
 scripts/new-video.mjs       一条片的独立项目目录脚手架（建目录 + 生成并登记专属开场骨架）
 scripts/brands.mjs          品牌库命令（sync / check / missing）
+scripts/stock.mjs           库存素材命令（sites / search / get / icons / brands / license）：抓画面、抽图标、补 logo、核署名
 src/components/…            组件资产（registry.ts 注册）
 src/lib/asset.tsx           素材路径解析 + MissingAsset 缺素材占位
 src/lib/source.tsx          sourceSchema / SourceBadge：真素材的来源角标（平台 · 日期 · 地址）
@@ -484,6 +512,10 @@ src/lib/cine/               开场电影感工具包（砸字、闪白、抖动�
 openings/library.json       开场库：钩子、手法、预览、数据、保留/淘汰
 usage/library.json          正片组件用量台账：每条片用了什么、入场用过哪几种
 assets/library.json         素材台账：每张真素材的尺寸/md5/上过哪条片哪一镜 + 素材占比规则（minRatio）
+assets/stock-index.json     库存素材出处表：文件 → 站点/页面/作者/license/是否必须署名（stock.mjs get 写，只记出处不记内容）
+assets/icons-index.json     矢量图标出处表（Iconify 合集 / Simple Icons 同源）
+public/assets/stock/        抓下来的库存画面文件（不进 git：视频/图片是构建产物，重跑 stock.mjs get 就能拿回来）
+public/assets/icons/        缓存的矢量图标 SVG（进 git：体积小、离线渲染要用）
 brands/library.json         品牌库：文案叫法 → public/brands/ 里的真 logo 文件
 public/brands/              真 logo 文件（svg/png）；空文件不算，见 brands.mjs check
 scripts/usage.mjs           用量台账命令（backfill / report / unused / recent）
@@ -494,6 +526,7 @@ src/engine/                 Video（音轨/镜头/字幕）、ShotFrame（转场
 src/lib/                    theme / box / cue / sfx / icons / ui / anim
 CATALOG.md                  组件目录（自动生成）
 docs/OPUS55_ANIMATIONS.md   外部动画移植台账：一、prompt 语料的机制移植；一·b、opus-video-skills 真代码移植（含 MIT + John Heibel 双版权署名）
+docs/STOCK_SITES.md         免费素材站调研（每个站实测过什么、license/署名口径、为什么这么接）
 examples/comment-mining/    完整示例：文案.md、storyboard.json、input.json、口播和配音
 <工作区>/neurocast-<片名>/   不在这个目录里：每条视频自己的文案/素材/成片都在这里（见「一条视频 = 一个独立项目目录」）
 _deprecated/                旧版不可用的脚本和文档（仅留档）

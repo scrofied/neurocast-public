@@ -14,5 +14,214 @@ export const BRANDS: Brand[] = [
    "anthropic",
    "opus"
   ]
+ },
+ {
+  "key": "chatgpt",
+  "label": "ChatGPT",
+  "file": "chatgpt.svg",
+  "aliases": [
+   "chatgpt",
+   "chatgpt",
+   "gpt",
+   "openai",
+   "gpt-4",
+   "gpt4"
+  ]
+ },
+ {
+  "key": "gemini",
+  "label": "Gemini",
+  "file": "gemini.svg",
+  "aliases": [
+   "gemini",
+   "gemini",
+   "谷歌ai"
+  ]
+ },
+ {
+  "key": "deepseek",
+  "label": "DeepSeek",
+  "file": "deepseek.svg",
+  "aliases": [
+   "deepseek",
+   "deepseek",
+   "深度求索"
+  ]
+ },
+ {
+  "key": "cursor",
+  "label": "Cursor",
+  "file": "cursor.svg",
+  "aliases": [
+   "cursor",
+   "cursor"
+  ]
+ },
+ {
+  "key": "figma",
+  "label": "Figma",
+  "file": "figma.svg",
+  "aliases": [
+   "figma",
+   "figma"
+  ]
+ },
+ {
+  "key": "canva",
+  "label": "Canva",
+  "file": "canva.svg",
+  "aliases": [
+   "canva",
+   "canva"
+  ]
+ },
+ {
+  "key": "davinci",
+  "label": "DaVinci Resolve",
+  "file": "davinci.svg",
+  "aliases": [
+   "davinci",
+   "davinci",
+   "达芬奇"
+  ]
+ },
+ {
+  "key": "notion",
+  "label": "Notion",
+  "file": "notion.svg",
+  "aliases": [
+   "notion",
+   "notion"
+  ]
+ },
+ {
+  "key": "wechat",
+  "label": "微信",
+  "file": "wechat.svg",
+  "aliases": [
+   "wechat",
+   "微信",
+   "公众号",
+   "视频号",
+   "微信群"
+  ]
+ },
+ {
+  "key": "douyin",
+  "label": "抖音",
+  "file": "douyin.svg",
+  "aliases": [
+   "douyin",
+   "抖音",
+   "douyin",
+   "tiktok"
+  ]
+ },
+ {
+  "key": "xiaohongshu",
+  "label": "小红书",
+  "file": "xiaohongshu.svg",
+  "aliases": [
+   "xiaohongshu",
+   "小红书",
+   "小红书笔记"
+  ]
+ },
+ {
+  "key": "bilibili",
+  "label": "哔哩哔哩",
+  "file": "bilibili.svg",
+  "aliases": [
+   "bilibili",
+   "b站",
+   "哔哩哔哩",
+   "bilibili"
+  ]
+ },
+ {
+  "key": "youtube",
+  "label": "YouTube",
+  "file": "youtube.svg",
+  "aliases": [
+   "youtube",
+   "youtube",
+   "油管"
+  ]
+ },
+ {
+  "key": "github",
+  "label": "GitHub",
+  "file": "github.svg",
+  "aliases": [
+   "github",
+   "github"
+  ]
+ },
+ {
+  "key": "huggingface",
+  "label": "Hugging Face",
+  "file": "huggingface.svg",
+  "aliases": [
+   "huggingface",
+   "huggingface",
+   "hf 镜像"
+  ]
+ },
+ {
+  "key": "suno",
+  "label": "Suno",
+  "file": "suno.svg",
+  "aliases": [
+   "suno",
+   "suno"
+  ]
+ },
+ {
+  "key": "n8n",
+  "label": "n8n",
+  "file": "n8n.svg",
+  "aliases": [
+   "n8n",
+   "n8n"
+  ]
+ },
+ {
+  "key": "dify",
+  "label": "Dify",
+  "file": "dify.svg",
+  "aliases": [
+   "dify",
+   "dify"
+  ]
+ },
+ {
+  "key": "taobao",
+  "label": "淘宝",
+  "file": "taobao.svg",
+  "aliases": [
+   "taobao",
+   "淘宝",
+   "天猫"
+  ]
+ },
+ {
+  "key": "meituan",
+  "label": "美团",
+  "file": "meituan.svg",
+  "aliases": [
+   "meituan",
+   "美团"
+  ]
+ },
+ {
+  "key": "twitter",
+  "label": "X / 推特",
+  "file": "twitter.svg",
+  "aliases": [
+   "twitter",
+   "推特",
+   "twitter",
+   "x平台"
+  ]
  }
 ];

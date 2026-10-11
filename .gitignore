@@ -12,3 +12,8 @@ public/jobs/
 .env.*
 .DS_Store
 *.local
+# 库存素材：抓下来的现成画面是构建产物（重跑 node scripts/stock.mjs get 就有），
+# 出处记在 assets/stock-index.json 里进 git；缓存的矢量图标体积小、离线渲染要用，留在 git 里。
+public/assets/stock/
+# 凭证只在仓库外（~/.neurocast/stock.env），任何情况下不许进仓库
+stock.env

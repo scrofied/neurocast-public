@@ -1124,6 +1124,114 @@
         "第5招 文字干货先出现，找好节奏再露脸 + 闪白叮"
       ],
       "sec": 3.4
+    },
+    {
+      "id": "opening-dbs-shatter",
+      "date": "2026-10-09",
+      "status": "trial",
+      "usedBy": [
+        "../../../dbs-decision"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 碎屏居中大字→真人全屏两侧动效→收窗",
+      "file": "src/openings/2026-10-09-dbs-shatter/Opening.tsx",
+      "desc": "0~4.1s PRO-02 碎屏（两句大字居中）；stageAt 碎屏层淡出揭幕真人全屏，左侧「辞职/转行/合伙做生意」胶囊逐个卡词弹出、右侧金章「先收藏这条」盖章；到 presenter.full 收进右上小窗",
+      "script": "../../../dbs-decision",
+      "hook": "反常识 + 真人全屏两侧动效",
+      "techniques": [
+        "居中大字",
+        "碎屏重组",
+        "两侧胶囊",
+        "收藏盖章"
+      ]
+    },
+    {
+      "id": "opening-aiconsole-info",
+      "date": "2026-10-09",
+      "status": "trial",
+      "usedBy": [
+        "../../../ai-console"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 全息指挥台大字先行→工作台录屏全屏→真人揭幕→盖章收窗",
+      "file": "src/openings/2026-10-09-aiconsole-info/Opening.tsx",
+      "desc": "0→「我做了」：第 0 帧 闪白+双冲击环+速度线+150px 大标题砸入，底是动态全息 AI 指挥台（透视数据走廊向镜头涌来、曲速粒子、指挥官核心向六颗 AI 节点派指令/成果飞回、HUD 四角与扫掠光带持续运动）；锚「我做了」工作台录屏 contain 全屏拉开入场（不加工、指挥台压暗让位）+胶囊弹出、「工作台$」标题飞出、四条要点按词时逐条弹底部；stageAt（锚「这里$+0.2」）录屏淡出、真人全屏入画、要点脉冲高亮、右侧金章盖章；presenter.full 收右上小窗、开场收尾交棒",
+      "script": "../../../ai-console",
+      "hook": "大字动画先行 2 秒 + 工作台锚「我做了」入画 + 真人揭幕",
+      "techniques": [
+        "大字先行撑留存",
+        "锚词入画",
+        "真录屏全屏",
+        "首帧大字",
+        "要点逐条",
+        "闪白揭幕",
+        "盖章"
+      ]
+    },
+    {
+      "id": "opening-aiconsole-explainer",
+      "date": "2026-10-09",
+      "status": "trial",
+      "usedBy": [
+        "neurocast-ai-ai"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 紫色指挥台大字先行→痛点实录→工作台实录→真人揭幕→盖章",
+      "file": "src/openings/2026-10-09-aiconsole-explainer/Opening.tsx",
+      "desc": "0→「以前同时」：第 0 帧 闪白+双冲击环+速度线+AI 生图 3D 大标题砸入（紫色全息指挥台底，持续推近+HUD 扫掠）；锚「以前同时」痛点实录（两三个工具·六个窗口来回搬）原样全屏，底部痛点词条逐条替换；锚「我做了」工作台实录全屏拉开+胶囊弹出、「工作台$」标题飞出、四条要点按配音词时逐条弹；stageAt（锚「回到这里$+0.3」）录屏淡出、真人全屏入画、要点脉冲高亮、右侧金章「各干长处」盖章；presenter.full 收右上小窗、开场收尾交棒",
+      "script": "neurocast-ai-ai",
+      "hook": "大字先行 + 痛点/工作台两段实录锚词入画 + 真人揭幕",
+      "techniques": [
+        "AI 生图底",
+        "大字先行",
+        "锚词入画",
+        "真录屏全屏",
+        "首帧大字",
+        "逐条痛点词条",
+        "要点逐条",
+        "闪白揭幕",
+        "盖章"
+      ]
+    },
+    {
+      "id": "opening-codex-vs-wb",
+      "date": "2026-10-10",
+      "status": "trial",
+      "usedBy": [
+        "neurocast-codex-workbuddy"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · Codex 与 WorkBuddy 双真图标 VS",
+      "file": "src/openings/2026-10-10-codex-vs-wb/Opening.tsx",
+      "desc": "第 0 帧两个真实官方图标左右砸位 + 居中「怎么选？」大字（闪白+impact）；「你还在」金色 VS 盖章；「纠结」图标对撞+承诺胶囊；「我现在让」整层爆闪交棒真人",
+      "script": "neurocast-codex-workbuddy",
+      "hook": "反问+品牌VS",
+      "techniques": [
+        "首帧大字居中",
+        "真图标对峙",
+        "VS 盖章",
+        "爆闪交棒"
+      ]
     }
   ]
 }

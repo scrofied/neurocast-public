@@ -23,6 +23,7 @@ const schema = z
     points: z.array(z.string()).min(2).max(5).default(["不写代码", "不装环境", "双击就能跑"]).describe("干货要点（2~5 条，每条建议 ≤ 8 字）"),
     at: z.number().default(0).describe("第 1 条出现的秒"),
     gap: z.number().default(0.42).describe("每条之间的间隔（秒）—— 卡在口播每说完一条的节奏上"),
+    ats: z.array(z.number()).optional().describe("逐条出现秒数（给了就覆盖 at+gap，卡不齐距的口播节奏用）"),
     personAt: z.number().optional().describe("真人入画时刻（秒，缺省 = 最后一条之后 0.35s）"),
     side: z.enum(["left", "right"]).default("left").describe("清单放在哪一侧（真人在另一侧）"),
   })
@@ -32,7 +33,7 @@ type D = z.infer<typeof schema>;
 const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
   const { t, dur, W, H, u, p, portrait } = useClock(duration);
   const n = d.points.length;
-  const ats = d.points.map((_, i) => d.at + i * d.gap);
+  const ats = d.points.map((_, i) => (d.ats && d.ats.length ? (d.ats[i] ?? d.at + i * d.gap) : d.at + i * d.gap));
   const P = d.personAt ?? ats[n - 1] + d.gap * 0.85;
   return (
     <ProRoot d={d}>
@@ -124,7 +125,7 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
               // 下一条砸下前 0.14s 就开始飞走 → 中间永远只有一条大字
               const hand = i < n - 1 ? ats[i + 1] - 0.14 : P - 0.2;
               const k = E.inOut(clamp((t - hand) / 0.2));
-              const slam = E.out5(clamp((t - a) / 0.16));
+              const slam = i === 0 ? 1 : E.out5(clamp((t - a) / 0.16)); // 首条第 0 帧就是满大字（红线：不从透明淡入）
               const bx = W / 2;
               const by = portrait ? H * 0.42 : H * 0.48;
               const sx = listX + 120 * u;

@@ -26,6 +26,7 @@ const schema = z
     crackAt: z.number().default(1.0).describe("裂开时刻（秒）—— 卡在转折词上，如“其实”"),
     punchAt: z.number().default(1.75).describe("第二句砸出时刻（秒）"),
     tilt: z.number().default(-8).describe("重组后分屏的倾斜角度"),
+    center: z.boolean().default(false).describe("两句大字垂直居中（默认在画面下方）"),
   })
   .prefault({});
 type D = z.infer<typeof schema>;
@@ -94,6 +95,8 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
           { x0: 0.66, x1: 1.0 },
         ];
         const tilt = d.tilt;
+        const l1y = d.center ? H * 0.4 : H * 0.7;
+        const l2y = d.center ? H * 0.36 : H * 0.64;
         return (
           <>
             {/* 1. 碎之前：整幅画面 */}
@@ -190,7 +193,7 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
 
             {/* 第一句：底部砸字（第 0 帧可见），裂开时跟着碎掉 */}
             {!shattered && (
-              <div style={{ position: "absolute", left: 0, right: 0, top: H * 0.7, display: "flex", justifyContent: "center", transform: `translate(${sh.x}px, ${sh.y}px)` }}>
+              <div style={{ position: "absolute", left: 0, right: 0, top: l1y, display: "flex", justifyContent: "center", transform: `translate(${sh.x}px, ${sh.y}px)` }}>
                 <div style={{ position: "relative", padding: `${10 * u}px ${36 * u}px`, transform: `scale(${mix(1.25, 1, E.out5(p(0, 0.18)))}) rotate(${frozen ? noise(t * 50, 3) * 2 : 0}deg)` }}>
                   <div style={{ position: "absolute", inset: 0, background: rgba("#000", 0.72), transform: "skewX(-10deg)" }} />
                   <Big text={d.line1} size={s1} color={L.ink} style={{ position: "relative" }} />
@@ -202,7 +205,7 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
 
             {/* 第二句：砸在中间光缝上 */}
             {t >= B && (
-              <div style={{ position: "absolute", left: 0, right: 0, top: H * 0.64, display: "flex", justifyContent: "center", opacity: 1 - exit, transform: `rotate(${tilt * 0.4}deg)` }}>
+              <div style={{ position: "absolute", left: 0, right: 0, top: l2y, display: "flex", justifyContent: "center", opacity: 1 - exit, transform: `rotate(${tilt * 0.4}deg)` }}>
                 <div style={{ position: "relative", padding: `${14 * u}px ${54 * u}px`, transform: `scale(${mix(2.2, 1, E.out5(p(B, 0.2)))})`, filter: `blur(${(1 - E.out(p(B, 0.15))) * 14}px)` }}>
                   <div style={{ position: "absolute", inset: 0, background: L.bg, transform: "skewX(-12deg)", boxShadow: `0 0 0 ${4 * u}px ${L.accent}, 0 0 ${60 * u}px ${rgba(L.accent, 0.6)}` }} />
                   <div style={{ position: "absolute", left: -18 * u, top: -18 * u, bottom: -18 * u, width: 14 * u, background: L.accent, transform: "skewX(-12deg)", boxShadow: `0 0 30px ${L.accent}` }} />
@@ -219,8 +222,8 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
             <Flash t={t} at={0} len={0.18} peak={0.3} />
             <Flash t={t} at={A} len={0.12} peak={0.6} />
             <Flash t={t} at={B} len={0.28} peak={0.85} color={L.accent} />
-            <SpeedLines t={t} at={B} x={W / 2} y={H * 0.64 + s2 * 0.5} color={rgba(L.ink, 0.85)} W={W} inner={s2 * 2.2} />
-            <Ring t={t} at={B} x={W / 2} y={H * 0.64 + s2 * 0.5} color={L.accent} r={W * 0.5} w={10 * u} />
+            <SpeedLines t={t} at={B} x={W / 2} y={l2y + s2 * 0.5} color={rgba(L.ink, 0.85)} W={W} inner={s2 * 2.2} />
+            <Ring t={t} at={B} x={W / 2} y={l2y + s2 * 0.5} color={L.accent} r={W * 0.5} w={10 * u} />
             <Sparks t={t} at={A + 0.1} x={ox} y={oy} color="#ffffff" n={70} speed={1800 * u} len={0.9} gravity={1600 * u} size={u} seed={5} />
             <Sparks t={t} at={B} x={W / 2} y={H / 2} color={L.accent} n={40} speed={1200 * u} len={0.8} size={u} seed={8} />
 

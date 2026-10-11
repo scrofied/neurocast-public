@@ -79,7 +79,8 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
     return { x, y, click };
   })();
 
-  const buttonsY = winY + winH - (full ? 70 : 34);
+  // 按钮行在窗口容器内部（overflow hidden）：top 必须用窗口内坐标，不能带 winY（页面坐标会被裁掉）
+  const buttonsY = winH - (full ? 70 : 34);
 
   return (
     <>

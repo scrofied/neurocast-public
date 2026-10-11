@@ -109,16 +109,18 @@ export const ShotFrame: React.FC<{
   through?: Through;
   /** 本镜出场被钻的洞（= 下一镜的 through） */
   nextThrough?: Through;
-}> = ({ frame, dur, transition, seed, children, nextTransition, variant, nextVariant, through, nextThrough }) => {
+  /** 原样素材（真录屏全屏展出）专用：停掉环境慢推镜 / 漂移 / 微旋，画面逐帧静止 */
+  steady?: boolean;
+}> = ({ frame, dur, transition, seed, children, nextTransition, variant, nextVariant, through, nextThrough, steady }) => {
   const t = useTheme();
   const { width: W, height: H } = useVideoConfig();
   const pin = transition === "cut" ? 1 : easeOutQuint(prog(frame, 0, ENTER));
   const pout = easeIn(prog(frame, dur - EXIT, EXIT));
   const life = clamp(frame / Math.max(1, dur));
-  const cam = 1 + life * 0.045;
-  const dx = noise1(frame / 80, seed) * 10;
-  const dy = noise1(frame / 95, seed + 7) * 6;
-  const rz = noise1(frame / 120, seed + 3) * 0.4;
+  const cam = steady ? 1 : 1 + life * 0.045;
+  const dx = steady ? 0 : noise1(frame / 80, seed) * 10;
+  const dy = steady ? 0 : noise1(frame / 95, seed + 7) * 6;
+  const rz = steady ? 0 : noise1(frame / 120, seed + 3) * 0.4;
 
   const kIn = prog(frame, 0, EXIT);
   const kOut = prog(frame, dur - EXIT, EXIT);
