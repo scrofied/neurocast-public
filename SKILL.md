@@ -374,7 +374,8 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
   - **21 个按钩子类型的透明层模板**（`op-t01`~`op-t21`，`src/openings/templates/`）：按文案第一句的钩子类型（反问/数字/反常识/痛点/悬念/点名/对比/警告/揭秘/倒计时/收益/结果先行/VS/清单/私信/稀缺/快讯/放大镜/打赌/故障打断/三拍）挑一个，只改字段；叠在真人画面上层。选型表在 `openings/TEMPLATES.md`，预览在 `openings/previews/op-t*.mp4`。
   - **5 个打断/节奏 trick**（`trick-01`~`05`，同目录 `trick-01-05.tsx`）。
   - 模板之间不要连着用同一种；同一模板换一条片必须换文案 + 换卡点 + 换调色（见「开场」一节）。
-- 目前 100 个正片组件（结构 10 / 信息图 28 / 概念隐喻 31 / 叙事场景 9 / 产品 11 / 截图录屏 11），另有 41 个开场（`src/openings/`，不计入）。**以 `node scripts/catalog.mjs` 生成的 CATALOG.md 为准**（这里的手写分类只是给个量感）。最新加入的两批：
+- 目前 115 个正片组件（结构 11 / 信息图 30 / 概念隐喻 40 / 叙事场景 10 / 叠加 1 / 产品 12 / 截图录屏 11），另有 47 个开场（`src/openings/`，不计入）。**以 `node scripts/catalog.mjs` 生成的 CATALOG.md 为准**（这里的手写分类只是给个量感）。最新加入的两批：
+  - **opus-5-5-motion-gallery 片库移植（2026-10，8 个）**：gear-train（齿比咬合，转速是算出来的）、attn-weights（注意力弧线六段式）、wave-cancel（反相抵消 + 抵消锋面）、kanban-sort（一堆杂乱条目自动归位）、beat-wall（卡点词墙 + iris 炸底）、text-structure（文字搭地板）、formula-drive（公式驱动全画面读数）、form-morph（一个形体一路变形）。逐个机制的出处与改动理由在 `docs/OPUS55_ANIMATIONS.md` 一·c；**挑它们先看下面的「语境 → 组件」表**，字段里要填的数必须是真数。
   - **真标识**：logo-wall（品牌墙，牌子上过 `public/brands/` 的真 svg，查不到退成通用图标）、brand-quote-card（引用官方原话 + 真地址 + 采集时间，逐字打出来）。
   - **真凭据**：citation-strip（出处清单：真 url + 真日期 + 可选截图缩略，写不出地址的条目直接不收）、evidence-zoom（在真截图上圈一个点放大，坐标来自 OCR 或人量的，不猜）。
   - **真界面**：real-doc-scroll（长文档/表格逐页滚动 + 当前行高亮 + 进度轨）、screen-versus（两三张真结果并排，各自标来源与采集时间）。
@@ -392,6 +393,22 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
   - flywheel（循环/正反馈/恶性循环）、domino-chain（连锁反应）。sword-forge 支持 `icon` 字段，可以把剑换成任意产品图标。
   - **共享工具**：`src/lib/bits.tsx`（StampBox 结论章 / Mark ✓✗? 标记 / hitShake 衰减抖动 / Pill 胶囊标签）。
 - 预览：`npm run studio` → Gallery 文件夹；或 `node scripts/preview.mjs <id>` 出 4 个时刻的静帧拼图（`out/preview/`）；自定义数据用 `node scripts/qa/try.mjs <id> <data.json> [秒] [时刻]`。
+
+### 语境 → 组件（口播里出现左列这种话，先想右列那个）
+
+| 口播在说什么 | 用 | 必须填真东西的字段（编不得） |
+|---|---|---|
+| 「A、B、C 一环扣一环」「每一级都在放大 / 拖慢」「差一齿整条都错」 | `gear-train` | `gears[].teeth` —— 转速是齿数比**算**出来的，齿数就是你真想对比的那个数；`beat` 只在「一卡一卡不连贯」（审批、结账、发薪日）时给 |
+| 「模型在看哪个词」「上下文里它更重视 X」「为什么会看漏 / 幻觉」 | `attn-weights` | `weights` 是要观众信的数字：有实测读数或论文截图就填 `source`（水印自动摘掉），没有就让它挂着「示意权重 · 非真实读数」 |
+| 「两边一抵消就安静了」「反着说一遍」「对冲 / 消音 / 降噪」 | `wave-cancel` | `noise / anti / sum` 三个标签写清是谁在响、谁反着说、谁在听；`leak` 别说成 0（真没有残余就别画全平），讲到漏就用 `limit` |
+| 「先全堆一起，再自动归位」「分类 / 分拣 / 一条都没漏」 | `kanban-sort` | `items[].to` 必须对得上 `columns` 的列名；条目就是文案里点名的那几件，别凑数 |
+| 「一串词按节拍砸出来」「数量滚到 N」「最后一拍揭底」 | `beat-wall` | `words[].at` / `punchAt` 是**分镜锚点（帧）**，跟台词对齐；`bpm` 是这条片的实际节奏，别默认 120 交差 |
+| 「XX 是地板 / 地基 / 门槛」「先撑住它才谈得上别的」 | `text-structure` | 全是文案词（`hang / floor / pillars / beam / verdict`），没有数字，最适合按台词逐句填 |
+| 「一个旋钮带着所有数一起变」「这个量随那个量怎么变」「临界点在哪儿」 | `formula-drive` | `readouts[].expr` 是**真公式**（`checkFormula` 会验），`driver.keys` 是关键帧真值；画面上的数字全是现算的，所以只要公式对就不会自相矛盾 |
+| 「同一个东西一路变成 A、B、C」「形态切换不切镜」 | `form-morph` | 这是代码画的**假界面**：只用来讲形态/交互逻辑。真操作、真产品必须换 `screen-morph` + 真录屏 |
+
+这 8 个**故意没写进 `scripts/lib/detect.mjs` 的自动检测器**：它们的画面全靠真数字，从文案里正则猜出来的数就是编的。自动模式（`--beats`）不碰它们，由写分镜那一步按上表挑、并填实数。
+
 
 ## 扩展组件资产（组件不是固定的，缺什么就补什么）
 
@@ -418,6 +435,7 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
 **不知道加什么的时候，去别人的动画里挖**：`docs/OPUS55_ANIMATIONS.md` 是移植台账，**两个来源分开记**：
 - **一、** `awesome-opus5-5-videos`（MIT）——那仓库**只有 prompt 没有代码**，所以这一路的「移植」是把别人描述的机制参数化成我们的组件。已移植 9 条（flood 转场、screen-morph、cursor-trace、infinite-zoom、scale-dive、fill-build、inplace-evolve、reward-beat、typo-arch）都标了 slug 和 @author，待移植的按 P1/P2/P3 排好了，还有一份「一条镜头只讲一件事、最后一个画面 = 下一个画面的起点、能不切就不切」这类通用原则。
 - **一·b、** `tuzhechen2005/opus-video-skills`（MIT © tuzhechen2005，部分文件双版权 © John Heibel）——**这一路是 Opus 写好的真代码**，已移植：全片后期层（`src/engine/PostPass.tsx`）+ 形状连续转场 zoom/push/wipe/grid（`src/engine/ShotFrame.tsx`）。每帧是时间的纯函数、无头 Chrome 逐帧渲染，和我们是同一套约束，所以机制能直接对译。
+- **一·c、** `opus-5-5-motion-gallery`（GitHub jinhanbuilds，整理：小红书 AI伐木工；22 条案例每条带演示 HTML + 提示词 + 原作者溯源）——**这一路搬的是机制与画法，画面全是我们重画的**，已移植 8 个：gear-train / attn-weights / wave-cancel / kanban-sort / beat-wall / text-structure / formula-drive / form-morph，表里逐条写了「上游怎么做 → 我们改成什么 → 为什么改」，组件文件头也留了原作者和原帖链接；剩下 14 条不搬的理由也写在同一节。
 
 要新增组件先去看这张表，别从空白开始想；移植完回来把表更新（勾掉 + 写组件 id/落地位置 + 出处）。**外部仓库只读不入库**：临时目录里 clone 来看，别把它拷进 skill 或 git。
 
@@ -523,9 +541,9 @@ scripts/openings.mjs        开场库命令
 scripts/opening-templates.mjs  把所有开场模板（PRO + 透明层）在真人片段上出四时刻拼图 / 单个出预览 mp4
 scripts/qa/transitions.mjs  转场 + 后期层的像素验证（出 out/qa/transitions.jpg 拼图 + 开/关后期均差）
 src/engine/                 Video（音轨/镜头/字幕）、ShotFrame（转场）、PostPass（全片后期层）、Hud（字幕/章节）
-src/lib/                    theme / box / cue / sfx / icons / ui / anim
+src/lib/                    theme / box / cue / sfx / icons / ui / anim / enter（入场变体）/ asset / source / brands / rise（Rise·RiseWords 逐行逐字升起）/ spring（周期化弹簧 Track、snapBeat 拍点吸附、harm 无缝谐波、dashFlow、samples 子帧采样）/ formula（compile(expr).at(vars) 真解析公式，checkFormula 在写分镜阶段就能报错）
 CATALOG.md                  组件目录（自动生成）
-docs/OPUS55_ANIMATIONS.md   外部动画移植台账：一、prompt 语料的机制移植；一·b、opus-video-skills 真代码移植（含 MIT + John Heibel 双版权署名）
+docs/OPUS55_ANIMATIONS.md   外部动画移植台账：一、prompt 语料的机制移植；一·b、opus-video-skills 真代码移植（含 MIT + John Heibel 双版权署名）；一·c、opus-5-5-motion-gallery 片库 8 个组件（逐条机制对照 + 原作者署名）
 docs/STOCK_SITES.md         免费素材站调研（每个站实测过什么、license/署名口径、为什么这么接）
 examples/comment-mining/    完整示例：文案.md、storyboard.json、input.json、口播和配音
 <工作区>/neurocast-<片名>/   不在这个目录里：每条视频自己的文案/素材/成片都在这里（见「一条视频 = 一个独立项目目录」）

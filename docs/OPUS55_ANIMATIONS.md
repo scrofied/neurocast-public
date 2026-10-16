@@ -1,7 +1,8 @@
-# Opus 5.5 动画移植台账（prompt 语料 + 真代码仓库两个来源）
+# Opus 5.5 动画移植台账（prompt 语料 + 真代码仓库 + 带演示的动效片库，三个来源）
 
-> 两个来源分开记：**一、** 来自只有 prompt 的 `awesome-opus5-5-videos`（机制由我们写成组件）；
-> **一·b、** 来自 `tuzhechen2005/opus-video-skills` 的**现成代码**（后期层 + 形状连续转场，直接对译过来）。
+> 三个来源分开记：**一、** 来自只有 prompt 的 `awesome-opus5-5-videos`（机制由我们写成组件）；
+> **一·b、** 来自 `tuzhechen2005/opus-video-skills` 的**现成代码**（后期层 + 形状连续转场，直接对译过来）；
+> **一·c、** 来自 `opus-5-5-motion-gallery` 的**可运行演示 + 溯源**（2026-10 批次，8 个组件，逐条署名原作者）。
 
 来源仓库：<https://github.com/yihui-dev/awesome-opus5-5-videos>（MIT © 2026 yihui-dev，475 条 prompt）
 本地克隆：`D:\temp\aop`（一次性，重拉：`git -c http.proxy=http://127.0.0.1:7890 -c https.proxy=http://127.0.0.1:7890 clone https://github.com/yihui-dev/awesome-opus5-5-videos D:/temp/aop`）
@@ -54,6 +55,40 @@ MIT © 2026 tuzhechen2005；其中 `skills/painted-animation/template/` 与 `ski
 `zoom +10 = 3.95`、`push +10 = 3.99`、`wipe +10 = 8.58`、`grid +10 = 5.98`（换镜帧确有撕裂/分离），
 `grid 稳定帧 = 0`、`首帧 = 0`（稳定期和开场第 0 帧滤镜根本没挂载，画面干净——开场红线）。拼图里能直接看到
 zoom 把上一镜放大穿出、wipe 的强调色前缘边、grid 的琥珀色方块逐格顶替上一镜。
+
+---
+
+## 一·c、已移植 —— 2026-10 批次（片库 `opus-5-5-motion-gallery`，8 个组件）
+
+来源：本地 `D:/agent/ai培训/github素材/opus-5-5-motion-gallery`（GitHub `jinhanbuilds/opus-5-5-motion-gallery`，
+22 条案例整理：小红书 **AI伐木工**）。每条都有可运行演示 HTML + 提示词 + 溯源字段（作者/平台/日期/url）。
+**只读不入库**：机制搬进组件，那个仓库没有拷进 skill、也没进 git。用户当时明确「忽略版权问题，直接搬，可以做适配改造」，
+所以逐条写清上游怎么做的、我们改成什么样、为什么改（下表），组件文件头留了同样的出处注释。
+
+| 我们的组件 | 上游条目 / 原作者 | 上游机制 | 我们的落地 | 为什么改 |
+|---|---|---|---|---|
+| `gear-train` | w05-escapement / Promptslove（博客《Opus 5.5 评测 Test 1》，2026-09） | three.js 3D 机芯 + 400vh 滚动拆解：齿轮真咬合、擒纵走一下停一下 | 俯视 SVG：`gearPath()` 每齿 5 点画真齿形；`k[i] = −(N[i+1]/N[i])·k[i+1]` 递推每级转速（输出端为 1）；`off = 中心连线角 + π − 半齿距` 做相位对齐；`beat` 时 `steps = floor(q) − 1 + easeOut(clamp(frac/0.22))` ⇒ 每拍只在前 22% 时间里走、其余锁死，末级下方挂摆轮 + 螺旋游丝 | 3D 和滚动交互在「每帧是时间的纯函数」里没有信息量，**齿比与咬合才是** ⇒ 降级成 2D 俯视；间歇运动写成闭式分段函数而不是状态机，这样任意一帧能独立求值（Remotion 会跳帧） |
+| `attn-weights` | v05-transformer / @宝玉（dotey），X 经 YouMind 收录（2026-09-26） | 六段式科普：分词 → 嵌入 → Q/K/V → 注意力弧线 → 公式 → 预测下一个词；弧线粗细∝权重 | 同样六段，`seg(a,b)` 按 `dur` 比例自动推进（分镜不用填时刻）；弧线 = 定长路径 + `strokeDashoffset` 生长 + 行进光点，粗细与亮度 ∝ 权重，百分比标在弧顶；softmax 横条与预测概率条互斥（后者出现前者淡出） | 上游是 3 分钟整片，我们一镜只有 6~16s ⇒ 六段压进一条时间轴。**加了一条红线**：没有 `source` 就自动打「示意权重 · 非真实读数」水印，给了真出处才摘掉并挂来源角标 |
+| `wave-cancel` | v18-noise-cancelling / iArt.ai 博客（2026-09-24，原片 9:16、22s） | 三行波形：噪声 / 反相声波 / 叠加结果，代码逐帧绘制 + 合成音效 | 三行 polyline 逐帧采样；第二行 ×`cos(π·flip)` 连续转到反相（不是硬切）；第三行按「抵消锋面」`u ≤ front` 归零；`leak` 保留被动挡掉的那部分 | 上游整片一路抵消到底 ⇒ 我们让锋面从左往右扫，观众看得见「哪一刻开始安静」；保留 `1 − calm` 的残余，免得画成假的全静音（`limit` 字段专门用来讲局限） |
+| `kanban-sort` | v02-app-launch / Scale My Vibe Code（博客，2026-09） | 杂乱条目先堆成一摞，再逐张飞入三列看板归位 | 卡片堆用 `listCues` 按分镜锚点错开；`sortAt` 起逐张飞入列，飞行间隔由剩余窗口反推：`FLY = clamp(dur*0.09,16,26)`、`fly = clamp((dur-34-FLY-sortAt)/(n-1),7,26)` | 上游是 15s 整片里的一段，时长固定；我们的镜头长度由配音决定 ⇒ 排期必须自适应，否则最后一张永远落不到位（第一版就是这个 bug） |
+| `beat-wall` | v03-high-end-product / @zero（twoclipping），X 经 YouMind 收录（2026-09-23） | 卡点词墙：词按拍子弹出，最后一拍圆形 iris 炸开揭示大字 | `snapBeat(t,bpm)` 把每个词和转场吸附到拍点；iris = `clipPath` 圆放大 + `alpha(t.bg,0.92)` 先把后景压暗再炸；`count` 计数随拍滚动 | 上游有真音乐文件；我们没有音轨分析 ⇒ `bpm` 手填，`punchAt` 走分镜锚点（**帧**），换算 `snapBeat(x/fps)` 只做一次（曾两边都除 fps，炸早了约 2s） |
+| `text-structure` | v08-kinetic-type《BUILD THE FLOOR》/ @TechHalla（2026-09-25） | 纯文字动效：词先悬着摆动 → 落下摊成地板 → 柱子长出 → 横梁落下 → 人站在梁上说完最后一句 | 四段结构自下而上算预算：`TOP=250`（full）→ 地板字号 `fSize = min(W/textEm(floor), AVAIL*0.3)` → 柱高 `CH`、梁厚 `DH`、结论字号 `VW` 全由 `AVAIL` 反推 | 上游整屏没有 HUD；我们必须让开顶部 90px HUD 与底部逐字字幕带 ⇒ 改成 bottom-up 尺寸预算，文案再长也只会缩字号，不会越界（第一版结论句和柱子叠在一起） |
+| `formula-drive` | v14-lab-explainer / misbahsy（GitHub `claude-horizon-animation`，2026-09） | 光学实验室解说：一个旋钮（入射角）带着全画面数值、光路和曲线走 | 新增 `src/lib/formula.ts`：`compile(expr).at(vars)` 真解析表达式 ⇒ 读数、曲线、临界案例全部现算，不是关键帧；`cases` 分段大字幕跟着关键帧走 | 上游把一组角度写死在代码里；我们让**公式**成为唯一真值来源 ⇒ 换公式就换一个镜头，`checkFormula` 还能在写分镜阶段就把错公式报出来 |
+| `form-morph` | v07-ui-morph / @zero（twoclipping）（2026-09-24） | 单一形体 UI 变形：一个圆角矩形一路变成播放器、聊天、地图……全程不切镜 | 每个形态在**自己的**缩放空间里画（`zi = 300/uw`，`Inner` 拿 `unit = PX*zi` 换算），形态间只插值外框；`lf(base,avail,txt)` 按容器宽夹字号；批注只画 argmax 那一个窗口 | 上游整片一个形态序列，我们要能塞进 6~14s 的镜头 ⇒ 形态数 3~8 自适应。第一版直接套外层缩放，小环形态里的字被放大到 ~300px 糊成一团。**诚实口径**：desc 写明这是代码画的假界面，真操作必须用 `screen-morph` + 真录屏 |
+
+**没搬的 14 条，以及为什么**：v01 showreel / v04 business-explainer / v16 bedtime-opener = 整片结构，不是单镜机制，我们已有分镜层；
+v06 sky-blue、w01 aurora-glass、w03 art-deco = 美术风格不是动画；v09 room-to-quarks ≈ 已有 `infinite-zoom`；
+v10 map-route = 要真地图数据；v12 rain-station、w07 sakura-valley = 要角色/体素资产；v19 water-cycle = 无缝循环，
+工具已经在 `src/lib/spring.ts`（`wrapWin` / `lifeU` / `samples`）；w02 longform = 网页排版不是视频镜头；
+w04 pulse、w06 neon-fluid = 生成式音频 / 流体模拟，逐帧成本与收益不匹配。
+
+**接线**：`node scripts/catalog.mjs` 已把 8 条的 `desc / use / tags` 生成进 CATALOG.md（现 162 个条目、115 个正片）；
+SKILL.md「语境 → 组件」表列了触发词与「哪个字段必须填真东西」。
+**故意没给这 8 个加 `scripts/lib/detect.mjs` 自动检测器**：它们的画面全靠真数字（齿数、权重、拍点、公式），
+从文案里正则猜出来的数就是编的 ⇒ 自动模式不碰它们，由写分镜那一步按语境挑、并填实数。
+
+验证：`node scripts/preview.mjs <8 个 id> 0 <时刻>` 出静帧逐张核过（安全区 y≥905、重叠、溢出、单位换算）；
+`node scripts/motion-audit.mjs` 显示 8 条全部接入 `useEnter`，待迁移只剩 `agent-relay` / `relay-parallel` 两个历史遗留。
 
 ---
 

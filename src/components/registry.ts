@@ -56,6 +56,7 @@ import { RevealCards } from "./metaphor/RevealCards";
 import { LeverLift } from "./metaphor/LeverLift";
 import { RaceLanes } from "./metaphor/RaceLanes";
 import { SafetyBrake } from "./metaphor/SafetyBrake";
+import { ShutterClose } from "./metaphor/ShutterClose";
 import { StepRail } from "./info/StepRail";
 import { TierGrid } from "./info/TierGrid";
 import { SpecMatrix } from "./info/SpecMatrix";
@@ -81,6 +82,8 @@ import { ScaleDive } from "./metaphor/ScaleDive";
 import { Painkiller } from "./metaphor/Painkiller";
 import { TimeCeiling } from "./metaphor/TimeCeiling";
 import { CarryOrDig } from "./metaphor/CarryOrDig";
+import { PyramidBase } from "./metaphor/PyramidBase";
+import { GateWeld } from "./metaphor/GateWeld";
 import { ForkPaths } from "./metaphor/ForkPaths";
 import { AgentRelay } from "./metaphor/AgentRelay";
 import { RelayParallel } from "./metaphor/RelayParallel";
@@ -94,6 +97,15 @@ import { FileLaunch } from "./product/FileLaunch";
 import { FolderSave } from "./product/FolderSave";
 import { BugFixLoop } from "./product/BugFixLoop";
 import { DragDeploy } from "./product/DragDeploy";
+// ── 移植自 opus-5-5-motion-gallery（2026-10 批次，机制逐条见 docs/OPUS55_ANIMATIONS.md）
+import { KanbanSort } from "./metaphor/KanbanSort";
+import { FormMorph } from "./product/FormMorph";
+import { TextStructure } from "./metaphor/TextStructure";
+import { FormulaDrive } from "./info/FormulaDrive";
+import { BeatWall } from "./structure/BeatWall";
+import { WaveCancel } from "./metaphor/WaveCancel";
+import { GearTrain } from "./metaphor/GearTrain";
+import { AttnWeights } from "./info/AttnWeights";
 import { Quote } from "./structure/Quote";
 import { PunchText } from "./structure/PunchText";
 import { ChapterCard } from "./structure/ChapterCard";
@@ -120,6 +132,7 @@ export const REGISTRY: CompDef[] = [
   HeadPip,
   TypoArch,
   InfiniteZoom,
+  BeatWall,
   // info
   ParticleNumber,
   CodeEditor,
@@ -149,6 +162,8 @@ export const REGISTRY: CompDef[] = [
   FillBuild,
   InplaceEvolve,
   RewardBeat,
+  FormulaDrive,
+  AttnWeights,
   // metaphor
   NeuralNet,
   AgentSwarm,
@@ -168,12 +183,15 @@ export const REGISTRY: CompDef[] = [
   LeverLift,
   RaceLanes,
   SafetyBrake,
+  ShutterClose,
   TeardownLens,
   WalledGarden,
   ScaleDive,
   Painkiller,
   TimeCeiling,
   CarryOrDig,
+  PyramidBase,
+  GateWeld,
   ForkPaths,
   AgentRelay,
   RelayParallel,
@@ -183,6 +201,10 @@ export const REGISTRY: CompDef[] = [
   MirrorReveal,
   SurfaceCore,
   OneFishFourPlates,
+  KanbanSort,
+  TextStructure,
+  WaveCancel,
+  GearTrain,
   // story
   PhoneFeed,
   SwordForge,
@@ -207,6 +229,7 @@ export const REGISTRY: CompDef[] = [
   BugFixLoop,
   DragDeploy,
   UnreadFlood,
+  FormMorph,
   // screen
   ScreenDemo,
   BoardProof,
