@@ -13,6 +13,8 @@ import { cam, idxOf, ink, rnd, spread, Stage, tpl } from "./kit";
 const s17 = z.object({
   tag: z.string().default("重磅").describe("红条上的大字"),
   headline: z.string().default("AI 行业刚刚变天了").describe("主标题"),
+  lead: z.string().default("").describe("首帧居中砸出的大字（空=不砸，维持原新闻条样式）"),
+  center: z.boolean().default(false).describe("主标题文字在白条里居中"),
   ticker: z.string().default("最新消息 · 全网首发 · 一条视频讲清楚 · ").describe("底部滚动条"),
   live: z.string().default("LIVE"),
   headAt: z.number().default(3).describe("主标题擦出（锚点）"),
@@ -41,9 +43,16 @@ export const T17News = tpl<z.infer<typeof s17>>({
         <div style={{ position: "absolute", left: 0, top: Y, height: 140, width: 360 * tagP, background: "#e8122d", borderTop: "6px solid #000", borderBottom: "6px solid #000", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
           <span style={ink(96, "#fff", t.font.title, 8)}>{d.tag}</span>
         </div>
-        <div style={{ position: "absolute", left: 360, top: Y, height: 140, width: 1460 * headP, background: "#fff", borderTop: "6px solid #000", borderBottom: "6px solid #000", display: "flex", alignItems: "center", padding: "0 40px", overflow: "hidden" }}>
-          <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: 88, color: "#111", whiteSpace: "nowrap" }}>{d.headline}</span>
+        <div style={{ position: "absolute", left: 360, top: Y, height: 140, width: 1460 * headP, background: "#fff", borderTop: "6px solid #000", borderBottom: "6px solid #000", overflow: "hidden" }}>
+          <div style={{ width: 1460, height: "100%", display: "flex", alignItems: "center", justifyContent: d.center ? "center" : "flex-start", padding: "0 40px", boxSizing: "border-box" }}>
+            <span style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: 88, color: "#111", whiteSpace: "nowrap" }}>{d.headline}</span>
+          </div>
         </div>
+        {d.lead && (
+          <div style={{ position: "absolute", left: 0, right: 0, top: 280, display: "flex", justifyContent: "center", opacity: 1 - easeIn(prog(frame, d.headAt - 8, 12)) }}>
+            <Slam frame={frame} at={0} text={d.lead} size={210} color="#fff" font={t.font.title} from={1.5} len={6} blur={4} minOpacity={0.95} strokeW={18} />
+          </div>
+        )}
         <div style={{ position: "absolute", left: 0, right: 0, top: Y + 150, height: 70, background: "#111", borderBottom: "4px solid #e8122d", overflow: "hidden", opacity: easeOut(prog(frame, 6, 8)) }}>
           <div style={{ position: "absolute", top: 12, left: -tick, whiteSpace: "nowrap", fontFamily: t.font.body, fontWeight: 800, fontSize: 38, color: "#fff" }}>{d.ticker.repeat(6)}</div>
         </div>

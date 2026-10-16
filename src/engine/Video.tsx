@@ -215,7 +215,9 @@ export const Video: React.FC<{ timeline: Timeline }> = ({ timeline }) => {
   // 开场驱动真人层时（全屏 + camera 右移让字），正片镜头整层不渲染：
   // 否则 camera.x 露出的那条边缘会把底下镜头的大字残影透出来（开场期间正片本来就压在全屏真人下面）
   // 例外：presenter.full<=0 = 真人从第 0 帧就在角落小窗，没有全屏遮挡，正片镜头必须照常渲染（开场大字叠在上面）
-  const openingDriving = !!opening && !!meta.presenter && meta.presenter.full > 0 && f >= opening.from && f < opening.to;
+  // 例外 2：开场还没完但真人已收进小窗（f >= presenter.full）——全屏遮挡没了，正片素材必须立刻露出来，
+  //        否则收窗到开场结束之间会是一段只有星空的空窗（素材型视频最忌这个空窗）。
+  const openingDriving = !!opening && !!meta.presenter && meta.presenter.full > 0 && f >= opening.from && f < Math.min(opening.to, meta.presenter.full);
   // 后期量只在换镜的 12 帧重叠窗上有峰值，稳定帧返回全 0 → 滤镜根本不挂载
   const fx = fxAt(shots, f, post, !!opening);
   const hideAt = (f: number) => {

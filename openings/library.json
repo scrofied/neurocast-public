@@ -1232,6 +1232,56 @@
         "VS 盖章",
         "爆闪交棒"
       ]
+    },
+    {
+      "id": "opening-ai-computer-use",
+      "date": "2026-10-11",
+      "status": "trial",
+      "usedBy": [
+        "neurocast-ai"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 《AI控制电脑》（骨架，待定制）",
+      "file": "src/openings/2026-10-11-ai-computer-use/Opening.tsx",
+      "desc": "第 0 帧 kicker 逐字弹出 + 钩子大字砸下（${d.hot} 烧金色）；${d.promiseAt} 帧第二行承诺缩放入场",
+      "script": "neurocast-ai",
+      "hook": "首帧大字+第二行承诺",
+      "techniques": [
+        "首帧大字",
+        "逐字 kicker",
+        "金色重音",
+        "承诺第二行"
+      ]
+    },
+    {
+      "id": "opening-junior-jobs-vanish",
+      "date": "2026-10-14",
+      "status": "trial",
+      "usedBy": [
+        "neurocast-junior-jobs-vanish"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null
+      },
+      "notes": "",
+      "name": "开场 · 《初级岗位正在消失》（骨架，待定制）",
+      "file": "src/openings/2026-10-14-junior-jobs-vanish/Opening.tsx",
+      "desc": "第 0 帧 kicker 逐字弹出 + 钩子大字砸下（${d.hot} 烧金色）；${d.promiseAt} 帧第二行承诺缩放入场",
+      "script": "neurocast-junior-jobs-vanish",
+      "hook": "首帧大字+第二行承诺",
+      "techniques": [
+        "首帧大字",
+        "逐字 kicker",
+        "金色重音",
+        "承诺第二行"
+      ]
     }
   ]
 }

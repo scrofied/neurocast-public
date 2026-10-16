@@ -302,6 +302,74 @@
     "D:/qord/work/stock-probe/rec2.mp4",
     "D:/qord/work/stock-probe/rec3.mp4"
    ]
+  },
+  {
+   "id": "AI到底是怎么控制你的电脑干活的",
+   "date": "2026-10-11",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai-computer-use_20261011-233640/timeline.json",
+   "assetSec": 74.8,
+   "totalSec": 159,
+   "ratio": 0.471,
+   "refs": [
+    "D:/qord/neurocast-ai-computer-use/assets/open/claude_icon.png",
+    "D:/qord/neurocast-ai-computer-use/assets/open/cursor_icon.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_tool-panel.jpg",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_trajectory-viewer.jpg",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_hello-world-example.jpg",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_computer-use.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_openchatcut.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_deep-research.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_cangjie.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_01-editor-overview.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_03-agent-transitions.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_04-motion-graphics.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_07-lut.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_hero.mp4",
+    "D:/qord/neurocast-ai-computer-use/assets/talk.mp4",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_cover.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_6agents.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_board.png"
+   ]
+  },
+  {
+   "id": "有人用AI重现了Photoshop，还100%免费开源",
+   "date": "2026-10-12",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/oss-ps_20261012-094059/timeline.json",
+   "assetSec": 77,
+   "totalSec": 101.9,
+   "ratio": 0.755,
+   "refs": [
+    "D:/qord/oss-ps/assets/gh-repo_clean.png",
+    "D:/qord/oss-ps/assets/site_example1.png",
+    "D:/qord/oss-ps/assets/site_example2.png",
+    "D:/qord/oss-ps/assets/site_hero.png",
+    "D:/qord/oss-ps/assets/gh-readme-features.png",
+    "D:/qord/oss-ps/assets/hue-saturation.png",
+    "D:/qord/oss-ps/assets/gh-readme-intro.png",
+    "D:/qord/oss-ps/assets/gh-compdoc_clean.png",
+    "D:/qord/oss-ps/assets/gh-agents_clean.png",
+    "D:/qord/oss-ps/assets/site_example3.png",
+    "D:/qord/oss-ps/assets/site_example4.png",
+    "D:/qord/oss-ps/assets/gh-releases_clean.png"
+   ]
+  },
+  {
+   "id": "初级岗位正在从根子上消失",
+   "date": "2026-10-14",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-junior-jobs-vanish_20261015-015045/timeline.json",
+   "assetSec": 74.2,
+   "totalSec": 326.3,
+   "ratio": 0.227,
+   "refs": [
+    "D:/qord/neurocast-junior-jobs-vanish/assets/shots/ali_qq.png",
+    "D:/qord/neurocast-junior-jobs-vanish/assets/shots/moe_1222.png",
+    "D:/qord/neurocast-junior-jobs-vanish/assets/shots/stanford_canaries.png",
+    "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nyfed_grads.png",
+    "D:/qord/neurocast-junior-jobs-vanish/assets/shots/bls_edu.png",
+    "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_rev.png",
+    "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_table.png",
+    "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_10k.png"
+   ]
   }
  ],
  "assets": {
@@ -3733,6 +3801,827 @@
      "date": "2026-10-11",
      "shots": [
       "s23"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/open/claude_icon.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "3051c52fb773",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "side-brand-fx"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/open/cursor_icon.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "08365da11554",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "side-brand-fx"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_tool-panel.jpg": {
+   "kind": "image",
+   "aspect": 0.908,
+   "md5": "6ff47c50c346",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_trajectory-viewer.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "dcd241d49147",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_hello-world-example.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "cb73e5e09797",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_computer-use.png": {
+   "kind": "image",
+   "aspect": 1.778,
+   "md5": "67818fd1af0d",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom",
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s4",
+      "s22"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_openchatcut.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "0642da7f83c3",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_deep-research.png": {
+   "kind": "image",
+   "aspect": 1.778,
+   "md5": "db4e482c525e",
+   "source": "GitHub · dzhng/deep-research 仓库页",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom",
+    "evidence-zoom",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s4",
+      "s11",
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_cangjie.png": {
+   "kind": "image",
+   "aspect": 1.778,
+   "md5": "1bd1856c9c5e",
+   "source": "GitHub · Yeadon8888/cangjie-skill",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom",
+    "citation-strip",
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s4",
+      "s14",
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_01-editor-overview.png": {
+   "kind": "image",
+   "aspect": 1.841,
+   "md5": "43b49aa427b7",
+   "source": "GitHub · OpenChatCut 同功能开源演示",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll",
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s8",
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_03-agent-transitions.png": {
+   "kind": "image",
+   "aspect": 1.841,
+   "md5": "61e537639600",
+   "source": "GitHub · OpenChatCut 同功能开源演示",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_04-motion-graphics.png": {
+   "kind": "image",
+   "aspect": 1.841,
+   "md5": "de4d54a19fbc",
+   "source": "GitHub · OpenChatCut 同功能开源演示",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_07-lut.png": {
+   "kind": "image",
+   "aspect": 1.841,
+   "md5": "2fee0ef9e451",
+   "source": "GitHub · OpenChatCut 同功能开源演示",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_hero.mp4": {
+   "kind": "video",
+   "aspect": 1.778,
+   "md5": "317478872650",
+   "source": "GitHub · alchaincyf/nuwa-skill 官方动画",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "head-pip"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s19"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/talk.mp4": {
+   "kind": "video",
+   "aspect": 1.778,
+   "md5": "db18ddbd8ab5",
+   "source": "GitHub · alchaincyf/nuwa-skill 官方动画",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "head-pip"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s19"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_cover.png": {
+   "kind": "image",
+   "aspect": 2.357,
+   "md5": "931335eb4b35",
+   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_6agents.png": {
+   "kind": "image",
+   "aspect": 2.357,
+   "md5": "178ce117231b",
+   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_board.png": {
+   "kind": "image",
+   "aspect": 1.792,
+   "md5": "f8ff524172b4",
+   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-11",
+     "shots": [
+      "s21"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/gh-repo_clean.png": {
+   "kind": "image",
+   "aspect": 1.6,
+   "md5": "8916f4275a8a",
+   "source": "GitHub 开源仓库",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom",
+    "board-proof",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s0",
+      "s3",
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/site_example1.png": {
+   "kind": "image",
+   "aspect": 1.784,
+   "md5": "292aa1f19d27",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s1",
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/site_example2.png": {
+   "kind": "image",
+   "aspect": 1.784,
+   "md5": "6814fe58178f",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/site_hero.png": {
+   "kind": "image",
+   "aspect": 2.034,
+   "md5": "2a3126b0ddcc",
+   "source": "项目官网截图",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/gh-readme-features.png": {
+   "kind": "image",
+   "aspect": 0.736,
+   "md5": "cd495553301e",
+   "source": "GitHub · README",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/hue-saturation.png": {
+   "kind": "image",
+   "aspect": 1.046,
+   "md5": "9f775fa5bf86",
+   "source": "项目官网截图",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/gh-readme-intro.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "2c5431a8bbe4",
+   "source": "GitHub · README",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "brand-quote-card",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s7",
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/gh-compdoc_clean.png": {
+   "kind": "image",
+   "aspect": 1.6,
+   "md5": "d6ef27fb39fc",
+   "source": "GitHub · 项目文档",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s8",
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/gh-agents_clean.png": {
+   "kind": "image",
+   "aspect": 1.6,
+   "md5": "b576a535f0fb",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/site_example3.png": {
+   "kind": "image",
+   "aspect": 1.784,
+   "md5": "9cdb786b6d9a",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s11"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/site_example4.png": {
+   "kind": "image",
+   "aspect": 1.784,
+   "md5": "935bab1b51d8",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s11"
+     ]
+    }
+   ]
+  },
+  "D:/qord/oss-ps/assets/gh-releases_clean.png": {
+   "kind": "image",
+   "aspect": 1.6,
+   "md5": "27f73e36cd04",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s13"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-junior-jobs-vanish/assets/shots/ali_qq.png": {
+   "kind": "image",
+   "aspect": 2.13,
+   "md5": "598314a62fdf",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "初级岗位正在从根子上消失",
+     "date": "2026-10-14",
+     "shots": [
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-junior-jobs-vanish/assets/shots/moe_1222.png": {
+   "kind": "image",
+   "aspect": 2.13,
+   "md5": "86d8c8fd097f",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "初级岗位正在从根子上消失",
+     "date": "2026-10-14",
+     "shots": [
+      "s3"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-junior-jobs-vanish/assets/shots/stanford_canaries.png": {
+   "kind": "image",
+   "aspect": 2.13,
+   "md5": "c7d529cb4553",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "初级岗位正在从根子上消失",
+     "date": "2026-10-14",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nyfed_grads.png": {
+   "kind": "image",
+   "aspect": 2.13,
+   "md5": "a81bc31d1d45",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof",
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "初级岗位正在从根子上消失",
+     "date": "2026-10-14",
+     "shots": [
+      "s10",
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-junior-jobs-vanish/assets/shots/bls_edu.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "7a536426e000",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "初级岗位正在从根子上消失",
+     "date": "2026-10-14",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_rev.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "b990d4052ddd",
+   "source": "NVIDIA 官方业绩公告",
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "brand-quote-card"
+   ],
+   "shows": [
+    {
+     "video": "初级岗位正在从根子上消失",
+     "date": "2026-10-14",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_table.png": {
+   "kind": "image",
+   "aspect": 2.13,
+   "md5": "c39e0e784aee",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "初级岗位正在从根子上消失",
+     "date": "2026-10-14",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_10k.png": {
+   "kind": "image",
+   "aspect": 2.13,
+   "md5": "50bce018cc91",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "初级岗位正在从根子上消失",
+     "date": "2026-10-14",
+     "shots": [
+      "s20"
      ]
     }
    ]

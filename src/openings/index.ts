@@ -20,6 +20,8 @@ import { OPENING_TEMPLATES, TRICK_TEMPLATES } from "./templates";
 //   再把文案 / 调色 / 卡点填进去；自成一体（自己铺不透明背景），可以没有真人口播
 // · src/openings/templates/ —— 透明叠加层模板（叠在真人画面上），同样按本片文案改数据
 // >>> new-video：每条片一个专属开场（scripts/new-video.mjs 维护，别手删这行）
+import { OpeningJuniorJobsVanish } from "./2026-10-14-junior-jobs-vanish/Opening";
+import { OpeningAiComputerUse } from "./2026-10-11-ai-computer-use/Opening";
 import { OpeningCodexVsWb } from "./2026-10-10-codex-vs-wb/Opening";
 import { OpeningAiconsoleExplainer } from "./2026-10-09-aiconsole-explainer/Opening";
-export const OPENINGS: CompDef[] = [OpeningCommentMining, OpeningAiTool4Steps, OpeningModelArena, OpeningNeverFromZero, OpeningCostBill, OpeningWorkbuddyPay, OpeningOpus55FourThings, OpeningWorkbuddy10Tips, OpeningCodex100x, OpeningWebpptNow, OpeningDbsShatter, OpeningAiconsoleInfo, ...PRO_TEMPLATE_OPENINGS, ...OPENING_TEMPLATES, ...TRICK_TEMPLATES, OpeningAiconsoleExplainer, OpeningCodexVsWb];
+export const OPENINGS: CompDef[] = [OpeningCommentMining, OpeningAiTool4Steps, OpeningModelArena, OpeningNeverFromZero, OpeningCostBill, OpeningWorkbuddyPay, OpeningOpus55FourThings, OpeningWorkbuddy10Tips, OpeningCodex100x, OpeningWebpptNow, OpeningDbsShatter, OpeningAiconsoleInfo, ...PRO_TEMPLATE_OPENINGS, ...OPENING_TEMPLATES, ...TRICK_TEMPLATES, OpeningAiconsoleExplainer, OpeningCodexVsWb, OpeningAiComputerUse, OpeningJuniorJobsVanish];
