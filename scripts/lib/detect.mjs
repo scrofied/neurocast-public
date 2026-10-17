@@ -1,5 +1,10 @@
 // Rule-based content detectors. Each returns { type, data, score } or null.
 // Order of preference is decided by score; the planner also enforces variety.
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 const CN_NUM = { 零: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 };
 const cnToInt = (s) => {
@@ -410,6 +415,22 @@ export const SLOT_SPEC = {
       return { src, strokes: [{ shape: "circle", x: clamp01(xy[0] - 0.16), y: clamp01(xy[1] - 0.06), w: 0.32, h: 0.12, label: label || undefined }] };
     },
   },
+  氛围: {
+    type: "stock-broll",
+    // [氛围: assets/stock/pexels/x.mp4 凌晨的写字楼 | 城市不睡] —— 库存画面只演氛围，不演证据。
+    // 两种写法都行：竖线分字段（标题 | 说明），或路径后面跟一个标题。
+    run: (v) => {
+      const toks = pipe(v);
+      const src = toks.find(isPath);
+      if (!src) return null;
+      const rest = toks.filter((t) => t !== src);
+      const title = short(rest[0] || "", 16) || undefined;
+      const caption = short(rest[1] || "", 26) || undefined;
+      return { src, title, caption };
+    },
+  },
+  示意: { alias: "氛围" },
+  空镜: { alias: "氛围" },
 };
 const sp = (s, sep = "[,，、;；]") => String(s || "").split(new RegExp(sep)).map((x) => x.trim()).filter(Boolean);
 // 圈注的框不能超出图外：留 0.1 的边，画到边上就收住
@@ -456,5 +477,79 @@ export const slotAssetRefs = (parsed) => {
   return [...new Set(out)];
 };
 
-export const DETECTORS = [detectSlot, detectCode, detectImage, detectToolIntro, detectSameDay, detectDeliverables, detectNoReach, detectTimeline, detectFunnel, detectSteps, detectVersus, detectNumbers, detectList, detectQuote];
+// ---------- 库存氛围画面：保守兜底 ----------
+// 只在两种条件下出手：素材库里有「带 tags 的本地库存文件」，且这句台词像氛围铺垫
+// （命中 tags、没有界面/数据/操作词、这一段也没有截图/录屏）。分数压在所有内容检测器之下，
+// 别的检测器能画这一句时就轮不到它 —— 兜底的是「真的没东西可演」的过场句，不是证据。
+// tags 由 stock.mjs get --tags 写进 assets/stock-index.json；没打标签的文件不会自动上片。
+const AMBIENT_RE = /城市|街道|街头|清晨|早晨|凌晨|深夜|夜晚|夜色|黄昏|通勤|地铁|车站|人群|路人|办公室|工位|写字楼|加班|忙碌|疲惫|焦虑|孤独|生活|日常|世界|时代|浪潮|洪流|未来|变化|速度|节奏|屏幕|手机|刷|走路|咖啡|雨|阳光|影子|房间|工厂|餐厅|商场|机场/;
+const EVIDENCE_RE = /截图|录屏|界面|后台|报表|数据|点开|点击|设置|输入框|按钮|菜单|代码|终端|文档|官网|页面|模型|回复|提示词|API|命令|控制台|编辑器|表格|收入|转化|粉丝数|播放量/;
+let STOCK_POOL;
+const localStock = () => {
+  if (STOCK_POOL !== undefined) return STOCK_POOL;
+  STOCK_POOL = [];
+  try {
+    const j = JSON.parse(fs.readFileSync(path.join(ROOT, "assets", "stock-index.json"), "utf8").replace(/^﻿/, ""));
+    for (const [src, meta] of Object.entries(j.items || {})) {
+      const tags = (Array.isArray(meta.tags) ? meta.tags : []).map((t) => String(t).toLowerCase().trim()).filter(Boolean);
+      if (!tags.length || (meta.kind !== "video" && meta.kind !== "image")) continue;
+      if (!fs.existsSync(path.join(ROOT, "public", src.replace(/\\/g, "/")))) continue; // 台账里有、文件被清掉的别用
+      STOCK_POOL.push({
+        src,
+        tags,
+        kind: meta.kind,
+        aspect: meta.width && meta.height ? +(meta.width / meta.height).toFixed(4) : undefined,
+        frames: meta.kind === "video" && meta.duration ? Math.round(meta.duration * 30) : undefined,
+      });
+    }
+  } catch {
+    STOCK_POOL = []; // 没抓过素材 = 空池子，检测器自然不触发
+  }
+  return STOCK_POOL;
+};
+
+export const detectStockAmbience = (seg) => {
+  if (!seg || seg.slots?.length) return null; // 已经点名了别的组件，别抢
+  const raw = String(seg.raw || seg.text || "");
+  if (/\[(?:图|截图|录屏|img|image|video)\s*[:：]/i.test(raw)) return null; // 有真截图就用真的
+  const text = String(seg.spoken || seg.text || "");
+  if (!AMBIENT_RE.test(text) || EVIDENCE_RE.test(text)) return null;
+  const lower = text.toLowerCase();
+  const hits = localStock()
+    .map((s) => ({ s, n: s.tags.filter((t) => lower.includes(t)).length }))
+    .filter((x) => x.n > 0);
+  if (!hits.length) return null;
+  hits.sort((a, b) => b.n - a.n || a.s.src.localeCompare(b.s.src));
+  // 命中数相同时按路径排序取第一个（不做随机轮换）：预采集 autoStockRefs 是按段落的，
+  // 而 chooseAuto 可能把几段拼成一镜；只有「组内最小命中」才对得上两边的结果。
+  const pick = hits[0].s;
+  const first = clean(text.split(/[，。！？；]/)[0]);
+  return {
+    type: "stock-broll",
+    // 32~38：比所有内容检测器（最低 neural 52）都低，只在没人能画这一句时兜底
+    score: 30 + Math.min(6, hits[0].n * 2),
+    data: {
+      src: pick.src,
+      kind: pick.kind,
+      ...(pick.aspect ? { aspect: pick.aspect } : {}),
+      ...(pick.frames ? { frames: pick.frames } : {}),
+      title: short(first, 16) || undefined,
+      caption: short(text, 26) || undefined,
+    },
+  };
+};
+/** 自动分镜的预采集：和 detectStockAmbience 同一套匹配，先把它可能用到的文件收进 assetRefs，
+ *  这样 prepAssets 会拷进 job、量出宽高帧数，台账才知道这是库存素材（不拷的话渲染时只能碰运气读 public）。 */
+export const autoStockRefs = (parsed) => {
+  const out = [];
+  for (const sec of parsed?.sections || [])
+    for (const p of sec.paras || []) {
+      if (p.asset) continue;
+      const m = detectStockAmbience({ raw: p.text, spoken: p.text, text: p.text, slots: p.slots });
+      if (m) out.push(m.data.src);
+    }
+  return [...new Set(out)];
+};
+
+export const DETECTORS = [detectSlot, detectCode, detectImage, detectToolIntro, detectSameDay, detectDeliverables, detectNoReach, detectTimeline, detectFunnel, detectSteps, detectVersus, detectNumbers, detectList, detectQuote, detectStockAmbience];
 export { clean, short, cnToInt };

@@ -1,6 +1,7 @@
 import React from "react";
 import { Img, staticFile } from "remotion";
 import { brandForName, findBrand } from "./brands";
+import { EXTERNAL_ICONS } from "./icons.generated";
 
 // Minimal stroke icon set (24x24, feather-like). Add new names here; components reference icons by name,
 // storyboards can pass `icon: "<name>"` wherever a component accepts one.
@@ -295,7 +296,8 @@ const P: Record<string, React.ReactNode> = {
   ),
 };
 
-export const ICONS = Object.keys(P);
+// 手写线条图标 + Iconify 抽来的外部图标（src/lib/icons.generated.tsx，stock.mjs icons --emit 生成）
+export const ICONS = [...Object.keys(P), ...Object.keys(EXTERNAL_ICONS)];
 
 // 真品牌标识：内置线条图标查不到时，先看这个名字是不是某个「有真 logo 文件」的产品
 // （brands/library.json + public/brands/，由 scripts/brands.mjs sync 生成）。
@@ -312,6 +314,17 @@ export const Icon: React.FC<{ name?: string; size?: number; color?: string; stro
   fill = "none",
   style,
 }) => {
+  // 外部图标（Iconify）：在 --emit 时把颜色字面量换成了 currentColor，所以跟 <Icon color> 走主题色。
+  // 描边宽度也统一交给这里（生成时剥掉了原图的 stroke-width），换 stroke 不会各画各的。
+  const ext = name ? EXTERNAL_ICONS[name] : undefined;
+  if (ext)
+    return (
+      <svg width={size} height={size} viewBox={ext.viewBox} fill="none" strokeWidth={stroke} style={{ color, ...style }}>
+        {ext.node}
+      </svg>
+    );
+  // 直接给文件路径（assets/icons/xxx.svg 或 brands/xxx.svg）：原样当图片读，不染色
+  if (name && /[\/\\]/.test(name) && /\.svg$/i.test(name)) return <BrandMark src={name.replace(/^public[\/\\]/, "")} size={size} style={style} />;
   const brand = name && !P[name] ? brandForName(name) : undefined;
   if (brand) return <BrandMark src={`brands/${brand.file}`} size={size} style={style} />;
   if (!name || !P[name]) return null;
@@ -323,7 +336,11 @@ export const Icon: React.FC<{ name?: string; size?: number; color?: string; stro
 };
 
 // raw 24x24 paths for use inside an existing <svg> (wrap in <g transform scale stroke …>)
-export const IconPaths: React.FC<{ name?: string }> = ({ name }) => (name && P[name] ? <>{P[name]}</> : null);
+export const IconPaths: React.FC<{ name?: string }> = ({ name }) => {
+  const ext = name ? EXTERNAL_ICONS[name] : undefined;
+  if (ext && ext.viewBox === "0 0 24 24") return <>{ext.node}</>; // 24 网格才塞得进别人画好的框
+  return name && P[name] ? <>{P[name]}</> : null;
+};
 
 // pick a sensible icon from a Chinese label (封面 -> image, 正文 -> doc ...)
 // 文案里点了某个产品的名，且它有自己的真 logo 文件时，优先上真标识（brand:key）

@@ -14,7 +14,7 @@ import { beatsMarkdown, planTimed, splitOpening, TimedError } from "./lib/timed.
 import { wordsOf } from "./lib/align.mjs";
 import { checkKindParity, checkTransitionParity, normPost, normThrough } from "./lib/motion.mjs";
 import { loadRegistry, validateShot } from "./lib/registry-node.mjs";
-import { slotAssetRefs } from "./lib/detect.mjs";
+import { slotAssetRefs, autoStockRefs } from "./lib/detect.mjs";
 import { load as loadUsage, shotsOf, record as recordUsage, crossVideoReport, statsOf, bodyComps } from "./lib/usage.mjs";
 import { ratioOf, shotAssets, isStock, entriesOf, stockMetaOf, checklist as assetChecklist, record as recordAssets, load as loadAssetLedger } from "./lib/assets.mjs";
 
@@ -304,7 +304,7 @@ const runTimed = async () => {
   }
   // 素材引用有三个来源：文案里的 [图/录屏] 标记、[槽位: …] 点名要的真文件，和分镜里
   // 任何声明了 assetFields 的组件（board-proof 这类以前只能手写 public/ 路径的，现在也会被 prepAssets 收到并补上 aspect/OCR/来源）
-  const assetRefs = [...new Set([...parsed.sections.flatMap((s) => s.paras.map((p) => p.asset).filter(Boolean)), ...slotAssetRefs(parsed), ...storyboardAssetRefs(storyboard)])];
+  const assetRefs = [...new Set([...parsed.sections.flatMap((s) => s.paras.map((p) => p.asset).filter(Boolean)), ...slotAssetRefs(parsed), ...(storyboard ? [] : autoStockRefs(parsed)), ...storyboardAssetRefs(storyboard)])];
   media.assets = prepAssets(assetRefs);
   media.assetsMissing = missingAssets; // 降级模式下缺的那些：注入时把路径清空，组件演占位而不是 404 崩掉渲染
 
@@ -466,7 +466,7 @@ const antiPpt = (tl, reg) => {
   if (!body.length) return;
   const txt = body.filter((s) => TEXT_ONLY.has(s.type));
   const ratio = txt.length / body.length;
-  if (ratio > 0.2) warn(`纯文字镜头占 ${(ratio * 100).toFixed(0)}%（${txt.map((s) => s.id).join(" ")}），超过 20% 会有 PPT 念稿感：换成有动作的隐喻/信息图组件`);
+  if (ratio > 0.2) warn(`纯文字镜头占 ${(ratio * 100).toFixed(0)}%（${txt.map((s) => s.id).join(" ")}），超过 20% 会有 PPT 念稿感：换成有动作的隐喻/信息图组件。要垫氛围画面：node scripts/stock.mjs search pexels "办公室 夜晚" --type video → get <站:id> --tags 办公室,夜晚 → 讲稿写 [氛围: assets/stock/pexels/<名>.mp4 | 标题]`);
   for (let i = 1; i < body.length; i++)
     if (TEXT_ONLY.has(body[i].type) && TEXT_ONLY.has(body[i - 1].type)) warn(`${body[i - 1].id}→${body[i].id} 连续两个纯文字镜头（${body[i - 1].type}→${body[i].type}），中间插一个有画面动作的组件`);
   // same component back-to-back reads like a slide template too

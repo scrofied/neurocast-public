@@ -2,9 +2,10 @@
 //
 //   node scripts/stock.mjs sites                                    站点能力 + license + 要不要署名（一张表）
 //   node scripts/stock.mjs brands [--color] [--only-missing] [--dry] 用 Simple Icons 补齐 public/brands/ 的真 logo
-//   node scripts/stock.mjs icons <合集> <名字…> [--color HEX]        从 Iconify 合集抽矢量图标存本地
+//   node scripts/stock.mjs icons <合集> <名字…> [--color HEX]        从 Iconify 合集抽矢量图标存本地（自动内联进渲染层）
+//   node scripts/stock.mjs icons --emit                             只重扫本地图标，生成 src/lib/icons.generated.tsx
 //   node scripts/stock.mjs search <站> <关键词> [--type video] [--n 12] [--landscape] [--min 1920]
-//   node scripts/stock.mjs get <站:id | 直链> [--res 1080] [--as 名字]  下载到 public/assets/stock/ 并记出处
+//   node scripts/stock.mjs get <站:id | 直链> [--res 1080] [--as 名字] [--tags 城市,凌晨]  下载到 public/assets/stock/ 并记出处
 //   node scripts/stock.mjs license [关键词]                          查库存素材的署名义务（出片前核对）
 //
 // 三条硬规矩（都是被驳回换来的，别绕过）：
@@ -24,6 +25,7 @@ const PUB = path.join(ROOT, "public");
 const STOCK_DIR = path.join(PUB, "assets", "stock"); // 分镜里写 assets/stock/<站>/<id>.mp4
 const STOCK_INDEX = path.join(ROOT, "assets", "stock-index.json"); // 只记出处，不记内容
 const ICON_DIR = path.join(PUB, "assets", "icons");
+const GEN_ICONS = path.join(ROOT, "src", "lib", "icons.generated.tsx"); // 图标内联进渲染层（能跟主题色）
 const BRAND_DIR = path.join(PUB, "brands");
 const BRAND_LIB = path.join(ROOT, "brands", "library.json");
 const CACHE = path.join(ROOT, "assets", ".cache");
@@ -331,9 +333,100 @@ const runBrands = async () => {
 // ---------------------------------------------------------------- icons：Iconify 合集
 
 const ICON_LICENSE = { lucide: "ISC", tabler: "MIT", mdi: "Apache-2.0", ph: "MIT", solar: "CC BY 4.0", ri: "MIT", bi: "MIT", si: "MIT" };
+
+// ---- SVG -> JSX（--emit 用）----
+// Iconify 的 body 是纯 path/g/circle；把颜色字面量换成 currentColor、剥掉 stroke-width，
+// 渲染时 <Icon color> 和 stroke 就能统一控制。带 defs/渐变/滤镜/use 的图标跳过（那些染色会坏）。
+const SVG_OK = new Set(["g", "path", "circle", "rect", "line", "ellipse", "polygon", "polyline"]);
+const SVG_BAD = /<(defs|style|title|desc|image|foreignObject|linearGradient|radialGradient|pattern|filter|mask|clipPath|use|text|animate|set)\b/i;
+const jsxName = (a) => a.replace(/[-:]([a-z])/g, (_, c) => c.toUpperCase());
+const recolor = (v) => v.replace(/#[0-9a-fA-F]{3,8}\b/g, "currentColor").replace(/\b(white|black)\b/gi, "currentColor");
+const svgToJsx = (inner) => {
+  inner = inner.replace(/<!--[\s\S]*?-->/g, "");
+  if (SVG_BAD.test(inner) || /url\(#|xlink:|\s[\w:-]+\s*=\s*'/.test(inner)) return null;
+  let out = "";
+  let last = 0;
+  const re = /<(\/?)([A-Za-z][\w:-]*)([^>]*?)(\/?)>/g;
+  for (let m; (m = re.exec(inner)); ) {
+    if (inner.slice(last, m.index).trim()) return null; // 标签外有文字 = 这个 SVG 不适合内联
+    last = re.lastIndex;
+    const [, close, tag, rawAttrs, selfClose] = m;
+    if (!SVG_OK.has(tag)) return null;
+    if (close) {
+      out += `</${tag}>`;
+      continue;
+    }
+    let attrs = "";
+    for (const am of rawAttrs.matchAll(/([A-Za-z_:][-A-Za-z0-9_:.]*)\s*=\s*"([^"]*)"/g)) {
+      const name = am[1];
+      if (/^(xmlns|xlink|class|style|width|height|id|stroke-width)$/i.test(name) || name.includes(":")) continue;
+      attrs += ` ${jsxName(name)}="${recolor(am[2])}"`;
+    }
+    // 属性里还有没被双引号解析掉的残留（单引号等）就放弃，别生成半截 JSX
+    const residue = rawAttrs.replace(/([A-Za-z_:][-A-Za-z0-9_:.]*)\s*=\s*"[^"]*"/g, "").trim();
+    if (residue && !/^\/?$/.test(residue)) return null;
+    out += `<${tag}${attrs}${selfClose ? " /" : ""}>`;
+  }
+  if (inner.slice(last).trim()) return null;
+  const stroked = /stroke="(?!none)/i.test(inner);
+  const coat = stroked
+    ? 'fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"'
+    : 'fill="currentColor" stroke="none"';
+  return `<g ${coat}>${out}</g>`;
+};
+
+const emitIcons = () => {
+  const files = fs.existsSync(ICON_DIR) ? fs.readdirSync(ICON_DIR).filter((f) => /\.svg$/i.test(f)).sort() : [];
+  const rows = [];
+  for (const f of files) {
+    const key = f.replace(/\.svg$/i, "");
+    const text = fs.readFileSync(path.join(ICON_DIR, f), "utf8").replace(/^﻿/, "");
+    const root = /<svg\b([^>]*)>([\s\S]*)<\/svg>/i.exec(text);
+    if (!root) {
+      console.log(`  ✖ ${f}：不是完整的 <svg>，跳过`);
+      continue;
+    }
+    const viewBox = (/\bviewBox\s*=\s*"([^"]+)"/i.exec(root[1]) || [])[1] || "0 0 24 24";
+    const body = svgToJsx(root[2]);
+    if (!body) {
+      console.log(`  ✖ ${f}：含 defs/渐变/滤镜/单引号属性等，无法内联，跳过（原件仍在 public/assets/icons/，可当图片用）`);
+      continue;
+    }
+    rows.push({ key, viewBox, body });
+  }
+  const src = `// 自动生成：node scripts/stock.mjs icons --emit（下载新图标后也会自动重扫）
+// 别手改这个文件 —— 改完会被下一次 --emit 覆盖。
+// 图标来自 Iconify（MIT / ISC / Apache-2.0 / CC BY，逐条见 assets/icons-index.json）。
+// 颜色已换成 currentColor，<Icon name="${rows[0]?.key || "tabler-brain"}" /> 会跟着主题色走；
+// 分镜里也能直接写 icon: "tabler-brain"。
+import React from "react";
+
+export type ExternalIcon = { viewBox: string; node: React.ReactNode };
+
+export const EXTERNAL_ICONS: Record<string, ExternalIcon> = {
+${rows
+  .map(
+    (r) => `  ${JSON.stringify(r.key)}: {
+    viewBox: ${JSON.stringify(r.viewBox)},
+    node: (
+      ${r.body}
+    ),
+  },`
+  )
+  .join("\n")}
+};
+`;
+  fs.mkdirSync(path.dirname(GEN_ICONS), { recursive: true });
+  fs.writeFileSync(GEN_ICONS, src, "utf8");
+  console.log(`✓ 已内联 ${rows.length} 个图标 → src/lib/icons.generated.tsx${files.length > rows.length ? `（${files.length - rows.length} 个跳过）` : ""}`);
+  if (rows.length) console.log(`  分镜里写 icon: ${JSON.stringify(rows[rows.length - 1].key)}，或 <Icon name=${JSON.stringify(rows[rows.length - 1].key)} />`);
+};
+
 const runIcons = async () => {
+  // 只重扫本地：下载过一批之后单独跑，不联网
+  if (flag("emit") && !positional.length) return emitIcons();
   const [collection, ...names] = positional;
-  if (!collection || !names.length) die("用法：node scripts/stock.mjs icons <合集> <名字…> [--color HEX]\n  合集：lucide / tabler / mdi / ph / solar / ri / bi（名字用 - 连接，如 brain robot-ai）");
+  if (!collection || !names.length) die("用法：node scripts/stock.mjs icons <合集> <名字…> [--color HEX]\n       node scripts/stock.mjs icons --emit（只重扫 public/assets/icons/，生成本地可染色的图标模块）\n  合集：lucide / tabler / mdi / ph / solar / ri / bi（名字用 - 连接，如 brain robot-ai）");
   const color = (val("color", "currentColor") || "currentColor").replace(/^#/, "");
   const r = await req(`https://cdn.jsdelivr.net/npm/@iconify-json/${collection}@latest/icons.json`, { timeout: 180000 });
   if (!r.ok) die(`拿 @iconify-json/${collection} 失败：${r.error}`);
@@ -356,11 +449,15 @@ const runIcons = async () => {
     fs.writeFileSync(path.join(PUB, rel), svg, "utf8");
     idx[rel] = { site: "iconify", collection, name, color, license: ICON_LICENSE[collection] || "见合集仓库", attribution: /CC BY/i.test(ICON_LICENSE[collection] || ""), bytes: svg.length, fetchedAt: new Date().toISOString().slice(0, 10) };
     done.push(rel);
-    console.log(`  ✓ ${rel}${color === "currentColor" ? "（保留 currentColor，内联时可染色）" : ` #${color}`}`);
+    console.log(`  ✓ ${rel}${color === "currentColor" ? "（保留 currentColor）" : ` 落盘色 #${color} → 内联时仍会转成 currentColor`}`);
   }
   writeJson(path.join(ROOT, "assets", "icons-index.json"), idx);
-  if (done.length) console.log(`\n分镜里这样引用：src: "${done[done.length - 1]}"  · 出处记在 assets/icons-index.json（${done.length} 个本次新增）`);
+  if (done.length) {
+    console.log("");
+    emitIcons(); // 下载完立刻进渲染层，别让图标躺在 public/ 里没人能引用
+  }
 };
+
 
 // ---------------------------------------------------------------- search
 
@@ -408,7 +505,7 @@ const mixkitItems = async (site, q, n) => {
 const pexelsSearch = async (site, q, n, opts, type) => {
   const key = needKey("pexels", "PEXELS_API_KEY");
   const ep = type === "video" ? "videos/search" : "search";
-  const p = new URLSearchParams({ query: q, per_page: String(n), locale: "zh-CN" });
+  const p = new URLSearchParams({ query: q, per_page: String(Math.max(1, Math.min(n, 80))), locale: "zh-CN" });
   if (opts.landscape) p.set("orientation", "landscape");
   if (opts.min) p.set("size", "large");
   const r = await req(`https://api.pexels.com/v1/${ep}?${p}`, { headers: { authorization: key } });
@@ -441,7 +538,7 @@ const pexelsSearch = async (site, q, n, opts, type) => {
 
 const pixabaySearch = async (site, q, n, opts, type) => {
   const key = needKey("pixabay", "PIXABAY_API_KEY");
-  const p = new URLSearchParams({ key, q, per_page: String(Math.min(n, 200)), safesearch: "true" });
+  const p = new URLSearchParams({ key, q, per_page: String(Math.max(3, Math.min(n, 200))), safesearch: "true" });
   if (opts.landscape) p.set("orientation", "horizontal");
   if (opts.min) p.set("min_width", String(opts.min));
   const ep = type === "video" ? "https://pixabay.com/api/videos/" : "https://pixabay.com/api/";
@@ -492,7 +589,10 @@ const runSearch = async () => {
   const fn = searchers[site] || die(`本站不做自动抓取（${site}）：${SITES[site]?.note ?? "未知站点"}\n  可抓的：${Object.keys(searchers).join(" / ")}`);
   const type = val("type", site === "mixkit" ? "video" : "photo");
   const opts = { landscape: flag("landscape"), min: Number(val("min", 0)) || 0, type };
-  const items = await fn(site, qparts.join(" "), Number(val("n", 12)), opts, type);
+  // per_page 各站有硬范围：Pexels 1~80、Pixabay 3~200。--n 写小了直接 400，所以在这儿先夹住。
+  const nRaw = Number(val("n", 12));
+  const n = Number.isFinite(nRaw) ? nRaw : 12;
+  const items = await fn(site, qparts.join(" "), n, opts, type);
   if (!items.length) die("没搜到（换个关键词，或去掉 --min/--landscape 限制）");
   console.log(`\n${SITES[site].name} · "${qparts.join(" ")}" · ${type} —— 挑一个再 node scripts/stock.mjs get ${site}:<id>\n`);
   for (const it of items) {
@@ -507,7 +607,7 @@ const runSearch = async () => {
 
 const runGet = async () => {
   const spec = positional[0];
-  if (!spec) die("用法：node scripts/stock.mjs get <站:id | 直链> [--res 1080] [--as 名字] [--kind video]");
+  if (!spec) die("用法：node scripts/stock.mjs get <站:id | 直链> [--res 1080] [--as 名字] [--kind video] [--tags 城市,凌晨]\n  --tags：给这条氛围画面打标签，自动分镜只在台词命中标签时才用它（不打就只能在讲稿里手写 [氛围:]）");
   let item;
   const m = /^([a-z]+):(.+)$/i.exec(spec);
   if (m && searchers[m[1]] && /^\d+$/.test(m[2])) {
@@ -553,6 +653,7 @@ const runGet = async () => {
   fs.mkdirSync(path.dirname(abs), { recursive: true });
   fs.writeFileSync(abs, r.buf);
   const dims = probeDims(abs, isVid);
+  const tags = (val("tags", "") || "").split(/[,，、;；|]+/).map((t) => t.trim()).filter(Boolean);
   const j = loadIndex();
   j.items[rel] = {
     site: item.site,
@@ -567,12 +668,15 @@ const runGet = async () => {
     bytes: r.buf.length,
     md5: md5(r.buf),
     fetchedAt: new Date().toISOString().slice(0, 10),
+    ...(tags.length ? { tags } : {}),
     ...dims,
   };
   saveIndex(j);
   console.log(`✓ ${rel}  ${(r.buf.length / 1048576).toFixed(1)}MB${dims.width ? ` ${dims.width}x${dims.height}` : ""}${dims.duration ? ` ${Math.round(dims.duration)}s` : ""}`);
   console.log(`  出处：${item.license}${item.attribution ? " —— ⚠ 必须署名" : " —— 不要求署名（但角标仍写「示意画面」）"}${item.monetize === false ? "\n  ⚠ 这条是 Restricted license，不能用在变现内容（抖音/YouTube 恰是变现场景）" : ""}`);
-  console.log(`  分镜里写 src: "${rel}"；make.mjs 会照常拷进 job、量比例、进台账，台账里这条会带 stock 标记。`);
+  if (tags.length) console.log(`  标签：${tags.join("、")}（自动分镜只在台词命中这些词时才用它）`);
+  else console.log(`  没打标签：自动分镜不会自己挑它；要让它参与，重跑 get 加 --tags 城市,凌晨，或在讲稿手写 [氛围:]`);
+  console.log(`  讲稿里写：[氛围: ${rel} | 大标题 | 一句说明]；分镜里写 stock-broll 的 src: "${rel}"。make.mjs 会拷进 job、量比例、进台账，台账里带 stock 标记。`);
 };
 
 // ---------------------------------------------------------------- license / sites
@@ -586,7 +690,7 @@ const runLicense = () => {
   for (const k of keys) {
     const a = j.items[k];
     console.log(`  ${k}`);
-    console.log(`    ${a.site} · ${a.kind} · ${a.license} · 作者 ${a.author || "-"} · 抓于 ${a.fetchedAt}`);
+    console.log(`    ${a.site} · ${a.kind} · ${a.license} · 作者 ${a.author || "-"} · 抓于 ${a.fetchedAt}${a.tags?.length ? ` · 标签 ${a.tags.join("、")}` : ""}`);
     console.log(`    署名：${a.attribution ? "★ 必须（上屏带作者，或片尾列出处）" : "不要求"} · 变现：${a.monetize === false ? "✖ Restricted，不能用" : "可以"} · 页面：${a.page || a.url}`);
   }
   const must = keys.filter((k) => j.items[k].attribution);

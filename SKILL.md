@@ -125,6 +125,7 @@ node scripts/new-video.mjs 我的新片 my-new-video    # 第二个参数是开�
 [流程: 首页.png 打开榜单, 榜单.png 换到 AGENTIC, 结果.png 导出]        → screen-morph（一镜到底，2~6 格真截图）
 [层层: 主界面.png 0.3,0.36 总榜, 明细.png 0.5,0.16 单个模型]           → infinite-zoom（穿门无限缩放，洞口坐标可选）
 [圈注: 报表.png 0.42,0.31 成本占九成]                                  → cursor-trace（在真截图上一笔笔画出来）
+[氛围: assets/stock/pexels/office.mp4 凌晨的写字楼 | 城市不睡]        → stock-broll（库存画面只演氛围，不演证据；别名 示意/空镜）
 ```
 
 - 一行一个标记，**不朗读、不进字幕**，挂在紧跟的那段正文上；一段里多个标记 = 多个镜头（每个标记切一刀）。
@@ -354,14 +355,18 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
 |---|---|
 | `node scripts/stock.mjs sites` | 站点能力表：要不要 key、license、能不能变现、是否必须署名 |
 | `node scripts/stock.mjs search <站> <关键词> [--type video] [--n 12] [--landscape] [--min 1920]` | 只列候选 + 缩略图，不下载 |
-| `node scripts/stock.mjs get <站:id \| 直链> [--res 1080] [--as 名字]` | 下载到 `public/assets/stock/<站>/`，出处写 `assets/stock-index.json` |
-| `node scripts/stock.mjs icons <合集> <名字…> [--color HEX]` | 从 Iconify（lucide / tabler / mdi / ph / solar）抽 SVG 存 `public/assets/icons/`，一次缓存之后离线用 |
+| `node scripts/stock.mjs get <站:id \| 直链> [--res 1080] [--as 名字] [--tags 城市,凌晨]` | 下载到 `public/assets/stock/<站>/`，出处写 `assets/stock-index.json`；`--tags` 是自动分镜的匹配词 |
+| `node scripts/stock.mjs icons <合集> <名字…> [--color HEX]` | 从 Iconify（lucide / tabler / mdi / ph / solar）抽 SVG 存 `public/assets/icons/`，下载完自动内联进渲染层（一次缓存之后离线用） |
+| `node scripts/stock.mjs icons --emit` | 只重扫 `public/assets/icons/*.svg`，生成 `src/lib/icons.generated.tsx`（手放进去的 SVG 也走这条） |
 | `node scripts/stock.mjs brands [--only-missing] [--dry]` | 用 Simple Icons 补齐 `public/brands/` 缺的真 logo（映射表在品牌库里） |
 | `node scripts/stock.mjs license [关键词]` | 出片前核对某条素材的署名义务 |
 
 - **key 只从环境变量读**（`PEXELS_API_KEY` / `PIXABAY_API_KEY` / `UNSPLASH_ACCESS_KEY`），或仓库外的 `~/.neurocast/stock.env`；任何输出都不回显 key，凭证不进仓库。没 key 时零 key 源（Mixkit / Iconify / Simple Icons）照常用。
+- **图标现在能上屏了。** `node scripts/stock.mjs icons tabler brain` 下载后会自动内联进 `src/lib/icons.generated.tsx`；分镜写 `icon: "tabler-brain"`，组件里写 `<Icon name="tabler-brain" size={40} color={t.primary} />`。生成时颜色已转成 `currentColor`、描边宽度剥掉，所以跟 `<Icon color/stroke>` 和主题色走。带渐变/defs/滤镜/单引号属性的 SVG 不内联（原件仍在，`<Icon name="assets/icons/x.svg" />` 走不染色的图片分支）。
+- **自动氛围兜底只认打了标签的本地素材**：`get --tags 城市,凌晨` 之后，自动分镜在「台词命中标签 + 有氛围词 + 没界面/数据/操作词 + 这一句没截图/录屏」时才可能垫一段；分数压在所有内容检测器之下，只在别的检测器都不想画这一句时兜底。没打标签就只能手写 `[氛围:]` 或 storyboard。
+- **只能人工的源**：Unsplash（API 强制署名 + 热链、要回调，跟本地渲染对不上）、SVG Silh / Flaticon / Pictogram2（搜索页要爬或要登录）。别在自动流程里指望它们。
 - **下载物不进 git**：`public/assets/stock/` 已在 `.gitignore` 里，`assets/stock-index.json`（只有出处，没有内容）进 git。
-- 组件：`stock-broll`（库存视频/静帧当氛围垫底，`layout: full/card/split`、静帧也能 `move: push/pan`、素材比镜头短自动慢放铺满、长则裁掉用不到的尾巴）。凡是讲步骤、讲数据、引用模型回复的句子别用它。
+- 组件：`stock-broll`（库存视频/静帧当氛围垫底，`layout: full/card/split`、静帧也能 `move: push/pan`、素材比镜头短自动慢放铺满、长则裁掉用不到的尾巴）。讲稿里用 `[氛围: 路径 | 标题 | 说明]` 点名（`示意`/`空镜` 同义），storyboard 里直接写 `stock-broll`。凡是讲步骤、讲数据、引用模型回复的句子别用它。
 - 沿用既有红线：**真人姓名/形象一律不上屏**（平台连驳两次），库存视频里带清晰正脸说话人的也别选。
 
 ## 组件资产库
@@ -430,7 +435,7 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
 5. `node scripts/preview.mjs <id>` 看静帧，溢出/重叠/太空都要修到满意。注意：静帧拼图里**不画逐字字幕**，字幕带那条冲突肉眼看不见，得按上一条的算法自己核一遍。
 6. `node scripts/catalog.mjs` 重新生成 CATALOG.md。
 7. 可选：在 `scripts/lib/detect.mjs` 加检测器，让自动模式也能选到它。
-8. 新图标加在 `src/lib/icons.tsx`；新音效放 `public/sfx/<name>.wav` 并在 `src/lib/sfx.tsx` 的 `SFX` 表登记时长（帧）。
+8. 新图标优先用 Iconify：`node scripts/stock.mjs icons tabler brain`（自动内联进 `src/lib/icons.generated.tsx`，分镜写 `icon: "tabler-brain"`）；手写的通用线条图标才加进 `src/lib/icons.tsx` 的 `P` 表。新音效放 `public/sfx/<name>.wav` 并在 `src/lib/sfx.tsx` 的 `SFX` 表登记时长（帧）。
 
 **不知道加什么的时候，去别人的动画里挖**：`docs/OPUS55_ANIMATIONS.md` 是移植台账，**两个来源分开记**：
 - **一、** `awesome-opus5-5-videos`（MIT）——那仓库**只有 prompt 没有代码**，所以这一路的「移植」是把别人描述的机制参数化成我们的组件。已移植 9 条（flood 转场、screen-morph、cursor-trace、infinite-zoom、scale-dive、fill-build、inplace-evolve、reward-beat、typo-arch）都标了 slug 和 @author，待移植的按 P1/P2/P3 排好了，还有一份「一条镜头只讲一件事、最后一个画面 = 下一个画面的起点、能不切就不切」这类通用原则。
@@ -476,7 +481,7 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
 | `node scripts/usage.mjs report / unused / list / recent` | 用量台账：覆盖率、高频、从未上片的池子 |
 | `node scripts/usage.mjs backfill [路径…]` / `record <timeline.json>` | 历史分镜回填建库 / 手工补记一条片子 |
 | `node scripts/brands.mjs sync / check / missing` | 品牌库：生成组件用的映射 / 校验 / 看还缺哪些 logo（详见「真实素材」） |
-| `node scripts/stock.mjs sites / search / get / icons / brands / license` | 库存素材：查站点能力、找画面、下载、抽矢量图标、补品牌 logo、核署名义务（详见「库存素材（示意画面）」） |
+| `node scripts/stock.mjs sites / search / get / icons / icons --emit / brands / license` | 库存素材：查站点能力、找画面、下载、抽矢量图标（自动内联）、补品牌 logo、核署名义务（详见「库存素材（示意画面）」） |
 | `node scripts/preview.mjs <id>[,<id>]` | 组件静帧 QA |
 | `node scripts/qa/transitions.mjs [kinds] [偏移]` | 转场 + 全片后期层 QA：出边界拼图 + 开/关后期的像素均差（稳定帧/首帧须为 0） |
 | `node scripts/catalog.mjs` | 重新生成 CATALOG.md |
