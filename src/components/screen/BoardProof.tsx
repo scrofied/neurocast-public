@@ -88,9 +88,10 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
                 // 素材没到位（草稿模式清空了路径）：演「缺素材」，别让 404 把整次渲染打挂
                 <MissingAsset field="boards[].src" hint="举证要用真截图，画出来的不算数" w={bw} h={bh} frame={frame} />
               )}
-              {/* 每张图自己的来源：平台 + 采集时间（不写就不渲染） */}
-              <div style={{ position: "absolute", right: 0, bottom: 18, paddingRight: 20 }}>
-                <SourceBadge source={b.source} frame={frame} y={0} />
+              {/* 每张图自己的来源：平台 + 采集时间（不写就不渲染）。
+                  角标从容器顶往下长，直接 bottom 会被外层 overflow:hidden 裁掉 —— 靠 y=-36 顶回内侧。 */}
+              <div style={{ position: "absolute", right: 20, bottom: 18, width: 1, height: 1 }}>
+                <SourceBadge source={b.source} frame={frame} y={-36} />
               </div>
             </div>
           ))}
@@ -129,8 +130,10 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
         <Corners color={alpha(t.primary, 0.85)} size={22} inset={12} />
       </div>
 
+      {/* kicker+title 这一块实测约 100px 高（20 标签 + 8 间距 + 62 标题 + 行距），
+          只留 88 会让标题的下沿压在举证卡片的上边框上 → 按实测高度让位。 */}
       {(d.kicker || d.title) && (
-        <div style={{ position: "absolute", left: 96, top: Math.max(20, by - 88), opacity: eTag.opacity * (1 - outP), transform: `translateY(${eTag.dy}px)` }}>
+        <div style={{ position: "absolute", left: 96, top: Math.max(20, by - 106), opacity: eTag.opacity * (1 - outP), transform: `translateY(${eTag.dy}px)` }}>
           {d.kicker && (
             <div style={{ display: "inline-flex", alignItems: "center", gap: 12, fontFamily: t.font.mono, fontSize: 20, letterSpacing: 6, color: t.primary }}>
               <span style={{ width: 40, height: 2, background: t.primary, boxShadow: `0 0 10px ${t.primary}` }} />

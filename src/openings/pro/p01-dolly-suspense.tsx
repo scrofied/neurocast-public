@@ -4,7 +4,7 @@ import { clamp, E, fitSize, h1, mix, noise, pulses, shake, useClock } from "./ki
 import { Dust, Flash, LightLeak, Ring, Scrim, Sparks, SpeedLines } from "./kit/fx";
 import { rgba } from "./kit/look";
 import { Sfx } from "./kit/sfx";
-import { Backdrop, common, PersonMedia, PRO_FONT, ProRoot } from "./kit/stage";
+import { Backdrop, common, PersonMedia, personSchema, PRO_FONT, ProRoot } from "./kit/stage";
 import { Big, Chars, gradientInk } from "./kit/type";
 import type { ProOpening } from "./types";
 
@@ -26,6 +26,9 @@ const schema = z
     sub: z.string().default("").describe("答案下方的小字（可留空）"),
     revealAt: z.number().default(2.4).describe("揭晓时刻（秒）—— 卡在口播说出答案的那个字上"),
     zoomTo: z.number().default(1.32).describe("推镜终点倍数（1.2~1.45）"),
+    personAt: z.number().default(0).describe("真人第几秒才出场（默认 0 = 第 0 帧就在）。出场前那几秒铺 pre 的图，守「开场前 2 秒不露主播脸」"),
+    pre: personSchema.describe("personAt 之前铺的背景素材（kind:image = 一张生图/真图，跟着同一套推镜与压暗）；不给就用模板自己的图形底"),
+    center: z.boolean().default(false).describe("悬疑句垂直居中（默认在画面下方）。和 personAt 一起给时，真人出场那一下它会滑回下方让出人脸"),
   })
   .prefault({});
 type D = z.infer<typeof schema>;
@@ -33,6 +36,9 @@ type D = z.infer<typeof schema>;
 const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
   const { t, dur, W, H, u, p } = useClock(duration);
   const R = d.revealAt;
+  // 真人第几秒才出场：0 = 第 0 帧就在（老片行为一字不变）。>0 时那几秒铺 pre 的图，
+  // 到点在 pre 与真人之间硬切一下，用一道闪白 + 咚盖住切口（和模板自己的揭晓语法同一套）。
+  const P = Math.max(0, d.personAt ?? 0);
   const look0 = d.look;
   return (
     <ProRoot d={d}>
@@ -66,13 +72,19 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
         const lineEms = Array.from(before).length + Array.from(after).length + (m ? Array.from(d.reveal).length + 0.3 : 0);
         const lineSize = Math.min(84 * u, (W * 0.88) / Math.max(1, lineEms));
         const per = Math.min(0.075, Math.max(0.03, (R - 0.6) / Math.max(1, Array.from(before).length + 2)));
+        // 首帧红线：整句（含遮块）第 0 帧就在位可读，逐字只是「点亮」，不是从无到有
+        const lineAt = 0;
+        const maskAt = lineAt + per * Array.from(before).length;
+        // 大字位置：center = 前几秒居中（第 0 屏不能沉底），真人一出场就滑回下方让出脸。
+        // 滑的这 0.28 秒正好压在 personAt 那道闪白 + whip 音上，看不出是「挪位置」。
+        const lineY = d.center ? mix(H * 0.44, H * 0.66, d.person && P > 0 ? E.inOut(p(P - 0.02, 0.28)) : 0) : H * 0.66;
         const revSize = fitSize(d.reveal, W * 0.78, 300 * u);
         const k = clamp((t - R) / 0.22);
         return (
           <>
-            {/* 画面 */}
+            {/* 画面：真人出场前铺 pre（生图/真图），出场后换真人；两者都没有就是模板图形底 */}
             <div style={{ position: "absolute", inset: 0, transform: `translate(${sh.x + breathe.x}px, ${sh.y + breathe.y}px) rotate(${sh.r}deg)` }}>
-              {d.person ? <PersonMedia person={d.person} cam={{ zoom: z0 + kick + post + thump * 0.006, filter: gradeF }} /> : <Backdrop look={L} t={t} />}
+              {d.person && t >= P ? <PersonMedia person={d.person} cam={{ zoom: z0 + kick + post + thump * 0.006, filter: gradeF }} /> : d.pre ? <PersonMedia person={d.pre} cam={{ zoom: z0 + thump * 0.006, filter: gradeF }} /> : <Backdrop look={L} t={t} />}
             </div>
             {/* 冷色压暗 */}
             <div style={{ position: "absolute", inset: 0, background: rgba(L.bg, 0.25 + dark * 0.4), mixBlendMode: "multiply" }} />
@@ -81,17 +93,22 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
             <div style={{ position: "absolute", inset: 0, boxShadow: `inset 0 0 ${220 * u}px ${rgba(L.danger, clamp(thump * 0.35))}` }} />
             <Dust t={t} W={W} H={H} color={L.key} n={34} opacity={0.35} />
             <Scrim side="bottom" size={0.55} strength={0.82} />
+            {/* 首帧红线：开场闪白压在文字层「下面」，只冲一下背景，不能把大字糊成一片白 */}
+            <Flash t={t} at={0} len={0.18} peak={0.3} />
+            {/* 真人出场那一下：一道闪白盖住 pre→真人 的硬切（白色、peak/len 与首帧那道一致，
+                整屏染成 key 色的话抽帧看就是一张错帧的绿纸，撞「首帧必须是完整画面」红线） */}
+            {d.person && P > 0 && <Flash t={t} at={P} len={0.18} peak={0.32} />}
 
             {/* 顶部小字 */}
             {d.kicker && (
-              <div style={{ position: "absolute", top: H * 0.66 + lineSize * 1.25, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: (t < 0.02 ? 1 : E.out(p(0, 0.25))) * (1 - E.out(p(R, 0.2))) }}>
+              <div style={{ position: "absolute", top: lineY + lineSize * 1.25, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: E.out(p(0, 0.2)) * (1 - E.out(p(R, 0.2))) }}>
                 <div style={{ fontFamily: PRO_FONT, fontWeight: 700, fontSize: 34 * u, letterSpacing: "0.32em", color: L.key, padding: `${10 * u}px ${28 * u}px`, border: `1.5px solid ${rgba(L.key, 0.6)}`, borderRadius: 999, background: rgba("#000", 0.35), textShadow: `0 0 20px ${rgba(L.key, 0.8)}` }}>{d.kicker}</div>
               </div>
             )}
 
-            {/* 悬疑句：逐字浮现，答案被遮住 */}
-            <div style={{ position: "absolute", left: 0, right: 0, top: H * 0.66, display: "flex", justifyContent: "center", alignItems: "center", opacity: 1 - E.out(p(R, 0.18)), transform: `translateY(${-E.out(p(R, 0.3)) * 30 * u}px)`, filter: t > R ? `blur(${E.out(p(R, 0.2)) * 10}px)` : undefined }}>
-              <Chars text={before} t={t} at={0.18} per={per} len={0.35} anim="rise" size={lineSize} color={L.ink} outline={0} glow={rgba("#000", 0.9)} glowR={24} />
+            {/* 悬疑句：逐字点亮，答案被遮住 */}
+            <div style={{ position: "absolute", left: 0, right: 0, top: lineY, display: "flex", justifyContent: "center", alignItems: "center", opacity: 1 - E.out(p(R, 0.18)), transform: `translateY(${-E.out(p(R, 0.3)) * 30 * u}px)`, filter: t > R ? `blur(${E.out(p(R, 0.2)) * 10}px)` : undefined }}>
+              <Chars text={before} t={t} at={lineAt} per={per} len={0.35} anim="rise" floor={0.55} size={lineSize} color={L.ink} outline={0} glow={rgba("#000", 0.9)} glowR={24} />
               {m && (
                 <span
                   style={{
@@ -102,12 +119,12 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
                     borderRadius: 6 * u,
                     background: `repeating-linear-gradient(90deg, ${rgba(L.accent, 0.95)} 0 ${lineSize * 0.12}px, ${rgba(L.accent, 0.7)} ${lineSize * 0.12}px ${lineSize * 0.16}px)`,
                     boxShadow: `0 0 ${30 * u}px ${rgba(L.accent, 0.5 + thump * 0.5)}`,
-                    opacity: t >= 0.18 + per * Array.from(before).length ? 1 : 0,
-                    transform: `scaleX(${E.back(p(0.18 + per * Array.from(before).length, 0.3))}) translateX(${noise(t * 30, 9) * thump * 6}px)`,
+                    opacity: clamp(0.5 + 0.5 * E.out((t - maskAt) / 0.25)),
+                    transform: `scaleX(${0.9 + 0.1 * E.back(clamp((t - maskAt) / 0.3))}) translateX(${noise(t * 30, 9) * thump * 6}px)`,
                   }}
                 />
               )}
-              {after && <Chars text={after} t={t} at={0.18 + per * (Array.from(before).length + 2)} per={per} len={0.35} anim="rise" size={lineSize} color={L.ink} glow={rgba("#000", 0.9)} glowR={24} />}
+              {after && <Chars text={after} t={t} at={maskAt + per * 2} per={per} len={0.35} anim="rise" floor={0.55} size={lineSize} color={L.ink} glow={rgba("#000", 0.9)} glowR={24} />}
             </div>
 
             {/* ── 揭晓 ── */}
@@ -138,14 +155,16 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
                 {d.sub && <div style={{ marginTop: 24 * u, fontFamily: PRO_FONT, fontWeight: 700, fontSize: 44 * u, color: L.ink, letterSpacing: "0.12em", opacity: E.out(p(R + 0.25, 0.4)), transform: `translateY(${(1 - E.out(p(R + 0.25, 0.4))) * 20 * u}px)`, textShadow: "0 4px 18px rgba(0,0,0,.9)" }}>{d.sub}</div>}
               </div>
             )}
-            {/* 揭晓瞬间画面整体压暗衬巨字 */}
-            {/* 开场：第 0 帧闪白 → 0.25 秒内露出画面 */}
-            {/* 首帧红线：闪白从 0.7 压到 0.3 —— 第 0 帧必须看得清画面，不能是一片白 */}
-            <Flash t={t} at={0} len={0.18} peak={0.3} />
 
             {/* 音效 */}
             <Sfx name="boom" at={0} vol={0.55} />
             <Sfx name="drone" at={0} vol={0.45} />
+            {d.person && P > 0.3 && (
+              <>
+                <Sfx name="whip" at={P - 0.28} vol={0.4} />
+                <Sfx name="boom" at={P} vol={0.5} />
+              </>
+            )}
             {beats.map((b, i) => (
               <Sfx key={i} name="heart" at={b} vol={0.35 + (i / Math.max(1, beats.length)) * 0.35} />
             ))}

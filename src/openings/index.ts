@@ -18,10 +18,16 @@ import { OPENING_TEMPLATES, TRICK_TEMPLATES } from "./templates";
 // · src/openings/<日期-主题>/Opening.tsx —— 为某条文案单独写的开场，归档在 openings/library.json，不复用
 // · src/openings/pro/ —— 5 个高规格「开场模板」（口播开场五招），做片时按第一句的钩子类型挑一个，
 //   再把文案 / 调色 / 卡点填进去；自成一体（自己铺不透明背景），可以没有真人口播
-// · src/openings/templates/ —— 透明叠加层模板（叠在真人画面上），同样按本片文案改数据
+// · src/openings/templates/ —— 透明叠层模板 + 章节隧道（op-tunnel，自背景），同样按本片文案改数据
 // >>> new-video：每条片一个专属开场（scripts/new-video.mjs 维护，别手删这行）
+import { OpeningAiSiceng } from "./2026-10-16-ai-siceng/Opening";
+import { OpeningWb5Settings } from "./2026-11-06-wb-5settings/Opening";
+import { OpeningCouncil4Collage } from "./2026-10-19-council4-collage/Opening";
+import { OpeningSkillUpgrade } from "./2026-10-21-skill-upgrade/Opening";
+import { OpeningTrae } from "./2026-10-24-trae/Opening";
+import { OpeningPersonalAgent } from "./2026-10-25-personal-agent/Opening";
 import { OpeningJuniorJobsVanish } from "./2026-10-14-junior-jobs-vanish/Opening";
 import { OpeningAiComputerUse } from "./2026-10-11-ai-computer-use/Opening";
 import { OpeningCodexVsWb } from "./2026-10-10-codex-vs-wb/Opening";
 import { OpeningAiconsoleExplainer } from "./2026-10-09-aiconsole-explainer/Opening";
-export const OPENINGS: CompDef[] = [OpeningCommentMining, OpeningAiTool4Steps, OpeningModelArena, OpeningNeverFromZero, OpeningCostBill, OpeningWorkbuddyPay, OpeningOpus55FourThings, OpeningWorkbuddy10Tips, OpeningCodex100x, OpeningWebpptNow, OpeningDbsShatter, OpeningAiconsoleInfo, ...PRO_TEMPLATE_OPENINGS, ...OPENING_TEMPLATES, ...TRICK_TEMPLATES, OpeningAiconsoleExplainer, OpeningCodexVsWb, OpeningAiComputerUse, OpeningJuniorJobsVanish];
+export const OPENINGS: CompDef[] = [OpeningCommentMining, OpeningAiTool4Steps, OpeningModelArena, OpeningNeverFromZero, OpeningCostBill, OpeningWorkbuddyPay, OpeningOpus55FourThings, OpeningWorkbuddy10Tips, OpeningCodex100x, OpeningWebpptNow, OpeningDbsShatter, OpeningAiconsoleInfo, ...PRO_TEMPLATE_OPENINGS, ...OPENING_TEMPLATES, ...TRICK_TEMPLATES, OpeningAiconsoleExplainer, OpeningCodexVsWb, OpeningAiComputerUse, OpeningJuniorJobsVanish, OpeningAiSiceng, OpeningCouncil4Collage, OpeningSkillUpgrade, OpeningTrae, OpeningPersonalAgent, OpeningWb5Settings];

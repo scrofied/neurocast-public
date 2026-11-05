@@ -27,6 +27,12 @@ const schema = z.object({
   shrinkAt: z.number().optional().describe("真人收进中间舞台的时刻（锚点/秒）；有专属开场时用它让开场全屏播完 2~3 秒，优先于 intro"),
   opening: item.optional().describe("本条视频专属开场：{type: 开场组件 id(layer=opening), at, until, data}。透明画布叠在真人画面上层"),
   inserts: z.array(item).default([]).describe("口播段中途的整屏插图（同样是透明覆盖层）：讲到某句时把一张截图/图表盖满画面举证，讲完撤走露出真人"),
+  mute: z.boolean().default(false).describe("静音本条口播视频的音轨（整片改用外部音源时用）"),
+  hide: z.array(z.object({ at: z.number(), until: z.number() })).default([]).describe("整段隐藏真人与侧栏的台词区间；用于整屏动效插入层"),
+  full: z.array(z.object({ at: z.number(), until: z.number() })).default([]).describe("真人重新切回全屏的台词区间；区间结束后回到两侧动效舞台"),
+  win: z.object({ x: z.number(), y: z.number(), w: z.number(), h: z.number() }).optional().describe("自定义真人窗口（默认居中 1040x836）；给大画面人物用"),
+  panelW: z.number().default(350).describe("侧栏宽度"),
+  bare: z.boolean().default(false).describe("侧栏去掉玻璃底与边框，内容直接浮在背景上（更接近参考博主的动效排布）"),
   leftLabel: z.string().optional(),
   rightLabel: z.string().optional(),
   left: z.array(item).default([]),
@@ -41,7 +47,7 @@ const PANEL = { y: 132, w: 350, h: 792 };
 const LEFT_X = 58;
 const RIGHT_X = 1920 - 58 - 350;
 
-const SlotItem: React.FC<{ it: Item; dur: number; side: "left" | "right"; seed: number }> = ({ it, dur, side, seed }) => {
+const SlotItem: React.FC<{ it: Item; dur: number; side: "left" | "right"; seed: number; w: number; h: number }> = ({ it, dur, side, seed, w, h }) => {
   const f = useCurrentFrame();
   const def = LOOKUP[it.type];
   const data = useMemo(() => {
@@ -52,18 +58,18 @@ const SlotItem: React.FC<{ it: Item; dur: number; side: "left" | "right"; seed: 
   if (!def) return null;
   const pin = easeOut(prog(f, 0, 14));
   const pout = easeInOut(prog(f, dur - 10, 10));
-  const dx = (side === "left" ? -1 : 1) * ((1 - pin) * 40 + pout * 30);
+  const dx = (side === "left" ? -1 : 1) * ((1 - pin) * 24 + pout * 18);
   const C = def.C;
   return (
     <div style={{ position: "absolute", inset: 0, opacity: pin * (1 - pout), transform: `translateX(${dx}px)`, filter: pin < 1 || pout > 0 ? `blur(${(1 - pin) * 6 + pout * 6}px)` : undefined }}>
-      <Box width={PANEL.w} height={PANEL.h}>
+      <Box width={w} height={h}>
         <C data={data} frame={f} dur={dur} variant={0} seed={seed} text="" />
       </Box>
     </div>
   );
 };
 
-const Panel: React.FC<{ items: Item[]; x: number; side: "left" | "right"; show: number; dur: number; label?: string; seed: number }> = ({ items, x, side, show, dur, label, seed }) => {
+const Panel: React.FC<{ items: Item[]; x: number; side: "left" | "right"; show: number; dur: number; label?: string; seed: number; w: number; h: number; y: number; bare?: boolean }> = ({ items, x, side, show, dur, label, seed, w, h, y, bare }) => {
   const t = useTheme();
   const sorted = [...items].map((it, i) => ({ ...it, at: it.at ?? i * 90 })).sort((a, b) => a.at! - b.at!);
   return (
@@ -71,20 +77,20 @@ const Panel: React.FC<{ items: Item[]; x: number; side: "left" | "right"; show: 
       style={{
         position: "absolute",
         left: x,
-        top: PANEL.y,
-        width: PANEL.w,
-        height: PANEL.h,
+        top: y,
+        width: w,
+        height: h,
         opacity: show,
-        transform: `translateX(${(side === "left" ? -1 : 1) * (1 - show) * 80}px)`,
-        borderRadius: 22,
-        background: `linear-gradient(160deg, ${alpha(t.primary, 0.07)}, ${alpha(t.bg, 0.55)} 55%)`,
-        border: `1px solid ${alpha(t.primary, 0.22)}`,
-        boxShadow: `inset 0 0 40px ${alpha(t.primary, 0.05)}`,
+        transform: `translateX(${(side === "left" ? -1 : 1) * (1 - show) * 40}px)`,
+        borderRadius: bare ? 0 : 22,
+        background: bare ? "transparent" : `linear-gradient(160deg, ${alpha(t.primary, 0.07)}, ${alpha(t.bg, 0.55)} 55%)`,
+        border: bare ? undefined : `1px solid ${alpha(t.primary, 0.22)}`,
+        boxShadow: bare ? undefined : `inset 0 0 40px ${alpha(t.primary, 0.05)}`,
         overflow: "hidden",
       }}
     >
-      <Corners color={alpha(t.primary, 0.8)} size={16} inset={10} />
-      {label && <div style={{ position: "absolute", left: 24, bottom: 16, fontFamily: t.font.mono, fontSize: 13, letterSpacing: 4, color: alpha(t.primary, 0.7) }}>{label}</div>}
+      {!bare && <Corners color={alpha(t.primary, 0.8)} size={16} inset={10} />}
+      {label && !bare && <div style={{ position: "absolute", left: 24, bottom: 16, fontFamily: t.font.mono, fontSize: 13, letterSpacing: 4, color: alpha(t.primary, 0.7) }}>{label}</div>}
       {sorted.map((it, i) => {
         const from = Math.max(0, Math.round(it.at!));
         const next = sorted[i + 1]?.at;
@@ -92,7 +98,7 @@ const Panel: React.FC<{ items: Item[]; x: number; side: "left" | "right"; show: 
         if (to <= from) return null;
         return (
           <Sequence key={i} from={from} durationInFrames={to - from} layout="none">
-            <SlotItem it={it} dur={to - from} side={side} seed={seed + i * 13} />
+            <SlotItem it={it} dur={to - from} side={side} seed={seed + i * 13} w={w} h={h} />
           </Sequence>
         );
       })}
@@ -149,26 +155,35 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed, text }) =>
   const enterAt = useEnter(variant);
   const { width, height } = useBox();
   const intro = data.shrinkAt ?? data.intro ?? 24;
+  const WB = data.win ?? WIN;
+  const PW = data.panelW ?? PANEL.w;
+  const LX = data.win ? 36 : LEFT_X;
+  const RX = 1920 - LX - PW;
+  const PY = data.win ? data.win.y : PANEL.y;
+  const PH = data.win ? Math.max(320, 1080 - PY - 44) : PANEL.h;
   const op = data.opening;
   const odef = op ? LOOKUP[op.type] : undefined;
   const orange = openRange(op, dur);
   const odata = useMemo(() => (odef && op ? withData(odef, op.data) : undefined), [odef, op]);
   const opening = !!(odef?.camera && orange && frame >= orange.from && frame < orange.to);
+  const fullNow = data.full.some((r) => frame >= r.at && frame < r.until);
+  const hiddenNow = (data.hide ?? []).some((r) => frame >= r.at && frame < r.until);
   const cam: Cam = opening ? odef!.camera!(odata, frame - orange!.from, orange!.to - orange!.from) : {};
   // an opening that drives the person suppresses the shrink: it owns the window shape for its window
   // 收缩（舞台框）是本组件自己那层的入场：只取 e.p 顶替原生进度（fallback=wipe → easeInOut，基线不变），
   // 不消费 dx/dy/clip，避免给窗口凭空加位移；分镜写 motion.enter 时由它改这段节奏。
   const eStage = enterAt(frame, intro, { fallback: "wipe", dur: 26 });
-  const k = opening ? 0 : eStage.p;
-  const x = WIN.x * k;
-  const y = WIN.y * k;
-  const w = width + (WIN.w - width) * k;
-  const h = height + (WIN.h - height) * k;
+  const k = opening || fullNow ? 0 : eStage.p;
+  const x = WB.x * k;
+  const y = WB.y * k;
+  const w = width + (WB.w - width) * k;
+  const h = height + (WB.h - height) * k;
   const radius = 26 * k;
   // 侧栏槽位（两侧玻璃栏的淡入）也是本组件自己那层的入场：只取 e.p 顶替原生 easeOut 进度
   // （fallback=slide-r 的 p 即 easeOut，基线一致），位移仍由 Panel 原生 (1-show) 计算，不额外叠加。
   const eSlot = enterAt(frame, intro + 12, { fallback: "slide-r", dur: 20 });
-  const show = eSlot.p * (opening ? 0 : 1);
+  const covered = !!(odef?.opening?.selfBg && orange && frame >= orange.from && frame < orange.to);
+  const show = eSlot.p * (opening || covered || fullNow || hiddenNow ? 0 : 1);
   const vf = data.videoFrames ?? Infinity;
   const last = Math.max(0, Math.floor(vf) - 2);
   const src = /^https?:/.test(data.video) ? data.video : staticFile(data.video);
@@ -180,6 +195,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed, text }) =>
       <div
         style={{
           position: "absolute",
+          opacity: hiddenNow ? 0 : 1,
           left: opening ? 0 : x,
           top: opening ? 0 : y,
           width: opening ? "100%" : w,
@@ -201,7 +217,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed, text }) =>
           }}
         >
           {frame < last ? (
-            <OffthreadVideo src={src} style={style} volume={(f) => (data.audioUntil !== undefined && f >= data.audioUntil ? 0 : 1)} />
+            <OffthreadVideo src={src} style={style} volume={(f) => (data.mute ? 0 : data.audioUntil !== undefined && f >= data.audioUntil ? 0 : 1)} />
           ) : (
             <Freeze frame={last}>
               <OffthreadVideo src={src} style={style} muted />
@@ -228,19 +244,19 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed, text }) =>
       </div>
       {show > 0.01 && (
         <>
-          <Panel items={data.left} x={LEFT_X} side="left" show={show} dur={dur} label={data.leftLabel} seed={seed} />
-          <Panel items={data.right} x={RIGHT_X} side="right" show={show} dur={dur} label={data.rightLabel} seed={seed + 7} />
+          <Panel items={data.left} x={LX} side="left" show={show} dur={dur} label={data.leftLabel} seed={seed} w={PW} h={PH} y={PY} bare={data.bare} />
+          <Panel items={data.right} x={RX} side="right" show={show} dur={dur} label={data.rightLabel} seed={seed + 7} w={PW} h={PH} y={PY} bare={data.bare} />
           <svg width={width} height={height} style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: show }}>
             {[
-              [LEFT_X + PANEL.w, PANEL.y + 60, WIN.x, WIN.y + 90],
-              [RIGHT_X, PANEL.y + 60, WIN.x + WIN.w, WIN.y + 90],
+              [LX + PW, PY + 60, WB.x, WB.y + 90],
+              [RX, PY + 60, WB.x + WB.w, WB.y + 90],
             ].map(([x1, y1, x2, y2], i) => (
               <path key={i} d={`M${x1},${y1} C${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}`} fill="none" stroke={alpha(t.primary, 0.35)} strokeWidth={1.5} strokeDasharray="3 7" strokeDashoffset={-frame * 1.2} />
             ))}
           </svg>
         </>
       )}
-      <div style={{ position: "absolute", left: WIN.x, top: WIN.y + WIN.h + 10, width: WIN.w, height: 2, opacity: show, background: `linear-gradient(90deg, transparent, ${alpha(t.primary, clamp(0.3 + 0.2 * Math.sin(frame / 12)))}, transparent)` }} />
+      <div style={{ position: "absolute", left: WB.x, top: WB.y + WB.h + 10, width: WB.w, height: 2, opacity: show, background: `linear-gradient(90deg, transparent, ${alpha(t.primary, clamp(0.3 + 0.2 * Math.sin(frame / 12)))}, transparent)` }} />
       {op && orange && (
         <Sequence from={orange.from} durationInFrames={orange.to - orange.from} layout="none">
           <OpeningLayer it={op} dur={orange.to - orange.from} seed={seed + 101} text={text} />
@@ -265,7 +281,7 @@ export const TalkingHeadStage: CompDef<D> = {
   layer: "structure",
   variants: 1,
   minSec: 3,
-  maxSec: 40,
+  maxSec: 260,
   tags: ["口播", "真人", "开场"],
   motion: { kind: "真人从全屏收进中间发光舞台框，两侧玻璃侧栏随之滑入", energy: 2 },
   desc: "开头 1 秒真人全屏，随后收进中间发光窗口；左右两块玻璃侧栏按讲话节奏依次放入小组件（手机信息流、要点卡、逻辑翻转、数字等）",

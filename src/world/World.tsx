@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { rng, noise1 } from "../lib/anim";
 import { useTheme } from "../lib/theme";
 import type { Shot } from "../types";
+import { MatrixRain } from "./MatrixRain";
 
 // camera travel: slow drift + a speed burst at every shot boundary (the "flight" transition)
 const useTravel = (shots: Shot[], frame: number) => {
@@ -118,16 +119,22 @@ export const World: React.FC<{ shots: Shot[]; seed: number; variant: string }> =
   const starZ = travel % 3000;
   const sway = noise1(frame / 140, seed) * 0.05;
   const bob = noise1(frame / 170, seed + 5) * 0.03;
+  const matrix = variant === "matrix";
   return (
     <ThreeCanvas width={width} height={height} camera={{ fov: 60, near: 1, far: 5000, position: [0, 0, 400] }} style={{ position: "absolute", inset: 0 }}>
       <fog attach="fog" args={[t.bg, 600, 3200]} />
       <group rotation={[bob, sway, 0]}>
-        <group position={[0, 0, starZ]}>
-          <Stars seed={seed} color={t.primary} color2={t.secondary} count={2600} />
-        </group>
-        <group position={[0, 0, starZ - 3000]}>
-          <Stars seed={seed} color={t.primary} color2={t.secondary} count={2600} />
-        </group>
+        {!matrix && (
+          <>
+            <group position={[0, 0, starZ]}>
+              <Stars seed={seed} color={t.primary} color2={t.secondary} count={2600} />
+            </group>
+            <group position={[0, 0, starZ - 3000]}>
+              <Stars seed={seed} color={t.primary} color2={t.secondary} count={2600} />
+            </group>
+          </>
+        )}
+        {matrix && <MatrixRain travel={travel} seed={seed} />}
         {variant === "grid" && (
           <>
             <Grid color={t.primary} bg={t.bg} travel={travel} y={-330} />
@@ -153,7 +160,7 @@ export const World: React.FC<{ shots: Shot[]; seed: number; variant: string }> =
             ))}
           </group>
         )}
-        <Floaters seed={seed} color={t.primary} travel={travel} frame={frame} />
+        {!matrix && <Floaters seed={seed} color={t.primary} travel={travel} frame={frame} />}
       </group>
     </ThreeCanvas>
   );

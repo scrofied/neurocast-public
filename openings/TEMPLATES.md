@@ -1,41 +1,68 @@
-# 开场模板库（20 个）
+# 开场模板选型
 
-代码在 `src/openings/templates/`，公共工具在 `kit.tsx`。每个模板都是透明叠加层，盖在真人画面上面：第 0 帧就有东西出现，所有文字都从 data 里取，每个变化都挂在锚点上（字段名是 `xxxAt`，填台词原文或帧数），用 3 秒左右。
+先设计前 2 / 5 / 10 秒的看点、解释/证据、第一步兑现，再选机制。不要把每条片都做成“砸字 + 闪白 + 叮”。当前 ID、时长和必填字段以 `node scripts/openings.mjs list` 与 [CATALOG.md](../CATALOG.md) 为准。
 
-按文案第一句的钩子类型挑一个，改字段，写进分镜顶层（全片 TTS + 真人小窗）或口播镜头的 `data.opening`：
+## 三套自带舞台的三段开场
 
-```json
-{ "opening": { "type": "op-t02-number", "at": 0, "until": "AI$", "data": { "to": 90, "unit": "%", "line": "的人都用错了 AI", "hl": "用错了", "landAt": "90" } } }
-```
+代码在 `src/openings/templates/retention.tsx`；推荐 8 秒，支持 6–10 秒，无需真人底图。
 
-| # | id | 钩子 | 第一句长这样就用它 | 画面 |
-|---|---|---|---|---|
-| 01 | `op-t01-question` | 反问质疑 | “为什么…？”“你真的…吗？” | 巨型问号砸下 + 问句逐字弹出 + 红章盖答案 |
-| 02 | `op-t02-number` | 数字冲击 | “90% 的人…”“3 天涨粉 1 万” | 计数器狂滚后定格砸下，冲击环 + 叮 |
-| 03 | `op-t03-myth` | 反常识 | “都说…其实…”“努力就有结果？错” | 常识被划掉，勾翻成叉，真相砸入 |
-| 04 | `op-t04-pain` | 痛点扎心 | “天天加班、工资不涨…” | 画面变黑白，痛点气泡围攻，“是不是你？” |
-| 05 | `op-t05-suspense` | 悬念 | “最后一个方法才是重点” | 马赛克遮挡 + 锁头砸下晃动 + “看到最后 ▼” |
-| 06 | `op-t06-callout` | 身份点名 | “如果你是宝妈/上班族…” | 瞄准框锁定人脸 + 人群标签 |
-| 07 | `op-t07-before-after` | 前后对比 | “3 个月前 0 粉，现在 10 万” | 光刃劈开画面，左灰右金 BEFORE/AFTER |
-| 08 | `op-t08-warning` | 警告 | “千万别…”“这 3 个坑” | 红色警报 + 警戒条 + STOP 禁止牌 |
-| 09 | `op-t09-reveal` | 揭秘爆料 | “揭秘…内幕”“平台不会告诉你” | 绝密档案撕开封条，大字弹出 |
-| 10 | `op-t10-countdown` | 时间紧迫 | “只要 3 分钟”“最后 3 天” | 巨型倒数 3→2→1 + 引线进度条烧完 |
-| 11 | `op-t11-money` | 收益诱惑 | “一个月多赚 3 万” | 金币雨 + 到账通知 + 金额滚动 |
-| 12 | `op-t12-rewind` | 结果先行 | “这网站我 20 分钟做的” | 定格 + VHS 倒带 + “怎么做到的？” |
-| 13 | `op-t13-versus` | 对决比较 | “A 和 B 谁更强？” | 两块色块冲撞，VS 爆炸 |
-| 14 | `op-t14-list` | 清单干货 | “5 个 AI 神器”“最后一个最狠” | 卡片扇形甩出，最后一张金光翻转 |
-| 15 | `op-t15-chat` | 真实提问 | “有粉丝私信问我…” | 手机甩入，聊天气泡逐条弹出 |
-| 16 | `op-t16-crowd` | 稀缺少数 | “100 个人只有 1 个…” | 百人方阵熄灭，只剩 1 个发光 |
-| 17 | `op-t17-news` | 热点快讯 | “重磅！…刚刚发布” | 新闻台红条 + LIVE + 滚动字幕 |
-| 18 | `op-t18-magnify` | 细节聚焦 | “注意看我身后这台…” | 放大镜真实放大画面里的东西 + 标注 |
-| 19 | `op-t19-bet` | 挑战打赌 | “看完还不会我…” | 筹码砸桌 + 红章承诺 |
-| 20 | `op-t20-glitch` | 打断刷屏 | “先别划走！”（万能兜底） | 信号撕裂，真人从噪点里闯出 |
+| ID | 首帧 → 解释 → 兑现 | 适用素材 | 默认声音 |
+|---|---|---|---|
+| `op-result-first` | 暗绿展台真实结果 → 局部聚焦 → 分屏第一步 | `result.src` 真截图/录屏 | `foley` 快门、点击、打字 |
+| `op-quiet-question` | 纸白反问与留白 → 绕路示意 → 直达路径与行动条 | 无需证据素材；图形只做关系解释 | `quiet` 只留配音 |
+| `op-proof-compare` | 同条件实物对照 → 滑杆揭差别 → 收高腾出复现步骤 | `before.src`、`after.src` 真素材 | `pulse` 低频脉冲 |
 
-字段说明和默认值见 `CATALOG.md`（搜 `op-t`）。预览视频在 `openings/previews/op-t*.mp4`，想换人像重新生成可以跑：
+必须显式填写 `hook / proof / payoff`（≤36 / 60 / 60 字，尽量短）；用 `proofAt / payoffAt` 对齐台词。**storyboard 的时间填台词原文或秒数，不填帧数**；普通组件在运行时接收帧，PRO 接收秒。兑现后至少留 0.8 秒供阅读。
+
+素材各自填写 `source.platform` 或 `source.url`；库存画面不能作证据。预览缺素材只显示“布局演示 · 非实测数据”，正式管线会拦下。不要让示意画面冒充结果。
+
+新三套的 `sound` 可选四种：quiet / foley / pulse / impact。声音只落首帧、解释、兑现节点，无统一结尾 whoosh。全局 `sfx:false` 同样约束 PRO；有 BGM 时开场压低，quiet 留白，结束时平滑回到正片音量。
+
+## 短钩子与真人叠层
+
+短模板结束后，仍需在正片前 5–10 秒给解释和第一步。数字、收益、评论、对比必须有真实依据，不能照搬示例声称实测。
+
+| ID | 机制 |
+|---|---|
+| `op-t01-question` | 问号 + 问句 + 答案章 |
+| `op-t02-number` | 滚动数字定格 |
+| `op-t03-myth` | 常识划掉、真相入场 |
+| `op-t04-pain` | 黑白画面、痛点气泡 |
+| `op-t05-suspense` | 遮挡与锁头；不要拖延兑现 |
+| `op-t06-callout` | 点名与聚焦框 |
+| `op-t07-before-after` | 分屏前后对比 |
+| `op-t08-warning` | 警告与禁止牌 |
+| `op-t09-reveal` | 档案撕封揭示 |
+| `op-t10-countdown` | 倒数与时间条 |
+| `op-t11-money` | 金额与通知；禁止虚构收益 |
+| `op-t12-rewind` | 定格倒带 |
+| `op-t13-versus` | 两方对决 |
+| `op-t14-list` | 扇形清单 |
+| `op-t15-chat` | 聊天气泡 |
+| `op-t16-crowd` | 人群筛选 |
+| `op-t17-news` | 新闻信息条 |
+| `op-t18-magnify` | 真人画面局部放大 |
+| `op-t19-bet` | 挑战与承诺 |
+| `op-t20-glitch` | 故障打断；不是万能兜底 |
+| `op-tunnel` | 章节过场；代码雨隧道 → 章节大标题（2.2–4 秒，自背景） |
+| `op-three-beat` | 钩子 → 承诺 → 第一条正文（5–8 秒） |
+| `trick-*` | 慢推、变形、收圈、身后标题、信息先行 |
+
+PRO 系列自带舞台与运镜，按各自时长用；详见 [PRO 选型与参数](../src/openings/pro/README.md)。自带舞台会挡住外层 presenter：PRO 需填 `person` 才露脸，新三套不内嵌真人。
+
+## 使用与验收
+
+TTS 把 opening 放分镜顶层；原声口播放 `talking-head-stage.data.opening`，不能两处同时挂。参数示例及注意事项见 [SKILL.md](../SKILL.md)。
 
 ```bash
-node scripts/opening-templates.mjs sheet   # 每个模板 4 帧总览 → out/templates/
-node scripts/opening-templates.mjs video op-t02-number
+node scripts/openings.mjs list
+node scripts/opening-templates.mjs sheet - op-quiet-question
+node scripts/opening-templates.mjs video op-result-first -
+node scripts/opening-templates.mjs sheet <talk.mp4> pro-
+node scripts/openings.mjs preview <input.json>
+node scripts/openings.mjs pending
 ```
 
-模板是起点，不是成品：同一个模板不要连着给两条视频用；改字段不够用时，就复制到 `src/openings/<日期-主题>/` 里改成专属开场。
+演示视频不是本片验收：必须预览本片前 10 秒，检查首帧、长字、素材来源、兑现时间和正文交接并试听。预览实际落在 `openings/previews/<开场id>-<input hash>.mp4`（按 input 文件区分），`sync` 会把最近一条写回 `library.json`；短片自动截到结尾。`pending` 盘点草稿、上过片但没录数据的开场、以及还没预览的正式开场。
+
+近三片同模板或同视觉/声音组合会警告。优先换机制，而不是复制源码换名字；草稿标 `opening.draft:true`，不可用于正式出片。发布后使用 `metric <id> video=<片标识> bounce2s=... finish5s=... finish10s=... plays=...` 回填真实样本，不凭单条小样本承诺留存效果。

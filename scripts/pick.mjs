@@ -3,6 +3,7 @@
 //   node scripts/pick.mjs --storyboard examples/xxx/storyboard.json     逐镜体检，标出该新增组件的位置
 //   node scripts/pick.mjs --list                                        列出全部组件的动效与适用
 //   node scripts/pick.mjs --fresh ["语义"]                               只在「从未上过片」的组件里选
+//   node scripts/pick.mjs --dormant ["语义"]                             只在「上过片但近 N 条没用过」的休眠池里选
 //   node scripts/pick.mjs --recent [--n 3]                              近 N 条片各用了哪些组件
 //   node scripts/pick.mjs "语义" --avoid quote,versus                    排除指定组件后再选
 //
@@ -73,6 +74,11 @@ const usageTag = (id) => {
   const s = statsOf(id, { ledger, rec: recentMap });
   return { ...s, tag: s.fresh ? "新" : s.recentN ? `刚用过${s.recentN}` : `${s.count}次` };
 };
+// 休眠池：上过片（不是全新），但近 recentVideos 条片没出现 → 轮换时优先从这里挑
+const dormant = (id) => {
+  const s = statsOf(id, { ledger, rec: recentMap });
+  return !s.fresh && !s.recentN;
+};
 
 if (has("--recent")) {
   const n = Number(flag("--n") || ledger.rules.recentVideos);
@@ -89,6 +95,7 @@ if (has("--recent")) {
 if (has("--list")) {
   for (const c of poolAll) {
     if (avoid.has(c.id)) continue;
+    if (has("--dormant") && !dormant(c.id)) continue;
     const t = usageTag(c.id);
     console.log(`${c.id}\t${c.motion?.kind || "—"}\t变体${c.variants}\t${t.fresh ? "从未上过片" : `已用 ${t.count} 次（最近 ${t.lastDate}）`}\t${c.use || c.tags.join("、")}`);
   }
@@ -118,23 +125,24 @@ if (sbPath) {
     const near = ranked.filter((r) => r.v > 0).slice(0, 3);
     const tagOf = (c) => {
       const t = usageTag(c.id);
-      return t.fresh ? "★新" : t.recentN ? "⚠刚用过" : "";
+      return t.fresh ? "★新" : t.recentN ? "⚠刚用过" : "○休眠";
     };
     if (myV < LOW) {
       weak++;
       console.log(`  ⚠ s${i} ${s.type}  ←「${line}」吻合度 ${myV}`);
       console.log(`     更接近的：${near.length ? near.map((r) => `${r.c.id}(${r.v})${tagOf(r.c)}`).join(" / ") : "没有语义接近的"}`);
-      console.log(`     ⇒ 现有组件都撑不住这个语义，应当新增一个（见 CATALOG.md 顶部「新增组件判定」）`);
+      console.log(`     ⇒ 现有组件都不贴合：先换更接近的 / 调参数；确实表达不了才新增（本片新增 0~2 个封顶，见 CATALOG.md 顶部「新增组件判定」）`);
     } else if (myV < GOOD) {
       console.log(`  · s${i} ${s.type}  勉强（${myV}）←「${line}」`);
     } else if (usageTag(s.type).recentN) {
-      const alt = ranked.filter((r) => r.v >= GOOD * 0.7 && usageTag(r.c.id).fresh).slice(0, 2);
-      console.log(`  · s${i} ${s.type}  语义够（${myV}）但近片刚用过${alt.length ? `，可换 ${alt.map((r) => r.c.id + "★新").join(" / ")}` : ""}`);
+      const alt = ranked.filter((r) => r.v >= GOOD * 0.7 && !usageTag(r.c.id).recentN).slice(0, 2);
+      console.log(`  · s${i} ${s.type}  语义够（${myV}）但近片刚用过${alt.length ? `，可换 ${alt.map((r) => `${r.c.id}${usageTag(r.c.id).fresh ? "★新" : "○休眠"}`).join(" / ")}` : ""}`);
     }
   });
   const mine = new Set(shots.map((s) => s.type).filter((t) => t !== "outro" && t !== "talking-head-stage"));
   const fresh = [...mine].filter((id) => statsOf(id, { ledger }).fresh);
-  console.log(`\n合计：${shots.length} 镜，其中 ${weak} 镜判定「应该新增组件」；用到 ${mine.size} 种组件，其中 ${fresh.length} 个从未上过片（要求 ≥${ledger.rules.minFresh}）${fresh.length < ledger.rules.minFresh ? " ⚠" : " ✓"}`);
+  const rotated = [...mine].filter((id) => !statsOf(id, { ledger }).recentN);
+  console.log(`\n合计：${shots.length} 镜，其中 ${weak} 镜语义不匹配（先换组件/调参数，新增封顶 0~2 个）；用到 ${mine.size} 种组件，其中 ${rotated.length} 个近 ${ledger.rules.recentVideos} 条片未用过（要求 ≥${ledger.rules.minRotated}）${rotated.length < ledger.rules.minRotated ? " ⚠" : " ✓"}；从未上过片 ${fresh.length} 个`);
   console.log("注：判定依据是「画面意图 ≠ 现有组件语义」，与台词文字无关——所以每条镜头都应写 intent。★新 = 从未上过片的候选，优先用它们。");
   process.exit(0);
 }
@@ -143,17 +151,44 @@ const VALUED_ARG = new Set(["--storyboard", "--avoid", "--n"]);
 const consumed = new Set();
 for (let i = 0; i < args.length; i++) if (VALUED_ARG.has(args[i]) && args[i + 1]) consumed.add(i + 1);
 const q = args.filter((a, i) => !a.startsWith("--") && !consumed.has(i)).join(" ");
-if (!q && !has("--fresh")) {
-  console.log('用法：node scripts/pick.mjs "语义描述" | --storyboard <file> | --list | --fresh ["语义"] | --recent [--n 3] | --avoid a,b');
+if (has("--fresh") && has("--dormant")) {
+  console.error("--fresh（从没上过片）和 --dormant（上过片但休眠）是互斥的两个池子，选一个。");
+  process.exit(1);
+}
+if (!q && !has("--fresh") && !has("--dormant")) {
+  console.log('用法：node scripts/pick.mjs "语义描述" | --storyboard <file> | --list | --fresh ["语义"] | --dormant ["语义"] | --recent [--n 3] | --avoid a,b');
+  process.exit(0);
+}
+
+if (has("--dormant") && !q) {
+  const pool = poolAll.filter((c) => !avoid.has(c.id) && dormant(c.id));
+  console.log(`休眠池：上过片但近 ${ledger.rules.recentVideos} 条片没出现，共 ${pool.length} 个（台账 ${ledger.videos.length} 条片）`);
+  if (!pool.length) {
+    console.log("⇒ 没有休眠组件：要么全都没上过片（用 --fresh），要么全都在近几条片里出现过。");
+    process.exit(0);
+  }
+  for (const c of pool) {
+    const t = usageTag(c.id);
+    console.log(`${c.id}\t${c.motion?.kind || "—"}\t变体${c.variants}\t累计 ${t.count} 次（最近 ${t.lastDate}）\t${c.use || c.tags.join("、")}`);
+  }
+  console.log("\n挑这些不会和最近三条片撞脸；仍要按语义选，别为了轮换硬塞。");
   process.exit(0);
 }
 
 let pool = poolAll.filter((c) => !avoid.has(c.id));
 if (has("--fresh")) {
-  pool = pool.filter((c) => statsOf(c.id, { ledger }).fresh);
+  pool = pool.filter((c) => statsOf(c.id, { ledger, rec: recentMap }).fresh);
   console.log(`只在从未上过片的 ${pool.length} 个组件里选（台账：${ledger.videos.length} 条片）\n`);
   if (!pool.length) {
     console.log("⇒ 全部正片组件都上过片了。这时候要么按本次语义新增组件，要么把老组件的 motion.enter 换掉。");
+    process.exit(0);
+  }
+}
+if (has("--dormant")) {
+  pool = pool.filter((c) => dormant(c.id));
+  console.log(`只在休眠池的 ${pool.length} 个组件里选（上过片、近 ${ledger.rules.recentVideos} 条片没出现）\n`);
+  if (!pool.length) {
+    console.log("⇒ 休眠池是空的，换 --fresh 或按语义新增组件。");
     process.exit(0);
   }
 }
@@ -163,12 +198,13 @@ console.log(`  ${pad("id", 22)} ${pad("吻合", 6)}  ${pad("用量", 16)} ${pad(
 for (const { c, v } of ranked) {
   const bar = v >= GOOD ? "✓" : v >= OK ? "~" : " ";
   const t = usageTag(c.id);
-  const note = (t.fresh ? "★" : t.recentIn.length >= 2 ? "⚠" : t.recentN ? "·" : " ") + " " + usageNote(t);
+  const mark = t.fresh ? "★" : t.recentIn.length >= 2 ? "⚠" : t.recentN ? "·" : "○";
+  const note = mark + " " + usageNote(t);
   console.log(`${bar} ${pad(c.id, 23)} ${pad(String(v), 6)}  ${pad(note, 16)} ${pad(c.motion?.kind || "—", 20)} ${(c.use || c.tags.join("、")).replace(/\s+/g, " ").slice(0, 34)}`);
 }
 const top = ranked[0];
 console.log("");
-console.log("  用量标记：★ 从未上过片（优先）· ⚠ 近片出现在 ≥2 条里（换组件）· · 只在 1 条近片出现过（可复用，但换 motion.enter）");
+console.log("  用量标记：★ 从未上过片（优先）· ⚠ 近片出现在 ≥2 条里（换组件）· · 只在 1 条近片出现过（可复用，但换 motion.enter）· ○ 休眠（上过片但近几条没用，轮换首选）");
 if (top.v >= GOOD) {
   const t = usageTag(top.c.id);
   const alt = ranked.filter((r) => r.c.id !== top.c.id && r.v >= GOOD * 0.75 && statsOf(r.c.id, { ledger }).fresh).slice(0, 2);

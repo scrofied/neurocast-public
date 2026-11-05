@@ -15,10 +15,13 @@ const rngOf = (seed) => {
 const SKINS = ["aurora", "violet", "amber", "matrix", "arctic"];
 const FONTS = ["yahei", "noto", "deng"];
 const WORLDS = ["grid", "tunnel", "stars"];
+// matrix 是需要显式点名的强风格世界：不参与 seed 随机，避免每条片都变成黑客帝国。
+const EXTRA_WORLDS = ["matrix"];
+const ALL_WORLDS = [...WORLDS, ...EXTRA_WORLDS];
 // 随机转场池：cut（无入场硬切）留给开场与分镜的显式声明，不参与随机——
-// 随机硬切会让节奏失控。池子 = motion.mjs 的 TRANSITIONS 去掉 cut，渲染层加一种它就自动多一种
+// 随机硬切会让节奏失控。池子 = motion.mjs 的 TRANSITIONS 去掉 cut 与 matrix，渲染层加一种它就自动多一种
 // （现在是 10 种：fade/fly/warp/iris/flood/glitch + 形状连续那四种 zoom/push/wipe/grid）。
-const RANDOM_TRANSITIONS = TRANSITIONS.filter((t) => t !== "cut");
+const RANDOM_TRANSITIONS = TRANSITIONS.filter((t) => t !== "cut" && t !== "matrix");
 
 export const VARIANTS = { neural: 3, agents: 3, prompt: 2, funnel: 1, vault: 1, assembly: 1, number: 2, code: 3, flow: 3, timeline: 2, versus: 2, growth: 2, cards: 2, screen: 3, quote: 2, chapter: 2, narration: 2, hook: 1, outro: 1 };
 
@@ -184,7 +187,7 @@ export const styleFor = (input) => {
     r,
     skin: input.skin && SKINS.includes(input.skin) ? input.skin : SKINS[seed % SKINS.length],
     font: FONTS[Math.floor(r() * FONTS.length)],
-    world: WORLDS[Math.floor(r() * WORLDS.length)],
+    world: input.world && ALL_WORLDS.includes(input.world) ? input.world : WORLDS[Math.floor(r() * WORLDS.length)],
     mirror: r() < 0.35,
     transitions: [...RANDOM_TRANSITIONS].sort(() => r() - 0.5).slice(0, 4),
     variantOffset: Math.floor(r() * 6),

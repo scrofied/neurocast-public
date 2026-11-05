@@ -10,7 +10,7 @@ import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, GlowDefs, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
 
-const node = z.object({ text: z.string(), icon: z.string().optional().describe("图标名，缺省按文字猜"), at: z.number().optional().describe("这一环点亮的时刻（锚点）") });
+const node = z.object({ text: z.string(), icon: z.string().optional().describe("图标名，缺省按文字猜"), at: z.number().optional().describe("这一环点亮的时刻（锚点）"), labelAbove: z.boolean().optional().describe("标签放到圆点上方；只有落到字幕带里的底部节点需要，默认在下方") });
 const schema = z.object({
   title: z.string().optional(),
   kicker: z.string().optional(),
@@ -120,7 +120,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
               style={{
                 position: "absolute",
                 left: "50%",
-                top: nr * 2 + 8,
+                top: nd.labelAbove ? -(fs * 1.35) - 8 : nr * 2 + 8,
                 transform: "translateX(-50%)",
                 whiteSpace: "nowrap",
                 fontFamily: t.font.title,

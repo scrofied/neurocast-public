@@ -4,6 +4,7 @@ import { clamp, easeInOut, easeOut, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Sfx } from "../../lib/sfx";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -44,11 +45,21 @@ const Dot: React.FC<{ x: number; y: number; col: string; show: boolean }> = ({ x
   <div style={{ position: "absolute", left: x - 11, top: y - 11, width: 22, height: 22, borderRadius: "50%", background: col, boxShadow: `0 0 22px ${col}` }} />
 );
 
-const C: React.FC<CompProps<D>> = ({ data, frame }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, variant }) => {
   const t = useTheme();
   const { width, height } = useBox();
   const W = width, H = height;
   const col = t.primary, gold = t.gold;
+  const enterAt = useEnter(variant);
+  const e = enterAt(frame, 0);
+  const layer = {
+    position: "absolute" as const,
+    inset: 0,
+    opacity: e.opacity,
+    transform: `translate(${e.dx}px, ${e.dy}px) scale(${e.scale}) rotate(${e.rot}deg)`,
+    transformOrigin: "50% 50%",
+    clipPath: e.clip,
+  };
   const cn = data.chain.length;
   const ln = data.lanes.length;
   const x0 = W * 0.16, x1 = W * 0.84;
@@ -73,7 +84,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
   const merge = Math.max(chainDone, par + laneDur) + 6;
   const eVer = data.verdict ? clamp(easeOut(prog(frame, merge + 6, 10))) : 0;
   return (
-    <>
+    <div style={layer}>
       <Heading kicker={data.kicker} title={data.title} frame={frame} width={W} />
       {/* 接力链 */}
       {data.chain.map((c, i) => {
@@ -116,7 +127,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
       {cues.slice(1).map((a, i) => <Sfx key={i} name="click" at={a} volume={0.28} />)}
       <Sfx name="swipe" at={par} volume={0.3} />
       {data.verdict && <Sfx name="stamp" at={merge + 6} volume={0.45} />}
-    </>
+    </div>
   );
 };
 
@@ -130,6 +141,7 @@ export const RelayParallel: CompDef<D> = {
   tags: ["并行", "流水线", "依赖", "调度", "效率"],
   desc: "上排任务节点按顺序接力（金色光点沿连线走到下一个才亮），下排互不依赖的泳道同时起跑、光点并排推进，全部到达后汇合、结论章砸出",
   use: "讲调度策略：有前后关系的按顺序做、能同时做的同时做；多任务并行、流水线优化、等待时间压缩",
+  motion: { kind: "金色光点沿接力链逐站传递，下排泳道光点同时起跑，全部到达后汇合并砸出结论章", energy: 2 },
   schema,
   example: {
     kicker: "调度",

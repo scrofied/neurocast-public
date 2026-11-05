@@ -219,16 +219,6 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
             )}
           </div>
 
-          {st.label && (
-            <div style={{ position: "absolute", left: 22, top: 20, maxWidth: bw * 0.52, padding: "9px 18px", borderRadius: 999, background: alpha(t.bg, 0.8), border: `2px solid ${mixC(g0.col, g1.col, p, 0.75)}`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(st.label, bw * 0.46, 26, 18), color: t.text, whiteSpace: "nowrap", opacity: vis * eLab.opacity, transform: `translateY(${eLab.dy}px)`, boxShadow: `0 0 26px ${mixC(g0.col, g1.col, p, 0.3)}` }}>
-              {st.label}
-            </div>
-          )}
-
-          <div style={{ position: "absolute", right: 0, bottom: 18, paddingRight: 20, opacity: vis }}>
-            <SourceBadge source={d.source} frame={frame} />
-          </div>
-
           {/* 被强调色「搬过去」的小方块 + 停留时轻呼吸 */}
           <div style={{ position: "absolute", left: mx - 9, top: my - 9, width: 18, height: 18, borderRadius: 5, background: t.accent, boxShadow: `0 0 ${18 + 10 * Math.sin(frame / 7)}px ${alpha(t.accent, 0.85)}`, transform: `rotate(${45 * p}deg)`, opacity: 0.9 }} />
 
@@ -275,6 +265,17 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
           >
             <path d="M6 4 L6 34 L14 26 L20 40 L26 37 L20 24 L32 24 Z" fill="#ffffff" stroke="#10151d" strokeWidth={2.4} strokeLinejoin="round" />
           </svg>
+        </div>
+
+        {/* 状态名与来源角标钉在卡片边框上，不吃相机推近：
+            放进 zoom 层里会被 overflow:hidden 裁掉左半边（推近后整块往焦点外滑）。 */}
+        {st.label && (
+          <div style={{ position: "absolute", left: 22, top: 20, maxWidth: bw * 0.52, padding: "9px 18px", borderRadius: 999, background: alpha(t.bg, 0.8), border: `2px solid ${mixC(g0.col, g1.col, p, 0.75)}`, fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(st.label, bw * 0.46, 26, 18), color: t.text, whiteSpace: "nowrap", opacity: vis * eLab.opacity, transform: `translateY(${eLab.dy}px)`, boxShadow: `0 0 26px ${mixC(g0.col, g1.col, p, 0.3)}` }}>
+            {st.label}
+          </div>
+        )}
+        <div style={{ position: "absolute", right: 20, bottom: 18, width: 1, height: 1, opacity: vis }}>
+          <SourceBadge source={d.source} frame={frame} y={-36} />
         </div>
       </div>
 

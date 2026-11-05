@@ -6,6 +6,9 @@ import { PromptChip } from "./metaphor/PromptChip";
 import { DataFunnel } from "./metaphor/DataFunnel";
 import { KnowledgeVault } from "./metaphor/KnowledgeVault";
 import { AssemblyLine } from "./metaphor/AssemblyLine";
+import { FeedGauge } from "./metaphor/FeedGauge";
+import { SenseRig } from "./metaphor/SenseRig";
+import { ReachGap } from "./metaphor/ReachGap";
 import { Flywheel } from "./metaphor/Flywheel";
 import { DominoChain } from "./metaphor/DominoChain";
 import { AssetDistill } from "./metaphor/AssetDistill";
@@ -27,15 +30,20 @@ import { Leaderboard } from "./info/Leaderboard";
 import { DayClock } from "./info/DayClock";
 import { ScreenDemo } from "./screen/ScreenDemo";
 import { BoardProof } from "./screen/BoardProof";
+import { RepoId } from "./screen/RepoId";
 import { UiReplica } from "./screen/UiReplica";
 import { LogoWall } from "./screen/LogoWall";
 import { BrandQuoteCard } from "./screen/BrandQuoteCard";
 import { CitationStrip } from "./screen/CitationStrip";
 import { ScreenVersus } from "./screen/ScreenVersus";
 import { EvidenceZoom } from "./screen/EvidenceZoom";
+import { ScreenMarkup } from "./screen/ScreenMarkup";
 import { RealDocScroll } from "./screen/RealDocScroll";
 import { ScreenMorph } from "./screen/ScreenMorph";
 import { CursorTrace } from "./screen/CursorTrace";
+import { DemoReel } from "./screen/DemoReel";
+import { AssetFull } from "./screen/AssetFull";
+import { FootageStage } from "./screen/FootageStage";
 import { PhoneFeed } from "./story/PhoneFeed";
 import { SwordForge } from "./story/SwordForge";
 import { Dialogue } from "./story/Dialogue";
@@ -44,6 +52,9 @@ import { CommentWall } from "./story/CommentWall";
 import { SignalMap } from "./story/SignalMap";
 import { Reframe } from "./story/Reframe";
 import { SideBrandFx } from "./story/SideBrandFx";
+import { SideCaps } from "./story/SideCaps";
+import { SideEditorial } from "./story/SideEditorial";
+import { SideScenes } from "./story/SideScenes";
 import { PersonaScene } from "./story/PersonaScene";
 import { PhotoWall } from "./story/PhotoWall";
 import { StockBroll } from "./story/StockBroll";
@@ -55,6 +66,9 @@ import { OpenLedger } from "./info/OpenLedger";
 import { RevealCards } from "./metaphor/RevealCards";
 import { LeverLift } from "./metaphor/LeverLift";
 import { RaceLanes } from "./metaphor/RaceLanes";
+import { ThresholdDrop } from "./metaphor/ThresholdDrop";
+import { QueueWindow } from "./metaphor/QueueWindow";
+import { SilentDrift } from "./metaphor/SilentDrift";
 import { SafetyBrake } from "./metaphor/SafetyBrake";
 import { ShutterClose } from "./metaphor/ShutterClose";
 import { StepRail } from "./info/StepRail";
@@ -78,12 +92,16 @@ import { SurfaceCore } from "./metaphor/SurfaceCore";
 import { OneFishFourPlates } from "./metaphor/OneFishFourPlates";
 import { AbAudioWave } from "./info/AbAudioWave";
 import { WalledGarden } from "./metaphor/WalledGarden";
+import { AbacusMetaphor } from "./metaphor/AbacusMetaphor";
+import { SideGraphic } from "./side/SideGraphic";
 import { ScaleDive } from "./metaphor/ScaleDive";
 import { Painkiller } from "./metaphor/Painkiller";
 import { TimeCeiling } from "./metaphor/TimeCeiling";
 import { CarryOrDig } from "./metaphor/CarryOrDig";
 import { PyramidBase } from "./metaphor/PyramidBase";
 import { GateWeld } from "./metaphor/GateWeld";
+import { CommitRewind } from "./metaphor/CommitRewind";
+import { VisibilitySeal } from "./metaphor/VisibilitySeal";
 import { ForkPaths } from "./metaphor/ForkPaths";
 import { AgentRelay } from "./metaphor/AgentRelay";
 import { RelayParallel } from "./metaphor/RelayParallel";
@@ -108,6 +126,7 @@ import { GearTrain } from "./metaphor/GearTrain";
 import { AttnWeights } from "./info/AttnWeights";
 import { Quote } from "./structure/Quote";
 import { PunchText } from "./structure/PunchText";
+import { TierStack } from "./structure/TierStack";
 import { ChapterCard } from "./structure/ChapterCard";
 import { Narration } from "./structure/Narration";
 import { Hook } from "./structure/Hook";
@@ -127,6 +146,7 @@ export const REGISTRY: CompDef[] = [
   Narration,
   Quote,
   PunchText,
+  TierStack,
   Outro,
   TalkingHeadStage,
   HeadPip,
@@ -171,6 +191,9 @@ export const REGISTRY: CompDef[] = [
   DataFunnel,
   KnowledgeVault,
   AssemblyLine,
+  FeedGauge,
+  SenseRig,
+  ReachGap,
   Flywheel,
   DominoChain,
   AssetDistill,
@@ -186,12 +209,16 @@ export const REGISTRY: CompDef[] = [
   ShutterClose,
   TeardownLens,
   WalledGarden,
+  AbacusMetaphor,
+  SideGraphic,
   ScaleDive,
   Painkiller,
   TimeCeiling,
   CarryOrDig,
   PyramidBase,
   GateWeld,
+  CommitRewind,
+  VisibilitySeal,
   ForkPaths,
   AgentRelay,
   RelayParallel,
@@ -205,6 +232,9 @@ export const REGISTRY: CompDef[] = [
   TextStructure,
   WaveCancel,
   GearTrain,
+  ThresholdDrop,
+  QueueWindow,
+  SilentDrift,
   // story
   PhoneFeed,
   SwordForge,
@@ -214,6 +244,9 @@ export const REGISTRY: CompDef[] = [
   SignalMap,
   Reframe,
   SideBrandFx,
+  SideCaps,
+  SideEditorial,
+  SideScenes,
   PersonaScene,
   PhotoWall,
   StockBroll,
@@ -233,15 +266,20 @@ export const REGISTRY: CompDef[] = [
   // screen
   ScreenDemo,
   BoardProof,
+  RepoId,
   UiReplica,
   LogoWall,
   BrandQuoteCard,
   CitationStrip,
   ScreenVersus,
   EvidenceZoom,
+  ScreenMarkup,
   RealDocScroll,
   ScreenMorph,
   CursorTrace,
+  DemoReel,
+  AssetFull,
+  FootageStage,
   // per-script openings
   ...OPENINGS,
 ];

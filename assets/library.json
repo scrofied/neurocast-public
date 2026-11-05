@@ -261,33 +261,6 @@
    ]
   },
   {
-   "id": "Codex和WorkBuddy怎么选",
-   "date": "2026-10-10",
-   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-workbuddy_20261011-014021/timeline.json",
-   "assetSec": 85.7,
-   "totalSec": 208.5,
-   "ratio": 0.411,
-   "refs": [
-    "D:/qord/neurocast-codex-workbuddy/assets/open/codex_icon.png",
-    "D:/qord/neurocast-codex-workbuddy/assets/open/wb_256.png",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s16.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/board1_s26.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/setup_a.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/setup_b.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp2_s8.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/inquiry_cmd.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp2_s10.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s12.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/shots/wb_noquote.png",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s13.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/console_hold.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/board1c_s11.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/shots/board_results.png",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/board1c_s17.mp4",
-    "D:/qord/neurocast-codex-workbuddy/assets/clean/manual_s18.mp4"
-   ]
-  },
-  {
    "id": "__stock_probe__",
    "date": "2026-10-11",
    "file": "public/jobs/stock-probe_20261011-024229/timeline.json",
@@ -301,34 +274,6 @@
     "D:/qord/work/stock-probe/rec1.mp4",
     "D:/qord/work/stock-probe/rec2.mp4",
     "D:/qord/work/stock-probe/rec3.mp4"
-   ]
-  },
-  {
-   "id": "AI到底是怎么控制你的电脑干活的",
-   "date": "2026-10-11",
-   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai-computer-use_20261011-233640/timeline.json",
-   "assetSec": 74.8,
-   "totalSec": 159,
-   "ratio": 0.471,
-   "refs": [
-    "D:/qord/neurocast-ai-computer-use/assets/open/claude_icon.png",
-    "D:/qord/neurocast-ai-computer-use/assets/open/cursor_icon.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_tool-panel.jpg",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_trajectory-viewer.jpg",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_hello-world-example.jpg",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_computer-use.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_openchatcut.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_deep-research.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_cangjie.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_01-editor-overview.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_03-agent-transitions.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_04-motion-graphics.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_07-lut.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_hero.mp4",
-    "D:/qord/neurocast-ai-computer-use/assets/talk.mp4",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_cover.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_6agents.png",
-    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_board.png"
    ]
   },
   {
@@ -369,6 +314,533 @@
     "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_rev.png",
     "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_table.png",
     "D:/qord/neurocast-junior-jobs-vanish/assets/shots/nvidia_10k.png"
+   ]
+  },
+  {
+   "id": "AI 能帮你干什么——三层金字塔",
+   "date": "2026-10-16",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-2-sanjiao_20261016-230037/timeline.json",
+   "assetSec": 24.4,
+   "totalSec": 106.1,
+   "ratio": 0.23,
+   "refs": [
+    "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_jimeng_home.jpg",
+    "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_vane_search.png",
+    "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_ragflow_kb.png"
+   ]
+  },
+  {
+   "id": "AI 软件为什么都要钱——四层结构",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-1-siceng_20261017-112657/timeline.json",
+   "assetSec": 39.3,
+   "totalSec": 191.4,
+   "ratio": 0.206,
+   "refs": [
+    "D:/qord/neurocast-codex-1-1-siceng/assets/m_deepseek.jpg",
+    "D:/qord/neurocast-codex-1-1-siceng/assets/m_doubao_promise.jpg",
+    "D:/qord/neurocast-codex-1-1-siceng/assets/m_jimeng_tools.jpg",
+    "D:/qord/neurocast-codex-1-1-siceng/assets/m_jimeng_home.jpg",
+    "D:/qord/neurocast-codex-1-1-siceng/assets/m_jimeng_agent.jpg",
+    "D:/qord/neurocast-codex-1-1-siceng/assets/m_jimeng_canvas.jpg"
+   ]
+  },
+  {
+   "id": "Vibe Coding 是什么",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-10-vibe_20261018-012944/timeline.json",
+   "assetSec": 38.4,
+   "totalSec": 163.4,
+   "ratio": 0.235,
+   "refs": [
+    "D:/qord/neurocast-codex-1-10-vibe/assets/miaoda.png",
+    "D:/qord/neurocast-codex-1-10-vibe/assets/v1.png",
+    "D:/qord/neurocast-codex-1-10-vibe/assets/v2.png",
+    "D:/qord/neurocast-codex-1-10-vibe/assets/v3.png",
+    "D:/qord/neurocast-codex-1-10-vibe/assets/note.png"
+   ]
+  },
+  {
+   "id": "AI 到底能帮你干什么——三层金字塔",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-2-sanjiao_20261018-014405/timeline.json",
+   "assetSec": 37.2,
+   "totalSec": 171.5,
+   "ratio": 0.217,
+   "refs": [
+    "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_jimeng_tools.jpg",
+    "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_vane_search.png",
+    "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_ragflow_kb.png",
+    "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_jimeng_home.jpg"
+   ]
+  },
+  {
+   "id": "AI 到底怎么替你干活——工作流与智能体",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-3-agent_20261018-015422/timeline.json",
+   "assetSec": 51.4,
+   "totalSec": 195,
+   "ratio": 0.264,
+   "refs": [
+    "D:/qord/neurocast-codex-1-3-agent/assets/w11_memory.png",
+    "D:/qord/neurocast-codex-1-3-agent/assets/w02_send.png",
+    "D:/qord/neurocast-codex-1-3-agent/assets/v04_midscene.mp4",
+    "D:/qord/neurocast-codex-1-3-agent/assets/p13_codex.png",
+    "D:/qord/neurocast-codex-1-3-agent/assets/A2_clip_clean.png",
+    "D:/qord/neurocast-codex-1-3-agent/assets/dflow.png"
+   ]
+  },
+  {
+   "id": "提示词到底怎么写——三步上手",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-4-tishi_20261018-020239/timeline.json",
+   "assetSec": 18.8,
+   "totalSec": 173.6,
+   "ratio": 0.109,
+   "refs": [
+    "D:/qord/neurocast-codex-1-4-tishi/assets/m0_pe_formulas.png",
+    "D:/qord/neurocast-codex-1-4-tishi/assets/m1_po_example.png",
+    "D:/qord/neurocast-codex-1-4-tishi/assets/m2_memory_file.png"
+   ]
+  },
+  {
+   "id": "一张自学路线图——四个台阶四条心法",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-5-luxian_20261018-020959/timeline.json",
+   "assetSec": 29.9,
+   "totalSec": 169,
+   "ratio": 0.177,
+   "refs": [
+    "D:/qord/neurocast-codex-1-5-luxian/assets/r1_layers.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/r2_pyramid.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/r3_agent.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/r4_prompt.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/k1_mindmap.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/k2_excel.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/k3_promptopt.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/k4_avatar.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/k5_hottopic.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/k6_search.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/m_yuqing.jpg",
+    "D:/qord/neurocast-codex-1-5-luxian/assets/codex_icon.png"
+   ]
+  },
+  {
+   "id": "Codex 是什么——一句话讲清",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-6-shenme_20261018-021748/timeline.json",
+   "assetSec": 35.7,
+   "totalSec": 142.6,
+   "ratio": 0.251,
+   "refs": [
+    "D:/qord/neurocast-codex-1-6-shenme/assets/codex_icon.png",
+    "public/brands/claude.svg",
+    "D:/qord/neurocast-codex-1-6-shenme/assets/m_jimeng_home.jpg",
+    "D:/qord/neurocast-codex-1-6-shenme/assets/codex_cli_splash.png",
+    "D:/qord/neurocast-codex-1-6-shenme/assets/gh_agents_clean.png",
+    "D:/qord/neurocast-codex-1-6-shenme/assets/codex_cli_run.png"
+   ]
+  },
+  {
+   "id": "为什么说这是普通人的机会",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-7-jihui_20261018-022432/timeline.json",
+   "assetSec": 35.8,
+   "totalSec": 156.5,
+   "ratio": 0.229,
+   "refs": [
+    "D:/qord/neurocast-codex-1-7-jihui/assets/gh_docs.png",
+    "D:/qord/neurocast-codex-1-7-jihui/assets/gh_releases.png",
+    "D:/qord/neurocast-codex-1-7-jihui/assets/gh_release_one.png",
+    "D:/qord/neurocast-codex-1-7-jihui/assets/gh_plans.png",
+    "D:/qord/neurocast-codex-1-7-jihui/assets/gh_graph.png"
+   ]
+  },
+  {
+   "id": "ChatGPT、智能体、Codex 差在哪",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-8-chazai_20261018-023107/timeline.json",
+   "assetSec": 45.4,
+   "totalSec": 202.4,
+   "ratio": 0.224,
+   "refs": [
+    "D:/qord/neurocast-codex-1-8-chazai/assets/readme_crop.png",
+    "D:/qord/neurocast-codex-1-8-chazai/assets/codex_cli.png",
+    "D:/qord/neurocast-codex-1-8-chazai/assets/install_strip.png"
+   ]
+  },
+  {
+   "id": "四种形态，你该怎么选",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-9-xingtai_20261018-023905/timeline.json",
+   "assetSec": 39.9,
+   "totalSec": 174.9,
+   "ratio": 0.228,
+   "refs": [
+    "D:/qord/neurocast-codex-1-9-xingtai/assets/doc_cmd.png",
+    "D:/qord/neurocast-codex-1-9-xingtai/assets/mkt_tall.png",
+    "D:/qord/neurocast-codex-1-9-xingtai/assets/cc_readme.png",
+    "D:/qord/neurocast-codex-1-9-xingtai/assets/trae_hero.png"
+   ]
+  },
+  {
+   "id": "七种角色，怎么变成两个人",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-11-jiaose_20261018-031617/timeline.json",
+   "assetSec": 39.5,
+   "totalSec": 163.2,
+   "ratio": 0.242,
+   "refs": [
+    "D:/qord/neurocast-codex-1-11-jiaose/assets/search.png",
+    "D:/qord/neurocast-codex-1-11-jiaose/assets/files.png",
+    "D:/qord/neurocast-codex-1-11-jiaose/assets/about.png",
+    "D:/qord/neurocast-codex-1-11-jiaose/assets/langs.png",
+    "D:/qord/neurocast-codex-1-11-jiaose/assets/issues.png"
+   ]
+  },
+  {
+   "id": "它到底怎么工作：三个特点",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-12-techu_20261018-033957/timeline.json",
+   "assetSec": 49.7,
+   "totalSec": 165.5,
+   "ratio": 0.3,
+   "refs": [
+    "D:/qord/neurocast-codex-1-12-techu/assets/runoob_code_wide.png",
+    "D:/qord/neurocast-codex-1-12-techu/assets/apple_hero.png",
+    "D:/qord/neurocast-codex-1-12-techu/assets/mdn_params.png",
+    "D:/qord/neurocast-codex-1-12-techu/assets/iter1.png",
+    "D:/qord/neurocast-codex-1-12-techu/assets/iter2.png",
+    "D:/qord/neurocast-codex-1-12-techu/assets/iter3.png",
+    "D:/qord/neurocast-codex-1-12-techu/assets/antd_home.png"
+   ]
+  },
+  {
+   "id": "一个真实成果：3D 简历",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-13-jianli_20261018-040432/timeline.json",
+   "assetSec": 57,
+   "totalSec": 196.1,
+   "ratio": 0.291,
+   "refs": [
+    "D:/qord/neurocast-codex-1-13-jianli/assets/d3d_a.png",
+    "D:/qord/neurocast-codex-1-13-jianli/assets/d3d_b.png",
+    "D:/qord/neurocast-codex-1-13-jianli/assets/d3d_c.png",
+    "D:/qord/neurocast-codex-1-13-jianli/assets/pdf_a.png",
+    "D:/qord/neurocast-codex-1-13-jianli/assets/lecture_steps.png",
+    "D:/qord/neurocast-codex-1-13-jianli/assets/lecture13.png"
+   ]
+  },
+  {
+   "id": "MCP 和命令行，该怎么选",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-15-mcpcli_20261018-092015/timeline.json",
+   "assetSec": 67.5,
+   "totalSec": 242.2,
+   "ratio": 0.279,
+   "refs": [
+    "D:/qord/neurocast-codex-1-15-mcpcli/assets/mcp_tools.png",
+    "D:/qord/neurocast-codex-1-15-mcpcli/assets/mcp_intro.png",
+    "D:/qord/neurocast-codex-1-15-mcpcli/assets/man_synopsis.png",
+    "D:/qord/neurocast-codex-1-15-mcpcli/assets/explainshell.png",
+    "D:/qord/neurocast-codex-1-15-mcpcli/assets/man_quote.png",
+    "D:/qord/neurocast-codex-1-15-mcpcli/assets/mcp_def_block.png",
+    "D:/qord/neurocast-codex-1-15-mcpcli/assets/mcp_call.png"
+   ]
+  },
+  {
+   "id": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-17-words_20261018-105316/timeline.json",
+   "assetSec": 35.8,
+   "totalSec": 146.4,
+   "ratio": 0.244,
+   "refs": [
+    "D:/qord/neurocast-codex-1-17-words/assets/cx_cmd_top.png",
+    "D:/qord/neurocast-codex-1-17-words/assets/cx_slash_tbl.png",
+    "D:/qord/neurocast-codex-1-17-words/assets/mcp_def.png",
+    "D:/qord/neurocast-codex-1-17-words/assets/cc_sub_def.png"
+   ]
+  },
+  {
+   "id": "两个坑：能力退化与决策外包",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-18-pits_20261018-120743/timeline.json",
+   "assetSec": 34.4,
+   "totalSec": 161.8,
+   "ratio": 0.213,
+   "refs": [
+    "D:/qord/neurocast-codex-1-18-pits/assets/arxiv_abs.png",
+    "D:/qord/neurocast-codex-1-18-pits/assets/msr_crit.png",
+    "D:/qord/neurocast-codex-1-18-pits/assets/cc_verify.png"
+   ]
+  },
+  {
+   "id": "两个坑：责任归属与权限安全",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-19-blame_20261018-133311/timeline.json",
+   "assetSec": 34,
+   "totalSec": 158.6,
+   "ratio": 0.215,
+   "refs": [
+    "D:/qord/neurocast-codex-1-19-blame/assets/c19_blocks.png",
+    "D:/qord/neurocast-codex-1-19-blame/assets/c19_perm_pick.png",
+    "D:/qord/neurocast-codex-1-19-blame/assets/c19_modes.png"
+   ]
+  },
+  {
+   "id": "Skill 是什么：给 AI 的一本工作手册",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-16-skill_20261018-153754/timeline.json",
+   "assetSec": 61.4,
+   "totalSec": 184.3,
+   "ratio": 0.333,
+   "refs": [
+    "D:/qord/neurocast-codex-1-16-skill/assets/skill_spec_hi.png",
+    "D:/qord/neurocast-codex-1-16-skill/assets/skill_tree.png",
+    "D:/qord/neurocast-codex-1-16-skill/assets/skill_pd_hi.png",
+    "D:/qord/neurocast-codex-1-16-skill/assets/cc_nav.png"
+   ]
+  },
+  {
+   "id": "MCP 到底是什么",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-14-mcp_20261018-154952/timeline.json",
+   "assetSec": 52.6,
+   "totalSec": 180.3,
+   "ratio": 0.292,
+   "refs": [
+    "D:/qord/neurocast-codex-1-14-mcp/assets/mcp_arch.png",
+    "D:/qord/neurocast-codex-1-14-mcp/assets/mcp_page.png",
+    "D:/qord/neurocast-codex-1-14-mcp/assets/mcp_servers_tall.png",
+    "D:/qord/neurocast-codex-1-14-mcp/assets/nodejs.png",
+    "D:/qord/neurocast-codex-1-14-mcp/assets/mcp_config.png",
+    "D:/qord/neurocast-codex-1-14-mcp/assets/vscode_mcp.png"
+   ]
+  },
+  {
+   "id": "新手怎么选 · 全课收尾",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-20-wrap_20261018-160020/timeline.json",
+   "assetSec": 44.2,
+   "totalSec": 195,
+   "ratio": 0.227,
+   "refs": [
+    "D:/qord/neurocast-codex-1-20-wrap/assets/c20_cc.png",
+    "D:/qord/neurocast-codex-1-20-wrap/assets/c20_codex.png",
+    "D:/qord/neurocast-codex-1-20-wrap/assets/c20_codex2.png",
+    "D:/qord/neurocast-codex-1-20-wrap/assets/c20_wb.png",
+    "D:/qord/neurocast-codex-1-20-wrap/assets/c20_dstab.png",
+    "D:/qord/neurocast-codex-1-20-wrap/assets/c20_dsnv.png"
+   ]
+  },
+  {
+   "id": "AI共享大脑：把档案放进GitHub",
+   "date": "2026-10-19",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai-github_20261020-004444/timeline.json",
+   "assetSec": 50.3,
+   "totalSec": 219.5,
+   "ratio": 0.229,
+   "refs": [
+    "D:/qord/neurocast-ai-github/assets/raw/shots/repo_home_m.png",
+    "D:/qord/neurocast-ai-github/assets/raw/shots/blob_readme_m.png",
+    "D:/qord/neurocast-ai-github/assets/raw/txt/git_log.png",
+    "D:/qord/neurocast-ai-github/assets/raw/txt/git_revert.png",
+    "D:/qord/neurocast-ai-github/assets/raw/docs/repo-create-global-nav-update.png",
+    "D:/qord/neurocast-ai-github/assets/raw/docs/create-repository-owner.png",
+    "D:/qord/neurocast-ai-github/assets/raw/docs/create-repository-name.png",
+    "D:/qord/neurocast-ai-github/assets/raw/docs/add-file-buttons.png",
+    "D:/qord/neurocast-ai-github/assets/raw/docs/new-file-preview.png",
+    "D:/qord/neurocast-ai-github/assets/raw/shots/repo_prompts_m.png",
+    "D:/qord/neurocast-ai-github/assets/raw/txt/file_profile.png",
+    "D:/qord/neurocast-ai-github/assets/raw/txt/file_rules.png",
+    "D:/qord/neurocast-ai-github/assets/talk_seg_rules.mp4",
+    "D:/qord/neurocast-ai-github/assets/raw/txt/file_sample.png",
+    "D:/qord/neurocast-ai-github/assets/raw/txt/file_output.png"
+   ]
+  },
+  {
+   "id": "怎样让马斯克来指挥你的AI干活？",
+   "date": "2026-10-19",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/council4_20261020-005258/timeline.json",
+   "assetSec": 89.8,
+   "totalSec": 174.7,
+   "ratio": 0.514,
+   "refs": [
+    "D:/qord/council4/assets/stills/council-table.png",
+    "D:/qord/council4/assets/clips/c3-modal.mp4",
+    "D:/qord/council4/assets/clips/c2-wide.mp4",
+    "D:/qord/council4/assets/clips/c2-task.mp4",
+    "D:/qord/council4/assets/clips/c3-seat.mp4",
+    "D:/qord/council4/assets/clips/c1-jobs.mp4",
+    "D:/qord/council4/assets/md-munger.png",
+    "D:/qord/council4/assets/md-musk.png",
+    "D:/qord/council4/assets/md-bezos.png",
+    "D:/qord/council4/assets/md-jobs.png",
+    "D:/qord/council4/assets/clips/c2-draft.mp4",
+    "D:/qord/council4/assets/script-md.png",
+    "D:/qord/council4/assets/task-page.png",
+    "D:/qord/council4/assets/clips/c3-step.mp4",
+    "D:/qord/council4/assets/clips/c2-home.mp4"
+   ]
+  },
+  {
+   "id": "AI到底是怎么控制你的电脑干活的",
+   "date": "2026-10-19",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai-computer-use_20261020-022814/timeline.json",
+   "assetSec": 74.8,
+   "totalSec": 159,
+   "ratio": 0.471,
+   "refs": [
+    "D:/qord/neurocast-ai-computer-use/assets/open/claude_icon.png",
+    "D:/qord/neurocast-ai-computer-use/assets/open/cursor_icon.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_hello-world-example.jpg",
+    "D:/qord/neurocast-ai-computer-use/assets/cu_desktop_crop.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_tool-panel.jpg",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_trajectory-viewer.jpg",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_computer-use.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_openchatcut.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_deep-research.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/repo_cangjie.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_01-editor-overview.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_03-agent-transitions.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_04-motion-graphics.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_07-lut.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_hero.mp4",
+    "D:/qord/neurocast-ai-computer-use/assets/talk_v2.mp4",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_cover.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_6agents.png",
+    "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_board.png"
+   ]
+  },
+  {
+   "id": "Codex和WorkBuddy怎么选",
+   "date": "2026-10-19",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-workbuddy_20261020-032357/timeline.json",
+   "assetSec": 85.7,
+   "totalSec": 208.5,
+   "ratio": 0.411,
+   "refs": [
+    "D:/qord/neurocast-codex-workbuddy/assets/open/codex_icon.png",
+    "D:/qord/neurocast-codex-workbuddy/assets/open/wb_256.png",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s16.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/board1_s26.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/setup_a.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/setup_b.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp2_s8.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/inquiry_cmd.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp2_s10.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s12.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/shots/wb_noquote.png",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s13.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/console_hold.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/board1c_s11.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/shots/board_results.png",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/board1c_s17.mp4",
+    "D:/qord/neurocast-codex-workbuddy/assets/clean/manual_s18.mp4"
+   ]
+  },
+  {
+   "id": "7 个真能干活的 AI 剪辑 skill",
+   "date": "2026-10-23",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/skills7_20261023-173330/timeline.json",
+   "assetSec": 77.5,
+   "totalSec": 157,
+   "ratio": 0.494,
+   "refs": [
+    "D:/qord/skills7/assets/repos/media/r4-flat-vector.mp4",
+    "D:/qord/skills7/assets/repos/media/r5-monet.mp4",
+    "D:/qord/skills7/assets/repos/media/r5-pixel.mp4",
+    "D:/qord/skills7/assets/repos/media/r6-flatflow.mp4",
+    "D:/qord/skills7/assets/repos/media/r1-workflow.mp4",
+    "D:/qord/skills7/assets/repos/media/r3-shadow-puppet.jpg",
+    "D:/qord/skills7/assets/repos/media/r7-sand.png",
+    "D:/qord/skills7/assets/repos/media/r1-interaction.mp4",
+    "D:/qord/skills7/assets/repos/media/r1-camera.mp4",
+    "D:/qord/skills7/assets/repos/media/r1-ui-entrance.mp4",
+    "D:/qord/skills7/assets/repos/media/r1-transition.mp4",
+    "D:/qord/skills7/assets/repos/media/r1-opening.mp4",
+    "D:/qord/skills7/assets/repos/media/r1-typography.mp4",
+    "D:/qord/skills7/assets/repos/media/r2-plan-a.png",
+    "D:/qord/skills7/assets/repos/media/r2-plan-b.png",
+    "D:/qord/skills7/assets/repos/media/r2-plan-c.png",
+    "D:/qord/skills7/assets/repos/media/r3-ink-wash.jpg",
+    "D:/qord/skills7/assets/repos/r3films/r3-paper-popup-clean.mp4",
+    "D:/qord/skills7/assets/repos/crop/r3-whiteboard-nobottom.jpg",
+    "D:/qord/skills7/assets/repos/r3films/r3-ukiyoe.mp4",
+    "D:/qord/skills7/assets/repos/media/r4-pixel.mp4",
+    "D:/qord/skills7/assets/repos/media/r4-line-art.mp4",
+    "D:/qord/skills7/assets/repos/crop/r4-pixel-crop.mp4",
+    "D:/qord/skills7/assets/repos/media/r5-egypt.mp4",
+    "D:/qord/skills7/assets/repos/media/r5-vangogh.mp4",
+    "D:/qord/skills7/assets/repos/media/r5-dawn.mp4",
+    "D:/qord/skills7/assets/repos/media/r6-notes.mp4",
+    "D:/qord/skills7/assets/repos/media/r6-cartoon.mp4",
+    "D:/qord/skills7/assets/repos/media/r6-cyber.mp4",
+    "D:/qord/skills7/assets/repos/media/r6-papercut.mp4",
+    "D:/qord/skills7/assets/repos/media/r7-flat.png",
+    "D:/qord/skills7/assets/repos/media/r7-particles.png"
+   ]
+  },
+  {
+   "id": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+   "date": "2026-10-25",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-trae_20261025-115429/timeline.json",
+   "assetSec": 80.4,
+   "totalSec": 166,
+   "ratio": 0.484,
+   "refs": [
+    "D:/qord/neurocast-trae/assets/video/venue_walk.mp4",
+    "D:/qord/neurocast-trae/assets/video/stage_upgrade.mp4",
+    "D:/qord/neurocast-trae/assets/video/stage_talk.mp4",
+    "D:/qord/neurocast-trae/assets/video/venue_selfie.mp4",
+    "D:/qord/neurocast-trae/assets/video/stage_crowd.mp4",
+    "D:/qord/neurocast-trae/assets/video/model_doubao.mp4",
+    "D:/qord/neurocast-trae/assets/video/model_deepseek.mp4",
+    "D:/qord/neurocast-trae/assets/video/model_qwen.mp4",
+    "D:/qord/neurocast-trae/assets/video/model_gpt.mp4",
+    "D:/qord/neurocast-trae/assets/video/hack_ide_clean.mp4",
+    "D:/qord/neurocast-trae/assets/video/hack_project.mp4",
+    "D:/qord/neurocast-trae/assets/video/hack_demo.mp4",
+    "D:/qord/neurocast-trae/assets/video/hack_cities_masked.mp4",
+    "D:/qord/neurocast-trae/assets/video/trae_demo_wall_clean.mp4",
+    "D:/qord/neurocast-trae/assets/video/hack_view.mp4",
+    "D:/qord/neurocast-trae/assets/github/find_skills_cli.mp4",
+    "D:/qord/neurocast-trae/assets/github/frontend_design_repo.mp4",
+    "D:/qord/neurocast-trae/assets/github/webapp_testing_official_example.mp4",
+    "D:/qord/neurocast-trae/assets/video/miniapp_screen16.png"
+   ]
+  },
+  {
+   "id": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+   "date": "2026-10-26",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai_20261026-171819/timeline.json",
+   "assetSec": 102.9,
+   "totalSec": 178.3,
+   "ratio": 0.577,
+   "refs": [
+    "D:/qord/neurocast-ai/assets/deck_a.mp4",
+    "D:/qord/neurocast-ai/assets/deck_b.mp4"
+   ]
+  },
+  {
+   "id": "WorkBuddy 这 5 个设置",
+   "date": "2026-11-05",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-wb-5settings_20261106-023543/timeline.json",
+   "assetSec": 41.2,
+   "totalSec": 171.5,
+   "ratio": 0.24,
+   "refs": [
+    "D:/qord/neurocast-wb-5settings/clips/wb1c_emptybox.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb1a_head.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb1b_personal.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb1d_typing.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb2_panel.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb2_cpath.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb2_dpath.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb3_context.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb4_result.mp4",
+    "D:/qord/neurocast-wb-5settings/clips/wb4_typing.mp4"
    ]
   }
  ],
@@ -3327,346 +3799,6 @@
     }
    ]
   },
-  "D:/qord/neurocast-codex-workbuddy/assets/open/codex_icon.png": {
-   "kind": "image",
-   "aspect": null,
-   "md5": "2668ce3a6f5c",
-   "source": null,
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "side-brand-fx"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s0"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/open/wb_256.png": {
-   "kind": "image",
-   "aspect": null,
-   "md5": "f7bf06ea288d",
-   "source": null,
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "side-brand-fx"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s0"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s16.mp4": {
-   "kind": "video",
-   "aspect": 1.958,
-   "md5": "24acfaf43820",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s1"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/board1_s26.mp4": {
-   "kind": "video",
-   "aspect": 1.958,
-   "md5": "2323a65b09ab",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s4"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/setup_a.mp4": {
-   "kind": "video",
-   "aspect": 1.951,
-   "md5": "c02cea8b8c9e",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s7"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/setup_b.mp4": {
-   "kind": "video",
-   "aspect": 1.951,
-   "md5": "3501c574328b",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s8"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp2_s8.mp4": {
-   "kind": "video",
-   "aspect": 1.958,
-   "md5": "d21ba2dadf5d",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s9"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/inquiry_cmd.mp4": {
-   "kind": "video",
-   "aspect": 1.951,
-   "md5": "324edaffb805",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s11"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp2_s10.mp4": {
-   "kind": "video",
-   "aspect": 1.958,
-   "md5": "317e5296e3dd",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s13"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s12.mp4": {
-   "kind": "video",
-   "aspect": 1.958,
-   "md5": "cca5ceb75229",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s14"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/shots/wb_noquote.png": {
-   "kind": "image",
-   "aspect": 1.198,
-   "md5": "a10d70597f08",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "cursor-trace"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s15"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s13.mp4": {
-   "kind": "video",
-   "aspect": 1.958,
-   "md5": "06f4987052c4",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s20"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/console_hold.mp4": {
-   "kind": "video",
-   "aspect": 1.951,
-   "md5": "8714910bf471",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s22"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/board1c_s11.mp4": {
-   "kind": "video",
-   "aspect": 1.958,
-   "md5": "d97fbb8b68d3",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s23"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/shots/board_results.png": {
-   "kind": "image",
-   "aspect": 2.657,
-   "md5": "20709798a78c",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "evidence-zoom"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s24"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/board1c_s17.mp4": {
-   "kind": "video",
-   "aspect": 1.958,
-   "md5": "2a53a95a3824",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s25"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-codex-workbuddy/assets/clean/manual_s18.mp4": {
-   "kind": "video",
-   "aspect": 1.951,
-   "md5": "885d904d6406",
-   "source": "自建 AI 工作台实录",
-   "capturedAt": null,
-   "note": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s27"
-     ]
-    }
-   ]
-  },
   "public/assets/stock/pexels/test-ai.mp4": {
    "kind": "video",
    "aspect": null,
@@ -3801,396 +3933,6 @@
      "date": "2026-10-11",
      "shots": [
       "s23"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/open/claude_icon.png": {
-   "kind": "image",
-   "aspect": null,
-   "md5": "3051c52fb773",
-   "source": null,
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "side-brand-fx"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s0"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/open/cursor_icon.png": {
-   "kind": "image",
-   "aspect": null,
-   "md5": "08365da11554",
-   "source": null,
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "side-brand-fx"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s0"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_tool-panel.jpg": {
-   "kind": "image",
-   "aspect": 0.908,
-   "md5": "6ff47c50c346",
-   "source": "GitHub · anthropics/claude-quickstarts",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s1"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_trajectory-viewer.jpg": {
-   "kind": "image",
-   "aspect": null,
-   "md5": "dcd241d49147",
-   "source": "GitHub · anthropics/claude-quickstarts",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "screen-morph"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s2"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_hello-world-example.jpg": {
-   "kind": "image",
-   "aspect": null,
-   "md5": "cb73e5e09797",
-   "source": "GitHub · anthropics/claude-quickstarts",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "screen-morph"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s2"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_computer-use.png": {
-   "kind": "image",
-   "aspect": 1.778,
-   "md5": "67818fd1af0d",
-   "source": "GitHub · anthropics/claude-quickstarts",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "infinite-zoom",
-    "cursor-trace"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s4",
-      "s22"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_openchatcut.png": {
-   "kind": "image",
-   "aspect": null,
-   "md5": "0642da7f83c3",
-   "source": "GitHub · anthropics/claude-quickstarts",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "infinite-zoom"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s4"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_deep-research.png": {
-   "kind": "image",
-   "aspect": 1.778,
-   "md5": "db4e482c525e",
-   "source": "GitHub · dzhng/deep-research 仓库页",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "infinite-zoom",
-    "evidence-zoom",
-    "citation-strip"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s4",
-      "s11",
-      "s14"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_cangjie.png": {
-   "kind": "image",
-   "aspect": 1.778,
-   "md5": "1bd1856c9c5e",
-   "source": "GitHub · Yeadon8888/cangjie-skill",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "infinite-zoom",
-    "citation-strip",
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s4",
-      "s14",
-      "s16"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_01-editor-overview.png": {
-   "kind": "image",
-   "aspect": 1.841,
-   "md5": "43b49aa427b7",
-   "source": "GitHub · OpenChatCut 同功能开源演示",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "real-doc-scroll",
-    "cursor-trace"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s8",
-      "s9"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_03-agent-transitions.png": {
-   "kind": "image",
-   "aspect": 1.841,
-   "md5": "61e537639600",
-   "source": "GitHub · OpenChatCut 同功能开源演示",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "real-doc-scroll"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s8"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_04-motion-graphics.png": {
-   "kind": "image",
-   "aspect": 1.841,
-   "md5": "de4d54a19fbc",
-   "source": "GitHub · OpenChatCut 同功能开源演示",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "real-doc-scroll"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s8"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_07-lut.png": {
-   "kind": "image",
-   "aspect": 1.841,
-   "md5": "2fee0ef9e451",
-   "source": "GitHub · OpenChatCut 同功能开源演示",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "real-doc-scroll"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s8"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_hero.mp4": {
-   "kind": "video",
-   "aspect": 1.778,
-   "md5": "317478872650",
-   "source": "GitHub · alchaincyf/nuwa-skill 官方动画",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "head-pip"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s19"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/talk.mp4": {
-   "kind": "video",
-   "aspect": 1.778,
-   "md5": "db18ddbd8ab5",
-   "source": "GitHub · alchaincyf/nuwa-skill 官方动画",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "head-pip"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s19"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_cover.png": {
-   "kind": "image",
-   "aspect": 2.357,
-   "md5": "931335eb4b35",
-   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "real-doc-scroll"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s20"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_6agents.png": {
-   "kind": "image",
-   "aspect": 2.357,
-   "md5": "178ce117231b",
-   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "real-doc-scroll"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s20"
-     ]
-    }
-   ]
-  },
-  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_board.png": {
-   "kind": "image",
-   "aspect": 1.792,
-   "md5": "f8ff524172b4",
-   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
-   "capturedAt": null,
-   "note": null,
-   "stock": null,
-   "used_in": [
-    "screen"
-   ],
-   "shows": [
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s21"
      ]
     }
    ]
@@ -4620,6 +4362,4984 @@
     {
      "video": "初级岗位正在从根子上消失",
      "date": "2026-10-14",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_jimeng_home.jpg": {
+   "kind": "image",
+   "aspect": 1.983,
+   "md5": "8fa851c44d02",
+   "source": "即梦网页版",
+   "capturedAt": "2026-10-16",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s7"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_vane_search.png": {
+   "kind": "image",
+   "aspect": 1.778,
+   "md5": "7ee1969c0b34",
+   "source": "联网搜索 · 本机部署",
+   "capturedAt": "2026-10-16",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s10"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_ragflow_kb.png": {
+   "kind": "image",
+   "aspect": 1.385,
+   "md5": "ad7af6a48610",
+   "source": "RAGFlow 官方文档配图",
+   "capturedAt": "2026-10-16",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom",
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s11"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-1-siceng/assets/m_deepseek.jpg": {
+   "kind": "image",
+   "aspect": 1.44,
+   "md5": "4b18ee415c44",
+   "source": "微博 · 用户屏摄",
+   "capturedAt": "2026-10-15",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-1-siceng/assets/m_doubao_promise.jpg": {
+   "kind": "image",
+   "aspect": 1.311,
+   "md5": "0986531175ad",
+   "source": "豆包对话截图",
+   "capturedAt": "2026-09-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-1-siceng/assets/m_jimeng_tools.jpg": {
+   "kind": "image",
+   "aspect": 3.636,
+   "md5": "037a9a51be0f",
+   "source": "即梦网页版",
+   "capturedAt": "2026-10-16",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-1-siceng/assets/m_jimeng_home.jpg": {
+   "kind": "image",
+   "aspect": 1.97,
+   "md5": "dfcb9a8d32ab",
+   "source": "即梦网页版",
+   "capturedAt": "2026-10-16",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-1-siceng/assets/m_jimeng_agent.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "62504b66bb0c",
+   "source": "即梦网页版",
+   "capturedAt": "2026-10-16",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-1-siceng/assets/m_jimeng_canvas.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "8588f92e308b",
+   "source": "即梦网页版",
+   "capturedAt": "2026-10-16",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-10-vibe/assets/miaoda.png": {
+   "kind": "image",
+   "aspect": 2.238,
+   "md5": "0b0b47767d12",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-10-vibe/assets/v1.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "e2924f6b4b9b",
+   "source": "本机浏览器实测 · 自己做的演示页",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-10-vibe/assets/v2.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "6fb6e9d6db20",
+   "source": "本机浏览器实测 · 自己做的演示页",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-10-vibe/assets/v3.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "43fa671040dd",
+   "source": "本机浏览器实测 · 自己做的演示页",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-10-vibe/assets/note.png": {
+   "kind": "image",
+   "aspect": 2.872,
+   "md5": "01da98cd2e9c",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s17"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-2-sanjiao/assets/m_jimeng_tools.jpg": {
+   "kind": "image",
+   "aspect": 3.636,
+   "md5": "037a9a51be0f",
+   "source": "即梦网页版",
+   "capturedAt": "2026-10-16",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-3-agent/assets/w11_memory.png": {
+   "kind": "image",
+   "aspect": 2.463,
+   "md5": "b1bd613295c1",
+   "source": "WorkBuddy",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-3-agent/assets/w02_send.png": {
+   "kind": "image",
+   "aspect": 0.835,
+   "md5": "58429c909093",
+   "source": "WorkBuddy",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-3-agent/assets/v04_midscene.mp4": {
+   "kind": "video",
+   "aspect": 1.444,
+   "md5": "1b6107dd3a2b",
+   "source": "GitHub · Midscene.js",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-3-agent/assets/p13_codex.png": {
+   "kind": "image",
+   "aspect": 1.6,
+   "md5": "1b14056a4b35",
+   "source": "GitHub 开源仓库配图",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-3-agent/assets/A2_clip_clean.png": {
+   "kind": "image",
+   "aspect": 0.8,
+   "md5": "41501acfecb6",
+   "source": "SkillHub",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-3-agent/assets/dflow.png": {
+   "kind": "image",
+   "aspect": 1.249,
+   "md5": "b64aaeb5b741",
+   "source": "微信官方文档 · 流程示意",
+   "capturedAt": "2026-10-03",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s21"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-4-tishi/assets/m0_pe_formulas.png": {
+   "kind": "image",
+   "aspect": 2.394,
+   "md5": "7170db13e276",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-4-tishi/assets/m1_po_example.png": {
+   "kind": "image",
+   "aspect": 3.114,
+   "md5": "1152451d7104",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-4-tishi/assets/m2_memory_file.png": {
+   "kind": "image",
+   "aspect": 3.061,
+   "md5": "fc34c5a2bb64",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/r1_layers.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "98f0d1cea23a",
+   "source": "Codex 基础课 1-1 ~ 1-4 成片",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/r2_pyramid.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "cb8fc96037e1",
+   "source": "Codex 基础课 1-1 ~ 1-4 成片",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/r3_agent.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "13c4d2e0db72",
+   "source": "Codex 基础课 1-1 ~ 1-4 成片",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/r4_prompt.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "68c6ee4c3156",
+   "source": "Codex 基础课 1-1 ~ 1-4 成片",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/k1_mindmap.jpg": {
+   "kind": "image",
+   "aspect": 3.333,
+   "md5": "cc9f4c9410a4",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/k2_excel.jpg": {
+   "kind": "image",
+   "aspect": 3.333,
+   "md5": "d74ed86d2df8",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/k3_promptopt.jpg": {
+   "kind": "image",
+   "aspect": 3.333,
+   "md5": "b75b661d2b2a",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/k4_avatar.jpg": {
+   "kind": "image",
+   "aspect": 3.333,
+   "md5": "1c16b436df0c",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/k5_hottopic.jpg": {
+   "kind": "image",
+   "aspect": 3.333,
+   "md5": "4bf748c38916",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/k6_search.jpg": {
+   "kind": "image",
+   "aspect": 3.333,
+   "md5": "292da19e5b80",
+   "source": "SkillHub",
+   "capturedAt": "2026-09-12",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/m_yuqing.jpg": {
+   "kind": "image",
+   "aspect": 2.391,
+   "md5": "ada3fa2a5084",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-5-luxian/assets/codex_icon.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "2668ce3a6f5c",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "logo-wall"
+   ],
+   "shows": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s27"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-6-shenme/assets/codex_icon.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "2668ce3a6f5c",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "logo-wall"
+   ],
+   "shows": [
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "public/brands/claude.svg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "1a2d0a89954e",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "logo-wall"
+   ],
+   "shows": [
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-6-shenme/assets/m_jimeng_home.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "8fa851c44d02",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-6-shenme/assets/codex_cli_splash.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "ee55cdeac7f6",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-6-shenme/assets/gh_agents_clean.png": {
+   "kind": "image",
+   "aspect": 1.6,
+   "md5": "b576a535f0fb",
+   "source": "GitHub · 仓库根目录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-6-shenme/assets/codex_cli_run.png": {
+   "kind": "image",
+   "aspect": 2.156,
+   "md5": "019b0e44fa32",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-7-jihui/assets/gh_docs.png": {
+   "kind": "image",
+   "aspect": 1.6,
+   "md5": "25b0b8606f74",
+   "source": "GitHub · openai/codex",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-7-jihui/assets/gh_releases.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "e404cc6ebc7c",
+   "source": "GitHub · openai/codex + Copilot 价格页",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-7-jihui/assets/gh_release_one.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "44f7f7bcaa44",
+   "source": "GitHub · openai/codex + Copilot 价格页",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-7-jihui/assets/gh_plans.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "5b4ff97bb8e2",
+   "source": "GitHub · openai/codex + Copilot 价格页",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-7-jihui/assets/gh_graph.png": {
+   "kind": "image",
+   "aspect": 1.6,
+   "md5": "09af2eb00d7c",
+   "source": "GitHub · openai/codex Insights",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-8-chazai/assets/readme_crop.png": {
+   "kind": "image",
+   "aspect": 1.468,
+   "md5": "9a60e51fbe68",
+   "source": "GitHub · openai/codex",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus",
+    "evidence-zoom",
+    "brand-quote-card"
+   ],
+   "shows": [
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s7",
+      "s14",
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-8-chazai/assets/codex_cli.png": {
+   "kind": "image",
+   "aspect": 1.627,
+   "md5": "285c3db4f3b5",
+   "source": "Codex CLI 官方 README 内嵌截图",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus",
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s7",
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-8-chazai/assets/install_strip.png": {
+   "kind": "image",
+   "aspect": 2.286,
+   "md5": "690f2c617f3a",
+   "source": "GitHub · openai/codex README",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s22"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-9-xingtai/assets/doc_cmd.png": {
+   "kind": "image",
+   "aspect": 1.911,
+   "md5": "cb25ef219f67",
+   "source": "GitHub · openai/codex",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-9-xingtai/assets/mkt_tall.png": {
+   "kind": "image",
+   "aspect": 0.614,
+   "md5": "1cc4628a9fe3",
+   "source": "VS Code Marketplace",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-9-xingtai/assets/cc_readme.png": {
+   "kind": "image",
+   "aspect": 1.769,
+   "md5": "3ac263e7173d",
+   "source": "GitHub · anthropics/claude-code",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-9-xingtai/assets/trae_hero.png": {
+   "kind": "image",
+   "aspect": 3.077,
+   "md5": "60e23b1721f4",
+   "source": "Trae 官网",
+   "capturedAt": "2026-10-17",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-11-jiaose/assets/search.png": {
+   "kind": "image",
+   "aspect": 1.43,
+   "md5": "ae504392053f",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-11-jiaose/assets/files.png": {
+   "kind": "image",
+   "aspect": 1.245,
+   "md5": "b13f28fc58ee",
+   "source": "GitHub · kingwrcy/moments",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-11-jiaose/assets/about.png": {
+   "kind": "image",
+   "aspect": 0.491,
+   "md5": "35e233aafa6e",
+   "source": "GitHub · kingwrcy/moments",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-11-jiaose/assets/langs.png": {
+   "kind": "image",
+   "aspect": 1.098,
+   "md5": "132bdaf31ff6",
+   "source": "GitHub · kingwrcy/moments",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-11-jiaose/assets/issues.png": {
+   "kind": "image",
+   "aspect": 2.107,
+   "md5": "e83a21e02e7a",
+   "source": "GitHub · Issues",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-12-techu/assets/runoob_code_wide.png": {
+   "kind": "image",
+   "aspect": 1.053,
+   "md5": "004437ed38a2",
+   "source": "runoob 教程页",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-12-techu/assets/apple_hero.png": {
+   "kind": "image",
+   "aspect": 0.994,
+   "md5": "b07e4caf3772",
+   "source": "Apple 中国官网",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-12-techu/assets/mdn_params.png": {
+   "kind": "image",
+   "aspect": 1.291,
+   "md5": "957b1ede8440",
+   "source": "MDN Web Docs 中文",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-12-techu/assets/iter1.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "f90996706ebb",
+   "source": "我自己做的三版页面",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-12-techu/assets/iter2.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "77da786b63dc",
+   "source": "我自己做的三版页面",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-12-techu/assets/iter3.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "45f7e3ccf440",
+   "source": "我自己做的三版页面",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-12-techu/assets/antd_home.png": {
+   "kind": "image",
+   "aspect": 2,
+   "md5": "01252e326294",
+   "source": "Ant Design 官网",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-13-jianli/assets/d3d_a.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "7fb793383b4a",
+   "source": "本站自制示意页 · HTML + CSS 3D",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-13-jianli/assets/d3d_b.png": {
+   "kind": "image",
+   "aspect": 1.553,
+   "md5": "777d569b0d9e",
+   "source": "本站自制示意页",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph",
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s0",
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-13-jianli/assets/d3d_c.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "ef9413b738e5",
+   "source": "本站自制示意页 · HTML + CSS 3D",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph",
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s0",
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-13-jianli/assets/pdf_a.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "43dd0c6c5215",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-13-jianli/assets/lecture_steps.png": {
+   "kind": "image",
+   "aspect": 2.41,
+   "md5": "b69d55ec0dfc",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-13-jianli/assets/lecture13.png": {
+   "kind": "image",
+   "aspect": 0.431,
+   "md5": "a7abd20a01df",
+   "source": "本站讲义（自制）",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-15-mcpcli/assets/mcp_tools.png": {
+   "kind": "image",
+   "aspect": 0.242,
+   "md5": "cc2bda1c008b",
+   "source": "MCP 官方规范",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-15-mcpcli/assets/mcp_intro.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "639cf893a9d1",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s4",
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-15-mcpcli/assets/man_synopsis.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "fa08a7f02711",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s4",
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-15-mcpcli/assets/explainshell.png": {
+   "kind": "image",
+   "aspect": 1.667,
+   "md5": "1f2c0904f48f",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-15-mcpcli/assets/man_quote.png": {
+   "kind": "image",
+   "aspect": 2.278,
+   "md5": "520a6440f37d",
+   "source": "man7.org",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-15-mcpcli/assets/mcp_def_block.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "2aaf17a64822",
+   "source": "MCP 官方规范",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s11"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-15-mcpcli/assets/mcp_call.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "e3b8d5f6c687",
+   "source": "MCP 官方规范",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s11"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-17-words/assets/cx_cmd_top.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "fd9040e204bc",
+   "source": "Codex 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-17-words/assets/cx_slash_tbl.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "9c85891ef7e6",
+   "source": "Codex 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-17-words/assets/mcp_def.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "35a1c44b88a1",
+   "source": "MCP 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "brand-quote-card"
+   ],
+   "shows": [
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-17-words/assets/cc_sub_def.png": {
+   "kind": "image",
+   "aspect": 2.857,
+   "md5": "7baf27cf9695",
+   "source": "Claude Code 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-18-pits/assets/arxiv_abs.png": {
+   "kind": "image",
+   "aspect": 5.864,
+   "md5": "da3852bfb05e",
+   "source": "arXiv",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-18-pits/assets/msr_crit.png": {
+   "kind": "image",
+   "aspect": 0.592,
+   "md5": "ef564e656b34",
+   "source": "Microsoft Research Blog",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-18-pits/assets/cc_verify.png": {
+   "kind": "image",
+   "aspect": 2.842,
+   "md5": "0cd1488a5587",
+   "source": "Claude Code 文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-19-blame/assets/c19_blocks.png": {
+   "kind": "image",
+   "aspect": 3.016,
+   "md5": "3d8962835b72",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s5",
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-19-blame/assets/c19_perm_pick.png": {
+   "kind": "image",
+   "aspect": 1.806,
+   "md5": "1bd08f08aa83",
+   "source": "Codex 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-19-blame/assets/c19_modes.png": {
+   "kind": "image",
+   "aspect": 3.88,
+   "md5": "68a225a5be66",
+   "source": "Codex 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s13",
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-16-skill/assets/skill_spec_hi.png": {
+   "kind": "image",
+   "aspect": 0.578,
+   "md5": "affbd1c0ad52",
+   "source": "Agent Skills 规范",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-16-skill/assets/skill_tree.png": {
+   "kind": "image",
+   "aspect": 2.711,
+   "md5": "2d2bdf01ebd9",
+   "source": "Agent Skills 规范",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-16-skill/assets/skill_pd_hi.png": {
+   "kind": "image",
+   "aspect": 1.902,
+   "md5": "38b6948723d4",
+   "source": "Agent Skills 规范",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-16-skill/assets/cc_nav.png": {
+   "kind": "image",
+   "aspect": 0.237,
+   "md5": "1c190dfa3c28",
+   "source": "Claude Code 文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-14-mcp/assets/mcp_arch.png": {
+   "kind": "image",
+   "aspect": 2.299,
+   "md5": "9ca9eb580a2a",
+   "source": "Model Context Protocol 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-14-mcp/assets/mcp_page.png": {
+   "kind": "image",
+   "aspect": 1.553,
+   "md5": "91e1db7d77f0",
+   "source": "Model Context Protocol 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-14-mcp/assets/mcp_servers_tall.png": {
+   "kind": "image",
+   "aspect": 0.438,
+   "md5": "32d4f5cc1114",
+   "source": "Model Context Protocol 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-14-mcp/assets/nodejs.png": {
+   "kind": "image",
+   "aspect": 1.553,
+   "md5": "c79e5a693b59",
+   "source": "Node.js 中文官网",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-14-mcp/assets/mcp_config.png": {
+   "kind": "image",
+   "aspect": 1.047,
+   "md5": "48bdda751ae8",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-14-mcp/assets/vscode_mcp.png": {
+   "kind": "image",
+   "aspect": 1.553,
+   "md5": "e7b99fc2e07d",
+   "source": "VS Code 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-20-wrap/assets/c20_cc.png": {
+   "kind": "image",
+   "aspect": 1.738,
+   "md5": "04c0504ad974",
+   "source": "Claude Code 官方文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-20-wrap/assets/c20_codex.png": {
+   "kind": "image",
+   "aspect": 4.188,
+   "md5": "4ec047a29a8c",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-20-wrap/assets/c20_codex2.png": {
+   "kind": "image",
+   "aspect": 4.188,
+   "md5": "d425083c30e4",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "board-proof"
+   ],
+   "shows": [
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-20-wrap/assets/c20_wb.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "1f1ad51f8487",
+   "source": "WorkBuddy",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "brand-quote-card"
+   ],
+   "shows": [
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-20-wrap/assets/c20_dstab.png": {
+   "kind": "image",
+   "aspect": 2.353,
+   "md5": "5d2e5e78df73",
+   "source": "DeepSeek 平台文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-1-20-wrap/assets/c20_dsnv.png": {
+   "kind": "image",
+   "aspect": 0.629,
+   "md5": "732161cf4d5e",
+   "source": "DeepSeek 平台文档",
+   "capturedAt": "2026-10-18",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/shots/repo_home_m.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "8ec7321a5256",
+   "source": "GitHub · 公开仓库页实拍",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/shots/blob_readme_m.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "3bdd7247974a",
+   "source": "GitHub · 公开仓库页实拍",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/txt/git_log.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "87a6e782dce0",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/txt/git_revert.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "d028c8dd4955",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/docs/repo-create-global-nav-update.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "7779582f7d0b",
+   "source": "GitHub Docs · 官方文档配图",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/docs/create-repository-owner.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "66d2a630affb",
+   "source": "GitHub Docs · 官方文档配图",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/docs/create-repository-name.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "d56eef0243ac",
+   "source": "GitHub Docs · 官方文档配图",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/docs/add-file-buttons.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "e3484c043074",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/docs/new-file-preview.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "8e662c342263",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/shots/repo_prompts_m.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "df6d8aeaeca9",
+   "source": "GitHub 公开仓库页 + 本机档案文件实拍",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s19"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/txt/file_profile.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "88fbb821601b",
+   "source": "GitHub 公开仓库页 + 本机档案文件实拍",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s19"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/txt/file_rules.png": {
+   "kind": "image",
+   "aspect": 2.147,
+   "md5": "2e9f67c13870",
+   "source": "本机私有仓库文件实拍",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "head-pip"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s21"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/talk_seg_rules.mp4": {
+   "kind": "image",
+   "aspect": 2.147,
+   "md5": "8ac94de033d3",
+   "source": "本机私有仓库文件实拍",
+   "capturedAt": "2026-10-19",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "head-pip"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s21"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/txt/file_sample.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "fcbbab5119d9",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s23"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-github/assets/raw/txt/file_output.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "77176b9b3188",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s23"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/stills/council-table.png": {
+   "kind": "image",
+   "aspect": 1.777,
+   "md5": "6dcfca1acd7f",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/clips/c3-modal.mp4": {
+   "kind": "video",
+   "aspect": 1.777,
+   "md5": "9dd47c77e831",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/clips/c2-wide.mp4": {
+   "kind": "video",
+   "aspect": 1.777,
+   "md5": "85089d3525c5",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s3"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/clips/c2-task.mp4": {
+   "kind": "video",
+   "aspect": 1.777,
+   "md5": "2ebc95f82911",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/clips/c3-seat.mp4": {
+   "kind": "video",
+   "aspect": 1.777,
+   "md5": "58879cfa4775",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/clips/c1-jobs.mp4": {
+   "kind": "video",
+   "aspect": 1.777,
+   "md5": "54e53d42fd0b",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s6"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/md-munger.png": {
+   "kind": "image",
+   "aspect": 1.349,
+   "md5": "8bd14ff3b2b9",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s7",
+      "s24"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/md-musk.png": {
+   "kind": "image",
+   "aspect": 1.128,
+   "md5": "27a97fb7eb51",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/md-bezos.png": {
+   "kind": "image",
+   "aspect": 1.146,
+   "md5": "f9a3b3da0c53",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s11"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/md-jobs.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "a688008c288b",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "brand-quote-card"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s13"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/clips/c2-draft.mp4": {
+   "kind": "video",
+   "aspect": 1.777,
+   "md5": "d9a07053db5b",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/script-md.png": {
+   "kind": "image",
+   "aspect": 1.22,
+   "md5": "dfd386e25430",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s17"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/task-page.png": {
+   "kind": "image",
+   "aspect": 1.545,
+   "md5": "b4680c933177",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/clips/c3-step.mp4": {
+   "kind": "video",
+   "aspect": 1.777,
+   "md5": "5aadd10ce84f",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s19"
+     ]
+    }
+   ]
+  },
+  "D:/qord/council4/assets/clips/c2-home.mp4": {
+   "kind": "video",
+   "aspect": 1.777,
+   "md5": "22eada52a82c",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s25"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/open/claude_icon.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "3051c52fb773",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "side-brand-fx"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/open/cursor_icon.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "08365da11554",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "side-brand-fx"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_hello-world-example.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "cb73e5e09797",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus",
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s1",
+      "s3"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/cu_desktop_crop.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "215a5110f3fb",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-versus"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_tool-panel.jpg": {
+   "kind": "image",
+   "aspect": 0.908,
+   "md5": "3f4eed332891",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/computeruse_trajectory-viewer.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "9fef20d034d4",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-morph"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s3"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_computer-use.png": {
+   "kind": "image",
+   "aspect": 1.778,
+   "md5": "67818fd1af0d",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": "2026-10-11",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom",
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s5",
+      "s23"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_openchatcut.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "0b19c903dfe9",
+   "source": "GitHub · anthropics/claude-quickstarts",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_deep-research.png": {
+   "kind": "image",
+   "aspect": 1.778,
+   "md5": "db4e482c525e",
+   "source": "GitHub · dzhng/deep-research 仓库页",
+   "capturedAt": "2026-10-11",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom",
+    "evidence-zoom",
+    "citation-strip"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s5",
+      "s12",
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/repo_cangjie.png": {
+   "kind": "image",
+   "aspect": 1.778,
+   "md5": "1bd1856c9c5e",
+   "source": "GitHub · Yeadon8888/cangjie-skill",
+   "capturedAt": "2026-10-11",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "infinite-zoom",
+    "citation-strip",
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s5",
+      "s15",
+      "s17"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_01-editor-overview.png": {
+   "kind": "image",
+   "aspect": 1.841,
+   "md5": "43b49aa427b7",
+   "source": "GitHub · OpenChatCut 同功能开源演示",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll",
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s9",
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_03-agent-transitions.png": {
+   "kind": "image",
+   "aspect": 1.841,
+   "md5": "61e537639600",
+   "source": "GitHub · OpenChatCut 同功能开源演示",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_04-motion-graphics.png": {
+   "kind": "image",
+   "aspect": 1.841,
+   "md5": "de4d54a19fbc",
+   "source": "GitHub · OpenChatCut 同功能开源演示",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/chatchat_07-lut.png": {
+   "kind": "image",
+   "aspect": 1.841,
+   "md5": "2fee0ef9e451",
+   "source": "GitHub · OpenChatCut 同功能开源演示",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_hero.mp4": {
+   "kind": "video",
+   "aspect": 1.778,
+   "md5": "317478872650",
+   "source": "GitHub · alchaincyf/nuwa-skill 官方动画",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "head-pip"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/talk_v2.mp4": {
+   "kind": "video",
+   "aspect": 1.778,
+   "md5": "53262151cc95",
+   "source": "GitHub · alchaincyf/nuwa-skill 官方动画",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "head-pip"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_cover.png": {
+   "kind": "image",
+   "aspect": 2.357,
+   "md5": "931335eb4b35",
+   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
+   "capturedAt": "2026-10-11",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s21"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_6agents.png": {
+   "kind": "image",
+   "aspect": 2.357,
+   "md5": "178ce117231b",
+   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
+   "capturedAt": "2026-10-11",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "real-doc-scroll"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s21"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai-computer-use/assets/gh/nuwa_board.png": {
+   "kind": "image",
+   "aspect": 1.792,
+   "md5": "f8ff524172b4",
+   "source": "GitHub · alchaincyf/nuwa-skill 仓库图",
+   "capturedAt": "2026-10-11",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s22"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/open/codex_icon.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "2668ce3a6f5c",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "side-brand-fx"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/open/wb_256.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "f7bf06ea288d",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "side-brand-fx"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s16.mp4": {
+   "kind": "video",
+   "aspect": 1.958,
+   "md5": "24acfaf43820",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s1"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/board1_s26.mp4": {
+   "kind": "video",
+   "aspect": 1.958,
+   "md5": "2323a65b09ab",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s4"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/setup_a.mp4": {
+   "kind": "video",
+   "aspect": 1.951,
+   "md5": "c02cea8b8c9e",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/setup_b.mp4": {
+   "kind": "video",
+   "aspect": 1.951,
+   "md5": "3501c574328b",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp2_s8.mp4": {
+   "kind": "video",
+   "aspect": 1.958,
+   "md5": "d21ba2dadf5d",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/inquiry_cmd.mp4": {
+   "kind": "video",
+   "aspect": 1.951,
+   "md5": "324edaffb805",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s11"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp2_s10.mp4": {
+   "kind": "video",
+   "aspect": 1.958,
+   "md5": "317e5296e3dd",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s13"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s12.mp4": {
+   "kind": "video",
+   "aspect": 1.958,
+   "md5": "cca5ceb75229",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/shots/wb_noquote.png": {
+   "kind": "image",
+   "aspect": 1.198,
+   "md5": "a10d70597f08",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "cursor-trace"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s15"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/exp1_s13.mp4": {
+   "kind": "video",
+   "aspect": 1.958,
+   "md5": "06f4987052c4",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/console_hold.mp4": {
+   "kind": "video",
+   "aspect": 1.951,
+   "md5": "8714910bf471",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s22"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/board1c_s11.mp4": {
+   "kind": "video",
+   "aspect": 1.958,
+   "md5": "d97fbb8b68d3",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s23"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/shots/board_results.png": {
+   "kind": "image",
+   "aspect": 2.657,
+   "md5": "20709798a78c",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "evidence-zoom"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s24"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/board1c_s17.mp4": {
+   "kind": "video",
+   "aspect": 1.958,
+   "md5": "2a53a95a3824",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s25"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-codex-workbuddy/assets/clean/manual_s18.mp4": {
+   "kind": "video",
+   "aspect": 1.951,
+   "md5": "885d904d6406",
+   "source": "自建 AI 工作台实录",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen"
+   ],
+   "shows": [
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s27"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r4-flat-vector.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "06792f616f55",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s1",
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r5-monet.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "d8811dddef7a",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s1",
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r5-pixel.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "3213b1e79159",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s2",
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r6-flatflow.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "e4180eb94f39",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s2",
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r1-workflow.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "726b4cbeb6f6",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s6",
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r3-shadow-puppet.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "f3363c264917",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s6",
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r7-sand.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "ed627bb9989e",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s6",
+      "s22"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r1-interaction.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "ef66d1ddfe75",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r1-camera.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "69c01c976baa",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r1-ui-entrance.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "12794372fd0d",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r1-transition.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "4adfe43579eb",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s9"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r1-opening.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "8affe396cb44",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r1-typography.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "a6d4ef51774b",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r2-plan-a.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "ca8451e40f5e",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r2-plan-b.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "852724f8e5df",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r2-plan-c.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "87b6cf834a4e",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r3-ink-wash.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "6300c4a2e9ce",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/r3films/r3-paper-popup-clean.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "19b935516ca3",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/crop/r3-whiteboard-nobottom.jpg": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "14d1be3fac2e",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/r3films/r3-ukiyoe.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "7255c0b953e4",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r4-pixel.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "32646a91ed9d",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r4-line-art.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "df207dacfee4",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/crop/r4-pixel-crop.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "caa857ed27d4",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r5-egypt.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "5c70d975ff33",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r5-vangogh.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "c4d090e571d7",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r5-dawn.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "bb15777a133c",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r6-notes.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "bc1894a679d2",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r6-cartoon.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "d9cc97d81e6e",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r6-cyber.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "dfb0cc0bea53",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r6-papercut.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "df2d9d272b51",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s20"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r7-flat.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "8eb538ef70c7",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s22"
+     ]
+    }
+   ]
+  },
+  "D:/qord/skills7/assets/repos/media/r7-particles.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "39a303e44bed",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s22"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/venue_walk.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "eda431eb490f",
+   "source": "TRAE 活动现场",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/stage_upgrade.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "906b32ee6da5",
+   "source": "TRAE 活动现场",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/stage_talk.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "05595f040f1b",
+   "source": "TRAE 活动现场",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/venue_selfie.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "029732b94eec",
+   "source": "TRAE 活动现场",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/stage_crowd.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "8659207a8193",
+   "source": "TRAE 活动现场",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s0"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/model_doubao.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "f81a1f829aac",
+   "source": "TRAE 客户端",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/model_deepseek.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "ae934b33cd23",
+   "source": "TRAE 客户端",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/model_qwen.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "ee8a9c79d4e4",
+   "source": "TRAE 客户端",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/model_gpt.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "2a5f3b30a8f2",
+   "source": "TRAE 客户端",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/hack_ide_clean.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "edd00187f99e",
+   "source": "TRAE 黑客松",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/hack_project.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "266d1a7b68e1",
+   "source": "TRAE 黑客松",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/hack_demo.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "3148873193f1",
+   "source": "TRAE 黑客松",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/hack_cities_masked.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "99955432cc1e",
+   "source": "TRAE 黑客松",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/trae_demo_wall_clean.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "f821a1aa9f0c",
+   "source": "TRAE 黑客松",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/hack_view.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "92d039bc93c3",
+   "source": "TRAE 黑客松",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/github/find_skills_cli.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "dae270a91e75",
+   "source": "GitHub 仓库",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/github/frontend_design_repo.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "74661a7eabd2",
+   "source": "GitHub 仓库",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s14"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/github/webapp_testing_official_example.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "f3c6aa021f9d",
+   "source": "GitHub 仓库",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s16"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-trae/assets/video/miniapp_screen16.png": {
+   "kind": "image",
+   "aspect": null,
+   "md5": "1277c6088cbd",
+   "source": "TRAE 现场演示",
+   "capturedAt": "2026-10",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "footage-stage"
+   ],
+   "shows": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai/assets/deck_a.mp4": {
+   "kind": "video",
+   "aspect": 1.778,
+   "md5": "cb2daf2ade31",
+   "source": "我的 AI 指挥舱 · 本机大屏",
+   "capturedAt": "2026-10-26",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-markup"
+   ],
+   "shows": [
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s1",
+      "s8"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-ai/assets/deck_b.mp4": {
+   "kind": "video",
+   "aspect": 1.778,
+   "md5": "654f001a55c0",
+   "source": "我的 AI 指挥舱 · 本机大屏",
+   "capturedAt": "2026-10-26",
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "screen-markup"
+   ],
+   "shows": [
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s9",
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb1c_emptybox.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "2149955651b3",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb1a_head.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "58fd4d2f20af",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb1b_personal.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "4203dbe580dd",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s2"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb1d_typing.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "90159385c3ad",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s5"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb2_panel.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "a12fb181c6d3",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb2_cpath.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "c7e4a952d0c1",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s7"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb2_dpath.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "8e5d2ed033b5",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s10"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb3_context.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "90dc48c24b18",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s12"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb4_result.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "eff8449b178f",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s18"
+     ]
+    }
+   ]
+  },
+  "D:/qord/neurocast-wb-5settings/clips/wb4_typing.mp4": {
+   "kind": "video",
+   "aspect": null,
+   "md5": "ddfdc8250364",
+   "source": null,
+   "capturedAt": null,
+   "note": null,
+   "stock": null,
+   "used_in": [
+    "asset-full"
+   ],
+   "shows": [
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
      "shots": [
       "s20"
      ]

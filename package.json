@@ -12,6 +12,12 @@
     "preview": "node scripts/preview.mjs",
     "catalog": "node scripts/catalog.mjs",
     "gallery": "node scripts/gallery.mjs",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
+    "audit": "node scripts/motion-audit.mjs",
+    "test:openings": "node --test scripts/qa/openings.test.mjs scripts/qa/opening-pipeline.test.mjs",
+    "sound:setup": "node scripts/sound-setup.mjs",
+    "sound:check": "node scripts/sfx.mjs audit",
+    "check": "npm run typecheck && npm run audit && npm run test:openings && npm run sound:check",
     "sfx": "python scripts/gen_sfx.py"
   },
   "dependencies": {

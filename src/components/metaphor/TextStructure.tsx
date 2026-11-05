@@ -29,7 +29,9 @@ const line = z.object({
 const schema = z.object({
   hang: z.string().max(6).describe("被吊着的词 —— 先悬着、摆动、然后坠落，如「等待」「加班」"),
   floor: z.string().max(8).describe("坠落后摊开当地板的词，如「三年等待」。它撑满画面宽度，成为地基"),
-  pillars: z.array(z.string().max(8)).min(1).max(2).describe("竖着长出来的柱子（1~2 根），如「没人看」「还得上班」"),
+  // 竖排柱子按容器高度裁切，实测 5 个字就会掉最后一个字（1-1 的「第三层就够」上屏只剩「第三层够」），
+  // 所以这里收死在 4 字：写多了在 --plan-only 阶段就报，而不是等成片逐秒 OCR 才发现少一个字。
+  pillars: z.array(z.string().max(4)).min(1).max(2).describe("竖着长出来的柱子（1~2 根，≤4 字），如「没人看」「还得上班」"),
   beam: z.string().max(6).describe("最后落下来的横梁上抠出的字，如「地板」「门槛」"),
   lines: z.array(line).min(1).max(4).describe("说话的句子：第一句在结构之前，后面的句子站在地基上"),
   verdict: z.string().max(16).describe("站在梁上的最后一句（结论）"),
@@ -95,7 +97,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const morphK = eioX(prog(s, tMorph / fps, tMorph / fps + 0.5));
   const landK = easeOut(prog(frame, tMorph, 22));
   const pillarK = (i: number) => 1 - Math.exp(-prog(s, tPillar / fps + i * 0.18, tPillar / fps + i * 0.18 + 0.9) * 4);
-  const beamY = lerp(-DH - 60, DT, easeIn(prog(s, tBeam / fps, tBeam / fps + 0.28)));
+  const beamY = lerp(-DH - 60, DT, easeIn(prog(s, tBeam / fps, 0.28)));
   const eVerdict = enterAt(frame, tVerdict, { fallback: "rise", dur: 18 });
 
   const speak = (size: number) => ({ fontFamily: t.font.body, fontWeight: 400, fontSize: size, color: t.text });

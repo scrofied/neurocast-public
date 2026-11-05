@@ -33,7 +33,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
   const G = full ? H * 0.8 : H * 0.76;
   const mirrorW = full ? W * 0.3 : W * 0.34;
   const mirrorH = full ? H * 0.56 : H * 0.4;
-  const mx = W * (full ? 0.54 : 0.52);
+  // 镜子原来放在 0.54W，右侧「它吐出来的」卡片（0.24W）会被推出画面外（1653+461>1920）。
+  // 整条场景左移到 0.42W：镜子 806~1382，卡片 1422~1883 正好留在画内，人形仍在 x≈357 不压标题。
+  const mx = W * (full ? 0.42 : 0.52);
   const my = G - mirrorH;
   const figH = mirrorH * 0.82;
   const figX = mx - mirrorW * 0.78;
@@ -104,7 +106,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
         <div style={{ position: "absolute", left: figX, top: G - figH - (full ? 70 : 38), transform: `translateX(-50%) translate(${ePerson.dx}px, ${ePerson.dy}px)`, fontFamily: t.font.title, fontWeight: 900, fontSize: full ? 28 : 15, color: t.text, whiteSpace: "nowrap", opacity: ePerson.opacity, textShadow: "0 2px 0 #000" }}>{data.person}</div>
         {/* the result card the mirror spits out */}
         {frame >= askAt && (
-          <div style={{ position: "absolute", left: mx + mirrorW + (full ? 40 : 18), top: my + mirrorH * 0.3, width: full ? W * 0.24 : W * 0.32, transform: `translate(${eCard.dx}px, ${eCard.dy}px) scale(${eCard.scale}) translateX(${(1 - clearK) * (full ? 30 : 15)}px)`, opacity: eCard.opacity, transformOrigin: "0 50%", borderRadius: 14, background: alpha(t.bg, 0.88), border: `3px solid ${clearK > 0.5 ? t.primary : t.bad}`, boxShadow: `0 0 26px ${alpha(clearK > 0.5 ? t.primary : t.bad, 0.5)}`, padding: full ? "16px 22px" : "8px 11px" }}>
+          <div style={{ position: "absolute", left: Math.min(mx + mirrorW + (full ? 40 : 18), W - (full ? W * 0.24 : W * 0.32) - 16), top: my + mirrorH * 0.3, width: full ? W * 0.24 : W * 0.32, transform: `translate(${eCard.dx}px, ${eCard.dy}px) scale(${eCard.scale}) translateX(${(1 - clearK) * (full ? 30 : 15)}px)`, opacity: eCard.opacity, transformOrigin: "0 50%", borderRadius: 14, background: alpha(t.bg, 0.88), border: `3px solid ${clearK > 0.5 ? t.primary : t.bad}`, boxShadow: `0 0 26px ${alpha(clearK > 0.5 ? t.primary : t.bad, 0.5)}`, padding: full ? "16px 22px" : "8px 11px" }}>
             <div style={{ fontFamily: t.font.mono, fontSize: full ? 17 : 10, letterSpacing: 3, color: t.dim, marginBottom: full ? 8 : 4 }}>它吐出来的</div>
             {/* the output is fuzzy while the input is fuzzy */}
             <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(bubbleText, (full ? W * 0.24 : W * 0.32) - (full ? 44 : 22), full ? 30 : 15, 12), color: t.text, lineHeight: 1.3, filter: `blur(${(1 - clearK) * 3}px)`, opacity: 0.6 + clearK * 0.4 }}>{bubbleText}</div>

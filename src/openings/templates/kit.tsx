@@ -7,7 +7,8 @@ import type { Cam, CompDef, CompProps } from "../../components/types";
 
 // Shared kit for the opening TEMPLATES (src/openings/templates/). Unlike the per-script openings,
 // templates are generic: every word comes from data, every change sits on an anchor (xxxAt, frames
-// relative to the opening start). All of them are transparent overlays above the person layer.
+// relative to the opening start). Most are transparent overlays above the person layer; selfBg
+// templates (op-tunnel) draw their own opaque stage and cover the shot underneath.
 
 export type Hit = { at: number; amp?: number; len?: number };
 export type Exit = "left" | "right" | "up" | "zoom" | "fade";
@@ -129,6 +130,11 @@ export const tpl = <D,>(o: {
   schema: z.ZodType<D>;
   example?: Partial<D>;
   assetFields?: string[];
+  minSec?: number;
+  maxSec?: number;
+  sec?: number;
+  selfBg?: boolean;
+  chapter?: boolean;
   C: React.FC<CompProps<D>>;
   camera?: (data: D, frame: number, dur: number) => Cam;
 }): CompDef<D> => ({
@@ -136,8 +142,8 @@ export const tpl = <D,>(o: {
   name: o.name,
   layer: "opening",
   variants: 1,
-  minSec: 2,
-  maxSec: 4,
+  minSec: o.minSec ?? 2,
+  maxSec: o.maxSec ?? 4,
   tags: ["开场模板", o.hook],
   desc: o.desc,
   use: o.use,
@@ -146,5 +152,6 @@ export const tpl = <D,>(o: {
   ...(o.assetFields?.length ? { assetFields: o.assetFields } : {}),
   C: o.C,
   camera: o.camera,
-  opening: { script: "template", hook: o.hook, techniques: o.techniques, template: true },
+  opening: { script: "template", hook: o.hook, techniques: o.techniques, template: true, sec: o.sec, ...(o.selfBg ? { selfBg: true } : {}), ...(o.chapter ? { chapter: true } : {}) },
+
 });

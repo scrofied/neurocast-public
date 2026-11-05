@@ -106,7 +106,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
                 {data.cite}
               </div>
             )}
-            <div style={{ marginLeft: "auto" }}>
+            <div style={{ marginLeft: "auto", position: "relative", width: 420, height: 34, flexShrink: 0 }}>
               <SourceBadge source={data.source} frame={frame} y={0} />
             </div>
           </div>

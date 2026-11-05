@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import { AbsoluteFill, useVideoConfig } from "remotion";
 import { alpha, useTheme } from "../lib/theme";
 import { clamp, easeIn, easeInOut, easeOutQuint, lerp, noise1, prog } from "../lib/anim";
@@ -7,7 +7,7 @@ const ENTER = 18;
 const EXIT = 12;
 // every shot is rendered this many frames past its end so its exit crosses the next shot's entry
 export const OVERLAP = 12;
-export const TRANSITIONS = ["fly", "warp", "iris", "glitch", "fade", "cut", "flood", "zoom", "push", "wipe", "grid"] as const;
+export const TRANSITIONS = ["fly", "warp", "iris", "glitch", "fade", "cut", "flood", "zoom", "push", "wipe", "grid", "matrix"] as const;
 
 // ---------------------------------------------------------------------------
 // 形状连续转场（移植自 opus-video-skills · kinetic-reel 的 trZoom / trPush / trWipe / trGrid，
@@ -91,6 +91,65 @@ const GridPops: React.FC<{ k: number; W: number; H: number; col: string }> = ({ 
   return <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>{cells}</svg>;
 };
 
+// matrix：每列一条下落速度不同的「代码幕」，幕布上方的画面先显影、下方仍被字雨盖住。
+// 和 grid 一样用 data-URI 蒙版（无头 Chrome 对 HTML 元素上的 SVG mask 引用支持不稳）。
+const MATRIX_COLS = 56;
+const h01 = (n: number, seed: number) => {
+  const x = Math.sin(n * 127.1 + seed * 311.7) * 43758.5453;
+  return x - Math.floor(x);
+};
+const matrixMask = (k: number, W: number, H: number, seed: number) => {
+  const cw = W / MATRIX_COLS;
+  let cells = "";
+  for (let c = 0; c < MATRIX_COLS; c++) {
+    const delay = h01(c + 7, seed) * 0.32;
+    const f = seg(k, delay, 1);
+    if (f <= 0) continue;
+    const h = f * H;
+    cells += `%3Crect x='${Math.round(c * cw)}' y='0' width='${Math.ceil(cw) + 1}' height='${Math.round(h)}'/%3E`;
+  }
+  return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${W}' height='${H}'%3E%3Cg fill='%23ffffff'%3E${cells}%3C/g%3E%3C/svg%3E")`;
+};
+
+const MATRIX_GLYPHS = Array.from("アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789<>/\\|=+-*");
+
+const MatrixCurtain: React.FC<{ k: number; W: number; H: number; seed: number; frame: number }> = ({ k, W, H, seed, frame }) => {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useLayoutEffect(() => {
+    const c = ref.current;
+    const ctx = c?.getContext("2d");
+    if (!c || !ctx) return;
+    const cell = 24;
+    const cols = Math.ceil(W / cell);
+    const rows = Math.ceil(H / cell);
+    ctx.clearRect(0, 0, W, H);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.font = '700 18px "MS Gothic", "Yu Gothic", monospace';
+    for (let col = 0; col < cols; col++) {
+      const delay = h01(col + 7, seed) * 0.32;
+      const f = seg(k, delay, 1);
+      if (f >= 1) continue;
+      const front = f * H;
+      ctx.fillStyle = "rgba(1, 12, 7, 0.9)";
+      ctx.fillRect(col * cell, front, cell, H - front);
+      const base = col * 13.7 + seed * 5.3;
+      for (let row = Math.max(0, Math.floor(front / cell)); row < rows; row++) {
+        const rv = h01(base + row * 9.1 + Math.floor(frame / 3) * 0.7, seed);
+        const a = row * cell < front + cell * 2 ? 0.95 : 0.18 + 0.42 * rv;
+        ctx.fillStyle = `rgba(96,255,178,${a})`;
+        ctx.fillText(MATRIX_GLYPHS[Math.floor(rv * MATRIX_GLYPHS.length)], col * cell + cell / 2, row * cell);
+      }
+      ctx.fillStyle = "rgba(218,255,238,0.9)";
+      ctx.fillRect(col * cell, Math.max(0, front - 2), cell, 2);
+    }
+    // 一层很轻的横向扫描线，让幕布不像纯色块
+    ctx.fillStyle = "rgba(0,0,0,0.12)";
+    for (let y = 0; y < H; y += 4) ctx.fillRect(0, y, W, 1);
+  }, [k, W, H, seed, frame]);
+  return <canvas ref={ref} width={W} height={H} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />;
+};
+
 // Wraps every shot: entry/exit transition + continuous slow camera move so no frame is static.
 // "cut": no entry animation (e.g. the talking-head opening must be visible from frame 0), soft exit.
 export const ShotFrame: React.FC<{
@@ -147,6 +206,12 @@ export const ShotFrame: React.FC<{
     const m = gridMask(e, W, H);
     style = { WebkitMaskImage: m, maskImage: m, WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat", WebkitMaskSize: "100% 100%", maskSize: "100% 100%" };
     overlay = <GridPops k={e} W={W} H={H} col={alpha(t.accent, 0.9)} />;
+  } else if (entering && transition === "matrix") {
+    // 代码雨幕布从上往下退，幕布退开的区域就是下一镜；位置按列错开，像一整片字雨在显影。
+    const e = easeInOut(prog(frame, 0, OVERLAP));
+    const m = matrixMask(e, W, H, seed);
+    style = { WebkitMaskImage: m, maskImage: m, WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat", WebkitMaskSize: "100% 100%", maskSize: "100% 100%" };
+    overlay = <MatrixCurtain k={e} W={W} H={H} seed={seed} frame={frame} />;
   } else if (leaving && nextTransition === "zoom") {
     // A 侧：本镜正被下一镜「从自己身上钻出去」——满不透明，只做几何推进
     const g = zoomGeom(kOut, W, H, nextThrough || DEF_THROUGH);
@@ -154,13 +219,18 @@ export const ShotFrame: React.FC<{
   } else if (leaving && nextTransition === "push") {
     const [ux, uy] = PUSH_DIRS[Math.max(0, Math.round(nextVariant ?? 0)) % 4];
     style = { transform: `translate(${-ux * W * ioExpo(kOut)}px, ${-uy * H * ioExpo(kOut)}px)` };
-  } else if (leaving && (nextTransition === "wipe" || nextTransition === "grid")) {
+  } else if (leaving && (nextTransition === "wipe" || nextTransition === "grid" || nextTransition === "matrix")) {
     // 原片 trWipe / trGrid 都是 drawImage(A, 0, 0) 先打底：上一镜整幅停住当底，下一镜盖上来
     style = {};
   } else if (isContinuity(transition)) {
     // 形状连续但不在窗口里（稳定期，或下一镜不是连续转场）：只留一个很软的收尾，不加额外动画
     style = { opacity: 1 - pout * 0.6 };
-  } else if (transition === "cut" || transition === "fade") {
+  } else if (transition === "cut") {
+    // 硬切：标称时长一到就整镜退场。旧版在重叠的 12 帧里淡出，遇到背景透明的组件
+    // （demo-reel / 图墙）会把上一镜从新镜的空隙里透出来，两个画面叠在一起。
+    if (leaving) return null;
+    style = {};
+  } else if (transition === "fade") {
     style = { opacity: pin * (1 - pout), transform: `scale(${1 + pout * 0.06})`, filter: pout > 0.01 ? `blur(${pout * 10}px)` : undefined };
   } else if (transition === "fly") {
     const s = 0.55 + 0.45 * pin + pout * 0.9;

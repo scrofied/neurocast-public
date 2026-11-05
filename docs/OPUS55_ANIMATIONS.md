@@ -92,6 +92,21 @@ SKILL.md「语境 → 组件」表列了触发词与「哪个字段必须填真�
 
 ---
 
+## 一·d、已移植 —— faceswap / swap2 的 3D 世界与显影转场（2026-11）
+
+来源是本地两个 Opus 生成的成片工程（`D:\qord\.qoder\live\work\faceswap`、`D:\qord\.qoder\live\work\swap2`，前 2 分 20 秒），不是公开仓库；只学机制与结构，不搬 Python 代码、不做像素级复刻。
+
+| 上游机制 | 上游位置 | 我们的落地 | 差异 |
+|---|---|---|---|
+| `Field3D` 3D 字形雨 + 透视相机 | `swap2/eng.py` | `src/world/MatrixRain.tsx`（Three.js `Points` + 8×8 字形图集 shader），`World` 新增 `world:"matrix"` | 原生 Python 逐帧画布 → WebGL 单 draw call；颜色吃主题 `primary`，不写死绿色 |
+| `Cam` / `orbit` / `draw_quad` / `text3d` | `swap2/eng.py` | 作为后续 `perspective-stage` 的参考，暂未单独组件化 | 我们已有 CSS 3D 卡片（`cards`）与 `ThreeCanvas` 世界；先接底层世界，不强搬整套相机 |
+| `matrix_reveal` 代码→画面显影 | `swap2/eng.py` | `ShotFrame` 新增 `transition:"matrix"`：按列下落的代码幕 + data-URI 遮罩显影 | 无头 Chrome 拿不到合成像素，改成「遮罩揭下一镜 + canvas 字雨盖未揭开区」；不采样真实画面亮度 |
+| `chapter_tunnel` 章节隧道 | `swap2/common.py` | `src/openings/templates/t22-tunnel.tsx`（`op-tunnel`，自背景 2.2–4s） | 2D canvas 透视投影，不抢全片 `ThreeCanvas`；章节号/标题/英文小标走 data |
+| 人声侧链 BGM | `swap2/audio_mix.py` | `scripts/lib/duck.mjs` + `timeline.meta.bgmDuck` + `Video.tsx` 的 BGM volume | 上游是 numpy 合成整轨；我们只搬 RMS 包络与 ducking，音效仍用猫学长真实素材 |
+| 逐帧一致性 / 光流 / 68 点人脸网格 | `swap2/sc2.py`、`faceswap/lib.py`、`prep.py` | **未接**，列为 P1/P2 候选（需要 YuNet/RMBG 预处理，模型许可先核） | 不把模型和 Python 依赖塞进渲染主链 |
+
+从这两条片子提炼的语法（已写进 SKILL 的转场/模板规则）：真实素材是底、动画是叠加层；4–6 秒一个空间事件；一个镜头只讲一件事；英文 mono 小标 + 中文大字；转场按语义选（代码雨=数据/进入，whip=快切，flash=章节，glitch=翻车）；声音跟着画面事件走。
+
 ## 二、值得做但还没做（下一次扩充的排队清单）
 
 | 优先级 | 机制 | slug / 作者 | 卡在哪 |

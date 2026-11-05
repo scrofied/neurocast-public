@@ -71,7 +71,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
     if (layout === "wall") {
       const rows = Math.ceil(n / 2);
       const maxRowEm = Math.max(...data.words.map((w) => textEm(w.text)));
-      return Math.min(full ? 132 : 54, (availW / 2 - 24) / maxRowEm, (bandH * 0.8) / (rows * 1.3));
+      // 一格就是 46% 宽（左右各留 27px），再扣掉 -0.035em 的字距；旧写法拿 availW/2-24 估，
+      // 比真实格宽还宽 45px ⇒ 7~8 字的词必然被 overflow:hidden 削掉半个字
+      return Math.min(full ? 132 : 54, (availW * 0.46 - 27) / (maxRowEm * 0.965), (bandH * 0.8) / (rows * 1.3));
     }
     const rows = n;
     return Math.min(full ? 104 : 44, availW / Math.max(...data.words.map((w) => textEm(w.text))), (bandH * 0.82) / (rows * 1.34));

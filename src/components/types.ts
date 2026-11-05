@@ -61,6 +61,10 @@ export type CompDef<D = any> = {
   use?: string;
   // 画面本身已经把讲的话显示出来了 → 默认隐藏底部字幕，避免重复
   hideCaptions?: boolean;
+  // 全屏素材类镜头：本镜期间引擎**不画**顶部章节 HUD、也不画右下角「待核」角标。
+  // 素材上叠我们自己写的字（章节条/角落标签）在机器审核里就是「无效水印」的形态，
+  // 所以这类镜头除底部字幕外不留任何文字。
+  bare?: boolean;
   // 能放进口播舞台的窄侧栏（组件用 useBox() 自适应尺寸）
   panel?: boolean;
   // 为 true 时 Gallery 不单独生成预览（例如依赖外部视频素材）
@@ -89,5 +93,18 @@ export type CompDef<D = any> = {
   // openings only: archive info for openings/library.json
   // selfBg: 开场自己画不透明背景（assetFields 里的图），没有 input.presenter 时首帧也不会露出正片残帧
   // sec: 模板推荐的开场时长（秒）——内部节奏按它编的，storyboard 的 until 别砍得太短
-  opening?: { script: string; hook: string; techniques: string[]; template?: boolean; selfBg?: boolean; sec?: number };
+  opening?: {
+    script: string;
+    hook: string;
+    techniques: string[];
+    template?: boolean;
+    selfBg?: boolean;
+    // chapter: 章节过场模板（op-tunnel），不按「短钩子」规则要求 5 秒内给证据
+    chapter?: boolean;
+    sec?: number;
+    draft?: boolean;
+    signature?: { visual: string; sound: string };
+    beats?: { proof: string; payoff: string };
+    requiredData?: string[];
+  };
 };

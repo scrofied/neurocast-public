@@ -231,13 +231,19 @@ export const sentenceSpans = (chars, times, a, b, maxSec = 6.5) => {
 };
 
 // ---------- caption lines ----------
+// 一个英文标识（video-shotcraft / mg-styles-15 / dashi-animationstyle）算一个不可切的整体：
+// 连字符、下划线只在「前后都是字母数字」时并入这一段。
+// 之前只并 [A-Za-z0-9.%]，于是 dashi-animationstyle 被切成「dashi-」+「animationstyle」两行字幕，
+// 一个词拦腰断开 —— 平台细则里的「字幕展示不完整 / 文案被截断」正是判这个。
+const ID_CH = /[A-Za-z0-9._%+-]/;
+const isAlnum = (c) => !!c && /[A-Za-z0-9]/.test(c);
 const tokens = (chars, a, b) => {
   const out = [];
   let i = a;
   while (i < b) {
     if (/[A-Za-z0-9]/.test(chars[i])) {
       let j = i;
-      while (j < b && /[A-Za-z0-9.%]/.test(chars[j])) j++;
+      while (j < b && (/[A-Za-z0-9.%]/.test(chars[j]) || (ID_CH.test(chars[j]) && isAlnum(chars[j + 1])))) j++;
       out.push([i, j]);
       i = j;
     } else {
@@ -257,6 +263,17 @@ const widthOf = (chars, a, b) => {
 // after structural particles, before adverbs/prepositions that start a new chunk
 const BREAK_AFTER = /[的了着过地得吗呢吧啊呀]/;
 const BREAK_BEFORE = /[就才都也还再又把被让给和与跟去来在是从到对向往]/;
+// 情态动词起头是新分句（「…生成 / 能跑起来…」），但别把「不能 / 可能 / 只能」切开
+const MODAL_BEFORE = /[能会要想]/;
+const NEG_PREV = /[不可只才就也都很最更没未难]/;
+// 动补结构是同一个词，绝不能拆到两行：「能跑起 / 来的」就是坏断行
+const COMPLEMENT = /(起来|出来|下来|过来|回来|上去|下去|进去|出去)/;
+// 数词/指示词 + 量词同理：「写成 一 / 个 Skill」这种断行＝文案被截断
+const NUM_W = "一两二三三四五六七八九十几每那这什哪";
+const MEASURE = "个条次台种样些儿本张位家部天年月号遍下点块件项步句字页款双份名回只";
+const keepTogether = (prev, next) =>
+  COMPLEMENT.test(String(prev ?? "") + String(next ?? "")) ||
+  (NUM_W.includes(prev ?? "") && MEASURE.includes(next ?? ""));
 
 // split one over-long phrase into k lines near equal width, preferring natural break points
 // (no orphans like a lone "宝剑", no breaks inside 排行榜)
@@ -288,7 +305,9 @@ const balanceK = (chars, x, y, maxW, k) => {
       }
       const prevC = chars[tks[i][1] - 1];
       const nextC = chars[tks[i + 1][0]];
-      const score = d - (BREAK_AFTER.test(prevC) ? 2.5 : 0) - (BREAK_BEFORE.test(nextC) ? 2 : 0);
+      const modal = MODAL_BEFORE.test(nextC) && !NEG_PREV.test(prevC) ? 3 : 0;
+      const splitComplement = keepTogether(prevC, nextC) ? 12 : 0;
+      const score = d - (BREAK_AFTER.test(prevC) ? 2.5 : 0) - (BREAK_BEFORE.test(nextC) ? 2 : 0) - modal + splitComplement;
       if (score < bestScore) {
         bestScore = score;
         best = i + 1;
@@ -318,15 +337,17 @@ export const captionLines = (chars, times, a, b, maxW = CAPTION_MAX) => {
   const lines = [];
   let cur = null;
   for (const [x, y] of phrases) {
+    // +0.01：0.55 宽的英文字符累加会带浮点毛刺（20×0.55 = 11.000000000000002），
+    // 不加容差时一条刚好 12 em 的短语会被当成超长，拦腰切开一个英文单词。
     const w = widthOf(chars, x, y);
-    if (w > maxW) {
+    if (w > maxW + 0.01) {
       if (cur) lines.push(cur);
       cur = null;
       lines.push(...balance(chars, x, y, maxW));
       continue;
     }
     const endsSentence = cur && ENDERS.test(chars[cur[1] - 1]);
-    if (cur && !endsSentence && widthOf(chars, cur[0], y) <= maxW) cur[1] = y;
+    if (cur && !endsSentence && widthOf(chars, cur[0], y) <= maxW + 0.01) cur[1] = y;
     else {
       if (cur) lines.push(cur);
       cur = [x, y];

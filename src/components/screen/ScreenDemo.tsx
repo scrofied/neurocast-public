@@ -15,7 +15,7 @@ const schema = z.object({
   src: z.string(),
   kind: z.enum(["image", "video"]).optional(),
   aspect: z.number().optional(), // width / height of source
-  frameStyle: z.enum(["browser", "laptop", "float", "full"]).optional().describe('full = 真录屏原样全屏展出（不装设备框、不画鼠标、不推镜头、不加聚焦标签），只在左上留一行小字标题、右上留来源角标'),
+  frameStyle: z.enum(["browser", "laptop", "float", "full"]).optional().describe('full = 真录屏原样全屏展出（不装设备框、不画鼠标、不推镜头、不加聚焦标签，素材按 contain 铺满不变形），HUD 下方留一行小字标题、右下角留来源角标'),
   url: z.string().optional().describe("真地址栏文案，如 arena.ai/leaderboard。写不出真地址就别用 browser 外框（会自动退成 float）"),
   title: z.string().optional(),
   kicker: z.string().optional(),
@@ -44,29 +44,29 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   // 环境慢推镜由 ShotFrame 的 steady 一并关掉；只有左上小字标题和右上来源角标带入场淡入。
   if (style === "full") {
     const eFull = enterAt(frame, 0, { fallback: "rise", dur: 18 });
-    const fw = aspect >= width / height ? width : height * aspect;
-    const fh = fw / aspect;
-    const ffx = (width - fw) / 2;
-    const ffy = (height - fh) / 2;
     const hasFull = !!data.src;
     return (
       <>
+        {/* 铺满 1920×1080，黑边交给 objectFit:contain 自己留。
+            之前按 data.aspect 手算盒子，但分镜经常忘写 aspect（默认 1.6），
+            而录屏素材基本都是 16:9（1386×780=1.777）⇒ 素材被纵向拉伸 11%、上下各裁掉 60px，
+            正好违反「录屏原样全屏不包装」。用 contain 后写没写 aspect 都不会变形。 */}
         <div
           style={{
             position: "absolute",
-            left: ffx,
-            top: ffy,
-            width: fw,
-            height: fh,
+            inset: 0,
             overflow: "hidden",
             background: "#04060a",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          {!hasFull && <MissingAsset field="src" hint="这里要一段真录屏（原样全屏展出）" w={fw} h={fh} frame={frame} />}
+          {!hasFull && <MissingAsset field="src" hint="这里要一段真录屏（原样全屏展出）" w={width} h={height} frame={frame} />}
           {hasFull && (data.kind === "video" ? (
-            <OffthreadVideo src={assetUrl(data.src)} muted style={{ width: fw, height: fh }} />
+            <OffthreadVideo src={assetUrl(data.src)} muted style={{ width: "100%", height: "100%", objectFit: "contain" }} />
           ) : (
-            <Img src={assetUrl(data.src)} style={{ width: fw, height: fh }} />
+            <Img src={assetUrl(data.src)} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
           ))}
         </div>
         {(data.kicker || data.title) && (
@@ -74,7 +74,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
             style={{
               position: "absolute",
               left: 26,
-              top: 10,
+              // HUD 占顶部 0~64（章节行 top26、进度轨 top60），录屏原样全屏时素材本身铺满 1080，
+              // 这行小字写在 top:10 会和「CH 01/05 ××」压在同一行上糊成一团；放到 HUD 之下
+              top: 76,
               display: "flex",
               alignItems: "baseline",
               gap: 12,
@@ -90,8 +92,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
             {data.title && <span style={{ fontFamily: t.font.body, fontWeight: 800, fontSize: 20, color: "#fff" }}>{data.title}</span>}
           </div>
         )}
-        <div style={{ position: "absolute", right: 26, top: 10, opacity: clamp(eFull.p * 1.6) }}>
-          <SourceBadge source={data.source} frame={frame} />
+        {/* 来源角标不能留在右上：那里是 HUD 的计时（00:18），长出处文案会把它压糊。
+            也不能贴着字幕带（bottom 52 + 最多两行）：放字幕之上、真人小窗（y≈110~440）之下。
+            容器 1×1 + SourceBadge 自带 align:right，从锚点向左长，不会被裁。 */}
+        <div style={{ position: "absolute", right: 26, top: height - 196, width: 1, height: 1, opacity: clamp(eFull.p * 1.6) }}>
+          <SourceBadge source={data.source} frame={frame} y={0} />
         </div>
       </>
     );
@@ -199,9 +204,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
             ) : (
               <Img src={src} style={{ position: "absolute", left: 0, top: -scroll, width: sw, height: sh }} />
             ))}
-            {/* 素材来源角标：平台 + 采集时间 + 出处（不填 source 就不渲染） */}
-            <div style={{ position: "absolute", right: 0, bottom: 14, paddingRight: 18 }}>
-              <SourceBadge source={data.source} frame={frame} />
+            {/* 素材来源角标：平台 + 采集时间 + 出处（不填 source 就不渲染）。
+                和 cursor-trace 同一个坑：SourceBadge 自己是 absolute + top:y，从锚点往下长；
+                直接写 bottom:14 会让它整块掉到容器底边之外，被上面的 overflow:hidden 裁掉
+                （1-3 的 p13_codex 那镜逐秒 OCR 就是扫不到「真实素材」）——靠 y=-38 顶回容器内侧。 */}
+            <div style={{ position: "absolute", right: 18, bottom: 14, width: 1, height: 1 }}>
+              <SourceBadge source={data.source} frame={frame} y={-38} />
             </div>
           </div>
         </div>

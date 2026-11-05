@@ -32,7 +32,17 @@ const schema = z.object({
 });
 type D = z.infer<typeof schema>;
 
-const markOf = (it: z.infer<typeof item>) => (findBrand(it.brand) ? it.brand : it.src ? undefined : guessIcon(it.brand) ?? guessIcon(it.note ?? ""));
+// 没登记真标识的产品退回通用线条图标。但 note 里点到「别家牌子」时不能借那家的真标识——
+// 1-1 踩过：brand「豆包」没有 logo，note 写「知识大量来自抖音」，于是把抖音的真标识挂到了豆包卡上（张冠李戴）。
+// 所以只允许从 note 借「通用图标」，brand:xxx 这种真标识一律不借。
+const markOf = (it: z.infer<typeof item>) => {
+  if (findBrand(it.brand)) return it.brand;
+  if (it.src) return undefined;
+  const own = guessIcon(it.brand);
+  if (own) return own;
+  const fromNote = guessIcon(it.note ?? "");
+  return fromNote && !fromNote.startsWith("brand:") ? fromNote : undefined;
+};
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();
@@ -101,7 +111,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
               {it.src && !brand ? (
                 <Img src={assetUrl(it.src)} style={{ height: size, objectFit: "contain" }} />
               ) : (
-                <Icon name={markOf(it)} size={size} color={isActive ? t.primary : t.text} />
+                <Icon name={markOf(it) ?? "spark"} size={size} color={isActive ? t.primary : t.text} />
               )}
             </div>
             <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(it.brand, cellW - 60, 30, 18), color: isActive ? t.text : alpha(t.text, 0.86), textAlign: "center", lineHeight: 1.15 }}>

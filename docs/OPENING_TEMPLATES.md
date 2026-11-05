@@ -1,167 +1,33 @@
-# 开场招式模板库
+# 开场模板入口
 
-按照《开场手法素材》文档，已实现 6 个可复用的技术类开场模板。每个模板对应一招，可以直接在 `storyboard.json` 的 `opening` 字段里选用。
+以 [SKILL.md 的开场流程](../SKILL.md#开场设计前-2--5--10-秒不是堆特效) 和 [开场选型表](../openings/TEMPLATES.md) 为准；本页原来的 `tech-opening-01`～`06` 并非当前注册 ID，不要写进分镜。
 
----
+- 前 2 秒给看点，5 秒内给证据/解释，10 秒内兑现第一步；不是把片头拉长到 10 秒。
+- 有真实成品：`op-result-first`；同条件前后素材：`op-proof-compare`；观点解释/无实测素材：`op-quiet-question`。
+- 短钩子可选 PRO 或透明叠层，后续正文接住承诺。不要每条片都闪白、重击、盖章。
+- `node scripts/openings.mjs list` 查看实际可选组件、推荐时长、近片签名及留存数据；字段查看 [CATALOG.md](../CATALOG.md)。
+- 分镜里的时间填台词锚点或秒数；新模板生产使用必须显式填写文案与所需真实素材，演示默认值不能直接出片。
+- `node scripts/openings.mjs preview <input.json>` 先校验，再输出本片前 10 秒；文件落在 `openings/previews/<开场id>-<input hash>.mp4`，检查画面交接并试听，不以静帧代替视听验收。
+- `node scripts/openings.mjs pending` 看开场库待办：草稿缺哪些字段、哪些上过片还没录数据、哪些正式开场还没预览。
+- `new-video.mjs` 只建项目目录，不生成未定制开场；草稿不能通过生产校验。
 
-## 招式1：慢慢放大 + 做悬疑
+## 章节隧道 `op-tunnel`
 
-**组件 ID**: `tech-opening-01`  
-**机制**: 持续推镜制造压迫感，同时不给答案  
-**适用场景**: 悬念型、揭露型
-
-**Schema**:
-```typescript
-{
-  suspenseText: string;  // 悬念句（不给答案），例如："你真的会用AI吗？"
-  revealAt?: string;     // 可选：何时开始退场
-}
-```
-
-**效果**: 悬念文字从小逐渐放大，配合镜头推进和轻微漂移，制造压迫感。不直接给答案。
-
----
-
-## 招式2：出其不意 + 按节奏变形
-
-**组件 ID**: `tech-opening-02`  
-**机制**: 画面形态突变打破预期，且变形卡在语音节奏上  
-**适用场景**: 反常识型、转折型
-
-**Schema**:
-```typescript
-{
-  shapes: Array<{
-    label: string;    // 形状标签，例如："印钞机"
-    icon: string;     // 图标类型："square" | "circle" | "triangle" | "star"
-  }>;
-  morphAt: string;    // 何时变形（卡在语音节奏上）
-}
-```
-
-**效果**: 几何形状突然变形（方→圆→三角→星），每次变形卡在关键词上，打破预期。
-
----
-
-## 招式3：蒙版缩圈 + 开篇主题
-
-**组件 ID**: `tech-opening-03`  
-**机制**: 用遮罩收圈强制聚焦，同时预告本片主题  
-**适用场景**: 聚焦型、主题揭示型
-
-**Schema**:
-```typescript
-{
-  theme: string;      // 主题文字，例如："AI 工具四步法"
-  subtitle?: string;  // 副标题，例如："20分钟做出你的第一个小软件"
-}
-```
-
-**效果**: 圆形遮罩从全屏缩到中心，主题文字在最小时出现并放大，副标题延后入场。环绕粒子旋转。
-
----
-
-## 招式4：身后飞个大标题 + 抠像 + 副标题
-
-**组件 ID**: `tech-opening-04`  
-**机制**: 人物抠像成主体，大标题从身后飞入，副标题补位  
-**适用场景**: 真人口播、观点输出
-
-**Schema**:
-```typescript
-{
-  title: string;      // 大标题，例如："AI工具制作法"
-  subtitle: string;   // 副标题，例如："零基础也能做"
-  titleAt?: string;   // 可选：大标题飞入锚点
-}
-```
-
-**效果**: 大标题从远处（Z轴-800）飞向前景，人物抠像区预留在右侧（需配合真人层）。副标题从下方滑入。
-
----
-
-## 招式5：文字干货先出现，找好节奏再露脸
-
-**组件 ID**: `tech-opening-05`  
-**机制**: 先出文字给获得感，人物延后 0.2–1 秒入画  
-**适用场景**: 干货型、知识型
-
-**Schema**:
-```typescript
-{
-  points: string[];      // 干货要点列表，例如：["需求降维", "三段式防崩", "单文件沙箱", "拖拽上线"]
-  delayPerson?: number;  // 人物延后多少帧入画，默认15帧（0.5秒）
-}
-```
-
-**效果**: 左侧干货要点逐条弹出（带序号徽章），右侧人物区延后0.5秒入画，先给信息获得感。
-
----
-
-## 招式6：反差硬切
-
-**组件 ID**: `tech-opening-06`  
-**机制**: 前后/左右硬切对比  
-**适用场景**: 对比型、纠错型
-
-**Schema**:
-```typescript
-{
-  left: {
-    label: string;  // 左侧标签，例如："错误方法"
-    text: string;   // 左侧文字，例如："随口瞎问AI"
-  },
-  right: {
-    label: string;  // 右侧标签，例如："正确方法"
-    text: string;   // 右侧文字，例如："三段式指令"
-  },
-  splitAt?: string;  // 何时硬切分屏
-}
-```
-
-**效果**: 前30帧全屏显示错误方法（红色调），30帧时闪白+震动，硬切成左右分屏对比，中间显示"VS"。
-
----
-
-## 使用方式
-
-在 `examples/<项目名>/storyboard.json` 的顶层加入 `opening` 字段：
+长视频换章时用：代码雨从中心向外冲成一条透视通道，章节编号与标题在通道尽头推近、落定，2.2–4 秒后交回正片。自背景（`selfBg:true`），会盖住 presenter 与素材，**只适合章节边界，不适合 15 秒以内短片或开场钩子**。
 
 ```json
 {
-  "opening": {
-    "type": "tech-opening-03",
-    "at": 0,
-    "until": "教你",
-    "data": {
-      "theme": "AI 工具四步法",
-      "subtitle": "20分钟做出你的第一个小软件"
+  "id": "s18",
+  "type": "punch-text",
+  "data": {
+    "opening": {
+      "type": "op-tunnel",
+      "at": 0,
+      "until": 2.6,
+      "data": { "num": "02", "title": "开源方法", "sub": "CHAPTER 02 // OPEN SOURCE" }
     }
-  },
-  "shots": [...]
+  }
 }
 ```
 
-**字段说明**:
-- `type`: 选择上面6个招式之一
-- `at`: 开场开始帧（通常是0）
-- `until`: 开场结束时间，可以是关键词（会自动对齐TTS）或帧数
-- `data`: 按该招式的 schema 填写
-
----
-
-## 附加绝招
-
-所有模板已应用：
-- **闪白效果**: 关键变化时刻使用白色叠加层（opacity 0.8→0.4→0）
-- **音效**: 配合 `Sfx` 组件，入场用 `ding` 或 `dong`，转场用 `whoosh`
-
----
-
-## 文件位置
-
-- 模板源码: `src/openings/templates/tech-*.tsx`
-- 注册文件: `src/openings/tech.ts`
-- 索引文件: `src/openings/index.ts`
-
-所有模板已自动注册到 `OPENINGS` 数组，无需手动导入。
+写在**这一章第一镜**的分镜条目 `data.opening` 里，`at/until` 是相对这一镜的**秒数**（写台词锚点也行，管线会换算）；模板默认 2.6 秒。每一章都换 `num/title/sub`，不要把同一章号复用到下一章。预览：`node scripts/opening-templates.mjs sheet - op-tunnel`。

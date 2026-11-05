@@ -14,7 +14,7 @@ const ledger = loadUsage();
 const recMap = recentOf(ledger);
 const uo = (id) => statsOf(id, { ledger, rec: recMap });
 
-const LAYER = { structure: "结构", info: "信息图", story: "叙事场景", product: "产品/工具演示", metaphor: "概念隐喻", screen: "截图录屏", overlay: "叠加", fx: "特效", opening: "专属开场（每条视频一个，不复用）" };
+const LAYER = { structure: "结构", info: "信息图", story: "叙事场景", product: "产品/工具演示", metaphor: "概念隐喻", screen: "截图录屏", overlay: "叠加", fx: "特效", opening: "开场（按机制选型，草稿不可出片）" };
 const isCue = (k) => k === "at" || k === "until" || /[a-z]At$/.test(k);
 
 const typeOf = (s, key = "") => {
@@ -63,7 +63,7 @@ const out = [
   `当前共 **${reg.list.length}** 个组件。写分镜时按「适用」选组件，按字段表填 data。`,
   "",
   `**用量台账**（\`usage/library.json\`，已记 ${ledger.videos.length} 条片子）：正片组件 ${bodyComps(reg.list).length} 个，历史上过片 ${bodyComps(reg.list).filter((c) => !uo(c.id).fresh).length} 个，**从未上过片 ${bodyComps(reg.list).filter((c) => uo(c.id).fresh).length} 个**。`,
-  `查重用 \`node scripts/pick.mjs --recent\`／\`node scripts/usage.mjs report\`；只在没上过的组件里选：\`node scripts/pick.mjs --fresh "语义"\`。`,
+  `查重用 \`node scripts/pick.mjs --recent\`／\`node scripts/usage.mjs report\`；只在没上过的组件里选：\`node scripts/pick.mjs --fresh "语义"\`；从休眠池（上过片、近 3 条没出现）轮换：\`node scripts/pick.mjs --dormant "语义"\`。`,
   "",
   "- **锚点**：类型写着「锚点」的字段（`at`、`until`、`xxxAt`）填台词里的原文片段，如 `\"at\": \"封面\"`，管线会换算成那个词说出口的帧；也可填秒数（相对本镜头开始）。`\"文字$\"` = 这几个字说完的时刻，`\"文字+0.3\"` = 往后偏 0.3 秒。",
   "- **可放侧栏**：能作为 `talking-head-stage` 的 `left/right` 小组件。",
@@ -73,16 +73,16 @@ const out = [
   "",
   "## 新增组件判定（写分镜时就要做）",
   "",
-  "组件库的价值在于**每条片子都长出几个新资产**，所以判定阈值**故意压低**：",
+  "组件库的价值在于**每条片子都能长出真正通用的新资产**，但不要为了“和别人不一样”硬造。判定阈值压低，同时给新增数量封顶：",
   "",
   "| 情况 | 处理 |",
   "|---|---|",
   "| 现有组件完全表达不了这个语义 | **必须新增** |",
-  "| 现有组件表达得不够准（要拐弯、要凑、要改字段含义） | **也应当新增** ← 阈值低在这里 |",
+  "| 现有组件表达得不够准（要拐弯、要凑、要改字段含义） | 先看参数/变体能不能贴近；贴近不了再新增 |",
   "| 现有组件差一点点（改个 data 就贴） | 不新增，直接用 |",
   "| 现有组件完全合适 | 不新增 |",
   "",
-  "**每条片子的下限：至少新增 2 个组件。** 不新增说明这片的语义全在已有覆盖内，或者判得太松。",
+  "**每条片最多新增 0~2 个真正通用的组件**（不是下限）。同一条片至少 3 个组件要来自近 3 条片未用过的轮换池（`rules.minRotated`）；防重复靠轮换，不靠硬造。",
   "",
   "判定流程：",
   "",
@@ -91,7 +91,7 @@ const out = [
   "3. 吻合度低于 4.5 的，问一句：**现有组件里有没有一个能不改一字就表达它？** 没有 → 新增",
   "4. 新增后跑 `node scripts/catalog.mjs` 登记进本目录",
   "",
-  "**新增之前先查台账**：`node scripts/pick.mjs --fresh \"语义\"` 只在从未上过片的组件里找。库里闲置的资产比新增更便宜——先把它用上，确实表达不了才新建。",
+  "**新增之前先查台账**：`node scripts/pick.mjs --fresh \"语义\"` 只在从未上过片的组件里找；池子用完就用 `node scripts/pick.mjs --dormant \"语义\"` 从近 3 条片没出现过的休眠组件里轮换（`--dormant --list` 看全池）。库里闲置的资产比新增更便宜——先把它用上，确实表达不了才新建。",
   "",
   "新增组件的质量要求：",
   "",
@@ -141,6 +141,9 @@ for (const [layer, list] of Object.entries(byLayer)) {
   for (const c of list) {
     const flags = [`${c.minSec}–${c.maxSec}s`, `变体 ${c.variants}`, c.motion ? `动效 ${c.motion.kind}｜强度 ${c.motion.energy}` : "动效 未标注", c.panel ? "可放侧栏" : "", c.hideCaptions ? "自动隐藏字幕" : ""].filter(Boolean).join(" · ");
     out.push(`### \`${c.id}\` ${c.name}`, "", `${flags}`, "");
+    if (c.opening?.draft) out.push("**草稿：禁止正式出片，完成定制和预览后才能移除 draft。**", "");
+    if (c.opening?.requiredData?.length) out.push(`**本片必填**：${c.opening.requiredData.map((k) => `\`data.${k}\``).join("、")}；示例默认值仅供布局预览。`, "");
+    if (c.opening?.signature) out.push(`**视听机制**：${c.opening.signature.visual} / ${c.opening.signature.sound}；近片重复时换机制，不只换文字。`, "");
     if (c.desc) out.push(`**画面**：${c.desc}`, "");
     if (c.use) out.push(`**适用**：${c.use}`, "");
     if (c.tags?.length) out.push(`**常见说法**：${c.tags.join("、")}`, "");

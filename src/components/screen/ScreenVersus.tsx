@@ -89,7 +89,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
                 <span style={{ width: 10, height: 10, borderRadius: 5, background: i === 0 ? t.bad : t.primary }} />
                 {p.label}
               </div>
-              <div style={{ position: "absolute", right: 0, bottom: 62, paddingRight: 16 }}>
+              <div style={{ position: "absolute", right: 16, bottom: 62, width: 1, height: 1 }}>
                 <SourceBadge source={p.source} frame={frame} />
               </div>
             </div>

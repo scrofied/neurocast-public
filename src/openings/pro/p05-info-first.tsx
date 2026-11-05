@@ -135,7 +135,10 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
               const sz = mix(bigSize, listSize, k);
               const centerAlign = 1 - k;
               const active = t >= P && i === cur;
-              const dim = t >= P + 0.4 && !active ? 0.55 : 1;
+              // 已落位但真人还没入画：这一条只是「背景堆叠」，压暗让画面中间正在砸的大字读得清。
+              // 否则要点里带英文品牌名（Claude Code / WorkBuddy 这种宽词）时，巨型字会横穿左侧清单，
+              // 和已落位的小字叠成一团（ats 卡口播时每条间隔可达 2 秒，重叠窗口很长）。
+              const dim = k >= 1 && t < P ? 0.26 : t >= P + 0.4 && !active ? 0.55 : 1;
               return (
                 <React.Fragment key={i}>
                   {/* 背后的巨型序号（只在中间阶段） */}

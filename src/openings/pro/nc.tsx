@@ -26,7 +26,7 @@ import type { ProOpening } from "./types";
 
 // 模板自己声明的专有字段说明（CATALOG / SKILL 里给写分镜的模型看，字段本身还有 zod .describe()）
 const FIELDS: Record<string, string> = {
-  "pro-01-dolly-suspense": "kicker 顶小字 · line 悬疑句（▇▇ = 被遮住的答案）· reveal 答案 · sub · revealAt 揭晓（秒/锚点）· zoomTo",
+  "pro-01-dolly-suspense": "kicker 顶小字 · line 悬疑句（▇▇ = 被遮住的答案）· reveal 答案 · sub · revealAt 揭晓（秒/锚点）· zoomTo · personAt 真人第几秒才出场（0=第 0 帧就在）· pre 出场前那几秒铺的背景图 · center 悬疑句垂直居中（真人出场那一下滑回下方）",
   "pro-02-shatter-morph": "line1 以为的 · line2 真相 · hl 发光词 · crackAt 裂开（卡转折词）· punchAt 第二句砸出 · tilt 分屏倾角",
   "pro-03-iris-title": "title 片名 · sub 副标题 · tag 期数/系列 · lockAt 光圈锁定 · steps 咔哒几格 · irisMin 最小半径 · openAt 张开",
   "pro-04-depth-title": "lead 小字 · title 巨字（≤6 字，\\n 换行）· sub · flyAt 飞入 · subAt 副标题 · outline 空心字 · titleY · fgScale · fgDrop",
@@ -49,7 +49,8 @@ const adapt = (P: ProOpening): CompDef => ({
   schema: P.schema,
   example: P.example,
   // 真人可选：person.src 吃本片口播视频（抠像 matte 也走这个目录）
-  assetFields: ["person.src", "person.matte"],
+  // pre.* = personAt 之前那几秒铺的背景图（pro-01 用得上：开场前 2 秒不露主播脸）
+  assetFields: ["person.src", "person.matte", "pre.src", "pre.matte"],
   // 自带不透明舞台：没有 input.presenter 时首帧也不会露出正片残帧
   // sec = 模板自己编排的推荐时长，storyboard 的 until 照它给
   opening: { script: "template", hook: P.hook, techniques: [P.trick], template: true, selfBg: true, sec: P.defaultSec },

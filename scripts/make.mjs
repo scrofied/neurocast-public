@@ -14,9 +14,11 @@ import { beatsMarkdown, planTimed, splitOpening, TimedError } from "./lib/timed.
 import { wordsOf } from "./lib/align.mjs";
 import { checkKindParity, checkTransitionParity, normPost, normThrough } from "./lib/motion.mjs";
 import { loadRegistry, validateShot } from "./lib/registry-node.mjs";
+import { openingQuality, openingSignature, recentOpeningMatches } from "./lib/opening-quality.mjs";
 import { slotAssetRefs, autoStockRefs } from "./lib/detect.mjs";
 import { load as loadUsage, shotsOf, record as recordUsage, crossVideoReport, statsOf, bodyComps } from "./lib/usage.mjs";
 import { ratioOf, shotAssets, isStock, entriesOf, stockMetaOf, checklist as assetChecklist, record as recordAssets, load as loadAssetLedger } from "./lib/assets.mjs";
+import { duckEnvelope } from "./lib/duck.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUB = path.join(ROOT, "public");
@@ -81,7 +83,7 @@ const workOut = videoDir ? path.join(videoDir, "out") : path.join(ROOT, "out");
 if (opt["--seed"]) input.seed = +opt["--seed"];
 if (opt["--no-sfx"]) input.sfx = false;
 if (input.timeline && !input.audio_timeline) input.audio_timeline = input.timeline;
-const KNOWN = new Set(["script", "script_file", "title", "subtitle", "seed", "skin", "audio", "audio_timeline", "timeline", "opening_video", "opening_timeline", "clip_timelines", "storyboard", "captions", "sfx", "bgm", "post", "cta", "outroTitle", "keywords", "tail", "assets", "tts", "voice", "presenter"]);
+const KNOWN = new Set(["script", "script_file", "title", "subtitle", "seed", "skin", "world", "audio", "audio_timeline", "timeline", "opening_video", "opening_timeline", "clip_timelines", "storyboard", "captions", "caption_hide", "sfx", "bgm", "post", "cta", "outroTitle", "keywords", "tail", "assets", "tts", "voice", "presenter"]);
 for (const k of Object.keys(input)) if (!KNOWN.has(k)) warn(`未知字段 "${k}" 已忽略（可用：${[...KNOWN].join(", ")}）`);
 // 全片后期层强度：input.post 或 storyboard.post 都行，input 优先；非法字段警告后丢掉
 let postCfg = normPost(input.post, warn);
@@ -118,6 +120,17 @@ const probe = (abs) => {
   const j = JSON.parse(o);
   const v = j.streams.find((s) => s.codec_type === "video");
   return { duration: +j.format.duration, video: v, hasAudio: j.streams.some((s) => s.codec_type === "audio") };
+};
+// 图片尺寸单独探一次：OCR 失败时也要能发现 33 B / 1240×0 这种坏图，
+// 否则组件会拿一个 aspect=Infinity 的素材去渲染，静帧阶段才看见。
+const imageDims = (abs) => {
+  try {
+    const o = execFileSync("ffprobe", ["-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "json", abs], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+    const v = JSON.parse(o).streams?.[0];
+    return v ? { width: +v.width || 0, height: +v.height || 0 } : null;
+  } catch {
+    return null;
+  }
 };
 const hashFile = (abs) => {
   const st = fs.statSync(abs);
@@ -203,9 +216,25 @@ const prepAssets = (refs) => {
     const a = { ...(input.assets?.[ref] || {}), src: pubRel(path.join(jobDir, name)), origin: relOrigin.startsWith("..") ? abs.replace(/\\/g, "/") : relOrigin };
     if (/\.(png|jpe?g|webp|bmp)$/i.test(abs)) {
       a.kind = "image";
+      const dim = imageDims(abs);
+      if (dim && (!dim.width || !dim.height)) {
+        const msg = `图片宽或高为 0：${ref}（${dim.width}×${dim.height}）`;
+        if (!opt["--allow-missing-assets"]) fail("E_ASSET", `${msg}；重新截图/导出后再出片`);
+        missingAssets.push(ref);
+        warn(`${msg}，已按缺素材降级`);
+        return;
+      }
+      if (dim?.width && dim?.height) a.aspect = a.aspect ?? dim.width / dim.height;
       const targets = focusTargets(ref);
       try {
         const res = JSON.parse(execFileSync("python", [path.join(ROOT, "scripts", "ocr_focus.py"), abs, JSON.stringify(targets)], { encoding: "utf8" }));
+        if (typeof res.width === "number" && typeof res.height === "number" && (!res.width || !res.height)) {
+          const msg = `图片宽或高为 0：${ref}（${res.width}×${res.height}）`;
+          if (!opt["--allow-missing-assets"]) fail("E_ASSET", `${msg}；重新截图/导出后再出片`);
+          missingAssets.push(ref);
+          warn(`${msg}，已按缺素材降级`);
+          return;
+        }
         a.aspect = a.aspect ?? res.width / res.height;
         if (!a.focus) {
           a.focus = res.hits.filter((h) => h.found).map((h) => ({ x: h.x, y: h.y, w: h.w, label: `点击「${h.q}」`, click: true }));
@@ -322,13 +351,26 @@ const runTimed = async () => {
     const name = `bgm${path.extname(abs)}`;
     fs.copyFileSync(abs, path.join(jobDir, name));
     out.timeline.meta.bgm = pubRel(path.join(jobDir, name));
+    // 人声侧链：有配音时按 RMS 包络把 BGM 压低；没配音/读不到就保持固定 0.14
+    const voice = path.join(jobDir, "voice.wav");
+    if (fs.existsSync(voice)) {
+      const env = duckEnvelope(voice, FPS, out.timeline.durationInFrames);
+      if (env) out.timeline.meta.bgmDuck = env;
+      else warn("BGM 侧链包络计算失败（ffmpeg 读不到 voice.wav）：本片 BGM 保持固定音量");
+    }
   }
   // presenter: a muted talking-head layer over the TTS-only film (full-screen first, then a PiP window)
   if (input.presenter) {
     const pr = typeof input.presenter === "string" ? { video: input.presenter } : input.presenter;
     const abs = resolveIn(pr.video);
     if (!fs.existsSync(abs)) fail("E_ASSET", `presenter.video 不存在：${abs}`);
-    const norm = derived(abs, "presenter", "mp4", (f) => sh("ffmpeg", ["-v", "error", "-y", "-i", abs, "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-pix_fmt", "yuv420p", "-movflags", "+faststart", f], "E_ASSET"));
+    // presenter.loop = 真人素材比片子短（只录了开场那几十秒）时把整段接几遍铺满全片，让小窗从头在场。
+    // 在归一化这一步用 -stream_loop 一次做完，引擎侧零改动：Video.tsx 的收尾时刻取自 p.frames，
+    // 而 frames 是从归一化后的文件 probe 出来的，接长了它自然跟着走。
+    // 缓存键必须带上接的遍数，否则会在 media/ 里命中上一版没接过的 presenter.mp4。
+    const srcDur = probe(abs).duration || 1;
+    const loopTimes = pr.loop ? Math.max(0, Math.ceil(((out.timeline.durationInFrames || 0) / FPS + 1) / srcDur) - 1) : 0;
+    const norm = derived(abs, `presenter${loopTimes ? `-x${loopTimes + 1}` : ""}`, "mp4", (f) => sh("ffmpeg", ["-v", "error", "-y", ...(loopTimes ? ["-stream_loop", String(loopTimes)] : []), "-i", abs, "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-pix_fmt", "yuv420p", "-movflags", "+faststart", f], "E_ASSET"));
     fs.copyFileSync(norm, path.join(jobDir, "presenter.mp4"));
     let dur = probe(norm).duration;
     // poster = the clip's first frame: held on screen during the alignment offset so the shot
@@ -401,6 +443,32 @@ const runTimed = async () => {
         console.log(`⚠ 真人对齐：匹配字数太少（${pairs.length}），偏移按 ${offset.toFixed(2)}s、速率 ×${rate.toFixed(3)}`);
       }
     }
+    // 镜头级真人窗口 → 合并成「两两不相交」的表。
+    // 为什么必须合并：相邻两镜各写一条 presenter:"none" 会生成 [a,b] 和 [b,c] 两段，
+    // PresenterLayer 在 b 处先按「上一段结束」淡入 8 帧、又立刻按「这一段开始」淡出，
+    // 真人窗就在镜头边界上闪一下 —— 观众看到的就是「脸抖了一下」。
+    const mergeWin = (arr) => {
+      const xs = arr.filter((g) => Number.isFinite(g[0]) && Number.isFinite(g[1]) && g[1] > g[0]).sort((a, b) => a[0] - b[0]);
+      const m = [];
+      for (const g of xs) {
+        const last = m[m.length - 1];
+        if (last && g[0] <= last[1]) last[1] = Math.max(last[1], g[1]);
+        else m.push([g[0], g[1]]);
+      }
+      return m;
+    };
+    // 同一段时间既写 none 又写 full = 自相矛盾。以「全屏讲话」为准（那是人主动要求露脸），
+    // 把缺席窗口里被全屏盖住的那一截剪掉，剩下的才交给 gaps。
+    const subtract = (A, B) =>
+      A.flatMap(([a, b]) => {
+        let cur = [[a, b]];
+        for (const [c, d] of B) cur = cur.flatMap(([x, y]) => (d <= x || c >= y ? [[x, y]] : [...(c > x ? [[x, c]] : []), ...(d < y ? [[d, y]] : [])]));
+        return cur.filter(([x, y]) => y - x >= 2);
+      });
+    const gapsMerged = mergeWin([...(Array.isArray(pr.gaps) ? pr.gaps.map((g) => [Math.round(Number(g[0]) * FPS), Math.round(Number(g[1]) * FPS)]) : []), ...(out.timeline.shots || []).filter((s) => s.presenter === "none").map((s) => [s.start, s.start + s.dur])]);
+    // fulls：正片中途真人再全屏的窗口（分镜 presenter:"full"）
+    const fullsMerged = mergeWin([...(Array.isArray(pr.fulls) ? pr.fulls.map((g) => [Math.round(Number(g[0]) * FPS), Math.round(Number(g[1]) * FPS)]) : []), ...(out.timeline.shots || []).filter((s) => s.presenter === "full").map((s) => [s.start, s.start + s.dur])]);
+    for (const [a, b] of fullsMerged) for (const [c, d] of gapsMerged) if (c < b && a < d) warn(`presenter:"full"（${(a / FPS).toFixed(1)}~${(b / FPS).toFixed(1)}s）和缺席窗口（${(c / FPS).toFixed(1)}~${(d / FPS).toFixed(1)}s）重叠：那一截按全屏处理，缺席已被剪掉 —— 检查这两段是不是同一镜头既写了 none 又被别的镜头写 full`);
     out.timeline.meta.presenter = {
       src: pubRel(path.join(jobDir, "presenter.mp4")),
       poster,
@@ -414,9 +482,27 @@ const runTimed = async () => {
       corner: pr.corner === "left" ? "left" : "right",
       // showFrom：小窗晚于第 0 帧才出现（开场全屏素材期间不露脸）。"align" = 与对齐偏移同帧（真人开口那一刻才入画）
       showFrom: pr.showFrom === "align" ? Math.round((offset || 0) * FPS) : pr.showFrom != null ? Math.round(pr.showFrom * FPS) : undefined,
+      // gaps：真人层整层缺席的帧区间（纯素材/纯界面镜头不必留脸）。
+      // 分镜里给某一镜写 presenter:"none" 的，这里自动并进同一张表 —— 镜头边界就是缺席边界。
+      gaps: subtract(gapsMerged, fullsMerged),
+      gapCut: pr.gapCut === true ? true : undefined,
+      fulls: fullsMerged,
       // stage：某时段真人窗固定在画面某个矩形（左右布局的左列），时段结束后动画收进 corner 小窗
       stage: pr.stage ? { from: pr.stage.from === "align" ? Math.round((offset || 0) * FPS) : Math.round((pr.stage.from ?? 0) * FPS), to: Math.round(pr.stage.to * FPS), x: pr.stage.x, y: pr.stage.y, w: pr.stage.w, h: pr.stage.h } : undefined,
     };
+    // 镜头级真人层编排的自检：全屏窗口太短的话，展开动画还没做完就开始收窗，看着像抽搐
+    const pm = out.timeline.meta.presenter;
+    const presEnd = pm.offset + Math.floor(pm.frames / (pm.rate || 1)) - 1;
+    for (const s of out.timeline.shots.filter((x) => x.presenter === "full")) {
+      if (s.dur < 45) warn(`镜头 ${s.id}（${s.type}）写了 presenter:"full" 但只有 ${(s.dur / FPS).toFixed(1)}s：真人从角上推到全屏要 22 帧、再收回 22 帧，中间只剩静止，建议 ≥1.8s`);
+      if (s.start < pm.full || s.start + s.dur > presEnd) warn(`镜头 ${s.id} 的 presenter:"full"（${(s.start / FPS).toFixed(1)}~${((s.start + s.dur) / FPS).toFixed(1)}s）落在开场全屏（<${(pm.full / FPS).toFixed(1)}s）或真人素材结束（${(presEnd / FPS).toFixed(1)}s）之外，那一截不会有全屏真人`);
+    }
+    for (const s of out.timeline.shots.filter((x) => x.presenter === "none")) {
+      if (s.start < pm.full) warn(`镜头 ${s.id} 写了 presenter:"none"，但它开始于真人收窗（${(pm.full / FPS).toFixed(1)}s）之前，那段时间真人本来就是全屏`);
+    }
+  } else {
+    const n = (out.timeline.shots || []).filter((s) => s.presenter === "none" || s.presenter === "full").length;
+    if (n) warn(`有 ${n} 个镜头写了 presenter:"none"/"full"，但 input 没给 presenter 真人层 —— 这两个字段不会有任何效果`);
   }
   fs.writeFileSync(path.join(jobDir, "beats.md"), md);
   fs.writeFileSync(path.join(jobDir, "beats.json"), JSON.stringify(out.report, null, 1));
@@ -446,17 +532,11 @@ const checkOpening = (used, tl) => {
     if (e.status === "retired") warn(`开场 ${used.id} 已被数据淘汰（status=retired），不建议再用`);
     const me = path.relative(ROOT, baseDir).replace(/\\/g, "/");
     const other = (e.usedBy || []).filter((x) => x !== me);
-    // 模板可以反复用（换文案换调色就是新开场）；专属开场不能重样
     if (other.length && !tpl) warn(`开场 ${used.id} 已经用在 ${other.join("、")}：开场不能重样，请为这条文案单独做一个`);
   }
-  const r = used.range ?? used.shot.data.opening;
-  const d = (r.until ?? used.shot?.data.shrinkAt ?? 90) - (r.at ?? 0);
-  // 模板的内部节奏按 ~3.4 秒编的，砍太短动画做不完；给足上限，但别拖到 4 秒以上
-  const lo = tpl ? 45 : 60;
-  const hi = tpl ? 120 : 105;
-  if (d < lo || d > hi) warn(`开场时长 ${(d / FPS).toFixed(1)} 秒，建议 ${(lo / FPS).toFixed(1)}~${(hi / FPS).toFixed(1)} 秒（钩子要短）`);
-  const rec = used.def?.opening?.sec;
-  if (tpl && rec && d < rec * FPS * 0.8) warn(`${used.id} 的画面按 ${rec} 秒编排，现在只给 ${(d / FPS).toFixed(1)} 秒：动画会做不完（until 给到 ${Math.round(rec * FPS)} 帧左右）`);
+  const signature = openingSignature(used.def, used.range.data, tl.meta.sfx !== false);
+  const repeated = recentOpeningMatches(signature, loadUsage().videos, opt["--video"] || tl.meta.title);
+  if (repeated.length) warn(`开场 ${used.id} 与近期「${repeated.map((v) => v.title || v.id).join("、")}」同模板或同视听签名；请换构图/揭示机制/声音，不能只换文案和颜色`);
 };
 
 // ---------- anti-PPT: too many text-only shots in a row is exactly the "reading slides" feel ----------
@@ -567,18 +647,20 @@ const crossVideoCheck = (tl, reg) => {
     });
     warn(`跨片重复（轻）：${detail.join("、")} 上一条片刚用过。要用可以，但 motion.enter 必须换一种没见过的`);
   }
-  if (rep.fresh.length >= rep.minFresh) {
-    console.log(`  跨片：本片首次使用 ${rep.fresh.length} 个组件 ✓ ${rep.fresh.join(" ")}`);
+  if (rep.rotated.length >= rep.minRotated) {
+    const freshNote = rep.fresh.length ? `，其中从未上过片 ${rep.fresh.length} 个：${rep.fresh.join(" ")}` : "";
+    console.log(`  跨片：本片有 ${rep.rotated.length} 个组件近 ${rep.recentVideos} 条片未用过 ✓${freshNote}`);
   } else {
     const pool = bodyComps(reg.list).filter((c) => !(ledger.comps[c.id]?.count > 0));
-    warn(`跨片重复：本片首次使用的组件只有 ${rep.fresh.length} 个（要求 ≥${rep.minFresh}）。库里还有 ${pool.length} 个从未上过片的组件：node scripts/usage.mjs unused，或按这次分镜的语义新增`);
+    warn(`跨片重复：本片近 ${rep.recentVideos} 条片未用过的组件只有 ${rep.rotated.length} 个（要求 ≥${rep.minRotated}）。库里还有 ${pool.length} 个从未上过片的组件：node scripts/usage.mjs unused；也可以把休眠组件换回来（node scripts/pick.mjs --recent）`);
   }
 };
 
 // ---------- 素材占比（assets/library.json）：真素材是信任度，不是装饰 ----------
 // antiPpt / varietyCheck / crossVideoCheck 都只管「画面重不重复」，这一项管的是另一件事：
 // 观众能不能从画面里看出「博主真的用过这个东西」。
-// 口径：上了真素材（jobs/ 副本或 http 外链）的镜头时长 ÷ 全片时长。
+// 口径：上了真实文件素材（截图 / 录屏 / 头像 / 文档）的镜头时长 ÷ 全片时长。
+// 真标识（public/brands/*.svg）和真地址（citation-strip 的 url）不算——它们没有文件上屏。
 // 组件的 schema 里有没有 source 字段（有 SourceBadge 能力的组件才该被提醒去填）。
 // 照旧不抠 zod 内部结构：往 example 上补一个 source 过一遍 schema，键活下来就说明组件会读它。
 const hasSourceField = (def) => {
@@ -636,8 +718,9 @@ const assetReport = (tl, reg) => {
   const min = ledger.rules.minRatio;
   const pct = (r.pct * 100).toFixed(1);
   const want = `${pct}%（${r.assetShots}/${r.shots} 镜 · ${(r.asset / FPS).toFixed(0)}/${(r.total / FPS).toFixed(0)} 秒有真素材）`;
-  if (r.pct >= min) console.log(`  素材占比 ${want} ≥${(min * 100).toFixed(0)}% ✓`);
-  else warn(`素材占比 ${want} 低于 ${(min * 100).toFixed(0)}%：这条片子基本全是代码动画，观众没有一样东西可以「看见是真的」。去补真截图/真录屏/真 logo/真头像，或把镜头让给素材组件（node scripts/pick.mjs --need 素材）`);
+  const scope = "（只计截图/录屏/头像等文件素材，真 logo 和出处 URL 不计）";
+  if (r.pct >= min) console.log(`  素材占比 ${want} ≥${(min * 100).toFixed(0)}% ✓${scope}`);
+  else warn(`素材占比 ${want} 低于 ${(min * 100).toFixed(0)}%${scope}：这条片子基本全是代码动画，观众没有一样东西可以「看见是真的」。去补真截图/真录屏/真头像，或把镜头让给素材组件（node scripts/pick.mjs --need 素材）`);
   // ---------- 库存素材（示意画面）：不计占比、不许冒充证据、必须带出处 ----------
   const rowsForStock = shotAssets(tl, ASSET_FIELDS, originOf);
   const stockShots = rowsForStock.filter((m) => m.stock.length);
@@ -703,6 +786,167 @@ const assetReport = (tl, reg) => {
   }
   if (missingAssets.length) console.log(`  本次降级跳过的素材：${missingAssets.join(" ")}`);
   return r;
+};
+
+// ---------- 真标识闭环：文案点名了牌子，但 logo 文件/生成表缺一口气 ----------
+// 组件侧找不到真 logo 会静默退回通用图标，画面看着「也像」，却把品牌讲成了泛品类。
+// 这里在分镜阶段就把三种断点喊出来：没登记、登记了但没文件、文件在但 brands.generated.ts 没同步。
+const BRAND_NORM = (s) => s.toLowerCase().replace(/[\s._\-·/]+/g, "");
+const brandReport = (tl) => {
+  const libPath = path.join(ROOT, "brands", "library.json");
+  const genPath = path.join(ROOT, "src", "lib", "brands.generated.ts");
+  if (!fs.existsSync(libPath)) return warn("缺 brands/library.json：brand 组件只能退通用图标");
+  let lib;
+  try {
+    lib = JSON.parse(fs.readFileSync(libPath, "utf8").replace(/^﻿/, ""));
+  } catch (e) {
+    return warn(`brands/library.json 解析失败（${e.message}）：brand 组件会退通用图标`);
+  }
+  const gen = fs.existsSync(genPath) ? fs.readFileSync(genPath, "utf8") : "";
+  const entries = Object.entries(lib.brands || {}).map(([key, b]) => ({
+    key,
+    label: b.label || key,
+    file: b.file || `${key}.svg`,
+    aliases: [key, ...(b.aliases || [])],
+  }));
+  const alias = entries
+    .flatMap((b) => b.aliases.map((a) => [BRAND_NORM(a), b]))
+    .filter(([a]) => a)
+    .sort((x, y) => y[0].length - x[0].length);
+  const resolve = (text) => {
+    const t = BRAND_NORM(text);
+    if (!t) return undefined;
+    const exact = alias.find(([a]) => a === t);
+    if (exact) return exact[1];
+    for (const [a, b] of alias) {
+      const cjk = /[\u4e00-\u9fa5]/.test(a);
+      if ((cjk || a.length >= 3) && t.includes(a)) return b;
+    }
+    return undefined;
+  };
+
+  // 品牌引用只可能出现在 brand 字段（logo-wall 的 items[].brand / brand-quote-card 的 brand），
+  // 递归扫 data 就够，不按组件名硬编码，以后新组件带 brand 字段也能兜住。
+  const refs = [];
+  const walk = (node, where) => {
+    if (!node || typeof node !== "object") return;
+    if (Array.isArray(node)) return node.forEach((x, i) => walk(x, `${where}[${i}]`));
+    for (const [k, v] of Object.entries(node)) {
+      if (k === "brand" && typeof v === "string" && v.trim()) refs.push({ text: v.trim(), where });
+      else walk(v, `${where}.${k}`);
+    }
+  };
+  for (const s of tl.shots) walk(s.data, s.id);
+  if (tl.opening) walk(tl.opening, "opening");
+  if (!refs.length) return;
+
+  const bad = new Map();
+  const unsynced = new Map();
+  const unknown = new Map();
+  const ok = new Set();
+  for (const r of refs) {
+    const b = resolve(r.text);
+    if (!b) {
+      if (!unknown.has(r.text)) unknown.set(r.text, []);
+      unknown.get(r.text).push(r.where);
+      continue;
+    }
+    const abs = path.join(PUB, "brands", b.file);
+    const size = fs.existsSync(abs) ? fs.statSync(abs).size : -1;
+    if (size <= 120) {
+      if (!bad.has(r.text)) bad.set(r.text, { b, size, where: [] });
+      bad.get(r.text).where.push(r.where);
+      continue;
+    }
+    if (!gen.includes(`"key": "${b.key}"`) && !new RegExp(`key:\\s*["']${b.key}["']`).test(gen)) {
+      if (!unsynced.has(r.text)) unsynced.set(r.text, { b, where: [] });
+      unsynced.get(r.text).where.push(r.where);
+      continue;
+    }
+    ok.add(b.key);
+  }
+  const where = (list) => [...new Set(list)].slice(0, 4).join("、") + (list.length > 4 ? " …" : "");
+  for (const [text, { b, size, where: w }] of bad)
+    warn(`真标识缺文件：「${text}」→ public/brands/${b.file} ${size < 0 ? "不存在" : `只有 ${size}B（空文件/下载残片）`}，会静默退成通用图标（${where(w)}）。补上 logo 后跑 node scripts/brands.mjs sync`);
+  for (const [text, { b, where: w }] of unsynced)
+    warn(`真标识没同步：「${text}」的文件在盘上，但 src/lib/brands.generated.ts 里没有它，渲染时会退成通用图标（${where(w)}）。跑 node scripts/brands.mjs sync`);
+  for (const [text, w] of unknown)
+    warn(`真标识没登记：「${text}」不在 brands/library.json（${where(w)}），会退成通用图标。要真 logo 就去登记 key/file/aliases，文件放进 public/brands/ 后跑 sync`);
+  if (ok.size && !unknown.size && !bad.size && !unsynced.size)
+    console.log(`  真标识：${refs.length} 处引用 · ${ok.size} 个牌子全部有真 logo ✓`);
+};
+
+// ---------- 图标署名：CC BY 的图标上了屏，片子里必须有 credit ----------
+// Iconify 各合集 license 不同；tabler / lucide / mdi / ph 不用署名，solar（CC BY 4.0）必须署名。
+// 这里不硬造一套字幕系统，只在分镜阶段把「用了 CC BY 但没看到任何 credit」喊出来。
+const iconAttributionReport = (tl) => {
+  const idxPath = path.join(ROOT, "assets", "icons-index.json");
+  if (!fs.existsSync(idxPath)) return;
+  let idx;
+  try {
+    idx = JSON.parse(fs.readFileSync(idxPath, "utf8").replace(/^﻿/, ""));
+  } catch (e) {
+    return warn(`assets/icons-index.json 解析失败（${e.message}）：无法核对图标署名`);
+  }
+  // 同时认两种写法：assets/icons/x.svg（文件）和 x（内联图标名）
+  const need = new Map();
+  for (const [rel, a] of Object.entries(idx)) {
+    if (!a?.attribution) continue;
+    const base = rel.replace(/^assets\/icons\//, "").replace(/\.svg$/i, "");
+    need.set(rel, { rel, base, a });
+    need.set(base, { rel, base, a });
+  }
+  if (!need.size) return;
+  const hits = new Map();
+  const walk = (node, where) => {
+    if (!node || typeof node !== "object") return;
+    if (Array.isArray(node)) return node.forEach((x, i) => walk(x, `${where}[${i}]`));
+    for (const [k, v] of Object.entries(node)) {
+      if (typeof v === "string" && need.has(v)) {
+        const n = need.get(v);
+        if (!hits.has(n.rel)) hits.set(n.rel, { ...n, where: [] });
+        hits.get(n.rel).where.push(where);
+      } else walk(v, `${where}.${k}`);
+    }
+  };
+  for (const s of tl.shots) walk(s.data, s.id);
+  if (tl.opening) walk(tl.opening, "opening");
+  if (!hits.size) return;
+  for (const { rel, a, where } of hits.values())
+    warn(`CC BY 图标必须署名：${rel}（${a.collection} · ${a.license}，${[...new Set(where)].slice(0, 3).join("、")}）—— 在画面角标或片尾写「图标：${a.collection} / ${a.license}」，或改用 tabler / lucide / ph（MIT / ISC，不用署名）`);
+};
+
+// ---------- 音效闭环：每次出片前确认 15 个 cue 真的在盘上 ----------
+// 组件里 <Sfx name="..."> 写错/文件缺失时，Remotion 会在渲染中途才 404；这里提前硬失败，
+// 并指出是哪个 cue、用什么命令补。猫学长 vendor 不在也能放现有 cue，只是不能换/新增。
+const soundReport = (tl) => {
+  if (tl.meta.sfx === false) {
+    console.log("  音效：本片关闭（--no-sfx / sfx:false）");
+    return;
+  }
+  const tsx = path.join(ROOT, "src", "lib", "sfx.tsx");
+  let cues = [];
+  if (fs.existsSync(tsx)) {
+    const src = fs.readFileSync(tsx, "utf8");
+    const block = src.match(/export const SFX = \{([\s\S]*?)\} as const;/);
+    if (block) cues = [...block[1].matchAll(/(?:^|\n)\s*([A-Za-z0-9_]+)\s*:\s*\d+/g)].map((m) => m[1]);
+  }
+  if (!cues.length) {
+    warn("src/lib/sfx.tsx 里没解析到 SFX 表：音效检查跳过（组件里的 <Sfx> 仍会按名字找 public/sfx）");
+    return;
+  }
+  const missing = cues.filter((c) => {
+    const p = path.join(PUB, "sfx", `${c}.wav`);
+    return !fs.existsSync(p) || fs.statSync(p).size < 1024;
+  });
+  if (missing.length) {
+    fail("E_SFX", `音效文件缺失/为空：${missing.join("、")}（public/sfx/）。先跑 node scripts/sfx.mjs auto ${missing.join(" ")}，或 node scripts/sound-setup.mjs 拉音效库；不想用音效就加 --no-sfx`);
+  }
+  const vendor = fs.existsSync(path.join(ROOT, "vendor", "sound", "sfx-sources", "scripts", "sfx.py"));
+  const manifest = fs.existsSync(path.join(PUB, "sfx", "manifest.json"));
+  console.log(`  音效：${cues.length} 个 cue 已就位${vendor ? " · 猫学长 sfx-sources 在线" : " · 仅 public/sfx"}${tl.meta.bgmDuck ? " · BGM 人声侧链开" : ""} ✓`);
+  if (!vendor) warn("音效库 vendor/sound 未拉取：现有 cue 能渲染，但要搜索/更换音效先跑 node scripts/sound-setup.mjs");
+  if (!manifest) warn("public/sfx/manifest.json 缺：来源/许可记录不完整，跑 node scripts/sfx.mjs audit 重建");
 };
 
 // 这个素材字段是不是「非给不可」：把组件 example 里的这个字段拿掉，schema 不认 → 必填。
@@ -835,6 +1079,18 @@ const main = async () => {
   // ---------- validate every shot against its component schema ----------
   const errors = [];
   let openingUsed = null;
+  const inspectOpening = (op, available, label, fallback = 75, provided = op.data ?? {}) => {
+    const ov = validateShot(reg, op.type, provided);
+    if (!ov.ok) { errors.push(`${label} ${op.type}：${ov.issues.join("；")}`); return; }
+    op.data = ov.data;
+    op.until ??= (op.at ?? 0) + Math.round(ov.def.opening?.sec ? ov.def.opening.sec * FPS : fallback);
+    const result = openingQuality({ def: ov.def, data: ov.data, provided, range: op, available, fps: FPS,
+      hasVoice: !!(tl.meta.audio || tl.audioClips?.length || tl.shots.some((s) => s.type === "talking-head-stage")),
+      sfxEnabled: tl.meta.sfx !== false, originOf: (v) => ASSET_ORIGIN[v] || v });
+    errors.push(...result.errors.map((e) => `${label}：${e}`));
+    result.warnings.forEach(warn);
+    openingUsed ??= { id: op.type, def: ov.def, range: op };
+  };
   for (const s of tl.shots) {
     // 形状连续转场的「洞」：写法错了就退回默认位置，别让整条分镜报错停下
     if (s.through !== undefined) {
@@ -845,6 +1101,7 @@ const main = async () => {
         delete s.through;
       }
     }
+    const providedData = s.data;
     const v = validateShot(reg, s.type, s.data);
     if (!v.ok) {
       if (storyboardMode && !s.auto) errors.push(`${s.id} ${s.type}：${v.issues.join("；")}`);
@@ -873,28 +1130,15 @@ const main = async () => {
         }
       }
     }
-    // per-script opening (talking-head stage)
+    if (v.def.layer === "opening") inspectOpening({ type: s.type, data: s.data, at: 0, until: s.dur }, s.dur, s.id, 75, providedData);
     const op = s.data.opening;
-    if (op?.type) {
-      const ov = validateShot(reg, op.type, op.data);
-      if (!ov.ok) errors.push(`${s.id} opening ${op.type}：${ov.issues.join("；")}`);
-      else {
-        if (ov.def.layer !== "opening") warn(`${s.id} opening：${op.type} 不是开场组件（layer=${ov.def.layer}）`);
-        op.data = ov.data;
-        openingUsed = { id: op.type, def: ov.def, shot: s };
-      }
-    }
+    if (op?.type) inspectOpening(op, s.dur, `${s.id} opening`, 150);
   }
-  // film-level opening (TTS-only film + presenter layer)
   if (tl.opening?.type) {
-    const ov = validateShot(reg, tl.opening.type, tl.opening.data);
-    if (!ov.ok) errors.push(`opening ${tl.opening.type}：${ov.issues.join("；")}`);
-    else {
-      if (ov.def.layer !== "opening") warn(`opening：${tl.opening.type} 不是开场组件（layer=${ov.def.layer}）`);
-      if (!tl.meta.presenter && !ov.def.opening?.selfBg) warn(`storyboard.opening 需要 input.presenter（真人画面层），否则开场下面没有真人；开场组件声明 opening.selfBg 可自带不透明背景`);
-      tl.opening.data = ov.data;
-      openingUsed = { id: tl.opening.type, def: ov.def, range: tl.opening };
-    }
+    const first = tl.shots.find((s) => s.start === 0 && (s.data?.opening?.type || reg.byId[s.type]?.layer === "opening"));
+    if (first) errors.push(`顶层opening与首镜头开场重复（${first.id}），请只保留一个，避免画面和声音叠加`);
+    inspectOpening(tl.opening, tl.durationInFrames, "opening");
+    if (!tl.meta.presenter && !reg.byId[tl.opening.type]?.opening?.selfBg) warn("透明顶层开场没有input.presenter，请提供真人层或选择selfBg模板");
   }
   if (errors.length) fail("E_STORYBOARD", `分镜数据不符合组件 schema（见 CATALOG.md）：\n  - ${errors.join("\n  - ")}`);
   for (const s of tl.shots) delete s.auto;
@@ -910,6 +1154,9 @@ const main = async () => {
   console.log(`  风格：皮肤 ${tl.meta.skin} · 世界 ${tl.meta.world} · 字体 ${tl.meta.font}${tl.meta.mirror ? " · 镜像" : ""} · seed ${tl.meta.seed}${tl.meta.sfx === false ? " · 无音效" : ""}`);
   console.log(`  画面分布：${Object.entries(counts).map(([k, v]) => `${k}×${v}`).join(" ")}`);
   assetReport(tl, reg);
+  brandReport(tl);
+  iconAttributionReport(tl);
+  soundReport(tl);
   crossVideoCheck(tl, reg);
   if (opt["--plan-only"]) {
     const fmt = (f) => `${Math.floor(f / FPS / 60)}:${((f / FPS) % 60).toFixed(1).padStart(4, "0")}`;
@@ -942,7 +1189,7 @@ const main = async () => {
   // --frames 只渲了部分帧、--dry-run 明确不落账，都是试渲染，不进跨片记忆
   const draft = opt["--frames"] || opt["--dry-run"];
   const video = opt["--video"] || tl.meta?.title;
-  const rec = draft ? null : recordUsage(tl, { video, file: tlPath, date: new Date().toISOString().slice(0, 10) });
+  const rec = draft ? null : recordUsage(tl, { video, file: tlPath, date: new Date().toISOString().slice(0, 10), opening: openingUsed ? openingSignature(openingUsed.def, openingUsed.range.data, tl.meta.sfx !== false) : undefined });
   if (rec?.video) console.log(`  用量台账：已记录「${rec.video.id}」（${rec.video.shots} 镜 / ${Object.keys(rec.video.types).length} 种组件）→ usage/library.json`);
   else if (opt["--dry-run"]) console.log(`  用量台账：--dry-run，未写入（画面重复度按真实规则照常检查）`);
   // 素材台账同一套规矩：真出片才记账，重跑同一条片子覆盖旧记录

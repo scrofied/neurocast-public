@@ -24,7 +24,7 @@ const SHOT = 60; // 每镜 2s：够看清稳定期，又不至于渲染太久
 const only = (process.argv[2] ? process.argv[2].split(",") : ["fade", "cut", "glitch", "zoom", "push", "wipe", "grid"]);
 
 // 每镜挑一个「长得明显不一样」的组件，换镜才看得出是谁盖住了谁
-const TYPES = ["hook", "narration", "quote", "versus", "cards", "number", "funnel", "chapter", "flow", "timeline", "growth", "screen"];
+const TYPES = (process.env.TYPES ? process.env.TYPES.split(",") : ["hook", "narration", "quote", "versus", "cards", "number", "funnel", "chapter", "flow", "timeline", "growth", "screen"]);
 const reg = await loadRegistry();
 const picks = TYPES.map((t) => reg.byId[t]).filter(Boolean);
 const shots = only.map((tr, i) => {
@@ -119,7 +119,9 @@ print(json.dumps([[t, mad(a, b)] for t, a, b in json.loads(pairsJson)]))
 const sheet = path.join(ROOT, "out", "qa", "transitions.jpg");
 const cols = String(marks.length + 2); // 每行一个边界：A尾 | +2 | +6 | +10 | 稳定
 const out = execFileSync("python", ["-c", py, sheet, JSON.stringify(pairs), ...files, cols], { encoding: "utf8" }).trim();
-for (const f of files) fs.unlinkSync(f);
-fs.rmSync(outDir, { recursive: true, force: true });
+if (!process.env.KEEP) {
+  for (const f of files) fs.unlinkSync(f);
+  fs.rmSync(outDir, { recursive: true, force: true });
+}
 console.log(`✓ 拼图（每行一个边界：上一镜尾巴 | 入场 +${marks.join(" | +")} | 稳定帧）-> ${sheet}`);
 for (const [tag, v] of JSON.parse(out)) console.log(`  ${tag.padEnd(14)} 开后期↔关后期 均差 ${v}`);

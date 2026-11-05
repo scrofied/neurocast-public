@@ -4,6 +4,7 @@ import { clamp, easeInOut, easeOut, prog } from "../../lib/anim";
 import { useBox } from "../../lib/box";
 import { cueOr } from "../../lib/cue";
 import { Sfx } from "../../lib/sfx";
+import { useEnter } from "../../lib/enter";
 import { alpha, useTheme } from "../../lib/theme";
 import { fitFont, Heading } from "../../lib/ui";
 import type { CompDef, CompProps } from "../types";
@@ -53,7 +54,7 @@ const Dot: React.FC<{ x: number; y: number; col: string; s?: number }> = ({ x, y
   <div style={{ position: "absolute", left: x - 11 * s, top: y - 11 * s, width: 22 * s, height: 22 * s, borderRadius: "50%", background: col, boxShadow: `0 0 22px ${col}`, opacity: clamp(s) }} />
 );
 
-const C: React.FC<CompProps<D>> = ({ data, frame }) => {
+const C: React.FC<CompProps<D>> = ({ data, frame, variant }) => {
   const t = useTheme();
   const { width, height } = useBox();
   const W = width, H = height;
@@ -61,6 +62,16 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
   const cards = data.cards ?? [];
   const n = cards.length;
   const col = t.primary, gold = t.gold;
+  const enterAt = useEnter(variant);
+  const e = enterAt(frame, 0);
+  const layer = {
+    position: "absolute" as const,
+    inset: 0,
+    opacity: e.opacity,
+    transform: `translate(${e.dx}px, ${e.dy}px) scale(${e.scale}) rotate(${e.rot}deg)`,
+    transformOrigin: "50% 50%",
+    clipPath: e.clip,
+  };
 
   if (data.mode === "dispatch") {
     // 指挥官(左) → 工作台(中) → 命令行(右下条) → 工具(右列)
@@ -78,7 +89,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
     const typedCmd = data.cmd.slice(0, Math.max(0, Math.floor((frame - send - 4) / 2)));
     // 卡片：从指挥官吐出 → 飞向工作台 → 消失（变成指令）
     return (
-      <>
+      <div style={layer}>
         <Heading kicker={data.kicker} title={data.title} frame={frame} width={W} />
         <Wire x1={A.x + 130} y1={A.y} x2={B.x - 130} y2={B.y} col={col} p={wire1} />
         <Wire x1={B.x + 60} y1={B.y + 60} x2={term.x - term.w / 2 + 20} y2={term.y} col={col} p={wire2} />
@@ -108,7 +119,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
         {cards.map((_, i) => <Sfx key={i} name="swipe" at={cardCues[i] + 8} volume={0.22} />)}
         <Sfx name="typing" at={send + 4} volume={0.3} />
         <Sfx name="click" at={run} volume={0.3} />
-      </>
+      </div>
     );
   }
 
@@ -127,7 +138,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
   const pkt2 = clamp(easeInOut(prog(frame, next, 12))); // 文件夹 → B
   const eRes = clamp(easeOut(prog(frame, stampF, 10)));
   return (
-    <>
+    <div style={layer}>
       <Heading kicker={data.kicker} title={data.title} frame={frame} width={W} />
       <Wire x1={A.x + 130} y1={A.y} x2={F.x - 120} y2={F.y} col={col} p={w1} dash />
       <Wire x1={F.x + 120} y1={F.y} x2={B.x - 130} y2={B.y} col={col} p={w2} dash />
@@ -157,7 +168,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame }) => {
       <Sfx name="pop" at={file} volume={0.35} />
       <Sfx name="swipe" at={next} volume={0.28} />
       {data.result && <Sfx name="stamp" at={stampF} volume={0.45} />}
-    </>
+    </div>
   );
 };
 
@@ -171,6 +182,7 @@ export const AgentRelay: CompDef<D> = {
   tags: ["多智能体", "派活", "编排", "交接", "命令行", "工作台"],
   desc: "dispatch：指挥官节点吐出任务卡→飞进工作台→工作台生成命令行指令→发给右侧执行工具；handoff：做完的工具打勾→成果文件光点写进文件夹→「文件位置」交给下一位直接读",
   use: "AI 编排/自动化流水线：一个模型指挥其他模型干活、成果用文件交接不用复制粘贴；CI/CD 派单、外包团队协作隐喻、多机器人分工",
+  motion: { kind: "任务卡从指挥官吐出、飞进工作台变指令，光点沿连线传给执行工具；交接模式文件光点进文件夹再交给下一位", energy: 2 },
   schema,
   example: {
     kicker: "原理",

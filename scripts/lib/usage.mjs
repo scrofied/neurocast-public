@@ -3,7 +3,7 @@
 //
 // 结构：
 // {
-//   "rules": { "recentVideos": 3, "minFresh": 3, "maxHistory": 12 },
+//   "rules": { "recentVideos": 3, "minRotated": 3, "maxHistory": 12 },
 //   "videos": [ { "id","title","date","file","shots","types" } ],
 //   "comps":  { "<id>": { "count", "videos": ["vid1",…], "lastDate", "history": [ { "video","date","shots":[…],"enters":[…] } ] } }
 // }
@@ -18,8 +18,9 @@ const DEFAULTS = {
   rules: {
     // 近 N 条片内用过的组件，选型时要给出「刚用过」提示
     recentVideos: 3,
-    // 每条片子至少要首次使用这么多个组件（0 表示不检查）
-    minFresh: 3,
+    // 每条片子至少要这么多个组件是近 recentVideos 条片没用过的（0 表示不检查）。
+    // 不再要求「从未上过片」——库用满之后那个池子会枯，轮换休眠组件才是可持续的防重复。
+    minRotated: 3,
     // 每个组件保留最近多少条片的明细
     maxHistory: 12,
   },
@@ -74,7 +75,7 @@ export const shotsOf = (tl) => {
  * 记一条片子的用量。同一 video id 重复调用 = 覆盖（幂等），方便重跑。
  * @returns {{video: object, added: number}}
  */
-export const record = (tl, { video, title, file, date, ledger } = {}) => {
+export const record = (tl, { video, title, file, date, ledger, opening } = {}) => {
   const j = ledger || load();
   const rows = shotsOf(tl);
   if (!rows.length) return { video: null, added: 0 };
@@ -107,7 +108,7 @@ export const record = (tl, { video, title, file, date, ledger } = {}) => {
     if (c.history.length > j.rules.maxHistory) c.history = c.history.slice(-j.rules.maxHistory);
     c.lastDate = day;
   }
-  const rec = { id: vid, title: title || tl?.meta?.title || vid, date: day, file: file ? String(file).replace(/\\/g, "/") : null, shots: rows.length, types };
+  const rec = { id: vid, title: title || tl?.meta?.title || vid, date: day, file: file ? String(file).replace(/\\/g, "/") : null, shots: rows.length, types, ...(opening ? { opening } : {}) };
   j.videos.push(rec);
   j.videos.sort((a, b) => String(a.date).localeCompare(String(b.date)));
   // 每个组件的 videos 也按片子的时间顺序排
@@ -164,6 +165,7 @@ export const usageNote = (s) => (s.fresh ? "从未上过片" : s.recentN ? `近$
  * @param heavy  近 N 条片里出现在 ≥2 条片的组件（真的会被观众认出来的重复）
  * @param light  只在 1 条近片里出现过的组件（提醒换入场语法即可）
  * @param fresh  本片第一次出现、台账里累计 0 次的组件
+ * @param rotated 本片用到、但近 N 条片都没出现过的组件（含 fresh）——轮换池
  */
 export const crossVideoReport = (tl, { ledger, selfVideo } = {}) => {
   const j = ledger || load();
@@ -179,5 +181,6 @@ export const crossVideoReport = (tl, { ledger, selfVideo } = {}) => {
     (videos.length >= 2 ? heavy : light).push({ id, n: r.n, videos, count: j.comps[id]?.count || 0 });
   }
   const fresh = [...mine].filter((id) => (j.comps[id]?.count || 0) === 0);
-  return { heavy, light, fresh, recentVideos: j.rules.recentVideos, minFresh: j.rules.minFresh, videos: j.videos.length };
+  const rotated = [...mine].filter((id) => !rec.has(id));
+  return { heavy, light, fresh, rotated, recentVideos: j.rules.recentVideos, minRotated: j.rules.minRotated, videos: j.videos.length };
 };

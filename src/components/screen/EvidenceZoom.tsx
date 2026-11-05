@@ -63,17 +63,31 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const cy = m ? fy + (m.y + m.h / 2) * sh : height / 2;
   const e = enterAt(frame, start, { fallback: "rise", dur: 20, from: 0.92 });
   const src = assetSrc(data.src);
+  // 推近后截图顶边会一路上移盖住标题（变换原点是圈中心，图越高越容易顶到 y64 那一带）。
+  // 标题不能跟着被压住：顶边真顶到标题带时，先垫一层顶部压暗，再把 Headline 画在最上层。
+  const topEdge = cy + (fy - cy) * zoom;
+  const scrim = clamp((172 - topEdge) / 70) * clamp(e.opacity);
+
+  // 来源角标在 scale(zoom) 容器**内部**，缩放中心 = 当前圈心 (cx,cy)。圈在图片左侧时，
+  // 贴在面板右下角的角标会被一路推出画框（1-9 s9 zoom 1.7 实测：推近期间「真实素材 | 平台 · 时间 采集 · 出处」整条消失，
+  // 逐秒 OCR 该镜 0 命中）。角标是可信度标识、不是证据内容，被推出去等于这一镜的出处白标。
+  // 解法：按屏幕安全边距**反解**未缩放坐标下的内缩距离 —— 没被推出去时仍是 16/14（全景外观一字不变），
+  // 只有会被推出时才把角标往面板内侧收；再夹一道上限保证锚点不跑出 overflow 盒（跑出去=被裁，比推出去更糟）。
+  const insetR = m ? Math.max(16, Math.min(sw - 260, fx + sw - (cx + (width - 40 - cx) / zoom))) : 16;
+  const insetB = m ? Math.max(14, Math.min(sh - 150, fy + sh - (cy + (height - 215 - cy) / zoom))) : 14;
 
   return (
     <>
-      <Headline kicker={data.kicker ?? "LOOK AT THIS"} title={data.title} frame={frame} y={64} size={42} />
       <div style={{ position: "absolute", inset: 0, transformOrigin: `${cx}px ${cy}px`, transform: `scale(${zoom})`, opacity: clamp(e.opacity) }}>
         <div style={{ position: "absolute", left: fx, top: fy, width: sw, height: sh, borderRadius: 14, overflow: "hidden", border: `1.5px solid ${alpha(t.primary, 0.5)}`, boxShadow: `0 30px 100px rgba(0,0,0,.7), 0 0 60px ${alpha(t.primary, 0.18)}`, transform: `scale(${e.scale}) translate(${e.dx}px, ${e.dy}px)` }}>
           {!src && <MissingAsset field="src" hint="evidence-zoom 要一张真截图：圈出来的必须是真数字" w={sw} h={sh} frame={frame} />}
           {src && data.kind === "video" && <OffthreadVideo src={src} muted style={{ width: sw, height: sh }} />}
           {src && data.kind !== "video" && <Img src={src} style={{ width: sw, height: sh, objectFit: "cover" }} />}
-          <div style={{ position: "absolute", right: 0, bottom: 12, paddingRight: 14 }}>
-            <SourceBadge source={data.source} frame={frame} />
+          {/* 来源角标：SourceBadge 自己是 absolute + top:y，所以外面这个 1×1 的盒子只当锚点用，
+              靠 y=-34 把胶囊顶回容器内侧——别改成普通流式布局，也别删 width/height，
+              否则胶囊会掉到容器底边之外，被上面的 overflow:hidden 整个裁掉（1-2 v3 逐秒 OCR 就是这么扫不到「真实素材」的）。 */}
+          <div style={{ position: "absolute", right: insetR, bottom: insetB, width: 1, height: 1 }}>
+            <SourceBadge source={data.source} frame={frame} y={-34} />
           </div>
         </div>
 
@@ -106,9 +120,21 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           (() => {
             const eL = enterAt(frame, cues[cur] + 14, { fallback: "drop", dur: 14, from: 0 });
             const wl = Math.max(220, Math.min(520, m.label.length * 30 + 90));
-            const right = cx < width * 0.62;
-            const lx = right ? cx + (m.w * sw) / 2 + 46 : cx - (m.w * sw) / 2 - 46 - wl;
-            const ly = cy - (m.h * sh) / 2 - 26;
+            // 标签放哪一侧：默认跟着圈心中不中偏左，但圈很宽时「右侧」会把标签顶出画面
+            // （s15 实测：w=0.8 的圈 + 420px 标签 → 右沿 1938 > 1920，药丸被切一半）。
+            // 先按默认侧摆，出界就翻边，再不行夹回来 —— 引线跟着最终侧走。
+            const halfW = (m.w * sw) / 2 + 46;
+            let lx = cx < width * 0.62 ? cx + halfW : cx - halfW - wl;
+            if (lx + wl > width - 30) lx = cx - halfW - wl;
+            if (lx < 30) lx = Math.max(30, Math.min(width - 30 - wl, cx - halfW - wl));
+            const right = lx > cx;
+            let ly = cy - (m.h * sh) / 2 - 26;
+            // 圈落在面板最底下几行时，标签药丸（高约 62）会一路垂到面板底边，正好压在
+            // 「真实素材 | 平台 · 采集 · 出处」角标上（1-20 s14 第三圈 y=0.863 实测：
+            // 药丸下沿 822 vs 角标上沿 814，右上角「真实素材」四个字被盖掉）。
+            // 出处角标是可信度标识，不能被证据标签盖住 → 贴底的圈改成把标签整个吊在圈上方。
+            const CH = 62;
+            if (ly + CH > fy + sh - 96) ly = cy - (m.h * sh) / 2 - 26 - CH;
             return (
               <>
                 <svg width={width} height={height} style={{ position: "absolute", inset: 0, opacity: eL.p }}>
@@ -140,13 +166,23 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           })()
         )}
 
-        {/* 没在圈的时候给一句「全景」提示：观众知道接下来要看局部 */}
-        {cur < 0 && (
-          <div style={{ position: "absolute", left: fx, top: fy + sh + 18, width: sw, textAlign: "center", fontFamily: t.font.mono, fontSize: 19, letterSpacing: 3, color: alpha(t.dim, 0.9), opacity: lerp(0, 1, easeOut(prog(frame, start + 6, 12))) }}>
-            先看整张，再看重点
-          </div>
-        )}
+        {/* 没在圈的时候给一句「全景」提示：观众知道接下来要看局部。
+            位置不能写死在面板下方：面板高度被 boxH=min(height-300,…) 夹住，凡是 ar<1.9 的截图
+            面板底边都落在 y976，提示行 = 976+18 = 994，正好压在字幕带（bottom52，y952~1028）上，
+            和逐字字幕叠成一片糊字（council4 s12/s19/s25 全分辨率抽帧实测）。
+            下面放不下就抬到面板上方、标题之下（这一段 zoom=1，不会跟着缩放跑）。 */}
+        {cur < 0 && (() => {
+          const below = fy + sh + 18;
+          const hy = below + 26 <= height - 150 ? below : Math.max(150, fy - 40);
+          return (
+            <div style={{ position: "absolute", left: fx, top: hy, width: sw, textAlign: "center", fontFamily: t.font.mono, fontSize: 19, letterSpacing: 3, color: alpha(t.dim, 0.9), opacity: lerp(0, 1, easeOut(prog(frame, start + 6, 12))) }}>
+              先看整张，再看重点
+            </div>
+          );
+        })()}
       </div>
+      {scrim > 0.02 && <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 216, background: `linear-gradient(180deg, ${alpha(t.bg, 0.94)} 0%, ${alpha(t.bg, 0.8)} 58%, ${alpha(t.bg, 0)} 100%)`, opacity: scrim }} />}
+      <Headline kicker={data.kicker ?? "LOOK AT THIS"} title={data.title} frame={frame} y={64} size={42} />
       <Sfx name="impact" at={start + 2} volume={0.34} />
       {cues.slice(0, cur + 1).map((c, i) => (
         <Sfx key={i} name="tick" at={c + 2} volume={0.26} />

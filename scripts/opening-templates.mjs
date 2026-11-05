@@ -1,10 +1,6 @@
-// QA / preview for the opening TEMPLATES: render each one over a real talking-head clip.
-// usage:
-//   node scripts/opening-templates.mjs sheet [person.mp4] [id片段]  -> out/templates/<id>.jpg (4 moments) + out/templates/_all.jpg
-//       例：node scripts/opening-templates.mjs sheet examples/ai-tool-4steps/talk.mp4 pro-   （只出 5 个 PRO 模板）
-//   node scripts/opening-templates.mjs video <id|all> [person.mp4] -> openings/previews/<id>.mp4
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { loadRegistry } from "./lib/registry-node.mjs";
@@ -12,77 +8,75 @@ import { loadRegistry } from "./lib/registry-node.mjs";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FPS = 30;
 const [cmd = "sheet", a1, a2] = process.argv.slice(2);
-const idFilter = cmd === "video" ? undefined : a2; // sheet 的第三个参数 = 只要 id 里含这段文字的模板
-const person = path.resolve(ROOT, (cmd === "video" ? a2 : a1) ?? "examples/ai-tool-4steps/talk.mp4");
-// usage also: node scripts/opening-templates.mjs video all
-if (!fs.existsSync(person)) {
-  console.error(`✖ 找不到真人视频 ${person}`);
-  process.exit(1);
-}
-
-// H.264 copy of the person clip inside public/ (Chrome can't decode HEVC)
-const pubDir = path.join(ROOT, "public", "jobs", "_templates");
-fs.mkdirSync(pubDir, { recursive: true });
-const clip = path.join(pubDir, "person.mp4");
-if (!fs.existsSync(clip)) execFileSync("ffmpeg", ["-v", "error", "-y", "-i", person, "-t", "6", "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p", clip]);
-
+const fail = (m) => { console.error(`失败：${m}`); process.exit(1); };
+if (!["sheet", "video"].includes(cmd)) fail("用法：sheet [person.mp4|-] [id片段] 或 video <id|all> [person.mp4|-]");
 const reg = await loadRegistry();
-let tpls = reg.list.filter((c) => c.opening?.template);
-if (idFilter) tpls = tpls.filter((c) => c.id.includes(idFilter));
-// 时长跟着模板自己编排的推荐秒数走（透明层模板没标 = 3 秒）
+let tpls = reg.list.filter((c) => c.opening?.template && !c.opening.draft);
+if (cmd === "video" && a1 && a1 !== "all") tpls = tpls.filter((c) => c.id === a1);
+if (cmd === "sheet" && a2) tpls = tpls.filter((c) => c.id.includes(a2));
+if (!tpls.length) fail("没有匹配的开场模板");
+const secs = (c) => c.opening?.sec ?? Math.min(c.maxSec, Math.max(c.minSec, 3));
+const personArg = cmd === "video" ? a2 : a1;
+const person = path.resolve(ROOT, personArg && personArg !== "-" ? personArg : "examples/ai-tool-4steps/talk.mp4");
+const needPerson = tpls.some((c) => !c.opening.selfBg);
+const usePerson = personArg !== "-" && fs.existsSync(person) && (needPerson || !!personArg);
+if (needPerson && !usePerson) fail("透明开场需要真人视频；请传 person.mp4。自带背景模板可用 '-' 单独预览。");
+let personSrc, personFrames;
+if (usePerson) {
+  const seconds = Math.max(...tpls.map(secs)) + 1;
+  const stat = fs.statSync(person);
+  const key = crypto.createHash("sha256").update(`${person}:${stat.mtimeMs}:${stat.size}:${seconds}`).digest("hex").slice(0, 14);
+  const pubDir = path.join(ROOT, "public", "jobs", "_opening-previews");
+  fs.mkdirSync(pubDir, { recursive: true });
+  const clip = path.join(pubDir, `${key}.mp4`);
+  if (!fs.existsSync(clip)) execFileSync("ffmpeg", ["-v", "error", "-y", "-stream_loop", "-1", "-i", person, "-t", String(seconds), "-an", "-r", String(FPS), "-c:v", "libx264", "-preset", "veryfast", "-crf", "22", "-pix_fmt", "yuv420p", clip]);
+  personSrc = `jobs/_opening-previews/${key}.mp4`;
+  personFrames = Math.round(seconds * FPS);
+}
 const timelineFor = (c) => {
-  const DUR = Math.round((c.opening?.sec ?? 3) * FPS); // 真人全屏铺满整段（full=999），模板独占这段时间
-  const id = c.id;
+  const dur = Math.round(secs(c) * FPS);
   return {
-    meta: { title: id, seed: 7, skin: "aurora", font: "yahei", world: "grid", fps: FPS, width: 1920, height: 1080, mirror: false, showCaptions: false, sfx: true, presenter: { src: "jobs/_templates/person.mp4", frames: 170, offset: 0, full: 999, focusX: 0.5, focusY: 0.3 } },
-    durationInFrames: DUR,
-    chapters: [{ title: id, start: 0, end: DUR }],
-    shots: [{ id: "s0", type: "narration", variant: 0, start: 0, dur: DUR, chapter: 0, text: "", data: { keywords: [" "] }, transition: "cut" }],
-    captions: [],
-    opening: { type: id, at: 0, until: DUR, data: {} },
+    meta: { title: c.id, seed: 7, skin: "aurora", font: "yahei", world: "grid", fps: FPS, width: 1920, height: 1080, mirror: false, showCaptions: false, sfx: true, chapterFlash: false, ...(personSrc ? { presenter: { src: personSrc, frames: personFrames, offset: 0, full: dur, focusX: 0.5, focusY: 0.3 } } : {}) },
+    durationInFrames: dur, chapters: [{ title: c.id, start: 0, end: dur }],
+    shots: [{ id: "s0", type: "narration", variant: 0, start: 0, dur, chapter: 0, text: "", data: { keywords: [" "] }, transition: "cut" }], captions: [],
+    opening: { type: c.id, at: 0, until: dur, data: c.example },
   };
 };
-
 const { bundle } = await import("@remotion/bundler");
 const { selectComposition, renderStill, renderMedia } = await import("@remotion/renderer");
 const serveUrl = await bundle({ entryPoint: path.join(ROOT, "src", "index.ts") });
-
-if (cmd === "video") {
-  // "video all" renders every template
-  const pick = a1 === "all" || !a1 ? tpls : tpls.filter((c) => c.id === a1);
-  for (const c of pick) {
-    const out = path.join(ROOT, "openings", "previews", `${c.id}.mp4`);
-    fs.mkdirSync(path.dirname(out), { recursive: true });
-    const inputProps = { timeline: timelineFor(c) };
-    const composition = await selectComposition({ serveUrl, id: "NeuroCast", inputProps, chromiumOptions: { gl: "angle" } });
-    await renderMedia({ serveUrl, composition, codec: "h264", outputLocation: out, inputProps, chromiumOptions: { gl: "angle" }, concurrency: 8 });
-    console.log(`✓ ${out}`);
-  }
-  process.exit(0);
-}
-
+const chromiumOptions = { gl: "angle" };
 const outDir = path.join(ROOT, "out", "templates");
 fs.mkdirSync(outDir, { recursive: true });
 const sheets = [];
 for (const c of tpls) {
-  // 四个时刻：第 0 帧（首帧红线）+ 前段 / 中段 / 后段，按这段的推荐时长比例取
-  const durC = Math.round((c.opening?.sec ?? 3) * FPS);
-  const FR = [0, 0.25, 0.55, 0.8].map((x) => Math.max(0, Math.min(durC - 1, Math.round(x * durC))));
   const inputProps = { timeline: timelineFor(c) };
-  const composition = await selectComposition({ serveUrl, id: "NeuroCast", inputProps, chromiumOptions: { gl: "angle" } });
+  const composition = await selectComposition({ serveUrl, id: "NeuroCast", inputProps, chromiumOptions });
+  if (cmd === "video") {
+    const out = path.join(ROOT, "openings", "previews", `${c.id}.mp4`);
+    fs.mkdirSync(path.dirname(out), { recursive: true });
+    await renderMedia({ serveUrl, composition, codec: "h264", outputLocation: out, inputProps, chromiumOptions, concurrency: 4 });
+    console.log(`模板演示：${out}`);
+    continue;
+  }
+  const dur = inputProps.timeline.durationInFrames;
+  const moments = dur > 5 * FPS ? [0, 2.5 * FPS, 5.7 * FPS, dur - 12] : [0, dur * 0.25, dur * 0.55, dur * 0.8];
+  const frames = [...new Set(moments.map((f) => Math.max(0, Math.min(dur - 1, Math.round(f)))))];
   const files = [];
-  for (const f of FR) {
-    const p = path.join(outDir, `_${c.id}_${f}.png`);
-    await renderStill({ serveUrl, composition, output: p, frame: f, inputProps, chromiumOptions: { gl: "angle" } });
-    files.push(p);
+  for (const frame of frames) {
+    const out = path.join(outDir, `_${c.id}_${frame}.png`);
+    await renderStill({ serveUrl, composition, output: out, frame, inputProps, chromiumOptions });
+    files.push(out);
   }
   const sheet = path.join(outDir, `${c.id}.jpg`);
-  const py = `import sys\nfrom PIL import Image, ImageDraw\nfs=sys.argv[3:]\nw,h=480,270\ns=Image.new('RGB',(w*len(fs),h+24),'black')\nd=ImageDraw.Draw(s)\nd.text((6,4),sys.argv[2],fill='white')\nfor i,f in enumerate(fs):\n  s.paste(Image.open(f).convert('RGB').resize((w,h)),(i*w,24))\ns.save(sys.argv[1],quality=80)\n`;
-  execFileSync("python", ["-c", py, sheet, c.id, ...files]);
+  const py = "import sys\nfrom PIL import Image, ImageDraw\nfiles=sys.argv[3:]\nw,h=480,270\ns=Image.new('RGB',(w*len(files),h+24),'black')\nImageDraw.Draw(s).text((6,4),sys.argv[2],fill='white')\nfor i,f in enumerate(files): s.paste(Image.open(f).convert('RGB').resize((w,h)),(i*w,24))\ns.save(sys.argv[1],quality=85)";
+  execFileSync("python", ["-c", py, sheet, `${c.id}: ${frames.map((f) => `${(f / FPS).toFixed(1)}s`).join(' / ')}`, ...files]);
   for (const f of files) fs.unlinkSync(f);
   sheets.push(sheet);
-  console.log(`✓ ${c.id}`);
+  console.log(`模板拼图：${sheet}`);
 }
-const all = path.join(outDir, "_all.jpg");
-execFileSync("python", ["-c", "import sys\nfrom PIL import Image\nfs=sys.argv[2:]\nims=[Image.open(f) for f in fs]\nw,h=ims[0].size\ns=Image.new('RGB',(w,h*len(ims)))\nfor i,im in enumerate(ims): s.paste(im,(0,i*h))\ns.save(sys.argv[1],quality=78)", all, ...sheets]);
-console.log(`✓ 总览：${all}`);
+if (sheets.length) {
+  const out = path.join(outDir, "_all.jpg");
+  execFileSync("python", ["-c", "import sys\nfrom PIL import Image\nims=[Image.open(f) for f in sys.argv[2:]]\nw=max(i.width for i in ims);h=sum(i.height for i in ims)\ns=Image.new('RGB',(w,h));y=0\nfor i in ims: s.paste(i,(0,y));y+=i.height\ns.save(sys.argv[1],quality=85)", out, ...sheets]);
+  console.log(`总览：${out}；正式出片另跑 openings.mjs preview <input.json> 检查本片真人/素材/人声。`);
+}

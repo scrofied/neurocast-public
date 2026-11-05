@@ -166,8 +166,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
             <div style={{ position: "absolute", left: 0, top: (fh - 46) * railP, width: 4, height: 38, borderRadius: 2, background: t.primary, boxShadow: `0 0 12px ${t.primary}` }} />
           </div>
         )}
-        <div style={{ position: "absolute", right: 0, bottom: 12, paddingRight: 14 }}>
-          <SourceBadge source={data.source} frame={frame} />
+        {/* SourceBadge 自己是绝对定位且从容器顶往下长：直接 bottom:12 会让整块胶囊掉到
+            容器底边之外，被上面的 overflow:hidden 整个裁掉 —— 靠 y=-36 顶回内侧。
+            长文档的容器底边（fy+fh 最晚到 height-95）会压进逐字字幕带（bottom 52 + 50 字），
+            角标正好被字幕盖住 —— 容器低到字幕带附近时把角标往上让开一行。 */}
+        <div style={{ position: "absolute", right: 14, bottom: fy + fh > height - 130 ? 62 : 12, width: 1, height: 1 }}>
+          <SourceBadge source={data.source} frame={frame} y={-36} />
         </div>
       </div>
 

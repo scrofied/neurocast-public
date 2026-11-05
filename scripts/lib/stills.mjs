@@ -8,7 +8,9 @@ export const renderStills = async ({ root, timeline, out, frac = 0.6, only }) =>
   const { selectComposition, renderStill } = await import("@remotion/renderer");
   const serveUrl = await bundle({ entryPoint: path.join(root, "src", "index.ts") });
   const inputProps = { timeline };
-  const composition = await selectComposition({ serveUrl, id: "NeuroCast", inputProps, chromiumOptions: { gl: "angle" } });
+  const browserExecutable = process.env.REMOTION_BROWSER_EXECUTABLE || undefined;
+  const chromiumOptions = { gl: process.env.REMOTION_GL || "angle" };
+  const composition = await selectComposition({ serveUrl, id: "NeuroCast", inputProps, browserExecutable, chromiumOptions });
   const tmp = path.join(path.dirname(out), `_stills_${Date.now()}`);
   fs.mkdirSync(tmp, { recursive: true });
   const shots = timeline.shots.filter((s) => !only || only.includes(s.id));
@@ -17,7 +19,7 @@ export const renderStills = async ({ root, timeline, out, frac = 0.6, only }) =>
   const work = shots.map((s) => async () => {
     const frame = Math.min(timeline.durationInFrames - 1, s.start + Math.floor(s.dur * frac));
     const f = path.join(tmp, `${String(k++).padStart(3, "0")}_${s.id}_${s.type}.png`);
-    await renderStill({ serveUrl, composition, output: f, frame, inputProps, chromiumOptions: { gl: "angle" } });
+    await renderStill({ serveUrl, composition, output: f, frame, inputProps, browserExecutable, chromiumOptions });
     files.push(f);
     process.stdout.write(".");
   });

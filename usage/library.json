@@ -1,8 +1,9 @@
 {
  "rules": {
   "recentVideos": 3,
-  "minFresh": 3,
-  "maxHistory": 12
+  "minRotated": 3,
+  "maxHistory": 12,
+  "minFresh": 3
  },
  "videos": [
   {
@@ -379,64 +380,6 @@
    }
   },
   {
-   "id": "Codex和WorkBuddy怎么选",
-   "title": "Codex和WorkBuddy怎么选",
-   "date": "2026-10-10",
-   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-workbuddy_20261011-014021/timeline.json",
-   "shots": 34,
-   "types": {
-    "side-brand-fx": 1,
-    "screen": 13,
-    "cards": 2,
-    "versus": 1,
-    "dialogue": 1,
-    "pile-crush": 1,
-    "fill-build": 1,
-    "case-replay": 1,
-    "cursor-trace": 1,
-    "tool-card": 1,
-    "code": 1,
-    "open-ledger": 2,
-    "surface-vs-core": 1,
-    "race-lanes": 1,
-    "evidence-zoom": 1,
-    "checklist": 1,
-    "safety-brake": 1,
-    "reveal-cards": 1,
-    "scale-gap": 1,
-    "ring-assembly": 1
-   }
-  },
-  {
-   "id": "AI到底是怎么控制你的电脑干活的",
-   "title": "AI到底是怎么控制你的电脑干活的",
-   "date": "2026-10-11",
-   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai-computer-use_20261011-233640/timeline.json",
-   "shots": 27,
-   "types": {
-    "side-brand-fx": 1,
-    "screen": 3,
-    "screen-morph": 1,
-    "before-after": 1,
-    "infinite-zoom": 1,
-    "pile-crush": 1,
-    "punch-text": 2,
-    "versus": 2,
-    "real-doc-scroll": 2,
-    "cursor-trace": 2,
-    "checklist": 2,
-    "evidence-zoom": 1,
-    "pit-trap": 1,
-    "version-lanes": 1,
-    "citation-strip": 1,
-    "blame-strike": 1,
-    "funnel": 1,
-    "head-pip": 1,
-    "one-fish-four-plates": 1,
-    "agent-relay": 1
-   }
-  },
-  {
    "id": "有人用AI重现了Photoshop，还100%免费开源",
    "title": "有人用AI重现了Photoshop，还100%免费开源",
    "date": "2026-10-12",
@@ -489,17 +432,945 @@
     "gate-weld": 1,
     "ring-assembly": 1
    }
+  },
+  {
+   "id": "AI 能帮你干什么——三层金字塔",
+   "title": "AI 能帮你干什么——三层金字塔",
+   "date": "2026-10-16",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-2-sanjiao_20261016-230037/timeline.json",
+   "shots": 13,
+   "types": {
+    "quote": 2,
+    "tier-stack": 1,
+    "neural": 1,
+    "pit-trap": 1,
+    "attn-weights": 1,
+    "punch-text": 1,
+    "evidence-zoom": 3,
+    "agent-relay": 1,
+    "time-ceiling": 1,
+    "inplace-evolve": 1
+   }
+  },
+  {
+   "id": "AI 软件为什么都要钱——四层结构",
+   "title": "AI 软件为什么都要钱——四层结构",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-1-siceng_20261017-112657/timeline.json",
+   "shots": 24,
+   "types": {
+    "logo-wall": 1,
+    "pile-crush": 1,
+    "quote": 2,
+    "teardown-lens": 1,
+    "kanban-sort": 1,
+    "tier-stack": 4,
+    "feed-gauge": 1,
+    "scale-gap": 1,
+    "evidence-zoom": 2,
+    "neural": 1,
+    "vault": 1,
+    "cursor-trace": 1,
+    "beat-wall": 2,
+    "screen": 1,
+    "screen-morph": 1,
+    "assembly": 1,
+    "text-structure": 1,
+    "dusty-shelf": 1
+   }
+  },
+  {
+   "id": "Vibe Coding 是什么",
+   "title": "Vibe Coding 是什么",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-10-vibe_20261018-012944/timeline.json",
+   "shots": 19,
+   "types": {
+    "beat-wall": 1,
+    "dusty-shelf": 1,
+    "board-proof": 2,
+    "punch-text": 1,
+    "case-replay": 1,
+    "flywheel": 1,
+    "agent-relay": 1,
+    "bullet-cards": 1,
+    "before-after": 1,
+    "surface-vs-core": 1,
+    "number": 1,
+    "mirror-reveal": 1,
+    "counter-example": 1,
+    "labor-takeover": 1,
+    "screen-morph": 1,
+    "typo-arch": 1,
+    "logic-flip": 1,
+    "hook": 1
+   },
+   "opening": {
+    "id": "pro-02-shatter-morph",
+    "visual": "pro-02-shatter-morph",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "AI 到底能帮你干什么——三层金字塔",
+   "title": "AI 到底能帮你干什么——三层金字塔",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-2-sanjiao_20261018-014405/timeline.json",
+   "shots": 23,
+   "types": {
+    "bullet-cards": 1,
+    "sense-rig": 3,
+    "neural": 1,
+    "tier-stack": 2,
+    "punch-text": 2,
+    "dusty-shelf": 1,
+    "vault": 2,
+    "beat-wall": 2,
+    "screen": 1,
+    "agent-relay": 1,
+    "logic-flip": 1,
+    "reach-gap": 1,
+    "evidence-zoom": 2,
+    "cursor-trace": 1,
+    "mirror-reveal": 1,
+    "quote": 1
+   },
+   "opening": {
+    "id": "pro-05-info-first",
+    "visual": "pro-05-info-first",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "AI 到底怎么替你干活——工作流与智能体",
+   "title": "AI 到底怎么替你干活——工作流与智能体",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-3-agent_20261018-015422/timeline.json",
+   "shots": 30,
+   "types": {
+    "reveal-cards": 1,
+    "punch-text": 2,
+    "reach-gap": 1,
+    "hook": 1,
+    "assembly": 1,
+    "version-lanes": 1,
+    "step-rail": 1,
+    "before-after": 1,
+    "versus": 1,
+    "form-morph": 1,
+    "evidence-zoom": 2,
+    "beat-wall": 1,
+    "number": 2,
+    "neural": 1,
+    "cursor-trace": 2,
+    "screen": 2,
+    "feed-gauge": 1,
+    "kanban-sort": 1,
+    "spec-matrix": 1,
+    "race-lanes": 1,
+    "counter-example": 1,
+    "chat-command": 1,
+    "fork-paths": 1,
+    "quote": 1,
+    "prompt": 1
+   },
+   "opening": {
+    "id": "pro-01-dolly-suspense",
+    "visual": "pro-01-dolly-suspense",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "提示词到底怎么写——三步上手",
+   "title": "提示词到底怎么写——三步上手",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-4-tishi_20261018-020239/timeline.json",
+   "shots": 26,
+   "types": {
+    "reach-gap": 1,
+    "versus": 1,
+    "prompt": 2,
+    "cursor-trace": 1,
+    "evidence-zoom": 2,
+    "untapped-potential": 1,
+    "fill-build": 1,
+    "punch-text": 1,
+    "before-after": 1,
+    "step-rail": 2,
+    "chat-command": 2,
+    "number": 1,
+    "flywheel": 1,
+    "fork-paths": 1,
+    "painkiller": 1,
+    "pit-trap": 1,
+    "mirror-reveal": 1,
+    "asset-distill": 1,
+    "vault": 1,
+    "blame-strike": 1,
+    "quote": 1,
+    "feed-gauge": 1
+   },
+   "opening": {
+    "id": "pro-03-iris-title",
+    "visual": "pro-03-iris-title",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "一张自学路线图——四个台阶四条心法",
+   "title": "一张自学路线图——四个台阶四条心法",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-5-luxian_20261018-020959/timeline.json",
+   "shots": 28,
+   "types": {
+    "dialogue": 1,
+    "flow": 1,
+    "untapped-potential": 1,
+    "counter-example": 1,
+    "checklist": 1,
+    "pyramid-base": 1,
+    "infinite-zoom": 1,
+    "real-doc-scroll": 1,
+    "surface-vs-core": 1,
+    "scope-shrink": 1,
+    "board-proof": 1,
+    "chat-command": 1,
+    "reward-beat": 1,
+    "logic-flip": 1,
+    "time-shards": 1,
+    "one-fish-four-plates": 1,
+    "bullet-cards": 1,
+    "reframe": 1,
+    "safety-brake": 1,
+    "lever-lift": 1,
+    "ring-assembly": 1,
+    "scale-dive": 1,
+    "measure-ruler": 1,
+    "scale-gap": 1,
+    "dusty-shelf": 1,
+    "text-structure": 1,
+    "tier-grid": 1,
+    "logo-wall": 1
+   },
+   "opening": {
+    "id": "pro-04-depth-title",
+    "visual": "pro-04-depth-title",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "Codex 是什么——一句话讲清",
+   "title": "Codex 是什么——一句话讲清",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-6-shenme_20261018-021748/timeline.json",
+   "shots": 16,
+   "types": {
+    "logo-wall": 1,
+    "inplace-evolve": 1,
+    "screen-versus": 1,
+    "brand-quote-card": 1,
+    "shutter-close": 1,
+    "reframe": 1,
+    "bullet-cards": 1,
+    "real-doc-scroll": 1,
+    "race-lanes": 1,
+    "board-proof": 1,
+    "sense-rig": 1,
+    "form-morph": 1,
+    "text-structure": 1,
+    "measure-ruler": 1,
+    "surface-vs-core": 1,
+    "vet-card": 1
+   },
+   "opening": {
+    "id": "pro-02-shatter-morph",
+    "visual": "pro-02-shatter-morph",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "为什么说这是普通人的机会",
+   "title": "为什么说这是普通人的机会",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-7-jihui_20261018-022432/timeline.json",
+   "shots": 16,
+   "types": {
+    "dialogue": 1,
+    "cards": 1,
+    "screen": 2,
+    "version-lanes": 1,
+    "threshold-drop": 1,
+    "screen-morph": 1,
+    "formula-drive": 1,
+    "flow": 1,
+    "agents": 1,
+    "lever-lift": 1,
+    "blame-strike": 1,
+    "reveal-cards": 1,
+    "form-morph": 1,
+    "queue-window": 1,
+    "open-ledger": 1
+   },
+   "opening": {
+    "id": "pro-01-dolly-suspense",
+    "visual": "pro-01-dolly-suspense",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "ChatGPT、智能体、Codex 差在哪",
+   "title": "ChatGPT、智能体、Codex 差在哪",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-8-chazai_20261018-023107/timeline.json",
+   "shots": 23,
+   "types": {
+    "pit-trap": 1,
+    "tier-stack": 1,
+    "chat-command": 1,
+    "reach-gap": 1,
+    "sense-rig": 1,
+    "checklist": 1,
+    "versus": 1,
+    "screen-versus": 1,
+    "cursor-trace": 1,
+    "ring-assembly": 1,
+    "inplace-evolve": 1,
+    "timeline": 1,
+    "prompt": 1,
+    "bug-fix-loop": 1,
+    "evidence-zoom": 1,
+    "brand-quote-card": 1,
+    "domino-chain": 1,
+    "safety-brake": 1,
+    "kanban-sort": 1,
+    "tier-grid": 1,
+    "spec-matrix": 1,
+    "quote": 1,
+    "screen": 1
+   },
+   "opening": {
+    "id": "pro-03-iris-title",
+    "visual": "pro-03-iris-title",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "四种形态，你该怎么选",
+   "title": "四种形态，你该怎么选",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-9-xingtai_20261018-023905/timeline.json",
+   "shots": 20,
+   "types": {
+    "tool-card": 1,
+    "cursor-trace": 2,
+    "domino-chain": 1,
+    "reveal-cards": 1,
+    "real-doc-scroll": 1,
+    "checklist": 2,
+    "tier-stack": 1,
+    "step-rail": 1,
+    "measure-ruler": 1,
+    "evidence-zoom": 1,
+    "vet-card": 1,
+    "reframe": 1,
+    "walled-garden": 1,
+    "fork-paths": 1,
+    "versus": 1,
+    "punch-text": 1,
+    "quote": 1,
+    "dialogue": 1
+   },
+   "opening": {
+    "id": "pro-05-info-first",
+    "visual": "pro-05-info-first",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "七种角色，怎么变成两个人",
+   "title": "七种角色，怎么变成两个人",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-11-jiaose_20261018-031617/timeline.json",
+   "shots": 20,
+   "types": {
+    "board-proof": 1,
+    "cursor-trace": 1,
+    "assembly": 1,
+    "number": 1,
+    "real-doc-scroll": 1,
+    "blame-strike": 1,
+    "evidence-zoom": 2,
+    "versus": 1,
+    "checklist": 1,
+    "before-after": 1,
+    "logic-flip": 1,
+    "bullet-cards": 1,
+    "measure-ruler": 1,
+    "teardown-lens": 1,
+    "quote": 1,
+    "inplace-evolve": 1,
+    "mirror-reveal": 1,
+    "scope-shrink": 1,
+    "hook": 1
+   },
+   "opening": {
+    "id": "pro-04-depth-title",
+    "visual": "pro-04-depth-title",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "它到底怎么工作：三个特点",
+   "title": "它到底怎么工作：三个特点",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-12-techu_20261018-033957/timeline.json",
+   "shots": 18,
+   "types": {
+    "evidence-zoom": 1,
+    "versus": 2,
+    "screen": 2,
+    "teardown-lens": 1,
+    "cursor-trace": 1,
+    "cards": 2,
+    "checklist": 2,
+    "beat-wall": 1,
+    "infinite-zoom": 1,
+    "before-after": 1,
+    "safety-brake": 1,
+    "funnel": 1,
+    "quote": 1,
+    "hook": 1
+   },
+   "opening": {
+    "id": "pro-03-iris-title",
+    "visual": "pro-03-iris-title",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "一个真实成果：3D 简历",
+   "title": "一个真实成果：3D 简历",
+   "date": "2026-10-17",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-13-jianli_20261018-040432/timeline.json",
+   "shots": 21,
+   "types": {
+    "screen-morph": 1,
+    "screen-versus": 1,
+    "board-proof": 1,
+    "prompt": 1,
+    "evidence-zoom": 1,
+    "sense-rig": 1,
+    "code": 1,
+    "drag-deploy": 1,
+    "spec-matrix": 1,
+    "text-structure": 1,
+    "reveal-cards": 1,
+    "fork-paths": 1,
+    "cards": 1,
+    "flywheel": 1,
+    "chat-command": 1,
+    "domino-chain": 1,
+    "counter-example": 1,
+    "shutter-close": 1,
+    "fill-build": 1,
+    "real-doc-scroll": 1,
+    "reach-gap": 1
+   },
+   "opening": {
+    "id": "op-result-first",
+    "visual": "result-focus-split",
+    "sound": "foley"
+   }
+  },
+  {
+   "id": "MCP 和命令行，该怎么选",
+   "title": "MCP 和命令行，该怎么选",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-15-mcpcli_20261018-092015/timeline.json",
+   "shots": 23,
+   "types": {
+    "logic-flip": 1,
+    "reveal-cards": 1,
+    "real-doc-scroll": 1,
+    "formula-drive": 1,
+    "screen-versus": 1,
+    "citation-strip": 1,
+    "flow": 1,
+    "agent-relay": 1,
+    "board-proof": 1,
+    "gear-train": 1,
+    "cursor-trace": 1,
+    "infinite-zoom": 1,
+    "fork-paths": 1,
+    "safety-brake": 1,
+    "gate-weld": 1,
+    "reframe": 1,
+    "spec-matrix": 1,
+    "kanban-sort": 1,
+    "dialogue": 1,
+    "quote": 1,
+    "dusty-shelf": 1,
+    "punch-text": 1,
+    "sense-rig": 1
+   },
+   "opening": {
+    "id": "pro-02-shatter-morph",
+    "visual": "pro-02-shatter-morph",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+   "title": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-17-words_20261018-105316/timeline.json",
+   "shots": 11,
+   "types": {
+    "beat-wall": 1,
+    "cards": 1,
+    "screen-morph": 1,
+    "brand-quote-card": 1,
+    "tier-stack": 1,
+    "relay-parallel": 1,
+    "screen": 1,
+    "assembly": 1,
+    "ring-assembly": 1,
+    "fill-build": 1,
+    "teardown-lens": 1
+   },
+   "opening": {
+    "id": "pro-04-depth-title",
+    "visual": "pro-04-depth-title",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "两个坑：能力退化与决策外包",
+   "title": "两个坑：能力退化与决策外包",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-18-pits_20261018-120743/timeline.json",
+   "shots": 20,
+   "types": {
+    "versus": 1,
+    "counter-example": 1,
+    "pit-trap": 1,
+    "silent-drift": 1,
+    "punch-text": 1,
+    "evidence-zoom": 2,
+    "real-doc-scroll": 1,
+    "bullet-cards": 1,
+    "before-after": 1,
+    "blame-strike": 1,
+    "chat-command": 1,
+    "tier-grid": 1,
+    "inplace-evolve": 1,
+    "reveal-cards": 1,
+    "dusty-shelf": 1,
+    "fork-paths": 1,
+    "measure-ruler": 1,
+    "step-rail": 1,
+    "flow": 1
+   },
+   "opening": {
+    "id": "pro-03-iris-title",
+    "visual": "pro-03-iris-title",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "两个坑：责任归属与权限安全",
+   "title": "两个坑：责任归属与权限安全",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-19-blame_20261018-133311/timeline.json",
+   "shots": 21,
+   "types": {
+    "labor-takeover": 1,
+    "case-replay": 1,
+    "punch-text": 1,
+    "surface-vs-core": 1,
+    "vet-card": 1,
+    "board-proof": 1,
+    "kanban-sort": 1,
+    "safety-brake": 1,
+    "reach-gap": 1,
+    "spec-matrix": 1,
+    "cursor-trace": 1,
+    "sink": 1,
+    "number": 1,
+    "evidence-zoom": 1,
+    "citation-strip": 1,
+    "ring-assembly": 1,
+    "counter-example": 1,
+    "reframe": 1,
+    "quote": 1,
+    "lever-lift": 1,
+    "checklist": 1
+   },
+   "opening": {
+    "id": "pro-02-shatter-morph",
+    "visual": "pro-02-shatter-morph",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "Skill 是什么：给 AI 的一本工作手册",
+   "title": "Skill 是什么：给 AI 的一本工作手册",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-16-skill_20261018-153754/timeline.json",
+   "shots": 18,
+   "types": {
+    "domino-chain": 1,
+    "blame-strike": 1,
+    "punch-text": 1,
+    "folder-save": 1,
+    "asset-distill": 1,
+    "real-doc-scroll": 2,
+    "counter-example": 1,
+    "cursor-trace": 1,
+    "pile-crush": 1,
+    "evidence-zoom": 1,
+    "sense-rig": 1,
+    "text-structure": 1,
+    "threshold-drop": 1,
+    "mirror-reveal": 1,
+    "bullet-cards": 1,
+    "checklist": 1,
+    "reveal-cards": 1
+   },
+   "opening": {
+    "id": "pro-01-dolly-suspense",
+    "visual": "pro-01-dolly-suspense",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "MCP 到底是什么",
+   "title": "MCP 到底是什么",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-14-mcp_20261018-154952/timeline.json",
+   "shots": 18,
+   "types": {
+    "reach-gap": 1,
+    "carry-or-dig": 1,
+    "evidence-zoom": 1,
+    "cursor-trace": 1,
+    "real-doc-scroll": 1,
+    "tool-card": 1,
+    "step-rail": 1,
+    "screen": 2,
+    "board-proof": 1,
+    "pit-trap": 1,
+    "labor-takeover": 1,
+    "dialogue": 1,
+    "agent-relay": 1,
+    "unread-flood": 1,
+    "sense-rig": 1,
+    "tier-grid": 1,
+    "narration": 1
+   },
+   "opening": {
+    "id": "op-quiet-question",
+    "visual": "editorial-path",
+    "sound": "quiet"
+   }
+  },
+  {
+   "id": "新手怎么选 · 全课收尾",
+   "title": "新手怎么选 · 全课收尾",
+   "date": "2026-10-18",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-1-20-wrap_20261018-160020/timeline.json",
+   "shots": 25,
+   "types": {
+    "surface-vs-core": 1,
+    "measure-ruler": 1,
+    "logic-flip": 1,
+    "cursor-trace": 1,
+    "board-proof": 1,
+    "brand-quote-card": 1,
+    "tier-grid": 1,
+    "race-lanes": 1,
+    "sense-rig": 1,
+    "bullet-cards": 1,
+    "lever-lift": 1,
+    "dusty-shelf": 1,
+    "mirror-reveal": 1,
+    "safety-brake": 1,
+    "evidence-zoom": 1,
+    "real-doc-scroll": 1,
+    "vet-card": 1,
+    "domino-chain": 1,
+    "tier-stack": 1,
+    "step-rail": 1,
+    "number": 1,
+    "checklist": 1,
+    "versus": 1,
+    "flywheel": 1,
+    "quote": 1
+   },
+   "opening": {
+    "id": "pro-05-info-first",
+    "visual": "pro-05-info-first",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "AI共享大脑：把档案放进GitHub",
+   "title": "AI共享大脑：把档案放进GitHub",
+   "date": "2026-10-19",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai-github_20261020-004444/timeline.json",
+   "shots": 34,
+   "types": {
+    "reframe": 1,
+    "vault": 1,
+    "persona-scene": 1,
+    "dusty-shelf": 1,
+    "side-caps": 3,
+    "logo-wall": 1,
+    "agents": 1,
+    "spec-matrix": 1,
+    "code": 1,
+    "gate-weld": 1,
+    "infinite-zoom": 2,
+    "commit-rewind": 1,
+    "screen-versus": 3,
+    "flow": 1,
+    "drag-deploy": 1,
+    "screen-morph": 1,
+    "visibility-seal": 1,
+    "safety-brake": 1,
+    "head-pip": 1,
+    "text-structure": 1,
+    "form-morph": 1,
+    "counter-example": 1,
+    "chat-command": 1,
+    "relay-parallel": 1,
+    "prompt": 1,
+    "scale-gap": 1,
+    "walled-garden": 1,
+    "wave-cancel": 1,
+    "data-sieve": 1
+   },
+   "opening": {
+    "id": "pro-01-dolly-suspense",
+    "visual": "pro-01-dolly-suspense",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "怎样让马斯克来指挥你的AI干活？",
+   "title": "怎样让马斯克来指挥你的AI干活？",
+   "date": "2026-10-19",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/council4_20261020-005258/timeline.json",
+   "shots": 30,
+   "types": {
+    "screen": 10,
+    "agent-relay": 1,
+    "evidence-zoom": 5,
+    "beat-wall": 1,
+    "ring-assembly": 1,
+    "measure-ruler": 1,
+    "brand-quote-card": 1,
+    "scope-shrink": 1,
+    "flow": 1,
+    "ui-replica": 1,
+    "domino-chain": 1,
+    "before-after": 1,
+    "persona-scene": 1,
+    "chat-command": 1,
+    "pile-crush": 1,
+    "side-caps": 1,
+    "typo-arch": 1
+   },
+   "opening": {
+    "id": "opening-council4-collage",
+    "visual": "opening-council4-collage",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "AI到底是怎么控制你的电脑干活的",
+   "title": "AI到底是怎么控制你的电脑干活的",
+   "date": "2026-10-19",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai-computer-use_20261020-022814/timeline.json",
+   "shots": 28,
+   "types": {
+    "side-brand-fx": 1,
+    "screen-versus": 1,
+    "screen": 3,
+    "screen-morph": 1,
+    "before-after": 1,
+    "infinite-zoom": 1,
+    "pile-crush": 1,
+    "punch-text": 2,
+    "versus": 2,
+    "real-doc-scroll": 2,
+    "cursor-trace": 2,
+    "checklist": 2,
+    "evidence-zoom": 1,
+    "pit-trap": 1,
+    "version-lanes": 1,
+    "citation-strip": 1,
+    "blame-strike": 1,
+    "funnel": 1,
+    "head-pip": 1,
+    "one-fish-four-plates": 1,
+    "agent-relay": 1
+   },
+   "opening": {
+    "id": "pro-02-shatter-morph",
+    "visual": "pro-02-shatter-morph",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "Codex和WorkBuddy怎么选",
+   "title": "Codex和WorkBuddy怎么选",
+   "date": "2026-10-19",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-codex-workbuddy_20261020-032357/timeline.json",
+   "shots": 34,
+   "types": {
+    "side-brand-fx": 1,
+    "screen": 13,
+    "cards": 2,
+    "versus": 1,
+    "dialogue": 1,
+    "pile-crush": 1,
+    "fill-build": 1,
+    "case-replay": 1,
+    "cursor-trace": 1,
+    "tool-card": 1,
+    "code": 1,
+    "open-ledger": 2,
+    "surface-vs-core": 1,
+    "race-lanes": 1,
+    "evidence-zoom": 1,
+    "checklist": 1,
+    "safety-brake": 1,
+    "reveal-cards": 1,
+    "scale-gap": 1,
+    "ring-assembly": 1
+   },
+   "opening": {
+    "id": "opening-codex-vs-wb",
+    "visual": "opening-codex-vs-wb",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "7 个真能干活的 AI 剪辑 skill",
+   "title": "7 个真能干活的 AI 剪辑 skill",
+   "date": "2026-10-23",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/skills7_20261023-173330/timeline.json",
+   "shots": 28,
+   "types": {
+    "narration": 1,
+    "asset-full": 11,
+    "domino-chain": 1,
+    "code": 1,
+    "punch-text": 1,
+    "side-caps": 1,
+    "repo-id": 7,
+    "tier-grid": 1,
+    "bullet-cards": 1,
+    "agents": 1,
+    "folder-save": 1,
+    "cards": 1
+   },
+   "opening": {
+    "id": "opening-skill-upgrade",
+    "visual": "opening-skill-upgrade",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+   "title": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+   "date": "2026-10-25",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-trae_20261025-115429/timeline.json",
+   "shots": 20,
+   "types": {
+    "footage-stage": 7,
+    "side-scenes": 10,
+    "form-morph": 1,
+    "flywheel": 1,
+    "sense-rig": 1
+   },
+   "opening": {
+    "id": "opening-trae",
+    "visual": "opening-trae",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+   "title": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+   "date": "2026-10-26",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-ai_20261026-171819/timeline.json",
+   "shots": 15,
+   "types": {
+    "side-caps": 2,
+    "screen-markup": 4,
+    "beat-wall": 1,
+    "unread-flood": 1,
+    "blame-strike": 1,
+    "dialogue": 1,
+    "ring-assembly": 1,
+    "logic-flip": 1,
+    "pile-crush": 1,
+    "text-structure": 1,
+    "punch-text": 1
+   },
+   "opening": {
+    "id": "op-three-beat",
+    "visual": "op-three-beat",
+    "sound": "embedded"
+   }
+  },
+  {
+   "id": "WorkBuddy 这 5 个设置",
+   "title": "WorkBuddy 这 5 个设置",
+   "date": "2026-11-05",
+   "file": "D:/qord/.qoder/skills/neurocast/public/jobs/neurocast-wb-5settings_20261106-023543/timeline.json",
+   "shots": 29,
+   "types": {
+    "punch-text": 3,
+    "reveal-cards": 1,
+    "asset-full": 7,
+    "chat-command": 2,
+    "before-after": 3,
+    "code": 1,
+    "bullet-cards": 2,
+    "dialogue": 1,
+    "tier-grid": 1,
+    "counter-example": 1,
+    "flywheel": 1,
+    "safety-brake": 1,
+    "unread-flood": 1,
+    "case-replay": 1,
+    "drag-deploy": 1,
+    "step-rail": 1,
+    "folder-save": 1
+   },
+   "opening": {
+    "id": "opening-wb-5settings",
+    "visual": "opening-wb-5settings",
+    "sound": "embedded"
+   }
   }
  ],
  "comps": {
   "hook": {
-   "count": 3,
+   "count": 7,
    "videos": [
     "workbuddy必装的三大神级skill，附保姆级教程",
     "如何做出爆款内容",
-    "AI 是怎么替你干活的"
+    "AI 是怎么替你干活的",
+    "Vibe Coding 是什么",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "七种角色，怎么变成两个人",
+    "它到底怎么工作：三个特点"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "workbuddy必装的三大神级skill，附保姆级教程",
@@ -524,6 +1395,46 @@
       "s0"
      ],
      "enters": []
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
@@ -569,13 +1480,15 @@
    ]
   },
   "narration": {
-   "count": 44,
+   "count": 46,
    "videos": [
     "workbuddy必装的三大神级skill，附保姆级教程",
     "如何做出爆款内容",
-    "AI 是怎么替你干活的"
+    "AI 是怎么替你干活的",
+    "MCP 到底是什么",
+    "7 个真能干活的 AI 剪辑 skill"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-23",
    "history": [
     {
      "video": "workbuddy必装的三大神级skill，附保姆级教程",
@@ -641,19 +1554,42 @@
       "s14"
      ],
      "enters": []
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slide-l"
+     ]
     }
    ]
   },
   "agents": {
-   "count": 11,
+   "count": 14,
    "videos": [
     "workbuddy必装的三大神级skill，附保姆级教程",
     "如何做出爆款内容",
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
-    "别再让AI每次从零开始"
+    "别再让AI每次从零开始",
+    "为什么说这是普通人的机会",
+    "AI共享大脑：把档案放进GitHub",
+    "7 个真能干活的 AI 剪辑 skill"
    ],
-   "lastDate": "2026-10-01",
+   "lastDate": "2026-10-23",
    "history": [
     {
      "video": "workbuddy必装的三大神级skill，附保姆级教程",
@@ -702,18 +1638,54 @@
      "enters": [
       "zoom-through"
      ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s25"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "number": {
-   "count": 8,
+   "count": 15,
    "videos": [
     "workbuddy必装的三大神级skill，附保姆级教程",
     "如何做出爆款内容",
     "AI 是怎么替你干活的",
-    "用 AI 挖出你身上的隐藏资产"
+    "用 AI 挖出你身上的隐藏资产",
+    "Vibe Coding 是什么",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "七种角色，怎么变成两个人",
+    "两个坑：责任归属与权限安全",
+    "新手怎么选 · 全课收尾"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-22",
    "history": [
     {
      "video": "workbuddy必装的三大神级skill，附保姆级教程",
@@ -753,11 +1725,72 @@
       "zoom-through",
       "slam"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s13",
+      "s24"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "slam"
+     ]
     }
    ]
   },
   "quote": {
-   "count": 39,
+   "count": 53,
    "videos": [
     "workbuddy必装的三大神级skill，附保姆级教程",
     "如何做出爆款内容",
@@ -769,83 +1802,40 @@
     "WorkBuddy 的 10 个高频使用技巧",
     "怎样用AI控制AI",
     "什么是AI控制AI",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "AI 能帮你干什么——三层金字塔",
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底能帮你干什么——三层金字塔",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "ChatGPT、智能体、Codex 差在哪",
+    "四种形态，你该怎么选",
+    "七种角色，怎么变成两个人",
+    "它到底怎么工作：三个特点",
+    "MCP 和命令行，该怎么选",
+    "两个坑：责任归属与权限安全",
+    "新手怎么选 · 全课收尾"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-18",
    "history": [
     {
-     "video": "workbuddy必装的三大神级skill，附保姆级教程",
-     "date": "2026-09-27",
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
      "shots": [
-      "s6",
-      "s16",
-      "s20",
-      "s28",
-      "s34"
+      "s0",
+      "s3"
      ],
-     "enters": []
+     "enters": [
+      "drop",
+      "slide-l"
+     ]
     },
     {
-     "video": "如何做出爆款内容",
-     "date": "2026-09-27",
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
      "shots": [
       "s2",
-      "s4",
-      "s7",
-      "s9",
-      "s11",
-      "s13",
-      "s15",
-      "s17",
-      "s19",
-      "s21",
-      "s25",
-      "s28",
-      "s31",
-      "s34",
-      "s36",
-      "s38",
-      "s40",
-      "s42",
-      "s44",
-      "s46",
-      "s48",
-      "s50",
-      "s52",
-      "s54"
-     ],
-     "enters": []
-    },
-    {
-     "video": "AI 是怎么替你干活的",
-     "date": "2026-09-28",
-     "shots": [
-      "s8"
-     ],
-     "enters": []
-    },
-    {
-     "video": "从评论区挖掘爆款选题",
-     "date": "2026-09-28",
-     "shots": [
-      "s20"
-     ],
-     "enters": []
-    },
-    {
-     "video": "20 分钟用 AI 做出你的第一个小软件",
-     "date": "2026-09-29",
-     "shots": [
-      "s19"
-     ],
-     "enters": []
-    },
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s1",
-      "s9"
+      "s23"
      ],
      "enters": [
       "wipe",
@@ -853,65 +1843,120 @@
      ]
     },
     {
-     "video": "用Opus做AI剪辑=浪费90%成本",
-     "date": "2026-10-02",
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
      "shots": [
-      "s12"
+      "s22"
      ],
      "enters": [
       "wipe"
      ]
     },
     {
-     "video": "WorkBuddy 的 10 个高频使用技巧",
-     "date": "2026-10-05",
-     "shots": [
-      "s8"
-     ],
-     "enters": [
-      "wipe"
-     ]
-    },
-    {
-     "video": "怎样用AI控制AI",
-     "date": "2026-10-09",
-     "shots": [
-      "s41"
-     ],
-     "enters": [
-      "wipe"
-     ]
-    },
-    {
-     "video": "什么是AI控制AI",
-     "date": "2026-10-09",
-     "shots": [
-      "s16"
-     ],
-     "enters": [
-      "slide-r"
-     ]
-    },
-    {
-     "video": "初级岗位正在从根子上消失",
-     "date": "2026-10-14",
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
      "shots": [
       "s28"
      ],
      "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
       "rise"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "wipe"
      ]
     }
    ]
   },
   "cards": {
-   "count": 5,
+   "count": 11,
    "videos": [
     "workbuddy必装的三大神级skill，附保姆级教程",
     "AI 是怎么替你干活的",
-    "Codex和WorkBuddy怎么选"
+    "为什么说这是普通人的机会",
+    "它到底怎么工作：三个特点",
+    "一个真实成果：3D 简历",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+    "Codex和WorkBuddy怎么选",
+    "7 个真能干活的 AI 剪辑 skill"
    ],
-   "lastDate": "2026-10-10",
+   "lastDate": "2026-10-23",
    "history": [
     {
      "video": "workbuddy必装的三大神级skill，附保姆级教程",
@@ -931,8 +1976,50 @@
      "enters": []
     },
     {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s5",
+      "s11"
+     ],
+     "enters": [
+      "rise",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s2",
       "s32"
@@ -941,48 +2028,40 @@
       "slam",
       "wipe"
      ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s27"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "versus": {
-   "count": 9,
+   "count": 18,
    "videos": [
     "如何做出爆款内容",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
     "用Opus做AI剪辑=浪费90%成本",
-    "Codex和WorkBuddy怎么选",
-    "AI到底是怎么控制你的电脑干活的"
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "ChatGPT、智能体、Codex 差在哪",
+    "四种形态，你该怎么选",
+    "七种角色，怎么变成两个人",
+    "它到底怎么工作：三个特点",
+    "两个坑：能力退化与决策外包",
+    "新手怎么选 · 全课收尾",
+    "AI到底是怎么控制你的电脑干活的",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
-    {
-     "video": "如何做出爆款内容",
-     "date": "2026-09-27",
-     "shots": [
-      "s56"
-     ],
-     "enters": []
-    },
-    {
-     "video": "20 分钟用 AI 做出你的第一个小软件",
-     "date": "2026-09-29",
-     "shots": [
-      "s5"
-     ],
-     "enters": []
-    },
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s20"
-     ],
-     "enters": [
-      "assemble"
-     ]
-    },
     {
      "video": "用 AI 挖出你身上的隐藏资产",
      "date": "2026-10-02",
@@ -1006,35 +2085,121 @@
      ]
     },
     {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
      "shots": [
-      "s3"
+      "s9"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
      ],
      "enters": [
       "slide-l"
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
      "shots": [
-      "s7",
-      "s24"
+      "s1",
+      "s8"
+     ],
+     "enters": [
+      "assemble",
+      "slam"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s8",
+      "s25"
      ],
      "enters": [
       "wipe",
       "slide-r"
      ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-l"
+     ]
     }
    ]
   },
   "neural": {
-   "count": 1,
+   "count": 5,
    "videos": [
-    "AI 是怎么替你干活的"
+    "AI 是怎么替你干活的",
+    "AI 能帮你干什么——三层金字塔",
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底能帮你干什么——三层金字塔",
+    "AI 到底怎么替你干活——工作流与智能体"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -1043,17 +2208,62 @@
       "s2"
      ],
      "enters": []
+    },
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "assemble"
+     ]
     }
    ]
   },
   "prompt": {
-   "count": 3,
+   "count": 9,
    "videos": [
     "AI 是怎么替你干活的",
     "用 AI 挖出你身上的隐藏资产",
-    "Codex 必装的 5 个神级 Skill"
+    "Codex 必装的 5 个神级 Skill",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "ChatGPT、智能体、Codex 差在哪",
+    "一个真实成果：3D 简历",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-10-07",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -1082,15 +2292,67 @@
      "enters": [
       "wipe"
      ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s29"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s2",
+      "s25"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s28"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "timeline": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "AI 是怎么替你干活的"
+    "AI 是怎么替你干活的",
+    "ChatGPT、智能体、Codex 差在哪"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -1099,17 +2361,33 @@
       "s6"
      ],
      "enters": []
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "flow": {
-   "count": 3,
+   "count": 9,
    "videos": [
     "AI 是怎么替你干活的",
     "20 分钟用 AI 做出你的第一个小软件",
-    "用 AI 挖出你身上的隐藏资产"
+    "用 AI 挖出你身上的隐藏资产",
+    "一张自学路线图——四个台阶四条心法",
+    "为什么说这是普通人的机会",
+    "MCP 和命令行，该怎么选",
+    "两个坑：能力退化与决策外包",
+    "AI共享大脑：把档案放进GitHub",
+    "怎样让马斯克来指挥你的AI干活？"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -1136,11 +2414,71 @@
      "enters": [
       "zoom-through"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "screen": {
-   "count": 88,
+   "count": 110,
    "videos": [
     "AI 是怎么替你干活的",
     "别再让AI每次从零开始",
@@ -1152,183 +2490,20 @@
     "现在的PPT，都做成这样了",
     "怎样用AI控制AI",
     "什么是AI控制AI",
-    "Codex和WorkBuddy怎么选",
-    "AI到底是怎么控制你的电脑干活的"
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底能帮你干什么——三层金字塔",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "为什么说这是普通人的机会",
+    "ChatGPT、智能体、Codex 差在哪",
+    "它到底怎么工作：三个特点",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+    "MCP 到底是什么",
+    "怎样让马斯克来指挥你的AI干活？",
+    "AI到底是怎么控制你的电脑干活的",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
-    {
-     "video": "AI 是怎么替你干活的",
-     "date": "2026-09-28",
-     "shots": [
-      "s11"
-     ],
-     "enters": []
-    },
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s0",
-      "s4",
-      "s7",
-      "s21"
-     ],
-     "enters": [
-      "wipe",
-      "assemble",
-      "zoom-through",
-      "slide-l"
-     ]
-    },
-    {
-     "video": "用Opus做AI剪辑=浪费90%成本",
-     "date": "2026-10-02",
-     "shots": [
-      "s0",
-      "s6",
-      "s7",
-      "s14",
-      "s23"
-     ],
-     "enters": [
-      "wipe",
-      "assemble",
-      "zoom-through",
-      "drop",
-      "rise"
-     ]
-    },
-    {
-     "video": "用WorkBuddy变现：4个Skill+4个步骤",
-     "date": "2026-10-03",
-     "shots": [
-      "s1",
-      "s16",
-      "s35"
-     ],
-     "enters": [
-      "rise",
-      "wipe",
-      "slide-r"
-     ]
-    },
-    {
-     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
-     "date": "2026-10-04",
-     "shots": [
-      "s1",
-      "s3",
-      "s5",
-      "s8",
-      "s10",
-      "s17"
-     ],
-     "enters": [
-      "wipe",
-      "slide-r",
-      "zoom-through",
-      "rise"
-     ]
-    },
-    {
-     "video": "WorkBuddy 的 10 个高频使用技巧",
-     "date": "2026-10-05",
-     "shots": [
-      "s2",
-      "s6",
-      "s15",
-      "s19"
-     ],
-     "enters": [
-      "wipe",
-      "assemble",
-      "zoom-through",
-      "drop"
-     ]
-    },
-    {
-     "video": "Codex 必装的 5 个神级 Skill",
-     "date": "2026-10-07",
-     "shots": [
-      "s3",
-      "s4",
-      "s7",
-      "s13",
-      "s14",
-      "s18",
-      "s22"
-     ],
-     "enters": [
-      "wipe",
-      "assemble",
-      "zoom-through",
-      "drop",
-      "rise",
-      "slam",
-      "slide-l"
-     ]
-    },
-    {
-     "video": "现在的PPT，都做成这样了",
-     "date": "2026-10-08",
-     "shots": [
-      "s0",
-      "s1",
-      "s2",
-      "s3",
-      "s8",
-      "s9",
-      "s10",
-      "s11",
-      "s15",
-      "s18"
-     ],
-     "enters": [
-      "wipe",
-      "assemble",
-      "zoom-through",
-      "drop",
-      "rise",
-      "slam",
-      "slide-l",
-      "slide-r"
-     ]
-    },
-    {
-     "video": "怎样用AI控制AI",
-     "date": "2026-10-09",
-     "shots": [
-      "s0",
-      "s2",
-      "s7",
-      "s8",
-      "s9",
-      "s11",
-      "s12",
-      "s13",
-      "s14",
-      "s17",
-      "s18",
-      "s19",
-      "s26",
-      "s27",
-      "s29",
-      "s36",
-      "s37",
-      "s39"
-     ],
-     "enters": [
-      "wipe",
-      "assemble",
-      "zoom-through",
-      "drop",
-      "rise",
-      "slam",
-      "slide-l",
-      "slide-r"
-     ]
-    },
     {
      "video": "什么是AI控制AI",
      "date": "2026-10-09",
@@ -1360,8 +2535,133 @@
      ]
     },
     {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s16",
+      "s19"
+     ],
+     "enters": [
+      "wipe",
+      "assemble"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s2",
+      "s7"
+     ],
+     "enters": [
+      "zoom-through",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s2",
+      "s16"
+     ],
+     "enters": [
+      "zoom-through",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s7",
+      "s15"
+     ],
+     "enters": [
+      "slide-l",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s0",
+      "s2",
+      "s3",
+      "s4",
+      "s5",
+      "s6",
+      "s15",
+      "s17",
+      "s19",
+      "s25"
+     ],
+     "enters": [
+      "zoom-through",
+      "rise",
+      "slide-l",
+      "slide-r",
+      "wipe"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s2",
+      "s17",
+      "s22"
+     ],
+     "enters": [
+      "slide-l",
+      "wipe",
+      "slam"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s1",
       "s4",
@@ -1387,29 +2687,19 @@
       "slam",
       "zoom-through"
      ]
-    },
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s1",
-      "s16",
-      "s21"
-     ],
-     "enters": [
-      "slide-l",
-      "wipe",
-      "slam"
-     ]
     }
    ]
   },
   "vault": {
-   "count": 1,
+   "count": 6,
    "videos": [
-    "AI 是怎么替你干活的"
+    "AI 是怎么替你干活的",
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底能帮你干什么——三层金字塔",
+    "提示词到底怎么写——三步上手",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -1418,16 +2708,62 @@
       "s12"
      ],
      "enters": []
+    },
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s6",
+      "s19"
+     ],
+     "enters": [
+      "slide-l",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "assemble"
+     ]
     }
    ]
   },
   "code": {
-   "count": 2,
+   "count": 6,
    "videos": [
     "AI 是怎么替你干活的",
-    "Codex和WorkBuddy怎么选"
+    "一个真实成果：3D 简历",
+    "AI共享大脑：把档案放进GitHub",
+    "Codex和WorkBuddy怎么选",
+    "7 个真能干活的 AI 剪辑 skill",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-10",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -1438,25 +2774,69 @@
      "enters": []
     },
     {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s17"
      ],
      "enters": [
       "drop"
      ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "assembly": {
-   "count": 3,
+   "count": 7,
    "videos": [
     "AI 是怎么替你干活的",
     "20 分钟用 AI 做出你的第一个小软件",
-    "别再让AI每次从零开始"
+    "别再让AI每次从零开始",
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "七种角色，怎么变成两个人",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令"
    ],
-   "lastDate": "2026-10-01",
+   "lastDate": "2026-10-18",
    "history": [
     {
      "video": "AI 是怎么替你干活的",
@@ -1482,6 +2862,46 @@
      ],
      "enters": [
       "wipe"
+     ]
+    },
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "drop"
      ]
     }
    ]
@@ -1504,7 +2924,7 @@
    ]
   },
   "bullet-cards": {
-   "count": 12,
+   "count": 23,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
@@ -1516,98 +2936,20 @@
     "做重大决策，让AI竭尽全力唱反调",
     "怎样用AI控制AI",
     "有人用AI重现了Photoshop，还100%免费开源",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "AI 到底能帮你干什么——三层金字塔",
+    "一张自学路线图——四个台阶四条心法",
+    "Codex 是什么——一句话讲清",
+    "七种角色，怎么变成两个人",
+    "两个坑：能力退化与决策外包",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "新手怎么选 · 全课收尾",
+    "7 个真能干活的 AI 剪辑 skill",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-11-05",
    "history": [
-    {
-     "video": "从评论区挖掘爆款选题",
-     "date": "2026-09-28",
-     "shots": [
-      "s0.right"
-     ],
-     "enters": []
-    },
-    {
-     "video": "20 分钟用 AI 做出你的第一个小软件",
-     "date": "2026-09-29",
-     "shots": [
-      "s9"
-     ],
-     "enters": []
-    },
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s11"
-     ],
-     "enters": [
-      "rise"
-     ]
-    },
-    {
-     "video": "用 AI 挖出你身上的隐藏资产",
-     "date": "2026-10-02",
-     "shots": [
-      "s15"
-     ],
-     "enters": [
-      "rise"
-     ]
-    },
-    {
-     "video": "用Opus做AI剪辑=浪费90%成本",
-     "date": "2026-10-02",
-     "shots": [
-      "s19"
-     ],
-     "enters": [
-      "rise"
-     ]
-    },
-    {
-     "video": "用WorkBuddy变现：4个Skill+4个步骤",
-     "date": "2026-10-03",
-     "shots": [
-      "s5"
-     ],
-     "enters": [
-      "rise"
-     ]
-    },
-    {
-     "video": "WorkBuddy 的 10 个高频使用技巧",
-     "date": "2026-10-05",
-     "shots": [
-      "s22"
-     ],
-     "enters": [
-      "rise"
-     ]
-    },
-    {
-     "video": "做重大决策，让AI竭尽全力唱反调",
-     "date": "2026-10-09",
-     "shots": [
-      "s6"
-     ],
-     "enters": [
-      "assemble"
-     ]
-    },
-    {
-     "video": "怎样用AI控制AI",
-     "date": "2026-10-09",
-     "shots": [
-      "s5",
-      "s10"
-     ],
-     "enters": [
-      "slide-l",
-      "wipe"
-     ]
-    },
     {
      "video": "有人用AI重现了Photoshop，还100%免费开源",
      "date": "2026-10-12",
@@ -1627,18 +2969,126 @@
      "enters": [
       "slam"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s8",
+      "s25"
+     ],
+     "enters": [
+      "slide-l"
+     ]
     }
    ]
   },
   "logic-flip": {
-   "count": 4,
+   "count": 11,
    "videos": [
     "从评论区挖掘爆款选题",
     "用WorkBuddy变现：4个Skill+4个步骤",
     "WorkBuddy 的 10 个高频使用技巧",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "AI 到底能帮你干什么——三层金字塔",
+    "一张自学路线图——四个台阶四条心法",
+    "七种角色，怎么变成两个人",
+    "MCP 和命令行，该怎么选",
+    "新手怎么选 · 全课收尾",
+    "怎样用AI控制AI？我搭了一个人公司指挥舱"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-26",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1677,6 +3127,76 @@
      "enters": [
       "wipe"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
@@ -1698,7 +3218,7 @@
    ]
   },
   "punch-text": {
-   "count": 13,
+   "count": 30,
    "videos": [
     "从评论区挖掘爆款选题",
     "用 AI 挖出你身上的隐藏资产",
@@ -1707,46 +3227,122 @@
     "Codex 必装的 5 个神级 Skill",
     "做重大决策，让AI竭尽全力唱反调",
     "怎样用AI控制AI",
+    "有人用AI重现了Photoshop，还100%免费开源",
+    "AI 能帮你干什么——三层金字塔",
+    "Vibe Coding 是什么",
+    "AI 到底能帮你干什么——三层金字塔",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "四种形态，你该怎么选",
+    "MCP 和命令行，该怎么选",
+    "两个坑：能力退化与决策外包",
+    "两个坑：责任归属与权限安全",
+    "Skill 是什么：给 AI 的一本工作手册",
     "AI到底是怎么控制你的电脑干活的",
-    "有人用AI重现了Photoshop，还100%免费开源"
+    "7 个真能干活的 AI 剪辑 skill",
+    "怎样用AI控制AI？我搭了一个人公司指挥舱",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-12",
+   "lastDate": "2026-11-05",
    "history": [
     {
-     "video": "从评论区挖掘爆款选题",
-     "date": "2026-09-28",
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
      "shots": [
-      "s2"
-     ],
-     "enters": []
-    },
-    {
-     "video": "用 AI 挖出你身上的隐藏资产",
-     "date": "2026-10-02",
-     "shots": [
-      "s7",
-      "s9",
-      "s12"
+      "s4",
+      "s21"
      ],
      "enters": [
-      "drop",
-      "wipe",
-      "assemble"
+      "zoom-through",
+      "slide-l"
      ]
     },
     {
-     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
-     "date": "2026-10-04",
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
      "shots": [
-      "s24"
+      "s1",
+      "s3"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
      ],
      "enters": [
       "wipe"
      ]
     },
     {
-     "video": "WorkBuddy 的 10 个高频使用技巧",
-     "date": "2026-10-05",
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s7",
+      "s27"
+     ],
+     "enters": [
+      "rise",
+      "slam"
+     ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
      "shots": [
       "s5"
      ],
@@ -1755,71 +3351,48 @@
      ]
     },
     {
-     "video": "Codex 必装的 5 个神级 Skill",
-     "date": "2026-10-07",
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
      "shots": [
-      "s16"
+      "s14"
      ],
      "enters": [
-      "wipe"
-     ]
-    },
-    {
-     "video": "做重大决策，让AI竭尽全力唱反调",
-     "date": "2026-10-09",
-     "shots": [
-      "s25"
-     ],
-     "enters": [
-      "wipe"
-     ]
-    },
-    {
-     "video": "怎样用AI控制AI",
-     "date": "2026-10-09",
-     "shots": [
-      "s25",
-      "s38"
-     ],
-     "enters": [
-      "wipe",
-      "assemble"
-     ]
-    },
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s6",
-      "s26"
-     ],
-     "enters": [
-      "rise",
       "slam"
      ]
     },
     {
-     "video": "有人用AI重现了Photoshop，还100%免费开源",
-     "date": "2026-10-12",
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
      "shots": [
-      "s16"
+      "s0",
+      "s17",
+      "s23"
      ],
      "enters": [
-      "wipe"
+      "wipe",
+      "assemble",
+      "zoom-through"
      ]
     }
    ]
   },
   "dialogue": {
-   "count": 5,
+   "count": 12,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
     "用 AI 挖出你身上的隐藏资产",
     "WorkBuddy 的 10 个高频使用技巧",
-    "Codex和WorkBuddy怎么选"
+    "一张自学路线图——四个台阶四条心法",
+    "为什么说这是普通人的机会",
+    "四种形态，你该怎么选",
+    "MCP 和命令行，该怎么选",
+    "MCP 到底是什么",
+    "Codex和WorkBuddy怎么选",
+    "怎样用AI控制AI？我搭了一个人公司指挥舱",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-10",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1858,26 +3431,99 @@
      ]
     },
     {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s5"
      ],
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "pop"
+     ]
     }
    ]
   },
   "scale-gap": {
-   "count": 4,
+   "count": 7,
    "videos": [
     "从评论区挖掘爆款选题",
     "用 AI 挖出你身上的隐藏资产",
-    "Codex和WorkBuddy怎么选",
-    "有人用AI重现了Photoshop，还100%免费开源"
+    "有人用AI重现了Photoshop，还100%免费开源",
+    "AI 软件为什么都要钱——四层结构",
+    "一张自学路线图——四个台阶四条心法",
+    "AI共享大脑：把档案放进GitHub",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-12",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1898,16 +3544,6 @@
      ]
     },
     {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s31"
-     ],
-     "enters": [
-      "zoom-through"
-     ]
-    },
-    {
      "video": "有人用AI重现了Photoshop，还100%免费开源",
      "date": "2026-10-12",
      "shots": [
@@ -1916,15 +3552,56 @@
      "enters": [
       "slide-r"
      ]
+    },
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s23"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s29"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s31"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "sink": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "从评论区挖掘爆款选题"
+    "从评论区挖掘爆款选题",
+    "两个坑：责任归属与权限安全"
    ],
-   "lastDate": "2026-09-28",
+   "lastDate": "2026-10-18",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -1933,6 +3610,16 @@
       "s5"
      ],
      "enters": []
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
@@ -1965,14 +3652,16 @@
    ]
   },
   "tool-card": {
-   "count": 9,
+   "count": 11,
    "videos": [
     "从评论区挖掘爆款选题",
     "Codex 必装的 5 个神级 Skill",
     "怎样用AI控制AI",
+    "四种形态，你该怎么选",
+    "MCP 到底是什么",
     "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-10",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -2010,8 +3699,28 @@
      ]
     },
     {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s16"
      ],
@@ -2022,7 +3731,7 @@
    ]
   },
   "chat-command": {
-   "count": 20,
+   "count": 31,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
@@ -2033,85 +3742,19 @@
     "WorkBuddy 的 10 个高频使用技巧",
     "Codex 必装的 5 个神级 Skill",
     "现在的PPT，都做成这样了",
-    "做重大决策，让AI竭尽全力唱反调"
+    "做重大决策，让AI竭尽全力唱反调",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "一张自学路线图——四个台阶四条心法",
+    "ChatGPT、智能体、Codex 差在哪",
+    "一个真实成果：3D 简历",
+    "两个坑：能力退化与决策外包",
+    "AI共享大脑：把档案放进GitHub",
+    "怎样让马斯克来指挥你的AI干活？",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-11-05",
    "history": [
-    {
-     "video": "从评论区挖掘爆款选题",
-     "date": "2026-09-28",
-     "shots": [
-      "s10"
-     ],
-     "enters": []
-    },
-    {
-     "video": "20 分钟用 AI 做出你的第一个小软件",
-     "date": "2026-09-29",
-     "shots": [
-      "s10",
-      "s14"
-     ],
-     "enters": []
-    },
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s15",
-      "s19"
-     ],
-     "enters": [
-      "zoom-through",
-      "drop"
-     ]
-    },
-    {
-     "video": "用 AI 挖出你身上的隐藏资产",
-     "date": "2026-10-02",
-     "shots": [
-      "s10",
-      "s13"
-     ],
-     "enters": [
-      "rise",
-      "slide-r"
-     ]
-    },
-    {
-     "video": "用Opus做AI剪辑=浪费90%成本",
-     "date": "2026-10-02",
-     "shots": [
-      "s20",
-      "s26"
-     ],
-     "enters": [
-      "zoom-through",
-      "drop"
-     ]
-    },
-    {
-     "video": "用WorkBuddy变现：4个Skill+4个步骤",
-     "date": "2026-10-03",
-     "shots": [
-      "s15"
-     ],
-     "enters": [
-      "zoom-through"
-     ]
-    },
-    {
-     "video": "WorkBuddy 的 10 个高频使用技巧",
-     "date": "2026-10-05",
-     "shots": [
-      "s12",
-      "s18"
-     ],
-     "enters": [
-      "zoom-through",
-      "drop"
-     ]
-    },
     {
      "video": "Codex 必装的 5 个神级 Skill",
      "date": "2026-10-07",
@@ -2151,6 +3794,99 @@
       "drop",
       "assemble"
      ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s10",
+      "s15"
+     ],
+     "enters": [
+      "assemble",
+      "drop"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s3",
+      "s21"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
@@ -2172,7 +3908,7 @@
    ]
   },
   "before-after": {
-   "count": 13,
+   "count": 23,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
@@ -2181,61 +3917,19 @@
     "用Opus做AI剪辑=浪费90%成本",
     "现在的PPT，都做成这样了",
     "怎样用AI控制AI",
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "七种角色，怎么变成两个人",
+    "它到底怎么工作：三个特点",
+    "两个坑：能力退化与决策外包",
+    "怎样让马斯克来指挥你的AI干活？",
     "AI到底是怎么控制你的电脑干活的",
-    "初级岗位正在从根子上消失"
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-11-05",
    "history": [
-    {
-     "video": "从评论区挖掘爆款选题",
-     "date": "2026-09-28",
-     "shots": [
-      "s12",
-      "s22"
-     ],
-     "enters": []
-    },
-    {
-     "video": "20 分钟用 AI 做出你的第一个小软件",
-     "date": "2026-09-29",
-     "shots": [
-      "s13",
-      "s18"
-     ],
-     "enters": []
-    },
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s17"
-     ],
-     "enters": [
-      "slide-r"
-     ]
-    },
-    {
-     "video": "用 AI 挖出你身上的隐藏资产",
-     "date": "2026-10-02",
-     "shots": [
-      "s5",
-      "s22"
-     ],
-     "enters": [
-      "rise",
-      "slide-r"
-     ]
-    },
-    {
-     "video": "用Opus做AI剪辑=浪费90%成本",
-     "date": "2026-10-02",
-     "shots": [
-      "s4"
-     ],
-     "enters": [
-      "zoom-through"
-     ]
-    },
     {
      "video": "现在的PPT，都做成这样了",
      "date": "2026-10-08",
@@ -2259,16 +3953,6 @@
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s3"
-     ],
-     "enters": [
-      "slam"
-     ]
-    },
-    {
      "video": "初级岗位正在从根子上消失",
      "date": "2026-10-14",
      "shots": [
@@ -2277,16 +3961,109 @@
      "enters": [
       "slide-l"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s4",
+      "s11",
+      "s24"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "data-sieve": {
-   "count": 2,
+   "count": 3,
    "videos": [
     "从评论区挖掘爆款选题",
-    "用 AI 挖出你身上的隐藏资产"
+    "用 AI 挖出你身上的隐藏资产",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "从评论区挖掘爆款选题",
@@ -2304,6 +4081,16 @@
      ],
      "enters": [
       "slide-l"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s33"
+     ],
+     "enters": [
+      "slide-r"
      ]
     }
    ]
@@ -2343,59 +4130,26 @@
    ]
   },
   "checklist": {
-   "count": 11,
+   "count": 21,
    "videos": [
     "从评论区挖掘爆款选题",
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
     "用Opus做AI剪辑=浪费90%成本",
     "WorkBuddy 的 10 个高频使用技巧",
-    "Codex和WorkBuddy怎么选",
-    "AI到底是怎么控制你的电脑干活的"
+    "一张自学路线图——四个台阶四条心法",
+    "ChatGPT、智能体、Codex 差在哪",
+    "四种形态，你该怎么选",
+    "七种角色，怎么变成两个人",
+    "它到底怎么工作：三个特点",
+    "两个坑：责任归属与权限安全",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "新手怎么选 · 全课收尾",
+    "AI到底是怎么控制你的电脑干活的",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-22",
    "history": [
-    {
-     "video": "从评论区挖掘爆款选题",
-     "date": "2026-09-28",
-     "shots": [
-      "s18"
-     ],
-     "enters": []
-    },
-    {
-     "video": "20 分钟用 AI 做出你的第一个小软件",
-     "date": "2026-09-29",
-     "shots": [
-      "s3",
-      "s12"
-     ],
-     "enters": []
-    },
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s12"
-     ],
-     "enters": [
-      "zoom-through"
-     ]
-    },
-    {
-     "video": "用Opus做AI剪辑=浪费90%成本",
-     "date": "2026-10-02",
-     "shots": [
-      "s10",
-      "s17",
-      "s21"
-     ],
-     "enters": [
-      "zoom-through",
-      "drop",
-      "rise"
-     ]
-    },
     {
      "video": "WorkBuddy 的 10 个高频使用技巧",
      "date": "2026-10-05",
@@ -2407,25 +4161,109 @@
      ]
     },
     {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
      "shots": [
-      "s26"
+      "s4"
      ],
      "enters": [
       "rise"
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
      "shots": [
-      "s10",
-      "s15"
+      "s5"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s5",
+      "s17"
+     ],
+     "enters": [
+      "slide-l",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s6",
+      "s14"
+     ],
+     "enters": [
+      "slide-r",
+      "assemble"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s11",
+      "s16"
      ],
      "enters": [
       "slam",
       "assemble"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "rise"
      ]
     }
    ]
@@ -2485,13 +4323,15 @@
    ]
   },
   "untapped-potential": {
-   "count": 4,
+   "count": 6,
    "videos": [
     "20 分钟用 AI 做出你的第一个小软件",
     "用 AI 挖出你身上的隐藏资产",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "提示词到底怎么写——三步上手",
+    "一张自学路线图——四个台阶四条心法"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "20 分钟用 AI 做出你的第一个小软件",
@@ -2522,17 +4362,40 @@
      "enters": [
       "wipe"
      ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "slam"
+     ]
     }
    ]
   },
   "scope-shrink": {
-   "count": 3,
+   "count": 6,
    "videos": [
     "20 分钟用 AI 做出你的第一个小软件",
     "做重大决策，让AI竭尽全力唱反调",
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "一张自学路线图——四个台阶四条心法",
+    "七种角色，怎么变成两个人",
+    "怎样让马斯克来指挥你的AI干活？"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "20 分钟用 AI 做出你的第一个小软件",
@@ -2560,6 +4423,36 @@
      ],
      "enters": [
       "drop"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "slide-l"
      ]
     }
    ]
@@ -2632,11 +4525,12 @@
    ]
   },
   "bug-fix-loop": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "20 分钟用 AI 做出你的第一个小软件"
+    "20 分钟用 AI 做出你的第一个小软件",
+    "ChatGPT、智能体、Codex 差在哪"
    ],
-   "lastDate": "2026-09-29",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "20 分钟用 AI 做出你的第一个小软件",
@@ -2645,18 +4539,31 @@
       "s16"
      ],
      "enters": []
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
   "drag-deploy": {
-   "count": 4,
+   "count": 7,
    "videos": [
     "20 分钟用 AI 做出你的第一个小软件",
     "别再让AI每次从零开始",
     "用Opus做AI剪辑=浪费90%成本",
-    "现在的PPT，都做成这样了"
+    "现在的PPT，都做成这样了",
+    "一个真实成果：3D 简历",
+    "AI共享大脑：把档案放进GitHub",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-08",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "20 分钟用 AI 做出你的第一个小软件",
@@ -2695,11 +4602,41 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "assemble"
+     ]
     }
    ]
   },
   "board-proof": {
-   "count": 32,
+   "count": 42,
    "videos": [
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
@@ -2709,107 +4646,19 @@
     "Codex 必装的 5 个神级 Skill",
     "现在的PPT，都做成这样了",
     "有人用AI重现了Photoshop，还100%免费开源",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "一张自学路线图——四个台阶四条心法",
+    "Codex 是什么——一句话讲清",
+    "七种角色，怎么变成两个人",
+    "一个真实成果：3D 简历",
+    "MCP 和命令行，该怎么选",
+    "两个坑：责任归属与权限安全",
+    "MCP 到底是什么",
+    "新手怎么选 · 全课收尾"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-21",
    "history": [
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s6"
-     ],
-     "enters": [
-      "assemble"
-     ]
-    },
-    {
-     "video": "用 AI 挖出你身上的隐藏资产",
-     "date": "2026-10-02",
-     "shots": [
-      "s0",
-      "s2"
-     ],
-     "enters": [
-      "slam",
-      "wipe"
-     ]
-    },
-    {
-     "video": "用WorkBuddy变现：4个Skill+4个步骤",
-     "date": "2026-10-03",
-     "shots": [
-      "s7",
-      "s23"
-     ],
-     "enters": [
-      "slam",
-      "assemble"
-     ]
-    },
-    {
-     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
-     "date": "2026-10-04",
-     "shots": [
-      "s0",
-      "s2",
-      "s4",
-      "s6",
-      "s12",
-      "s14",
-      "s18",
-      "s20",
-      "s22",
-      "s25"
-     ],
-     "enters": [
-      "slam",
-      "rise",
-      "assemble",
-      "slide-l",
-      "drop",
-      "slide-r",
-      "zoom-through"
-     ]
-    },
-    {
-     "video": "WorkBuddy 的 10 个高频使用技巧",
-     "date": "2026-10-05",
-     "shots": [
-      "s20"
-     ],
-     "enters": [
-      "assemble"
-     ]
-    },
-    {
-     "video": "Codex 必装的 5 个神级 Skill",
-     "date": "2026-10-07",
-     "shots": [
-      "s5",
-      "s10",
-      "s12",
-      "s19",
-      "s23"
-     ],
-     "enters": [
-      "assemble",
-      "zoom-through",
-      "drop",
-      "rise",
-      "slam"
-     ]
-    },
-    {
-     "video": "现在的PPT，都做成这样了",
-     "date": "2026-10-08",
-     "shots": [
-      "s12"
-     ],
-     "enters": [
-      "assemble"
-     ]
-    },
     {
      "video": "有人用AI重现了Photoshop，还100%免费开源",
      "date": "2026-10-12",
@@ -2845,17 +4694,111 @@
       "assemble",
       "rise"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s2",
+      "s17"
+     ],
+     "enters": [
+      "assemble",
+      "drop"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "assemble"
+     ]
     }
    ]
   },
   "asset-distill": {
-   "count": 3,
+   "count": 5,
    "videos": [
     "别再让AI每次从零开始",
     "用 AI 挖出你身上的隐藏资产",
-    "Codex 必装的 5 个神级 Skill"
+    "Codex 必装的 5 个神级 Skill",
+    "提示词到底怎么写——三步上手",
+    "Skill 是什么：给 AI 的一本工作手册"
    ],
-   "lastDate": "2026-10-07",
+   "lastDate": "2026-10-18",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -2886,16 +4829,42 @@
      "enters": [
       "zoom-through"
      ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "reframe": {
-   "count": 2,
+   "count": 8,
    "videos": [
     "用 AI 挖出你身上的隐藏资产",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "一张自学路线图——四个台阶四条心法",
+    "Codex 是什么——一句话讲清",
+    "四种形态，你该怎么选",
+    "MCP 和命令行，该怎么选",
+    "两个坑：责任归属与权限安全",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "用 AI 挖出你身上的隐藏资产",
@@ -2916,20 +4885,86 @@
      "enters": [
       "slide-r"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slide-l"
+     ]
     }
    ]
   },
   "blame-strike": {
-   "count": 10,
+   "count": 16,
    "videos": [
     "别再让AI每次从零开始",
     "用Opus做AI剪辑=浪费90%成本",
     "现在的PPT，都做成这样了",
     "怎样用AI控制AI",
+    "初级岗位正在从根子上消失",
+    "提示词到底怎么写——三步上手",
+    "为什么说这是普通人的机会",
+    "七种角色，怎么变成两个人",
+    "两个坑：能力退化与决策外包",
+    "Skill 是什么：给 AI 的一本工作手册",
     "AI到底是怎么控制你的电脑干活的",
-    "初级岗位正在从根子上消失"
+    "怎样用AI控制AI？我搭了一个人公司指挥舱"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-26",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -2976,16 +5011,6 @@
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s17"
-     ],
-     "enters": [
-      "slam"
-     ]
-    },
-    {
      "video": "初级岗位正在从根子上消失",
      "date": "2026-10-14",
      "shots": [
@@ -2998,19 +5023,90 @@
       "zoom-through",
       "slam"
      ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
   "open-ledger": {
-   "count": 6,
+   "count": 7,
    "videos": [
     "别再让AI每次从零开始",
     "用Opus做AI剪辑=浪费90%成本",
     "现在的PPT，都做成这样了",
     "做重大决策，让AI竭尽全力唱反调",
+    "为什么说这是普通人的机会",
     "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-10",
+   "lastDate": "2026-10-26",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -3053,8 +5149,18 @@
      ]
     },
     {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s18",
       "s30"
@@ -3067,11 +5173,12 @@
    ]
   },
   "carry-or-dig": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "别再让AI每次从零开始"
+    "别再让AI每次从零开始",
+    "MCP 到底是什么"
    ],
-   "lastDate": "2026-10-01",
+   "lastDate": "2026-10-18",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -3082,31 +5189,38 @@
      "enters": [
       "slide-l"
      ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "step-rail": {
-   "count": 7,
+   "count": 15,
    "videos": [
     "别再让AI每次从零开始",
     "用Opus做AI剪辑=浪费90%成本",
     "现在的PPT，都做成这样了",
     "做重大决策，让AI竭尽全力唱反调",
     "怎样用AI控制AI",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "四种形态，你该怎么选",
+    "两个坑：能力退化与决策外包",
+    "MCP 到底是什么",
+    "新手怎么选 · 全课收尾",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-11-05",
    "history": [
-    {
-     "video": "别再让AI每次从零开始",
-     "date": "2026-10-01",
-     "shots": [
-      "s10"
-     ],
-     "enters": [
-      "slide-r"
-     ]
-    },
     {
      "video": "用Opus做AI剪辑=浪费90%成本",
      "date": "2026-10-02",
@@ -3158,18 +5272,94 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s9",
+      "s23"
+     ],
+     "enters": [
+      "rise",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s27"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "teardown-lens": {
-   "count": 4,
+   "count": 8,
    "videos": [
     "别再让AI每次从零开始",
     "用WorkBuddy变现：4个Skill+4个步骤",
     "做重大决策，让AI竭尽全力唱反调",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "AI 软件为什么都要钱——四层结构",
+    "七种角色，怎么变成两个人",
+    "它到底怎么工作：三个特点",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-18",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -3210,18 +5400,64 @@
      "enters": [
       "zoom-through"
      ]
+    },
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "slam"
+     ]
     }
    ]
   },
   "flywheel": {
-   "count": 4,
+   "count": 10,
    "videos": [
     "别再让AI每次从零开始",
     "用Opus做AI剪辑=浪费90%成本",
     "用WorkBuddy变现：4个Skill+4个步骤",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "提示词到底怎么写——三步上手",
+    "一个真实成果：3D 简历",
+    "新手怎么选 · 全课收尾",
+    "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "别再让AI每次从零开始",
@@ -3262,20 +5498,85 @@
      "enters": [
       "assemble"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s23"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "pit-trap": {
-   "count": 6,
+   "count": 11,
    "videos": [
     "用Opus做AI剪辑=浪费90%成本",
     "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
     "WorkBuddy 的 10 个高频使用技巧",
     "怎样用AI控制AI",
     "什么是AI控制AI",
+    "AI 能帮你干什么——三层金字塔",
+    "提示词到底怎么写——三步上手",
+    "ChatGPT、智能体、Codex 差在哪",
+    "两个坑：能力退化与决策外包",
+    "MCP 到底是什么",
     "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "用Opus做AI剪辑=浪费90%成本",
@@ -3328,10 +5629,60 @@
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
      "shots": [
-      "s12"
+      "s4"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s13"
      ],
      "enters": [
       "drop"
@@ -3340,11 +5691,14 @@
    ]
   },
   "folder-save": {
-   "count": 1,
+   "count": 4,
    "videos": [
-    "用Opus做AI剪辑=浪费90%成本"
+    "用Opus做AI剪辑=浪费90%成本",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "7 个真能干活的 AI 剪辑 skill",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-02",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "用Opus做AI剪辑=浪费90%成本",
@@ -3355,19 +5709,50 @@
      "enters": [
       "wipe"
      ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s28"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "ui-replica": {
-   "count": 7,
+   "count": 8,
    "videos": [
     "用Opus做AI剪辑=浪费90%成本",
     "用WorkBuddy变现：4个Skill+4个步骤",
     "Codex 必装的 5 个神级 Skill",
     "现在的PPT，都做成这样了",
-    "做重大决策，让AI竭尽全力唱反调"
+    "做重大决策，让AI竭尽全力唱反调",
+    "怎样让马斯克来指挥你的AI干活？"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "用Opus做AI剪辑=浪费90%成本",
@@ -3422,16 +5807,35 @@
       "drop",
       "rise"
      ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "counter-example": {
-   "count": 3,
+   "count": 12,
    "videos": [
     "用Opus做AI剪辑=浪费90%成本",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "一张自学路线图——四个台阶四条心法",
+    "一个真实成果：3D 简历",
+    "两个坑：能力退化与决策外包",
+    "两个坑：责任归属与权限安全",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "AI共享大脑：把档案放进GitHub",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "用Opus做AI剪辑=浪费90%成本",
@@ -3454,16 +5858,114 @@
      "enters": [
       "slam"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s25"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s25"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "assemble"
+     ]
     }
    ]
   },
   "safety-brake": {
-   "count": 2,
+   "count": 10,
    "videos": [
     "用WorkBuddy变现：4个Skill+4个步骤",
-    "Codex和WorkBuddy怎么选"
+    "一张自学路线图——四个台阶四条心法",
+    "ChatGPT、智能体、Codex 差在哪",
+    "它到底怎么工作：三个特点",
+    "MCP 和命令行，该怎么选",
+    "两个坑：责任归属与权限安全",
+    "新手怎么选 · 全课收尾",
+    "AI共享大脑：把档案放进GitHub",
+    "Codex和WorkBuddy怎么选",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-10",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -3476,26 +5978,113 @@
      ]
     },
     {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s28"
      ],
      "enters": [
       "slide-l"
      ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "tier-grid": {
-   "count": 5,
+   "count": 12,
    "videos": [
     "用WorkBuddy变现：4个Skill+4个步骤",
     "WorkBuddy 的 10 个高频使用技巧",
     "怎样用AI控制AI",
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "一张自学路线图——四个台阶四条心法",
+    "ChatGPT、智能体、Codex 差在哪",
+    "两个坑：能力退化与决策外包",
+    "MCP 到底是什么",
+    "新手怎么选 · 全课收尾",
+    "7 个真能干活的 AI 剪辑 skill",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -3538,18 +6127,95 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s23"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "measure-ruler": {
-   "count": 4,
+   "count": 11,
    "videos": [
     "用WorkBuddy变现：4个Skill+4个步骤",
     "怎样用AI控制AI",
     "什么是AI控制AI",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "一张自学路线图——四个台阶四条心法",
+    "Codex 是什么——一句话讲清",
+    "四种形态，你该怎么选",
+    "七种角色，怎么变成两个人",
+    "两个坑：能力退化与决策外包",
+    "新手怎么选 · 全课收尾",
+    "怎样让马斯克来指挥你的AI干活？"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -3590,17 +6256,89 @@
      "enters": [
       "slide-r"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
   "walled-garden": {
-   "count": 3,
+   "count": 5,
    "videos": [
     "用WorkBuddy变现：4个Skill+4个步骤",
     "WorkBuddy 的 10 个高频使用技巧",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "四种形态，你该怎么选",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "用WorkBuddy变现：4个Skill+4个步骤",
@@ -3631,16 +6369,43 @@
      "enters": [
       "assemble"
      ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s30"
+     ],
+     "enters": [
+      "slide-l"
+     ]
     }
    ]
   },
   "domino-chain": {
-   "count": 2,
+   "count": 9,
    "videos": [
     "什么是AI控制AI",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "ChatGPT、智能体、Codex 差在哪",
+    "四种形态，你该怎么选",
+    "一个真实成果：3D 简历",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "新手怎么选 · 全课收尾",
+    "怎样让马斯克来指挥你的AI干活？",
+    "7 个真能干活的 AI 剪辑 skill"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-23",
    "history": [
     {
      "video": "什么是AI控制AI",
@@ -3661,176 +6426,244 @@
      "enters": [
       "drop"
      ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "wipe"
+     ]
     }
    ]
   },
   "evidence-zoom": {
-   "count": 48,
+   "count": 76,
    "videos": [
     "用WorkBuddy变现：4个Skill+4个步骤",
     "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
     "WorkBuddy 的 10 个高频使用技巧",
     "Codex 必装的 5 个神级 Skill",
     "做重大决策，让AI竭尽全力唱反调",
-    "Codex和WorkBuddy怎么选",
+    "有人用AI重现了Photoshop，还100%免费开源",
+    "AI 能帮你干什么——三层金字塔",
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底能帮你干什么——三层金字塔",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "ChatGPT、智能体、Codex 差在哪",
+    "四种形态，你该怎么选",
+    "七种角色，怎么变成两个人",
+    "它到底怎么工作：三个特点",
+    "一个真实成果：3D 简历",
+    "两个坑：能力退化与决策外包",
+    "两个坑：责任归属与权限安全",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "MCP 到底是什么",
+    "新手怎么选 · 全课收尾",
+    "怎样让马斯克来指挥你的AI干活？",
     "AI到底是怎么控制你的电脑干活的",
-    "有人用AI重现了Photoshop，还100%免费开源"
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-12",
+   "lastDate": "2026-10-26",
    "history": [
     {
-     "video": "用WorkBuddy变现：4个Skill+4个步骤",
-     "date": "2026-10-03",
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
      "shots": [
-      "s0",
-      "s2",
-      "s3",
-      "s4",
       "s6",
-      "s8",
-      "s9",
-      "s10",
-      "s12",
-      "s13",
-      "s18",
-      "s20",
-      "s21",
-      "s22",
-      "s26",
-      "s27",
-      "s28",
-      "s29",
-      "s32",
-      "s33"
+      "s9"
      ],
      "enters": [
-      "slam",
-      "wipe",
-      "slide-r",
-      "slide-l",
-      "rise",
-      "zoom-through",
-      "assemble"
-     ]
-    },
-    {
-     "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
-     "date": "2026-10-04",
-     "shots": [
-      "s7",
-      "s9",
-      "s13",
-      "s16",
-      "s19",
-      "s21",
-      "s23"
-     ],
-     "enters": [
-      "wipe",
       "assemble",
-      "rise",
-      "slide-l"
+      "slide-r"
      ]
     },
     {
-     "video": "WorkBuddy 的 10 个高频使用技巧",
-     "date": "2026-10-05",
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
      "shots": [
-      "s3",
-      "s9",
-      "s14",
-      "s17",
-      "s21",
-      "s23"
+      "s0"
      ],
      "enters": [
-      "slam",
-      "slide-l",
-      "slide-r",
-      "wipe",
-      "assemble",
-      "zoom-through"
+      "wipe"
      ]
     },
     {
-     "video": "Codex 必装的 5 个神级 Skill",
-     "date": "2026-10-07",
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
      "shots": [
-      "s2",
-      "s6",
-      "s11",
-      "s15",
-      "s20"
+      "s4"
      ],
      "enters": [
-      "slam",
-      "slide-l",
-      "slide-r",
-      "wipe",
-      "assemble"
-     ]
-    },
-    {
-     "video": "做重大决策，让AI竭尽全力唱反调",
-     "date": "2026-10-09",
-     "shots": [
-      "s11",
-      "s19",
-      "s22"
-     ],
-     "enters": [
-      "slam",
-      "wipe",
       "rise"
      ]
     },
     {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s5",
+      "s15"
+     ],
+     "enters": [
+      "slam",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s7",
+      "s9",
+      "s11",
+      "s18",
+      "s24"
+     ],
+     "enters": [
+      "assemble",
+      "slide-r",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s24"
      ],
      "enters": [
       "drop"
      ]
-    },
-    {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s11"
-     ],
-     "enters": [
-      "zoom-through"
-     ]
-    },
-    {
-     "video": "有人用AI重现了Photoshop，还100%免费开源",
-     "date": "2026-10-12",
-     "shots": [
-      "s0",
-      "s4",
-      "s6",
-      "s8",
-      "s10"
-     ],
-     "enters": [
-      "slam",
-      "slide-l",
-      "slide-r",
-      "wipe",
-      "assemble"
-     ]
     }
    ]
   },
   "screen-versus": {
-   "count": 2,
+   "count": 10,
    "videos": [
     "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Codex 是什么——一句话讲清",
+    "ChatGPT、智能体、Codex 差在哪",
+    "一个真实成果：3D 简历",
+    "MCP 和命令行，该怎么选",
+    "AI共享大脑：把档案放进GitHub",
+    "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "用 Opus 5.5 做出爆款视频的人不会告诉你的四件事",
@@ -3851,58 +6684,221 @@
      "enters": [
       "slide-l"
      ]
-    }
-   ]
-  },
-  "cursor-trace": {
-   "count": 4,
-   "videos": [
-    "WorkBuddy 的 10 个高频使用技巧",
-    "Codex和WorkBuddy怎么选",
-    "AI到底是怎么控制你的电脑干活的"
-   ],
-   "lastDate": "2026-10-11",
-   "history": [
+    },
     {
-     "video": "WorkBuddy 的 10 个高频使用技巧",
-     "date": "2026-10-05",
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
      "shots": [
-      "s4"
+      "s2"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
      ],
      "enters": [
       "zoom-through"
      ]
     },
     {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
      "shots": [
-      "s15"
+      "s1"
      ],
      "enters": [
       "wipe"
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
      "shots": [
-      "s9",
-      "s22"
+      "s4"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s12",
+      "s18",
+      "s23"
+     ],
+     "enters": [
+      "drop",
+      "rise",
+      "assemble"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "cursor-trace": {
+   "count": 19,
+   "videos": [
+    "WorkBuddy 的 10 个高频使用技巧",
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底能帮你干什么——三层金字塔",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "ChatGPT、智能体、Codex 差在哪",
+    "四种形态，你该怎么选",
+    "七种角色，怎么变成两个人",
+    "它到底怎么工作：三个特点",
+    "MCP 和命令行，该怎么选",
+    "两个坑：责任归属与权限安全",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "MCP 到底是什么",
+    "新手怎么选 · 全课收尾",
+    "AI到底是怎么控制你的电脑干活的",
+    "Codex和WorkBuddy怎么选"
+   ],
+   "lastDate": "2026-10-21",
+   "history": [
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s1",
+      "s12"
+     ],
+     "enters": [
+      "slide-l",
+      "rise"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s10",
+      "s23"
      ],
      "enters": [
       "assemble",
       "drop"
      ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "wipe"
+     ]
     }
    ]
   },
   "lever-lift": {
-   "count": 1,
+   "count": 5,
    "videos": [
-    "WorkBuddy 的 10 个高频使用技巧"
+    "WorkBuddy 的 10 个高频使用技巧",
+    "一张自学路线图——四个台阶四条心法",
+    "为什么说这是普通人的机会",
+    "两个坑：责任归属与权限安全",
+    "新手怎么选 · 全课收尾"
    ],
-   "lastDate": "2026-10-05",
+   "lastDate": "2026-10-18",
    "history": [
     {
      "video": "WorkBuddy 的 10 个高频使用技巧",
@@ -3913,18 +6909,64 @@
      "enters": [
       "zoom-through"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "ring-assembly": {
-   "count": 4,
+   "count": 10,
    "videos": [
     "Codex 必装的 5 个神级 Skill",
     "做重大决策，让AI竭尽全力唱反调",
+    "初级岗位正在从根子上消失",
+    "一张自学路线图——四个台阶四条心法",
+    "ChatGPT、智能体、Codex 差在哪",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+    "两个坑：责任归属与权限安全",
+    "怎样让马斯克来指挥你的AI干活？",
     "Codex和WorkBuddy怎么选",
-    "初级岗位正在从根子上消失"
+    "怎样用AI控制AI？我搭了一个人公司指挥舱"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-26",
    "history": [
     {
      "video": "Codex 必装的 5 个神级 Skill",
@@ -3947,16 +6989,6 @@
      ]
     },
     {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s33"
-     ],
-     "enters": [
-      "rise"
-     ]
-    },
-    {
      "video": "初级岗位正在从根子上消失",
      "date": "2026-10-14",
      "shots": [
@@ -3965,55 +6997,99 @@
      "enters": [
       "wipe"
      ]
-    }
-   ]
-  },
-  "real-doc-scroll": {
-   "count": 7,
-   "videos": [
-    "Codex 必装的 5 个神级 Skill",
-    "做重大决策，让AI竭尽全力唱反调",
-    "AI到底是怎么控制你的电脑干活的",
-    "有人用AI重现了Photoshop，还100%免费开源"
-   ],
-   "lastDate": "2026-10-12",
-   "history": [
+    },
     {
-     "video": "Codex 必装的 5 个神级 Skill",
-     "date": "2026-10-07",
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
      "shots": [
-      "s21"
+      "s20"
      ],
      "enters": [
-      "slam"
+      "assemble"
      ]
     },
     {
-     "video": "做重大决策，让AI竭尽全力唱反调",
-     "date": "2026-10-09",
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
      "shots": [
-      "s4",
-      "s8",
-      "s23"
+      "s9"
      ],
      "enters": [
-      "wipe",
-      "rise",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
       "slide-r"
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
      "shots": [
-      "s8",
-      "s20"
+      "s10"
      ],
      "enters": [
-      "wipe",
-      "zoom-through"
+      "slide-r"
      ]
     },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s33"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "real-doc-scroll": {
+   "count": 18,
+   "videos": [
+    "Codex 必装的 5 个神级 Skill",
+    "做重大决策，让AI竭尽全力唱反调",
+    "有人用AI重现了Photoshop，还100%免费开源",
+    "一张自学路线图——四个台阶四条心法",
+    "Codex 是什么——一句话讲清",
+    "四种形态，你该怎么选",
+    "七种角色，怎么变成两个人",
+    "一个真实成果：3D 简历",
+    "MCP 和命令行，该怎么选",
+    "两个坑：能力退化与决策外包",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "MCP 到底是什么",
+    "新手怎么选 · 全课收尾",
+    "AI到底是怎么控制你的电脑干活的"
+   ],
+   "lastDate": "2026-10-19",
+   "history": [
     {
      "video": "有人用AI重现了Photoshop，还100%免费开源",
      "date": "2026-10-12",
@@ -4023,16 +7099,138 @@
      "enters": [
       "slam"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s5",
+      "s10"
+     ],
+     "enters": [
+      "drop",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s9",
+      "s21"
+     ],
+     "enters": [
+      "wipe",
+      "zoom-through"
+     ]
     }
    ]
   },
   "dusty-shelf": {
-   "count": 2,
+   "count": 10,
    "videos": [
     "Codex 必装的 5 个神级 Skill",
-    "做重大决策，让AI竭尽全力唱反调"
+    "做重大决策，让AI竭尽全力唱反调",
+    "AI 软件为什么都要钱——四层结构",
+    "Vibe Coding 是什么",
+    "AI 到底能帮你干什么——三层金字塔",
+    "一张自学路线图——四个台阶四条心法",
+    "MCP 和命令行，该怎么选",
+    "两个坑：能力退化与决策外包",
+    "新手怎么选 · 全课收尾",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "Codex 必装的 5 个神级 Skill",
@@ -4053,17 +7251,105 @@
      "enters": [
       "slide-l"
      ]
+    },
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "reveal-cards": {
-   "count": 3,
+   "count": 11,
    "videos": [
     "现在的PPT，都做成这样了",
     "做重大决策，让AI竭尽全力唱反调",
-    "Codex和WorkBuddy怎么选"
+    "AI 到底怎么替你干活——工作流与智能体",
+    "为什么说这是普通人的机会",
+    "四种形态，你该怎么选",
+    "一个真实成果：3D 简历",
+    "MCP 和命令行，该怎么选",
+    "两个坑：能力退化与决策外包",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "Codex和WorkBuddy怎么选",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-10",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "现在的PPT，都做成这样了",
@@ -4086,24 +7372,110 @@
      ]
     },
     {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s29"
      ],
      "enters": [
       "assemble"
      ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "fork-paths": {
-   "count": 2,
+   "count": 8,
    "videos": [
     "做重大决策，让AI竭尽全力唱反调",
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "四种形态，你该怎么选",
+    "一个真实成果：3D 简历",
+    "MCP 和命令行，该怎么选",
+    "两个坑：能力退化与决策外包"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-26",
    "history": [
     {
      "video": "做重大决策，让AI竭尽全力唱反调",
@@ -4124,16 +7496,80 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s27"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "infinite-zoom": {
-   "count": 2,
+   "count": 7,
    "videos": [
     "做重大决策，让AI竭尽全力唱反调",
+    "一张自学路线图——四个台阶四条心法",
+    "它到底怎么工作：三个特点",
+    "MCP 和命令行，该怎么选",
+    "AI共享大脑：把档案放进GitHub",
     "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "做重大决策，让AI竭尽全力唱反调",
@@ -4146,10 +7582,52 @@
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
      "shots": [
-      "s4"
+      "s6"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s10",
+      "s19"
+     ],
+     "enters": [
+      "assemble",
+      "drop"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s5"
      ],
      "enters": [
       "zoom-through"
@@ -4158,12 +7636,18 @@
    ]
   },
   "screen-morph": {
-   "count": 2,
+   "count": 8,
    "videos": [
     "做重大决策，让AI竭尽全力唱反调",
+    "AI 软件为什么都要钱——四层结构",
+    "Vibe Coding 是什么",
+    "为什么说这是普通人的机会",
+    "一个真实成果：3D 简历",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+    "AI共享大脑：把档案放进GitHub",
     "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "做重大决策，让AI竭尽全力唱反调",
@@ -4176,10 +7660,70 @@
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
      "shots": [
       "s2"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s3"
      ],
      "enters": [
       "drop"
@@ -4188,13 +7732,15 @@
    ]
   },
   "persona-scene": {
-   "count": 3,
+   "count": 5,
    "videos": [
     "怎样用AI控制AI",
     "什么是AI控制AI",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "AI共享大脑：把档案放进GitHub",
+    "怎样让马斯克来指挥你的AI干活？"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "怎样用AI控制AI",
@@ -4225,18 +7771,44 @@
      "enters": [
       "drop"
      ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s23"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "agent-relay": {
-   "count": 6,
+   "count": 12,
    "videos": [
     "怎样用AI控制AI",
     "什么是AI控制AI",
-    "AI到底是怎么控制你的电脑干活的",
-    "有人用AI重现了Photoshop，还100%免费开源"
+    "有人用AI重现了Photoshop，还100%免费开源",
+    "AI 能帮你干什么——三层金字塔",
+    "Vibe Coding 是什么",
+    "AI 到底能帮你干什么——三层金字塔",
+    "MCP 和命令行，该怎么选",
+    "MCP 到底是什么",
+    "怎样让马斯克来指挥你的AI干活？",
+    "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-12",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "怎样用AI控制AI",
@@ -4263,16 +7835,6 @@
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
-     "shots": [
-      "s25"
-     ],
-     "enters": [
-      "zoom-through"
-     ]
-    },
-    {
      "video": "有人用AI重现了Photoshop，还100%免费开源",
      "date": "2026-10-12",
      "shots": [
@@ -4281,16 +7843,88 @@
      "enters": [
       "slam"
      ]
+    },
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s26"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "relay-parallel": {
-   "count": 4,
+   "count": 6,
    "videos": [
     "怎样用AI控制AI",
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "怎样用AI控制AI",
@@ -4315,16 +7949,42 @@
       "drop",
       "zoom-through"
      ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s27"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "spec-matrix": {
-   "count": 2,
+   "count": 8,
    "videos": [
     "怎样用AI控制AI",
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "ChatGPT、智能体、Codex 差在哪",
+    "一个真实成果：3D 简历",
+    "MCP 和命令行，该怎么选",
+    "两个坑：责任归属与权限安全",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "怎样用AI控制AI",
@@ -4345,17 +8005,80 @@
      "enters": [
       "slide-l"
      ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slide-l"
+     ]
     }
    ]
   },
   "labor-takeover": {
-   "count": 3,
+   "count": 6,
    "videos": [
     "怎样用AI控制AI",
     "什么是AI控制AI",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "两个坑：责任归属与权限安全",
+    "MCP 到底是什么"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-18",
    "history": [
     {
      "video": "怎样用AI控制AI",
@@ -4386,6 +8109,36 @@
      "enters": [
       "drop"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "assemble"
+     ]
     }
    ]
   },
@@ -4393,10 +8146,10 @@
    "count": 3,
    "videos": [
     "什么是AI控制AI",
-    "Codex和WorkBuddy怎么选",
-    "AI到底是怎么控制你的电脑干活的"
+    "AI到底是怎么控制你的电脑干活的",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "什么是AI控制AI",
@@ -4409,8 +8162,8 @@
      ]
     },
     {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
      "shots": [
       "s0"
      ],
@@ -4419,8 +8172,8 @@
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
      "shots": [
       "s0"
      ],
@@ -4431,12 +8184,15 @@
    ]
   },
   "fill-build": {
-   "count": 3,
+   "count": 6,
    "videos": [
     "什么是AI控制AI",
+    "提示词到底怎么写——三步上手",
+    "一个真实成果：3D 简历",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
     "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-10",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "什么是AI控制AI",
@@ -4451,8 +8207,38 @@
      ]
     },
     {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s10"
      ],
@@ -4482,11 +8268,12 @@
    ]
   },
   "scale-dive": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "一张自学路线图——四个台阶四条心法"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "什么是AI控制AI",
@@ -4497,17 +8284,32 @@
      "enters": [
       "zoom-through"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "surface-vs-core": {
-   "count": 4,
+   "count": 9,
    "videos": [
     "什么是AI控制AI",
-    "Codex和WorkBuddy怎么选",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "一张自学路线图——四个台阶四条心法",
+    "Codex 是什么——一句话讲清",
+    "两个坑：责任归属与权限安全",
+    "新手怎么选 · 全课收尾",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "什么是AI控制AI",
@@ -4517,16 +8319,6 @@
      ],
      "enters": [
       "wipe"
-     ]
-    },
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s19"
-     ],
-     "enters": [
-      "slam"
      ]
     },
     {
@@ -4540,15 +8332,79 @@
       "drop",
       "slide-l"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "slam"
+     ]
     }
    ]
   },
   "vet-card": {
-   "count": 1,
+   "count": 5,
    "videos": [
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "Codex 是什么——一句话讲清",
+    "四种形态，你该怎么选",
+    "两个坑：责任归属与权限安全",
+    "新手怎么选 · 全课收尾"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-18",
    "history": [
     {
      "video": "什么是AI控制AI",
@@ -4559,15 +8415,58 @@
      "enters": [
       "assemble"
      ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "rise"
+     ]
     }
    ]
   },
   "unread-flood": {
-   "count": 1,
+   "count": 4,
    "videos": [
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "MCP 到底是什么",
+    "怎样用AI控制AI？我搭了一个人公司指挥舱",
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-11-05",
    "history": [
     {
      "video": "什么是AI控制AI",
@@ -4578,15 +8477,47 @@
      "enters": [
       "slide-r"
      ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s19"
+     ],
+     "enters": [
+      "slide-r"
+     ]
     }
    ]
   },
   "typo-arch": {
-   "count": 1,
+   "count": 3,
    "videos": [
-    "什么是AI控制AI"
+    "什么是AI控制AI",
+    "Vibe Coding 是什么",
+    "怎样让马斯克来指挥你的AI干活？"
    ],
-   "lastDate": "2026-10-09",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "什么是AI控制AI",
@@ -4597,20 +8528,84 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s29"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
   "pile-crush": {
-   "count": 2,
+   "count": 6,
    "videos": [
+    "AI 软件为什么都要钱——四层结构",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "怎样让马斯克来指挥你的AI干活？",
+    "AI到底是怎么控制你的电脑干活的",
     "Codex和WorkBuddy怎么选",
-    "AI到底是怎么控制你的电脑干活的"
+    "怎样用AI控制AI？我搭了一个人公司指挥舱"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-26",
    "history": [
     {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s27"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
      "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
+     "date": "2026-10-19",
      "shots": [
       "s6"
      ],
@@ -4619,35 +8614,28 @@
      ]
     },
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
      "shots": [
-      "s5"
+      "s11"
      ],
      "enters": [
-      "zoom-through"
+      "drop"
      ]
     }
    ]
   },
   "case-replay": {
-   "count": 2,
+   "count": 5,
    "videos": [
+    "初级岗位正在从根子上消失",
+    "Vibe Coding 是什么",
+    "两个坑：责任归属与权限安全",
     "Codex和WorkBuddy怎么选",
-    "初级岗位正在从根子上消失"
+    "WorkBuddy 这 5 个设置"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-11-05",
    "history": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s12"
-     ],
-     "enters": [
-      "slide-l"
-     ]
-    },
     {
      "video": "初级岗位正在从根子上消失",
      "date": "2026-10-14",
@@ -4657,27 +8645,60 @@
      "enters": [
       "slam"
      ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "wipe"
+     ]
     }
    ]
   },
   "race-lanes": {
-   "count": 2,
+   "count": 5,
    "videos": [
-    "Codex和WorkBuddy怎么选",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "Codex 是什么——一句话讲清",
+    "新手怎么选 · 全课收尾",
+    "Codex和WorkBuddy怎么选"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
-    {
-     "video": "Codex和WorkBuddy怎么选",
-     "date": "2026-10-10",
-     "shots": [
-      "s21"
-     ],
-     "enters": [
-      "zoom-through"
-     ]
-    },
     {
      "video": "初级岗位正在从根子上消失",
      "date": "2026-10-14",
@@ -4687,16 +8708,61 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s23"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "Codex和WorkBuddy怎么选",
+     "date": "2026-10-19",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
     }
    ]
   },
   "brand-quote-card": {
-   "count": 2,
+   "count": 7,
    "videos": [
     "有人用AI重现了Photoshop，还100%免费开源",
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Codex 是什么——一句话讲清",
+    "ChatGPT、智能体、Codex 差在哪",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+    "新手怎么选 · 全课收尾",
+    "怎样让马斯克来指挥你的AI干活？"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "有人用AI重现了Photoshop，还100%免费开源",
@@ -4717,20 +8783,92 @@
      "enters": [
       "rise"
      ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
   "citation-strip": {
-   "count": 2,
+   "count": 4,
    "videos": [
-    "AI到底是怎么控制你的电脑干活的",
-    "有人用AI重现了Photoshop，还100%免费开源"
+    "有人用AI重现了Photoshop，还100%免费开源",
+    "MCP 和命令行，该怎么选",
+    "两个坑：责任归属与权限安全",
+    "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-12",
+   "lastDate": "2026-10-19",
    "history": [
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "有人用AI重现了Photoshop，还100%免费开源",
+     "date": "2026-10-12",
+     "shots": [
+      "s15"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
      "shots": [
       "s14"
      ],
@@ -4739,8 +8877,8 @@
      ]
     },
     {
-     "video": "有人用AI重现了Photoshop，还100%免费开源",
-     "date": "2026-10-12",
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
      "shots": [
       "s15"
      ],
@@ -4751,17 +8889,39 @@
    ]
   },
   "version-lanes": {
-   "count": 1,
+   "count": 3,
    "videos": [
+    "AI 到底怎么替你干活——工作流与智能体",
+    "为什么说这是普通人的机会",
     "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
      "shots": [
-      "s13"
+      "s6"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s14"
      ],
      "enters": [
       "slide-r"
@@ -4770,17 +8930,28 @@
    ]
   },
   "funnel": {
-   "count": 1,
+   "count": 2,
    "videos": [
+    "它到底怎么工作：三个特点",
     "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
      "shots": [
-      "s18"
+      "s13"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s19"
      ],
      "enters": [
       "drop"
@@ -4789,17 +8960,28 @@
    ]
   },
   "head-pip": {
-   "count": 1,
+   "count": 2,
    "videos": [
+    "AI共享大脑：把档案放进GitHub",
     "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-19",
    "history": [
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
      "shots": [
-      "s19"
+      "s21"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s20"
      ],
      "enters": [
       "zoom-through"
@@ -4808,17 +8990,28 @@
    ]
   },
   "one-fish-four-plates": {
-   "count": 1,
+   "count": 2,
    "videos": [
+    "一张自学路线图——四个台阶四条心法",
     "AI到底是怎么控制你的电脑干活的"
    ],
-   "lastDate": "2026-10-11",
+   "lastDate": "2026-10-22",
    "history": [
     {
-     "video": "AI到底是怎么控制你的电脑干活的",
-     "date": "2026-10-11",
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
      "shots": [
-      "s23"
+      "s15"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI到底是怎么控制你的电脑干活的",
+     "date": "2026-10-19",
+     "shots": [
+      "s24"
      ],
      "enters": [
       "slide-r"
@@ -4827,11 +9020,12 @@
    ]
   },
   "pyramid-base": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "一张自学路线图——四个台阶四条心法"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "初级岗位正在从根子上消失",
@@ -4842,15 +9036,26 @@
      "enters": [
       "slam"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
   "reward-beat": {
-   "count": 1,
+   "count": 2,
    "videos": [
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "一张自学路线图——四个台阶四条心法"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "初级岗位正在从根子上消失",
@@ -4861,15 +9066,27 @@
      "enters": [
       "slam"
      ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slam"
+     ]
     }
    ]
   },
   "gate-weld": {
-   "count": 1,
+   "count": 3,
    "videos": [
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "MCP 和命令行，该怎么选",
+    "AI共享大脑：把档案放进GitHub"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-19",
    "history": [
     {
      "video": "初级岗位正在从根子上消失",
@@ -4880,15 +9097,37 @@
      "enters": [
       "zoom-through"
      ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "drop"
+     ]
     }
    ]
   },
   "shutter-close": {
-   "count": 1,
+   "count": 3,
    "videos": [
-    "初级岗位正在从根子上消失"
+    "初级岗位正在从根子上消失",
+    "Codex 是什么——一句话讲清",
+    "一个真实成果：3D 简历"
    ],
-   "lastDate": "2026-10-14",
+   "lastDate": "2026-10-17",
    "history": [
     {
      "video": "初级岗位正在从根子上消失",
@@ -4898,6 +9137,1355 @@
      ],
      "enters": [
       "slam"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "slam"
+     ]
+    }
+   ]
+  },
+  "tier-stack": {
+   "count": 11,
+   "videos": [
+    "AI 能帮你干什么——三层金字塔",
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底能帮你干什么——三层金字塔",
+    "ChatGPT、智能体、Codex 差在哪",
+    "四种形态，你该怎么选",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+    "新手怎么选 · 全课收尾"
+   ],
+   "lastDate": "2026-10-18",
+   "history": [
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s5",
+      "s9",
+      "s13",
+      "s17"
+     ],
+     "enters": [
+      "assemble",
+      "zoom-through",
+      "drop",
+      "rise"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s3",
+      "s17"
+     ],
+     "enters": [
+      "rise",
+      "assemble"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "四种形态，你该怎么选",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "feed-gauge": {
+   "count": 3,
+   "videos": [
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手"
+   ],
+   "lastDate": "2026-10-17",
+   "history": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    }
+   ]
+  },
+  "logo-wall": {
+   "count": 4,
+   "videos": [
+    "AI 软件为什么都要钱——四层结构",
+    "一张自学路线图——四个台阶四条心法",
+    "Codex 是什么——一句话讲清",
+    "AI共享大脑：把档案放进GitHub"
+   ],
+   "lastDate": "2026-10-22",
+   "history": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s27"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "beat-wall": {
+   "count": 10,
+   "videos": [
+    "AI 软件为什么都要钱——四层结构",
+    "Vibe Coding 是什么",
+    "AI 到底能帮你干什么——三层金字塔",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "它到底怎么工作：三个特点",
+    "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+    "怎样让马斯克来指挥你的AI干活？",
+    "怎样用AI控制AI？我搭了一个人公司指挥舱"
+   ],
+   "lastDate": "2026-10-26",
+   "history": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s14",
+      "s20"
+     ],
+     "enters": [
+      "slam",
+      "slide-l"
+     ]
+    },
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s7",
+      "s18"
+     ],
+     "enters": [
+      "drop",
+      "assemble"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "它到底怎么工作：三个特点",
+     "date": "2026-10-17",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "子 Agent 与三个词的区别：MCP、Skill、斜杠命令",
+     "date": "2026-10-18",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "slam"
+     ]
+    }
+   ]
+  },
+  "form-morph": {
+   "count": 5,
+   "videos": [
+    "AI 到底怎么替你干活——工作流与智能体",
+    "Codex 是什么——一句话讲清",
+    "为什么说这是普通人的机会",
+    "AI共享大脑：把档案放进GitHub",
+    "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？"
+   ],
+   "lastDate": "2026-10-25",
+   "history": [
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s24"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "text-structure": {
+   "count": 7,
+   "videos": [
+    "AI 软件为什么都要钱——四层结构",
+    "一张自学路线图——四个台阶四条心法",
+    "Codex 是什么——一句话讲清",
+    "一个真实成果：3D 简历",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "AI共享大脑：把档案放进GitHub",
+    "怎样用AI控制AI？我搭了一个人公司指挥舱"
+   ],
+   "lastDate": "2026-10-26",
+   "history": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s21"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s25"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "attn-weights": {
+   "count": 1,
+   "videos": [
+    "AI 能帮你干什么——三层金字塔"
+   ],
+   "lastDate": "2026-10-16",
+   "history": [
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    }
+   ]
+  },
+  "time-ceiling": {
+   "count": 1,
+   "videos": [
+    "AI 能帮你干什么——三层金字塔"
+   ],
+   "lastDate": "2026-10-16",
+   "history": [
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "inplace-evolve": {
+   "count": 5,
+   "videos": [
+    "AI 能帮你干什么——三层金字塔",
+    "Codex 是什么——一句话讲清",
+    "ChatGPT、智能体、Codex 差在哪",
+    "七种角色，怎么变成两个人",
+    "两个坑：能力退化与决策外包"
+   ],
+   "lastDate": "2026-10-18",
+   "history": [
+    {
+     "video": "AI 能帮你干什么——三层金字塔",
+     "date": "2026-10-16",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s1"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s16"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "kanban-sort": {
+   "count": 5,
+   "videos": [
+    "AI 软件为什么都要钱——四层结构",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "ChatGPT、智能体、Codex 差在哪",
+    "MCP 和命令行，该怎么选",
+    "两个坑：责任归属与权限安全"
+   ],
+   "lastDate": "2026-10-26",
+   "history": [
+    {
+     "video": "AI 软件为什么都要钱——四层结构",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s18"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "sense-rig": {
+   "count": 11,
+   "videos": [
+    "AI 到底能帮你干什么——三层金字塔",
+    "Codex 是什么——一句话讲清",
+    "ChatGPT、智能体、Codex 差在哪",
+    "一个真实成果：3D 简历",
+    "MCP 和命令行，该怎么选",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "MCP 到底是什么",
+    "新手怎么选 · 全课收尾",
+    "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？"
+   ],
+   "lastDate": "2026-10-25",
+   "history": [
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s1",
+      "s8",
+      "s15"
+     ],
+     "enters": [
+      "slam",
+      "slide-l",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "Codex 是什么——一句话讲清",
+     "date": "2026-10-17",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s5"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s22"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s10"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "reach-gap": {
+   "count": 7,
+   "videos": [
+    "AI 到底能帮你干什么——三层金字塔",
+    "AI 到底怎么替你干活——工作流与智能体",
+    "提示词到底怎么写——三步上手",
+    "ChatGPT、智能体、Codex 差在哪",
+    "一个真实成果：3D 简历",
+    "两个坑：责任归属与权限安全",
+    "MCP 到底是什么"
+   ],
+   "lastDate": "2026-10-18",
+   "history": [
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "AI 到底怎么替你干活——工作流与智能体",
+     "date": "2026-10-17",
+     "shots": [
+      "s2"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "ChatGPT、智能体、Codex 差在哪",
+     "date": "2026-10-17",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    },
+    {
+     "video": "一个真实成果：3D 简历",
+     "date": "2026-10-17",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "两个坑：责任归属与权限安全",
+     "date": "2026-10-18",
+     "shots": [
+      "s8"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "MCP 到底是什么",
+     "date": "2026-10-18",
+     "shots": [
+      "s0"
+     ],
+     "enters": [
+      "slam"
+     ]
+    }
+   ]
+  },
+  "mirror-reveal": {
+   "count": 6,
+   "videos": [
+    "Vibe Coding 是什么",
+    "AI 到底能帮你干什么——三层金字塔",
+    "提示词到底怎么写——三步上手",
+    "七种角色，怎么变成两个人",
+    "Skill 是什么：给 AI 的一本工作手册",
+    "新手怎么选 · 全课收尾"
+   ],
+   "lastDate": "2026-10-18",
+   "history": [
+    {
+     "video": "Vibe Coding 是什么",
+     "date": "2026-10-17",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "AI 到底能帮你干什么——三层金字塔",
+     "date": "2026-10-17",
+     "shots": [
+      "s20"
+     ],
+     "enters": [
+      "rise"
+     ]
+    },
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    },
+    {
+     "video": "七种角色，怎么变成两个人",
+     "date": "2026-10-17",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "zoom-through"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    },
+    {
+     "video": "新手怎么选 · 全课收尾",
+     "date": "2026-10-18",
+     "shots": [
+      "s12"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    }
+   ]
+  },
+  "painkiller": {
+   "count": 1,
+   "videos": [
+    "提示词到底怎么写——三步上手"
+   ],
+   "lastDate": "2026-10-17",
+   "history": [
+    {
+     "video": "提示词到底怎么写——三步上手",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "time-shards": {
+   "count": 1,
+   "videos": [
+    "一张自学路线图——四个台阶四条心法"
+   ],
+   "lastDate": "2026-10-17",
+   "history": [
+    {
+     "video": "一张自学路线图——四个台阶四条心法",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "threshold-drop": {
+   "count": 2,
+   "videos": [
+    "为什么说这是普通人的机会",
+    "Skill 是什么：给 AI 的一本工作手册"
+   ],
+   "lastDate": "2026-10-18",
+   "history": [
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s4"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "Skill 是什么：给 AI 的一本工作手册",
+     "date": "2026-10-18",
+     "shots": [
+      "s13"
+     ],
+     "enters": [
+      "slide-r"
+     ]
+    }
+   ]
+  },
+  "formula-drive": {
+   "count": 2,
+   "videos": [
+    "为什么说这是普通人的机会",
+    "MCP 和命令行，该怎么选"
+   ],
+   "lastDate": "2026-10-18",
+   "history": [
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s6"
+     ],
+     "enters": [
+      "slam"
+     ]
+    },
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "queue-window": {
+   "count": 1,
+   "videos": [
+    "为什么说这是普通人的机会"
+   ],
+   "lastDate": "2026-10-17",
+   "history": [
+    {
+     "video": "为什么说这是普通人的机会",
+     "date": "2026-10-17",
+     "shots": [
+      "s14"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "gear-train": {
+   "count": 1,
+   "videos": [
+    "MCP 和命令行，该怎么选"
+   ],
+   "lastDate": "2026-10-18",
+   "history": [
+    {
+     "video": "MCP 和命令行，该怎么选",
+     "date": "2026-10-18",
+     "shots": [
+      "s9"
+     ],
+     "enters": [
+      "assemble"
+     ]
+    }
+   ]
+  },
+  "silent-drift": {
+   "count": 1,
+   "videos": [
+    "两个坑：能力退化与决策外包"
+   ],
+   "lastDate": "2026-10-18",
+   "history": [
+    {
+     "video": "两个坑：能力退化与决策外包",
+     "date": "2026-10-18",
+     "shots": [
+      "s3"
+     ],
+     "enters": [
+      "slam"
+     ]
+    }
+   ]
+  },
+  "side-caps": {
+   "count": 7,
+   "videos": [
+    "AI共享大脑：把档案放进GitHub",
+    "怎样让马斯克来指挥你的AI干活？",
+    "7 个真能干活的 AI 剪辑 skill",
+    "怎样用AI控制AI？我搭了一个人公司指挥舱"
+   ],
+   "lastDate": "2026-10-26",
+   "history": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s4",
+      "s15",
+      "s32"
+     ],
+     "enters": [
+      "drop",
+      "assemble",
+      "slam"
+     ]
+    },
+    {
+     "video": "怎样让马斯克来指挥你的AI干活？",
+     "date": "2026-10-19",
+     "shots": [
+      "s28"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s7"
+     ],
+     "enters": [
+      "drop"
+     ]
+    },
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s0",
+      "s10"
+     ],
+     "enters": [
+      "rise",
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "commit-rewind": {
+   "count": 1,
+   "videos": [
+    "AI共享大脑：把档案放进GitHub"
+   ],
+   "lastDate": "2026-10-19",
+   "history": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s11"
+     ],
+     "enters": [
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "visibility-seal": {
+   "count": 1,
+   "videos": [
+    "AI共享大脑：把档案放进GitHub"
+   ],
+   "lastDate": "2026-10-19",
+   "history": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s17"
+     ],
+     "enters": [
+      "slam"
+     ]
+    }
+   ]
+  },
+  "wave-cancel": {
+   "count": 1,
+   "videos": [
+    "AI共享大脑：把档案放进GitHub"
+   ],
+   "lastDate": "2026-10-19",
+   "history": [
+    {
+     "video": "AI共享大脑：把档案放进GitHub",
+     "date": "2026-10-19",
+     "shots": [
+      "s31"
+     ],
+     "enters": [
+      "rise"
+     ]
+    }
+   ]
+  },
+  "stock-broll": {
+   "count": 0,
+   "videos": [],
+   "lastDate": "2026-10-21",
+   "history": []
+  },
+  "demo-reel": {
+   "count": 0,
+   "videos": [],
+   "lastDate": "2026-10-22",
+   "history": []
+  },
+  "repo-id": {
+   "count": 7,
+   "videos": [
+    "7 个真能干活的 AI 剪辑 skill"
+   ],
+   "lastDate": "2026-10-23",
+   "history": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s8",
+      "s11",
+      "s13",
+      "s15",
+      "s17",
+      "s19",
+      "s21"
+     ],
+     "enters": [
+      "zoom-through",
+      "drop",
+      "rise",
+      "slam",
+      "slide-l",
+      "slide-r",
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "asset-full": {
+   "count": 18,
+   "videos": [
+    "7 个真能干活的 AI 剪辑 skill",
+    "WorkBuddy 这 5 个设置"
+   ],
+   "lastDate": "2026-11-05",
+   "history": [
+    {
+     "video": "7 个真能干活的 AI 剪辑 skill",
+     "date": "2026-10-23",
+     "shots": [
+      "s1",
+      "s2",
+      "s6",
+      "s9",
+      "s10",
+      "s12",
+      "s14",
+      "s16",
+      "s18",
+      "s20",
+      "s22"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "zoom-through",
+      "drop",
+      "rise",
+      "slam",
+      "slide-l",
+      "slide-r"
+     ]
+    },
+    {
+     "video": "WorkBuddy 这 5 个设置",
+     "date": "2026-11-05",
+     "shots": [
+      "s2",
+      "s5",
+      "s7",
+      "s10",
+      "s12",
+      "s18",
+      "s20"
+     ],
+     "enters": [
+      "wipe",
+      "assemble",
+      "zoom-through",
+      "drop",
+      "rise",
+      "slam",
+      "slide-l"
+     ]
+    }
+   ]
+  },
+  "footage-stage": {
+   "count": 7,
+   "videos": [
+    "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？"
+   ],
+   "lastDate": "2026-10-25",
+   "history": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s0",
+      "s5",
+      "s7",
+      "s12",
+      "s14",
+      "s16",
+      "s18"
+     ],
+     "enters": [
+      "slide-r",
+      "rise",
+      "slide-l",
+      "slam",
+      "assemble",
+      "wipe"
+     ]
+    }
+   ]
+  },
+  "side-scenes": {
+   "count": 10,
+   "videos": [
+    "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？"
+   ],
+   "lastDate": "2026-10-25",
+   "history": [
+    {
+     "video": "连胡彦斌都在用的AI工具TRAE，到底有多牛呢？",
+     "date": "2026-10-25",
+     "shots": [
+      "s1",
+      "s2",
+      "s3",
+      "s6",
+      "s8",
+      "s11",
+      "s13",
+      "s15",
+      "s17",
+      "s19"
+     ],
+     "enters": [
+      "slide-l",
+      "wipe",
+      "zoom-through",
+      "rise",
+      "drop",
+      "assemble",
+      "slam"
+     ]
+    }
+   ]
+  },
+  "screen-markup": {
+   "count": 4,
+   "videos": [
+    "怎样用AI控制AI？我搭了一个人公司指挥舱"
+   ],
+   "lastDate": "2026-10-26",
+   "history": [
+    {
+     "video": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+     "date": "2026-10-26",
+     "shots": [
+      "s1",
+      "s8",
+      "s9",
+      "s12"
+     ],
+     "enters": [
+      "rise",
+      "wipe",
+      "slide-l",
+      "slide-r"
      ]
     }
    ]

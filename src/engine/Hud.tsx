@@ -6,15 +6,12 @@ import type { Caption, Chapter } from "../types";
 
 export const ProgressHud: React.FC<{ chapters: Chapter[]; total: number; title: string; flash?: boolean }> = ({ chapters, total, title, flash = true }) => {
   const f = useCurrentFrame();
-  const { width, fps } = useVideoConfig();
+  const { width } = useVideoConfig();
   const t = useTheme();
   const ci = Math.max(0, chapters.findIndex((c) => f >= c.start && f < c.end));
   const L = 120;
   const W = width - 240;
   const pos = clamp(f / total);
-  const sec = Math.floor(f / fps);
-  const mm = String(Math.floor(sec / 60)).padStart(2, "0");
-  const ss = String(sec % 60).padStart(2, "0");
   const fade = easeOut(prog(f, 10, 20));
   // chapter change: the label swells and a light sweep runs along the bar for ~2s
   const since = f - (chapters[ci]?.start ?? 0);
@@ -27,7 +24,6 @@ export const ProgressHud: React.FC<{ chapters: Chapter[]; total: number; title: 
         <span style={{ color: t.primary }}>{`CH ${String(ci + 1).padStart(2, "0")}/${String(chapters.length).padStart(2, "0")}`}</span>
         <span style={{ color: t.text, fontFamily: t.font.body, fontWeight: 700, letterSpacing: 1, fontSize: 20, textShadow: fl > 0 ? `0 0 ${18 * fl}px ${alpha(t.primary, 0.9)}` : undefined }}>{chapters[ci]?.title || title}</span>
       </div>
-      <div style={{ position: "absolute", right: L, top: 26, fontSize: 17, letterSpacing: 3, color: t.dim }}>{`${mm}:${ss}`}</div>
       <div style={{ position: "absolute", left: L, width: W, top: 60, height: 4 }}>
         {chapters.map((c, i) => {
           const x = (c.start / total) * W;
@@ -49,7 +45,8 @@ export const ProgressHud: React.FC<{ chapters: Chapter[]; total: number; title: 
 
 // karaoke captions: every char lights up at the frame it is actually spoken (t[]),
 // numbers / latin terms / storyboard keywords (hl ranges) burn in the accent colour
-export const Captions: React.FC<{ captions: Caption[]; hidden?: (f: number) => boolean }> = ({ captions, hidden }) => {
+// lift：本镜字幕带往上抬的像素数（分镜 captionLift）。默认 0 = 距底 52。
+export const Captions: React.FC<{ captions: Caption[]; hidden?: (f: number) => boolean; lift?: number }> = ({ captions, hidden, lift = 0 }) => {
   const f = useCurrentFrame();
   const t = useTheme();
   const c = captions.find((x) => f >= x.start && f < x.end);
@@ -59,7 +56,7 @@ export const Captions: React.FC<{ captions: Caption[]; hidden?: (f: number) => b
   const isHl = (i: number) => !!c.hl?.some(([a, b]) => i >= a && i < b);
   const pin = easeOut(prog(f, c.start, 6));
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, bottom: 52, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
+    <div style={{ position: "absolute", left: 0, right: 0, bottom: 52 + lift, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
       <div
         style={{
           // ≤12 字一行 + 黑描边：no heavy box, readable on a bright talking-head frame too

@@ -157,7 +157,7 @@ if (cmd === "report" || !cmd) {
   const never = body.filter((c) => !used.has(c.id));
   const cnt = body.filter((c) => j.comps[c.id]?.count).sort((a, b) => (j.comps[b.id]?.count || 0) - (j.comps[a.id]?.count || 0));
   console.log(`台账：${j.videos.length} 条片子 · ${body.length} 个正片组件里用过 ${cnt.length} 个 · 从未用过 ${never.length} 个`);
-  console.log(`规则：近 ${j.rules.recentVideos} 条片算「刚用过」；每条片至少首次使用 ${j.rules.minFresh} 个组件`);
+  console.log(`规则：近 ${j.rules.recentVideos} 条片算「刚用过」；每条片至少 ${j.rules.minRotated} 个组件是近 ${j.rules.recentVideos} 条片未用过的`);
   console.log("\n高频 TOP 12：");
   for (const c of cnt.slice(0, 12)) {
     const e = j.comps[c.id];

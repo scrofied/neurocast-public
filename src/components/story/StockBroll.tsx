@@ -35,6 +35,8 @@ const schema = z.object({
   caption: z.string().optional().describe("画面底部一行小字，讲这张画面在垫哪句话"),
   dim: z.number().min(0).max(0.8).default(0.3).describe("压暗强度：素材太花、要压住它让字幕读得清时调大（默认 0.3）"),
   source: sourceSchema,
+  showSourceUrl: z.boolean().default(true).describe("是否在角标显示来源网址；有站外链接限制时设为 false"),
+  flat: z.boolean().default(false).describe("原样展示：不加压暗与渐变遮罩，素材直出"),
   at: z.number().optional(),
 });
 type D = z.infer<typeof schema>;
@@ -78,7 +80,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
 
   // 署名角标是 nowrap 的绝对定位小块，宽度只能按字数估（等宽字体 17px ≈ 10.6px/字）。
   // 先估出它占多宽，说明文字才知道自己还剩多少地方 —— 否则两者会在底边叠成一行糊字。
-  const badgeSrc = data.source || {};
+  const badgeSrc = data.source ? { ...data.source, ...(data.showSourceUrl ? {} : { url: undefined }) } : {};
   const badgeBits = [badgeSrc.platform, badgeSrc.author, badgeSrc.url ? String(badgeSrc.url).replace(/^https?:\/\//, "").replace(/^www\./, "").slice(0, 28) : ""].filter(Boolean).join(" · ").length;
   const badgeW = Math.min(boxW - gutter * 2, Math.round(168 + badgeBits * 10.6));
   // 开窗（card/split）时框子窄，说明和署名并排会把说明挤成一行一个字 —— 改成上下两行；
@@ -119,11 +121,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           </div>
         )}
 
-        {/* 压暗 + 收底：素材太亮太花会把字幕吃掉，这两层是给它「落地」到本片配色里 */}
-        <div style={{ position: "absolute", inset: 0, background: alpha(t.bg, data.dim), pointerEvents: "none" }} />
-        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${alpha(t.bg, 0.18)} 30%, ${alpha(t.bg, 0.72)})`, pointerEvents: "none" }} />
-        {/* 顶部再压一道：大字要画在素材之上，素材一亮就把字吃掉（预览里标题不出现就是这个原因） */}
-        {(data.kicker || data.title) && (
+        {/* 压暗 + 收底：素材太亮太花会把字幕吃掉，这两层是给它「落地」到本片配色里；flat = 原样直出 */}
+        {!data.flat && <div style={{ position: "absolute", inset: 0, background: alpha(t.bg, data.dim), pointerEvents: "none" }} />}
+        {!data.flat && <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${alpha(t.bg, 0.18)} 30%, ${alpha(t.bg, 0.72)})`, pointerEvents: "none" }} />}
+        {/* 顶部再压一道：大字要画在素材之上，素材一亮就把字吃掉（flat 模式不加） */}
+        {!data.flat && (data.kicker || data.title) && (
           <div style={{ position: "absolute", left: 0, right: 0, top: 0, height: 250, background: `linear-gradient(180deg, ${alpha(t.bg, 0.72)}, ${alpha(t.bg, 0)})`, pointerEvents: "none" }} />
         )}
         {inset && <div style={{ position: "absolute", inset: 0, boxShadow: `inset 0 0 90px ${alpha(t.primary, 0.14)}`, pointerEvents: "none" }} />}
@@ -137,7 +139,7 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
           )}
           {/* SourceBadge 自己是绝对定位（贴容器右边），给它一块流里的位置，署名才不会顶到屏幕边 */}
           <div style={{ marginLeft: "auto", position: "relative", width: badgeW, height: 34, flexShrink: 0 }}>
-            <SourceBadge source={data.source} frame={frame} />
+            <SourceBadge source={badgeSrc} frame={frame} />
           </div>
         </div>
       </div>

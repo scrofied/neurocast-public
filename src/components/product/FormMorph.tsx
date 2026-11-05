@@ -59,7 +59,7 @@ const schema = z.object({
 type D = z.infer<typeof schema>;
 
 // 交叠淡入淡出窗口（v07 的 env：0.2s 进 / 0.12s 出，窗口刻意互相压住）
-const env = (s: number, a: number, b: number) => Math.min(easeOut(prog(s, a, a + 0.2)), 1 - prog(s, b - 0.12, b));
+const env = (s: number, a: number, b: number) => Math.min(easeOut(prog(s, a, 0.2)), 1 - prog(s, b - 0.12, 0.12));
 
 const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
   const t = useTheme();

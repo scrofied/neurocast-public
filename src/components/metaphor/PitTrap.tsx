@@ -165,8 +165,12 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, seed, variant }) => {
           // 坑名标签原生是原地回弹放大入场（scale 0→1，easeOutBack）；坑盖翻开、人掉下去、安全线生长都是隐喻主体运动，保持原生
           const e = enterAt(frame, cues[i], { fallback: "rise", dur: 14, from: 0, seed: i });
           const fs = fitFont(p.text, W * 0.24, (full ? 54 : 26) * Math.max(0.6, c.s * 1.4), 16);
-          const side = p.u >= 0 ? 1 : -1;
-          const lx = c.x + side * (full ? W * 0.2 : W * 0.18) * Math.max(0.6, c.s * 1.3);
+          let side = p.u >= 0 ? 1 : -1;
+          const off = (full ? W * 0.2 : W * 0.18) * Math.max(0.6, c.s * 1.3);
+          // 左侧坑的标签默认往左挂，最宽可达 W*0.24 + 内边距，靠左半区的坑挂出去直接出画；放不下就改挂右侧
+          const estBoxW = W * 0.24 + (full ? 90 : 54);
+          if (side < 0 && c.x - off - estBoxW < W * 0.02) side = 1;
+          const lx = c.x + side * off;
           return (
             <div key={i} style={{ position: "absolute", left: lx, top: c.y, transform: `translate(${side > 0 ? "0" : "-100%"}, -50%) translate(${e.dx}px, ${e.dy}px) scale(${e.scale})`, transformOrigin: side > 0 ? "0 50%" : "100% 50%", textAlign: side > 0 ? "left" : "right", opacity: e.opacity }}>
               <div style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "6px 20px", borderRadius: 12, background: alpha(t.bg, 0.85), border: `3px solid ${t.bad}`, boxShadow: `0 0 18px ${alpha(t.bad, 0.5)}` }}>

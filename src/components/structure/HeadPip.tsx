@@ -92,8 +92,9 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant }) => {
             {data.note}
           </div>
         )}
-        <div style={{ position: "absolute", right: 0, bottom: data.note ? 66 : 12, paddingRight: 16 }}>
-          <SourceBadge source={data.source} frame={frame} />
+        {/* 角标从容器顶往下长，bottom:12 时整块会被 overflow:hidden 裁掉 —— 一律用 y=-36 顶回内侧。 */}
+        <div style={{ position: "absolute", right: 16, bottom: data.note ? 66 : 14, width: 1, height: 1 }}>
+          <SourceBadge source={data.source} frame={frame} y={-36} />
         </div>
       </div>
 

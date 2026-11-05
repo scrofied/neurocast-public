@@ -54,5 +54,5 @@ export const OpeningAiComputerUse: CompDef<D> = {
     camera: (dd, f, dur2) => cam(f, dur2, { punches: [{ at: 0, amt: 0.06 }, { at: dd.promiseAt, amt: 0.04 }] }),
   }),
   noGallery: true,
-  opening: { script: "neurocast-ai", hook: "首帧大字+第二行承诺", techniques: ["首帧大字", "逐字 kicker", "金色重音", "承诺第二行"] },
+  opening: { draft: true, script: "neurocast-ai", hook: "首帧大字+第二行承诺", techniques: ["首帧大字", "逐字 kicker", "金色重音", "承诺第二行"] },
 };

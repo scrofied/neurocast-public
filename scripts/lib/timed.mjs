@@ -161,7 +161,9 @@ const buildBeats = (runs, M) => {
 };
 
 // ---------- 4. anchors inside shot data ----------
-const isCueKey = (k) => k === "at" || k === "until" || /[a-z]At$/.test(k);
+// capturedAt 是素材采集日期（source 角标要原样上屏），不是时间锚点：
+// 之前它被 /[a-z]At$/ 命中，解析不到台词就被整条抹成 undefined，来源角标只剩平台名。
+const isCueKey = (k) => k !== "capturedAt" && (k === "at" || k === "until" || /[a-z]At$/.test(k));
 
 // useSec=true：解析产物保持「相对本段开始的秒数」（组件在 CompDef.cueUnit 里声明，如 PRO 开场模板）；
 // 缺省 false → 帧（引擎契约）。cueSec 是 id -> true 的表，嵌套 slot 按它自己的 type 重新判定。
@@ -176,6 +178,13 @@ const resolveCues = (obj, ctx, baseSec, path, warn, useSec = false, cueSec = {})
     if (isCueKey(k) && (typeof v === "string" || typeof v === "number")) {
       const sec = cueSeconds(v, ctx, baseSec, `${path}.${k}`, warn);
       out[k] = sec === undefined ? undefined : useSec ? Math.round((sec - baseSec) * 1000) / 1000 : Math.round((sec - baseSec) * ctx.fps);
+    } else if (isCueKey(k) && Array.isArray(v) && v.length && v.every((x) => typeof x === "string" || typeof x === "number")) {
+      // 锚点数组（step-rail 的 stepAt 这类，CATALOG 标的就是「锚点数组」）：逐个按台词解析。
+      // 以前这里只认标量，数组整条落进下面的递归、原样把字符串交给 zod → E_STORYBOARD: expected number, received string。
+      out[k] = v.map((x, i) => {
+        const sec = cueSeconds(x, ctx, baseSec, `${path}.${k}[${i}]`, warn);
+        return sec === undefined ? undefined : useSec ? Math.round((sec - baseSec) * 1000) / 1000 : Math.round((sec - baseSec) * ctx.fps);
+      });
     } else if (!(isSlot && k === "data")) out[k] = resolveCues(v, ctx, baseSec, `${path}.${k}`, warn, useSec, cueSec);
   }
   if (isSlot) {
@@ -509,7 +518,17 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
       motion,
       hideCaptions: s.captions === false ? true : s.captions === true ? false : undefined,
       // over: true = 这一镜渲染在 presenter 真人层「之上」（真人全屏讲话时的两侧动效）
-      over: s.over === true || undefined,
+      // presenter:"full" 的镜头必然要走 over 层 —— 真人这时铺满全屏，镜头画在他两侧而不是他背后
+      over: s.over === true || s.presenter === "full" || undefined,
+      // 镜头级真人层编排："none" = 这段时间真人小窗整层缺席（满屏真素材不必留一张脸）；
+      // "full" = 正片中途真人再全屏讲几句。两者由 make.mjs 汇成 presenter.gaps / presenter.fulls。
+      presenter: s.presenter === "none" || s.presenter === "full" ? s.presenter : undefined,
+      // caveat: 右下角「待核」角标文案（写在分镜条目上，别写进 data——组件 zod 会丢掉未知键）
+      caveat: typeof s.caveat === "string" && s.caveat.trim() ? s.caveat.trim() : undefined,
+      // captionLift: 本镜字幕带上移的像素数（写在分镜条目上）。
+      // 录屏素材里常有录制器的悬浮控制条（「录制中 00:03」那条白胶囊）正好压在底部字幕上；
+      // 「录屏原样全屏不包装」不许裁它盖它，那就把字幕抬到它上面。上限 200（再高就顶到画面中部了）。
+      captionLift: Number.isFinite(+s.captionLift) ? Math.max(0, Math.min(200, +s.captionLift)) : undefined,
       auto: !!s.auto,
     });
   });
@@ -526,9 +545,16 @@ export const planTimed = ({ parsed, media, storyboard, input, style, fps = 30, w
 
   // ---- captions: karaoke timing per char from the real voice
   const kw = [...(input.keywords || []), ...(storyboard?.keywords || [])];
+  // caption_hide：音频照念、只把命中的那一「行」字幕撤下。
+  // 审核红线词（点赞收藏 / 关注 / 评论区 / 多赚一份收入…）写在台词里不能上屏，
+  // 但镜头级 captions:false 会连累同一镜里其它该看的字，所以这里按行摘。
+  const hideLines = [...(input.caption_hide || []), ...(storyboard?.caption_hide || [])].filter(
+    (x) => typeof x === "string" && x
+  );
   const captions = [];
   for (const b of beats) {
     for (const ln of captionLines(M.chars, M.times, b.a, b.b)) {
+      if (hideLines.some((p) => ln.text.includes(p))) continue;
       const hl = [];
       const chars = Array.from(ln.text);
       const mark = (re) => {

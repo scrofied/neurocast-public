@@ -60,8 +60,11 @@ const C: React.FC<CompProps<D>> = ({ data, frame, dur, variant, seed }) => {
         {/* the source dish */}
         <div style={{ position: "absolute", left: srcX, top: srcY, width: srcW, height: srcH, transform: `translate(${eSrc.dx}px, ${eSrc.dy}px) scale(${eSrc.scale})`, opacity: eSrc.opacity, borderRadius: 18, background: `linear-gradient(150deg, ${alpha(t.primary, 0.25)}, ${alpha(t.bg2, 0.95)})`, border: `3px solid ${t.primary}`, boxShadow: `0 0 40px ${alpha(t.primary, 0.4)}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: full ? 8 : 4 }}>
           <Icon name={srcIcon} size={full ? 44 : 24} color={t.primary} />
-          <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.source, srcW - (full ? 30 : 16), full ? 26 : 14, 11), color: t.text, whiteSpace: "nowrap" }}>{data.source}</div>
-          <div style={{ fontFamily: t.font.mono, fontSize: full ? 16 : 10, letterSpacing: 3, color: t.primary }}>一条源内容</div>
+          {/* 切割虚线按 n 等分横穿源盘，字必须垫一块不透明底，否则标签被「切」成贯穿线 */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: full ? 4 : 2, padding: full ? "7px 14px" : "3px 7px", borderRadius: 10, background: alpha(t.bg, 0.94), boxShadow: `0 0 0 1.5px ${alpha(t.primary, 0.4)}` }}>
+            <div style={{ fontFamily: t.font.title, fontWeight: 900, fontSize: fitFont(data.source, srcW - (full ? 60 : 30), full ? 26 : 14, 11), color: t.text, whiteSpace: "nowrap" }}>{data.source}</div>
+            <div style={{ fontFamily: t.font.mono, fontSize: full ? 16 : 10, letterSpacing: 3, color: t.primary }}>一条源内容</div>
+          </div>
         </div>
         {/* cutting blades: the dashes that split it into portions */}
         {frame >= cutAt && (

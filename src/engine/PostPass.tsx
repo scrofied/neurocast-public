@@ -30,6 +30,7 @@ const FX_W: Record<string, { split: number; slice: number; flash: number }> = {
   push: { split: 0.012, slice: 0.1, flash: 0 },
   wipe: { split: 0.005, slice: 0.18, flash: 0 },
   grid: { split: 0.004, slice: 0.22, flash: 0 },
+  matrix: { split: 0.007, slice: 0.12, flash: 0 },
   warp: { split: 0.008, slice: 0.08, flash: 0 },
   fly: { split: 0.006, slice: 0, flash: 0 },
   iris: { split: 0.004, slice: 0, flash: 0 },

@@ -15,5 +15,11 @@ public/jobs/
 # 库存素材：抓下来的现成画面是构建产物（重跑 node scripts/stock.mjs get 就有），
 # 出处记在 assets/stock-index.json 里进 git；缓存的矢量图标体积小、离线渲染要用，留在 git 里。
 public/assets/stock/
+# 音效 skill 上游：需要时跑 node scripts/sound-setup.mjs 拉取，不把外部仓库塞进本项目 git
+vendor/sound/
 # 凭证只在仓库外（~/.neurocast/stock.env），任何情况下不许进仓库
 stock.env
+# 临时 QA 辅助脚本与手工备份（本地用，不参与交付；文件仍保留在盘上）
+_qa_*.mjs
+public/opening-assets/**/*_bak.*
+scripts/qa/*.bak

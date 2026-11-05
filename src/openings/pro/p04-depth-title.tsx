@@ -42,7 +42,8 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
       {(L) => {
         const exit = E.in(p(dur - 0.4, 0.4));
         const land = F + 0.42; // 落定时刻
-        const fly = clamp((t - F) / (land - F));
+        // flyAt:0 = 巨字首帧就位（不飞入）：抖音首帧不能是空画面，观众刷到第一眼就得看见钩子
+        const fly = F <= 0 ? 1 : clamp((t - F) / (land - F));
         const zf = E.expoIn(fly); // 越来越快地扑过来
         const sh = shake(t, [{ at: 0, amp: 10 * u, len: 0.3 }, { at: land, amp: 30 * u, len: 0.55 }], 9);
         // 竖屏：超过 3 个字就拆两行（字要大，宁可两行）
@@ -65,7 +66,7 @@ const C: React.FC<{ data: D; duration?: number }> = ({ data: d, duration }) => {
         const fgY = H * d.fgDrop * sep;
         const hasMatte = !!d.person?.matte;
         const rim = E.out(p(land, 0.15)) * (0.6 + 0.4 * Math.exp(-(t - land) * 3));
-        const leadK = E.out5(p(0.04, 0.3));
+        const leadK = F <= 0 ? 1 : E.out5(p(0.04, 0.3));
         const subK = E.out5(p(d.subAt, 0.45));
         const titleY = H * d.titleY;
         const fill = d.outline ? { color: "transparent", WebkitTextStroke: `${5 * u}px ${L.accent}` } : { ...gradientInk("#ffffff", L.accent, 180) };

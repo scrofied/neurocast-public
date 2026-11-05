@@ -25,6 +25,15 @@ export type Shot = {
   hideCaptions?: boolean;
   // true = 渲染在 presenter 真人层之上（真人全屏讲话时的两侧叠加动效，如 side-brand-fx）
   over?: boolean;
+  // 这一镜的真人层怎么处理（写在分镜条目上，不是 data 里）：
+  //   "none" = 整镜期间真人层缺席 —— 满屏真素材/真界面的镜头，角上一张脸只会压住要看的东西；
+  //   "full" = 这一镜真人重新全屏讲话（正片中途穿插），镜头自动走 over 层，动效画在他两侧。
+  presenter?: "none" | "full";
+  // 镜级「待核」角标：这一镜的解说里有没核实到的说法时，在右下角压一枚小胶囊说明清楚，
+  // 解说词一个字都不用改。写在分镜条目上（不是 data 里——data 会被组件 zod 静默丢掉未知键）。
+  caveat?: string;
+  /** 本镜字幕带往上抬的像素数（分镜 captionLift）：录屏里录制器悬浮条压在字幕带上时用 */
+  captionLift?: number;
 };
 
 // t: absolute start frame of every displayed char (karaoke highlight follows the real voice)
@@ -64,13 +73,15 @@ export type Timeline = {
     mirror: boolean;
     audio?: string | null; // legacy single track starting at frame 0
     bgm?: string | null;
+    // 每帧 BGM 增益（0.45~1）：make.mjs 按配音 RMS 算好写进来；不写 = 固定音量
+    bgmDuck?: number[];
     showCaptions: boolean;
     sfx?: boolean;
     chapterFlash?: boolean;
     // 全片后期层：不写用默认（观感和老片子一致）
     post?: PostSettings;
     // muted talking-head clip: full screen for `full` frames, then a picture-in-picture box
-    presenter?: { src: string; poster?: string; frames: number; offset: number; rate?: number; full: number; focusX: number; focusY: number; hideFrom?: number; corner?: "left" | "right"; showFrom?: number; stage?: { from: number; to: number; x: number; y: number; w: number; h: number } };
+    presenter?: { src: string; poster?: string; frames: number; offset: number; rate?: number; full: number; focusX: number; focusY: number; hideFrom?: number; corner?: "left" | "right"; showFrom?: number; gaps?: [number, number][]; gapCut?: boolean; fulls?: [number, number][]; stage?: { from: number; to: number; x: number; y: number; w: number; h: number } };
   };
   durationInFrames: number;
   chapters: Chapter[];
@@ -78,7 +89,8 @@ export type Timeline = {
   captions: Caption[];
   audioClips?: AudioClip[];
   // per-script opening for TTS-only films (storyboard.opening): transparent overlay above the presenter, frames
-  opening?: { type: string; at?: number; until?: number; data?: Record<string, any> };
+  // captions 默认缺省=false；只有显式开启时才在开场复用已脱敏的逐字字幕轨。
+  opening?: { type: string; at?: number; until?: number; captions?: boolean; data?: Record<string, any> };
 };
 
 export type ShotProps = {

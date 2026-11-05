@@ -236,8 +236,11 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, variant }) => {
         ) : (
           <MissingAsset field="src" hint="cursor-trace 要在真截图上画：画在假界面上等于骗人" w={sw} h={sh} frame={frame} at={start} />
         )}
-        <div style={{ position: "absolute", right: 0, bottom: 10, paddingRight: 12 }}>
-          <SourceBadge source={d.source} frame={frame} />
+        {/* 来源角标：SourceBadge 自己是 absolute + top:y，外面这个 1×1 盒子只当锚点。
+            直接写 bottom:10 会让角标从底边往下长，被容器的 overflow:hidden 整个裁掉
+            （1-2 的 RAGFlow 那镜就是这么把「真实素材」弄丢的）——靠 y=-36 顶回容器内侧。 */}
+        <div style={{ position: "absolute", right: 16, bottom: 14, width: 1, height: 1 }}>
+          <SourceBadge source={d.source} frame={frame} y={-36} />
         </div>
       </div>
 

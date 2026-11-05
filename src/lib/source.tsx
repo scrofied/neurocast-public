@@ -31,12 +31,13 @@ export type Source = z.infer<typeof sourceSchema>;
 
 const short = (u: string) => u.replace(/^https?:\/\//, "").replace(/^www\./, "").slice(0, 28);
 
-export const SourceBadge: React.FC<{ source: Source; frame: number; x?: number; y?: number; align?: "left" | "right" }> = ({
+export const SourceBadge: React.FC<{ source: Source; frame: number; x?: number; y?: number; align?: "left" | "right"; maxWidth?: number }> = ({
   source,
   frame,
   x = 0,
   y = 0,
   align = "right",
+  maxWidth,
 }) => {
   const t = useTheme();
   if (!source || !(source.platform || source.capturedAt || source.url || source.author)) return null;
@@ -74,6 +75,8 @@ export const SourceBadge: React.FC<{ source: Source; frame: number; x?: number; 
         opacity: p,
         transform: `translateY(${(1 - p) * 10}px)`,
         whiteSpace: "nowrap",
+        maxWidth,
+        boxSizing: maxWidth ? "border-box" : undefined,
         pointerEvents: "none",
       }}
     >
@@ -81,14 +84,15 @@ export const SourceBadge: React.FC<{ source: Source; frame: number; x?: number; 
         style={{
           width: 8,
           height: 8,
+          flexShrink: 0,
           borderRadius: 4,
           background: accent,
           boxShadow: stock ? "none" : `0 0 8px ${t.primary}`,
         }}
       />
-      {stock ? "示意画面" : "真实素材"}
-      <span style={{ opacity: 0.4 }}>|</span>
-      {bits.join(" · ")}
+      <span style={{ flexShrink: 0 }}>{stock ? "示意画面" : "真实素材"}</span>
+      <span style={{ opacity: 0.4, flexShrink: 0 }}>|</span>
+      {maxWidth ? <span title={bits.join(" · ")} style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis" }}>{bits.join(" · ")}</span> : bits.join(" · ")}
     </div>
   );
 };

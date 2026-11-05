@@ -9,7 +9,7 @@
 export const ENTER_KINDS = ["rise", "slam", "slide-l", "slide-r", "wipe", "assemble", "zoom-through", "drop"];
 
 /** 镜头级转场（与 src/engine/ShotFrame.tsx 的实现一一对应） */
-export const TRANSITIONS = ["fly", "warp", "iris", "glitch", "fade", "cut", "flood", "zoom", "push", "wipe", "grid"];
+export const TRANSITIONS = ["fly", "warp", "iris", "glitch", "fade", "cut", "flood", "zoom", "push", "wipe", "grid", "matrix"];
 
 /**
  * 形状连续转场：上一镜不淡出、不剪走，下一镜从上一镜画面里的一个形状长出来盖满全屏。

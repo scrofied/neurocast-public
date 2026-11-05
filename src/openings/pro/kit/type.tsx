@@ -67,9 +67,11 @@ export const Chars: React.FC<
     hlColor?: string;
     hlGlow?: string;
     anim?: "pop" | "drop" | "blur" | "type" | "rise";
+    /** 首帧红线：>0 时整句第 0 帧就在位（暗色可读），逐字只做「点亮」不做位移/缩放。0 = 逐字浮现（旧行为） */
+    floor?: number;
     seed?: number;
   }
-> = ({ text, t, at, per, len = 0.28, size, color = "#fff", font = FONT.heavy, weight = 900, glow, glowR = 36, outline = 0, outlineColor = "#000", tracking = 0, hl, hlColor, hlGlow, anim = "pop", seed = 0, style }) => {
+> = ({ text, t, at, per, len = 0.28, size, color = "#fff", font = FONT.heavy, weight = 900, glow, glowR = 36, outline = 0, outlineColor = "#000", tracking = 0, hl, hlColor, hlGlow, anim = "pop", floor = 0, seed = 0, style }) => {
   const chars = Array.from(text);
   return (
     <div style={{ display: "flex", fontFamily: font, fontWeight: weight, fontSize: size, lineHeight: 1.08, whiteSpace: "nowrap", letterSpacing: `${tracking}em`, ...style }}>
@@ -94,6 +96,12 @@ export const Chars: React.FC<
           fl = k < 1 ? `blur(${(1 - E.out(k)) * size * 0.12}px)` : undefined;
         }
         if (anim === "type") tf = "";
+        if (floor > 0) {
+          // 点亮模式：字从一开始就占位可读，扫过的只是亮度
+          tf = "";
+          fl = undefined;
+          op = clamp(floor + (1 - floor) * E.out(k * 1.4));
+        }
         return (
           <span
             key={i}

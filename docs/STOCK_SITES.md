@@ -30,7 +30,7 @@
 
 ## 二、这条能力接进来能直接解决什么
 
-1. **`brands/library.json` 里 35 个牌子，`public/brands/` 只有 1 个文件（claude.svg）。**
+1. **`brands/library.json` 里 35 个牌子，`public/brands/` 只有 1 个文件（claude.svg）。**（2026-10-17 已补齐到 36/36，见第七节；下面保留的是当时的缺口分析）
    剩下 34 个牌子（chatgpt / gemini / deepseek / cursor / figma / notion / wechat / douyin / bilibili / youtube /
    github / huggingface / n8n / dify / taobao / meituan / twitter…）在 `brands.mjs sync` 时全被判定「文件不存在」
    而剔出组件 —— 所以现在片子里提到这些牌子只能退成通用线条图标，正是用户打回过的那种「手绘替代」。
@@ -97,4 +97,30 @@ key 的处理：先做零 key 那批（Mixkit 视频 + Iconify 图标 + Simple I
 | 自动署名 | 分镜里 `stock-broll` 不写 `source` → `timeline.json` 落 `source: { kind: "stock", platform: "Pexels", author: "cottonbro studio", url: "…/6153734/" }`，日志「库存素材自动署名：1 处」 |
 | 角标文案 | 静帧实拍：右下角「示意画面 \| Pexels · cottonbro studio · pexels.com/video/6153734/」，虚线灰框、无「采集」字样 |
 | 三种版式 | `full`（铺满 + 居中大字）/ `card`（居中开窗）/ `split`（右块 + 左大字，标题按左半宽度自动缩）各出一张 QA 拼图核对 |
-| 管线 | `tsc --noEmit` 干净；`catalog.mjs` 149 组件；`motion-audit.mjs` `✓ stock-broll` |
+| 管线 | `tsc --noEmit` 干净；`catalog.mjs` 191 组件（2026-11-06 复核）；`motion-audit.mjs` `✓ stock-broll` |
+
+## 七、素材资产闭环（2026-10-17）
+
+**品牌库 36/36 有文件。** 之前缺的 14 个真 logo 全部补齐：VS Code / Premiere / Midjourney / Remotion（Iconify `logos:` 或 `thesvg-color:`，CC0 或品牌标识）、剪映 / 飞书 / 企业微信 / 语雀 / WPS（App Store 官方 512px 应用图标）、京东（jd.com 官网页头裁出的京东狗）、Qoder（桌面版自带图标）、MotionFace（官网 favicon）、Workbuddy / 豆包（Iconify 品牌标识）。
+每条在 `brands/library.json` 里都有 `src` 与 `license`；`node scripts/brands.mjs sync` 报 `36 个牌子可用 / 0 个缺文件`。`logo-wall` 静帧验证 14 个新 logo 全部能上屏（含深色底白色版 Midjourney）。豆包不用带人脸的头像版，避免真人形象审核风险。
+
+**库存工具补了两条命令：**
+- `tag <文件…> --tags 城市,凌晨`：给已下载素材补/换标签，`--tags ""` 清空；标签是自动氛围兜底的唯一匹配词。
+- `restore [--only-missing] [--dry]`：按 `assets/stock-index.json` 重下被 gitignore 的库存文件，重新量宽高/时长、核对 md5；换机器或 clone 后跑这条。`--dry` 只列清单。
+
+**第一批氛围素材（8 条，全 Pexels License、1920×1080、9–24 秒、无清晰正脸）：**
+
+| 文件 | 标签 | 用途 |
+|---|---|---|
+| `city-aerial-night.mp4` | 城市、夜景、航拍、灯火、深夜 | 城市不睡的宏观氛围 |
+| `city-traffic-night.mp4` | 城市、通勤、夜景、车流、夜晚 | 通勤/加班后的街景 |
+| `desk-night.mp4` | 办公室、凌晨、加班、空镜、夜晚 | 空工位、深夜加班 |
+| `typing-hands.mp4` | 键盘、打字、手部、代码、深夜 | 写代码/敲字特写（无脸） |
+| `phone-scroll-dark.mp4` | 手机、刷手机、手部、夜晚、短视频 | 刷信息流、注意力被吃掉 |
+| `phone-hands-dark.mp4` | 手机、打字、手部、夜晚、聊天 | 深夜回消息/对话 |
+| `server-room-blue.mp4` | 服务器、机房、算力、数据、蓝色 | 算力/云端/数据中心的氛围 |
+| `server-rack.mp4` | 服务器、机房、机柜、算力、特写 | 机柜特写、算力细节 |
+
+**缺品牌警告接进 `make.mjs --plan-only`：** 递归扫分镜里的 `brand` 字段（logo-wall 的 `items[].brand`、brand-quote-card 的 `brand`），分别报「没登记」「登记了但文件缺失/空文件」「文件在但 `brands.generated.ts` 没 sync」三种断点，并指明镜头与字段路径。已用临时改名 `doubao.svg` 实测：缺文件警告准确，恢复后 `sync` 并重跑，输出 `真标识：3 处引用 · 3 个牌子全部有真 logo ✓`。
+
+**烟测：** `node --check scripts/stock.mjs`、`restore --dry --only-missing`、`tag` 缺参报用法、`brands.mjs sync`、`tsc --noEmit` 均通过。

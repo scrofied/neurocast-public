@@ -1,131 +1,154 @@
-// Opening library: every per-script opening (layer "opening") is archived in openings/library.json with its
-// hook type, techniques, preview and retention data. Data decides keep / retire; nothing is reused as-is.
-// usage:
-//   node scripts/openings.mjs sync                        登记 src/openings 里所有开场（新的记为 trial）
-//   node scripts/openings.mjs list                        列出开场库 + 数据
-//   node scripts/openings.mjs metric <id> bounce2s=0.31 finish5s=0.58 [plays=1200]   录入数据（比例 0~1）
-//   node scripts/openings.mjs status <id> keep|retired|trial
-//   node scripts/openings.mjs preview <input.json>        渲染该视频前 5 秒到 openings/previews/<id>.mp4
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { loadRegistry } from "./lib/registry-node.mjs";
+import { RULES, parseMetrics, verdict, previewEnd } from "./lib/opening-metrics.mjs";
+import { load as loadUsage } from "./lib/usage.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const LIB = path.join(ROOT, "openings", "library.json");
-const FPS = 30;
-
-// retention rule of thumb (short-video platforms): 2s bounce above this = hook failed, 5s finish below this = weak
-export const RULES = { bounce2sMax: 0.35, finish5sMin: 0.5 };
-
-const load = () => (fs.existsSync(LIB) ? JSON.parse(fs.readFileSync(LIB, "utf8").replace(/^﻿/, "")) : { rules: RULES, openings: [] });
-const save = (lib) => {
-  fs.mkdirSync(path.dirname(LIB), { recursive: true });
-  fs.writeFileSync(LIB, JSON.stringify(lib, null, 2) + "\n");
-};
-const die = (m) => {
-  console.error(`✖ ${m}`);
-  process.exit(1);
-};
-const find = (lib, id) => lib.openings.find((o) => o.id === id) ?? die(`开场库里没有 ${id}（先运行 sync）`);
-
-// which folder under src/openings holds the component (by id → file search)
-const fileOf = (id) => {
-  const dir = path.join(ROOT, "src", "openings");
-  for (const d of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (!d.isDirectory()) continue;
-    for (const f of fs.readdirSync(path.join(dir, d.name))) {
-      const p = path.join(dir, d.name, f);
-      if (/\.tsx?$/.test(f) && fs.readFileSync(p, "utf8").includes(`"${id}"`)) return path.relative(ROOT, p).replace(/\\/g, "/");
-    }
-  }
-  return null;
-};
-
-const verdict = (o, rules) => {
-  const m = o.metrics || {};
-  if (m.bounce2s == null && m.finish5s == null) return "待数据";
-  const bad = (m.bounce2s != null && m.bounce2s > rules.bounce2sMax) || (m.finish5s != null && m.finish5s < rules.finish5sMin);
-  return bad ? "建议淘汰" : "建议保留";
-};
-
-const [cmd, ...rest] = process.argv.slice(2);
+const PREV_DIR = path.join(ROOT, "openings", "previews");
+const read = (p) => JSON.parse(fs.readFileSync(p, "utf8").replace(/^\uFEFF/, ""));
+// preview 实际落在 openings/previews/<id>-<input hash>.mp4；sync 用同一条规则找回最近一条，
+// 不再只看 <id>.mp4（那批是早期手工命名的，后来的预览一直进不了 e.preview）。
+const previewsOf = (id) => fs.existsSync(PREV_DIR)
+  ? fs.readdirSync(PREV_DIR)
+      .filter((f) => f.endsWith(".mp4") && (f === `${id}.mp4` || f.startsWith(`${id}-`)))
+      .map((f) => ({ f, t: fs.statSync(path.join(PREV_DIR, f)).mtimeMs }))
+      .sort((a, b) => b.t - a.t)
+      .map((x) => `openings/previews/${x.f}`)
+  : [];
+const load = () => fs.existsSync(LIB) ? read(LIB) : { rules: RULES, openings: [] };
+const save = (lib) => { fs.mkdirSync(path.dirname(LIB), { recursive: true }); fs.writeFileSync(LIB, JSON.stringify(lib, null, 2) + "\n"); };
+const die = (m) => { console.error(`失败：${m}`); process.exit(1); };
+const find = (lib, id) => lib.openings.find((o) => o.id === id) ?? die(`开场库里没有 ${id}，先运行 sync`);
+const sources = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((f) => f.isDirectory() ? sources(path.join(dir, f.name)) : /\.tsx?$/.test(f.name) ? [path.join(dir, f.name)] : []);
+const [cmd = "list", ...rest] = process.argv.slice(2);
 const lib = load();
-lib.rules = { ...RULES, ...(lib.rules || {}) };
+lib.rules = { ...RULES, ...lib.rules };
 
-if (cmd === "sync") {
-  const reg = await loadRegistry();
-  const defs = reg.list.filter((c) => c.layer === "opening");
-  let added = 0;
-  for (const c of defs) {
-    const file = fileOf(c.id);
-    const date = file?.match(/(\d{4}-\d{2}-\d{2})/)?.[1] ?? new Date().toISOString().slice(0, 10);
-    let e = lib.openings.find((o) => o.id === c.id);
-    if (!e) {
-      e = { id: c.id, date, status: "trial", usedBy: [], metrics: { plays: null, bounce2s: null, finish5s: null }, notes: "" };
-      lib.openings.push(e);
-      added++;
+try {
+  if (cmd === "sync") {
+    const reg = await loadRegistry();
+    const defs = reg.list.filter((c) => c.layer === "opening");
+    const files = sources(path.join(ROOT, "src", "openings")).map((p) => ({ p, text: fs.readFileSync(p, "utf8") }));
+    let added = 0;
+    for (const c of defs) {
+      const abs = files.find((f) => f.text.includes(`"${c.id}"`))?.p;
+      const file = abs ? path.relative(ROOT, abs).replace(/\\/g, "/") : null;
+      let e = lib.openings.find((o) => o.id === c.id);
+      if (!e) { e = { id: c.id, date: file?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? new Date().toISOString().slice(0, 10), status: "trial", usedBy: [], metrics: { plays: null, bounce2s: null, finish5s: null, finish10s: null }, notes: "" }; lib.openings.push(e); added++; }
+      Object.assign(e, { name: c.name, file, desc: c.desc, script: c.opening?.script, hook: c.opening?.hook, techniques: c.opening?.techniques ?? [], sec: c.opening?.sec, minSec: c.minSec, maxSec: c.maxSec, template: !!c.opening?.template, draft: !!c.opening?.draft, signature: c.opening?.signature, beats: c.opening?.beats, requiredData: c.opening?.requiredData });
+      e.metrics ??= {};
+      e.metrics.finish10s ??= null;
+      e.usedBy = (e.usedBy ?? []).filter((x) => x !== "template");
+      if (e.script && e.script !== "template" && !e.usedBy.includes(e.script)) e.usedBy.push(e.script);
+      const prev = previewsOf(c.id)[0];
+      if (prev) e.preview = prev;
+      else if (e.preview && !fs.existsSync(path.join(ROOT, e.preview))) delete e.preview;
     }
-    Object.assign(e, {
-      name: c.name,
-      file,
-      desc: c.desc,
-      script: c.opening?.script ?? e.script,
-      hook: c.opening?.hook ?? e.hook,
-      techniques: c.opening?.techniques ?? e.techniques ?? [],
-      // 模板的推荐时长（秒）：专属开场没有这个字段，挑模板时用来配 until
-      sec: c.opening?.sec ?? e.sec,
-    });
-    if (e.script && !e.usedBy.includes(e.script)) e.usedBy.push(e.script);
-    const prev = path.join("openings", "previews", `${c.id}.mp4`);
-    if (fs.existsSync(path.join(ROOT, prev))) e.preview = prev.replace(/\\/g, "/");
-  }
-  const gone = lib.openings.filter((o) => !defs.some((c) => c.id === o.id)).map((o) => o.id);
-  save(lib);
-  console.log(`✓ 开场库：${lib.openings.length} 个（新增 ${added}）→ ${path.relative(ROOT, LIB)}`);
-  if (gone.length) console.log(`  注意：库里有、代码里没有：${gone.join(", ")}（代码被删了？库记录保留）`);
-} else if (cmd === "list" || !cmd) {
-  if (!lib.openings.length) console.log("开场库是空的（运行 node scripts/openings.mjs sync）");
-  for (const o of lib.openings) {
-    const m = o.metrics || {};
-    const pct = (v) => (v == null ? "—" : `${(v * 100).toFixed(0)}%`);
-    console.log(`${o.status.padEnd(7)} ${o.id}  [${o.hook}]  2s跳出 ${pct(m.bounce2s)} · 5s完播 ${pct(m.finish5s)} · 播放 ${m.plays ?? "—"}  → ${verdict(o, lib.rules)}`);
-    console.log(`        ${o.date} · ${o.usedBy.join(", ")} · ${o.techniques.join(" / ")}${o.sec ? ` · 推荐 ${(o.sec).toFixed(1)}s（until 别砍到 ${(o.sec * 0.8).toFixed(1)}s 以内）` : ""}`);
-  }
-} else if (cmd === "metric") {
-  const [id, ...kv] = rest;
-  const e = find(lib, id);
-  for (const s of kv) {
-    const [k, v] = s.split("=");
-    if (!["bounce2s", "finish5s", "plays"].includes(k)) die(`未知指标 ${k}（bounce2s / finish5s / plays）`);
-    let n = parseFloat(String(v).replace("%", ""));
-    if (k !== "plays" && (String(v).includes("%") || n > 1)) n /= 100;
-    e.metrics[k] = n;
-  }
-  e.metrics.updated = new Date().toISOString().slice(0, 10);
-  save(lib);
-  console.log(`✓ ${id}：${JSON.stringify(e.metrics)} → ${verdict(e, lib.rules)}`);
-} else if (cmd === "status") {
-  const [id, st] = rest;
-  if (!["trial", "keep", "retired"].includes(st)) die("status 只能是 trial / keep / retired");
-  find(lib, id).status = st;
-  save(lib);
-  console.log(`✓ ${id} → ${st}`);
-} else if (cmd === "preview") {
-  const [input] = rest;
-  if (!input) die("用法：node scripts/openings.mjs preview <input.json>");
-  const sb = JSON.parse(fs.readFileSync(path.resolve(path.dirname(input), JSON.parse(fs.readFileSync(input, "utf8").replace(/^﻿/, "")).storyboard ?? "storyboard.json"), "utf8").replace(/^﻿/, ""));
-  const id = sb.opening?.type ?? sb.shots?.[0]?.data?.opening?.type;
-  if (!id) die("这个视频的第一个镜头没有 opening");
-  const out = path.join(ROOT, "openings", "previews", `${id}.mp4`);
-  fs.mkdirSync(path.dirname(out), { recursive: true });
-  const r = spawnSync(process.execPath, [path.join(ROOT, "scripts", "make.mjs"), input, "--frames", `0-${5 * FPS - 1}`, "--out", out], { stdio: "inherit" });
-  if (r.status) process.exit(r.status);
-  const e = lib.openings.find((o) => o.id === id);
-  if (e) {
-    e.preview = path.relative(ROOT, out).replace(/\\/g, "/");
     save(lib);
-  }
-  console.log(`✓ 开场预览：${out}`);
-} else die(`未知命令 ${cmd}（sync / list / metric / status / preview）`);
+    console.log(`开场库 ${lib.openings.length} 个，新增 ${added}；草稿 ${defs.filter((c) => c.opening?.draft).length} 个不参与默认选型`);
+  } else if (cmd === "list") {
+    const recent = loadUsage().videos.slice(-3).filter((v) => v.opening);
+    if (recent.length) console.log(`最近开场：${recent.map((v) => `${v.id} → ${v.opening.id} / ${v.opening.sound}`).join("；")}`);
+    const all = rest.includes("--all");
+    for (const o of lib.openings.filter((o) => all || !o.draft)) {
+      const m = o.metrics ?? {}, pct = (v) => v == null ? "—" : `${(v * 100).toFixed(0)}%`;
+      console.log(`${o.draft ? "draft" : o.status} ${o.id} [${o.hook}] · ${o.sec ? `推荐${o.sec}s` : `${o.minSec ?? 2}~${o.maxSec ?? 4}s`} · ${o.signature ? `${o.signature.visual}/${o.signature.sound}` : "内嵌视听编排"}`);
+      console.log(`  2s跳出 ${pct(m.bounce2s)} / 5s留存 ${pct(m.finish5s)} / 10s留存 ${pct(m.finish10s)} / 播放 ${m.plays ?? "—"} → ${verdict(m, lib.rules)}${o.metricVideo ? `（片：${o.metricVideo}，非模板均值）` : ""}`);
+      if (o.requiredData?.length) console.log(`  必填：${o.requiredData.join(", ")}；${o.desc}`);
+    }
+    if (!all && lib.openings.some((o) => o.draft)) console.log("草稿已隐藏；list --all 查看。示例值不等于本片内容，先填文案和真实素材再预览。");
+  } else if (cmd === "metric") {
+    const [id, ...args] = rest;
+    const e = find(lib, id);
+    const parsed = parseMetrics(args);
+    if (!parsed.video && e.metricVideo) die(`上次数据属于 ${e.metricVideo}，请显式填写 video=片标识，避免混合不同样本`);
+    const previous = parsed.video ? e.samples?.find((s) => s.video === parsed.video)?.metrics ?? {} : e.metrics ?? {};
+    const metrics = { ...previous, ...parsed.metrics, updated: new Date().toISOString().slice(0, 10) };
+    if (metrics.finish5s != null && metrics.finish10s != null && metrics.finish10s > metrics.finish5s) die("同口径下10秒留存不能高于5秒留存");
+    if (parsed.video) { e.samples = [...(e.samples ?? []).filter((s) => s.video !== parsed.video), { video: parsed.video, metrics }]; e.metricVideo = parsed.video; }
+    else delete e.metricVideo;
+    e.metrics = metrics;
+    save(lib);
+    console.log(`${id}：${JSON.stringify(metrics)} → ${verdict(metrics, lib.rules)}`);
+  } else if (cmd === "status") {
+    const [id, status] = rest;
+    if (!["trial", "keep", "retired"].includes(status)) die("status只能是trial / keep / retired");
+    find(lib, id).status = status; save(lib); console.log(`${id} → ${status}`);
+  } else if (cmd === "pending") {
+    const asJson = rest.includes("--json");
+    const metricKeys = ["plays", "bounce2s", "finish5s", "finish10s"];
+    const noMetric = (o) => metricKeys.every((k) => (o.metrics ?? {})[k] == null);
+    const drafts = lib.openings.filter((o) => o.draft);
+    const bare = lib.openings.filter((o) => !o.draft && noMetric(o));
+    const usedNoMetric = bare.filter((o) => (o.usedBy ?? []).length || o.metricVideo || (o.samples ?? []).length);
+    const noPreview = lib.openings.filter((o) => !o.draft && !o.preview);
+    const missing = (o) => [
+      o.hook ? null : "hook",
+      o.sec || (o.minSec != null && o.maxSec != null) ? null : "sec 或 minSec/maxSec",
+      o.signature ? null : "signature{visual,sound}",
+      o.requiredData?.length ? null : "requiredData",
+    ].filter(Boolean);
+    const report = {
+      total: lib.openings.length,
+      drafts: drafts.map((o) => ({ id: o.id, missing: missing(o) })),
+      noMetrics: bare.map((o) => o.id),
+      usedNoMetrics: usedNoMetric.map((o) => ({ id: o.id, usedBy: o.usedBy ?? [] })),
+      noPreview: noPreview.map((o) => o.id),
+    };
+    if (asJson) {
+      console.log(JSON.stringify(report, null, 1));
+      process.exit(0);
+    }
+    console.log(`开场待办：${report.drafts.length} 个草稿 · ${report.noMetrics.length} 个没录数据（其中 ${report.usedNoMetrics.length} 个上过片）· ${report.noPreview.length} 个没预览 / 共 ${report.total} 个`);
+    if (drafts.length) {
+      console.log("\n草稿（不参与默认选型，补齐后才能移除 draft）：");
+      for (const d of report.drafts) console.log(`  ${d.id}${d.missing.length ? `  缺：${d.missing.join(", ")}` : "  字段齐了，只差验收/预览"}`);
+    }
+    if (usedNoMetric.length) {
+      console.log("\n上过片但没录数据（优先补，metrics 闭环靠它）：");
+      for (const { id, usedBy } of report.usedNoMetrics) console.log(`  ${id}  ← ${usedBy.join("、") || "有 metricVideo/samples"}`);
+    }
+    if (noPreview.length) {
+      const show = report.noPreview.slice(0, 12);
+      console.log(`\n没预览的正式开场（${noPreview.length} 个）：${show.join("、")}${noPreview.length > show.length ? ` …还有 ${noPreview.length - show.length} 个` : ""}`);
+      console.log("  出预览：node scripts/openings.mjs preview <该片 input.json>（按 input hash 落到 openings/previews/<id>-<hash>.mp4）");
+    }
+    if (!drafts.length && !bare.length && !noPreview.length) console.log("\n开场库已闭环：草稿、数据、预览都齐 ✓");
+  } else if (cmd === "preview") {
+    const input = rest[0] && path.resolve(rest[0]);
+    if (!input) die("用法：node scripts/openings.mjs preview <input.json>（前10秒，短片自动截到结尾）");
+    const plan = spawnSync(process.execPath, [path.join(ROOT, "scripts", "make.mjs"), input, "--plan-only"], { cwd: ROOT, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
+    if (plan.stderr) process.stderr.write(plan.stderr);
+    if (plan.error || plan.status !== 0) die(plan.error?.message ?? "开场分镜检查未通过，请先修复上方错误");
+    const timelinePath = /时间轴：([^\r\n]+)/.exec(plan.stdout)?.[1]?.trim();
+    if (!timelinePath) die("make没有返回时间轴路径");
+    const timeline = read(timelinePath);
+    const reg = await loadRegistry();
+    const first = timeline.shots?.[0];
+    const id = timeline.opening?.type ?? first?.data?.opening?.type ?? (reg.byId[first?.type]?.layer === "opening" ? first.type : null);
+    if (!id) die("第一个镜头没有开场");
+    const hash = crypto.createHash("sha256").update(input).digest("hex").slice(0, 12);
+    const safeId = id.replace(/[^a-zA-Z0-9-]/g, "-");
+    const out = path.join(ROOT, "openings", "previews", `${safeId}-${hash}.mp4`);
+    fs.mkdirSync(path.dirname(out), { recursive: true });
+    const { bundle } = await import("@remotion/bundler");
+    const { selectComposition, renderMedia } = await import("@remotion/renderer");
+    const serveUrl = await bundle({ entryPoint: path.join(ROOT, "src", "index.ts") });
+    const inputProps = { timeline }, chromiumOptions = { gl: "angle" };
+    const composition = await selectComposition({ serveUrl, id: "NeuroCast", inputProps, chromiumOptions });
+    await renderMedia({ serveUrl, composition, inputProps, chromiumOptions, codec: "h264", outputLocation: out, frameRange: [0, previewEnd(timeline.durationInFrames, timeline.meta.fps)], concurrency: 4 });
+    const fresh = load(), e = fresh.openings.find((o) => o.id === id);
+    if (e) {
+      const rel = path.relative(ROOT, out).replace(/\\/g, "/");
+      e.previews = [...(e.previews ?? []).filter((p) => p.input !== input), { input, title: timeline.meta.title, path: rel }];
+      e.preview = rel; // 最近一次渲染的预览就是列表/文档里引用的那一条
+      save(fresh);
+    }
+    console.log(`开场预览：${out}（不写发布用量台账；必须看片并听声，预览存在不代表已验收）`);
+  } else die(`未知命令 ${cmd}（sync / list / pending / metric / status / preview）`);
+} catch (e) { die(e.message); }

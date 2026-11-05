@@ -2,7 +2,7 @@ import React from "react";
 import { z } from "zod";
 import { clamp, easeIn, easeInOut, easeOut, easeOutBack, lerp, prog } from "../../lib/anim";
 import { Flash, RingBurst, Scrim } from "../../lib/cine/Flash";
-import { CharPop, Slam, Wipe } from "../../lib/cine/Type";
+import { CharPop } from "../../lib/cine/Type";
 import { Icon } from "../../lib/icons";
 import { Sfx } from "../../lib/sfx";
 import { alpha, useTheme } from "../../lib/theme";
@@ -125,15 +125,9 @@ const C: React.FC<CompProps<D>> = ({ data: d, frame, dur, seed }) => {
           <div style={{ position: "absolute", left: 0, right: 0, height: 250, top: 1080 - 250 * bodyIn, background: `linear-gradient(180deg, transparent, ${alpha(t.primary, 0.28)})` }} />
           <div style={{ position: "absolute", left: (1920 - bodyW) / 2, width: bodyW, top: 1080 - 250 * bodyIn - 120, opacity: bodyIn }}>
             <div style={{ borderTop: `6px solid ${t.primary}`, paddingTop: 22, textAlign: "center", transform: `translateY(${(1 - bodyIn) * 60}px)` }}>
-              <Wipe frame={frame} at={d.bodyAt} text={d.bodyFirst} size={92} color={t.text} font={t.font.title} strokeW={9} len={12} edge={t.primary} />
+              <CharPop frame={frame} at={d.bodyAt} text={d.bodyFirst} cues={spread(d.bodyFirst, d.bodyAt, d.bodyAt + 12)} hl={hlIdx} hlColor={hlColor} size={92} color={t.text} font={t.font.title} strokeW={9} />
             </div>
           </div>
-          {/* the emphasized number/keyword lands with a ding */}
-          {hlIdx.length > 0 && (
-            <div style={{ position: "absolute", left: (1920 - bodyW) / 2, width: bodyW, top: 1080 - 250 * bodyIn - 120, textAlign: "center", pointerEvents: "none" }}>
-              <span style={{ ...ink(92, hlColor, t.font.title, 9), opacity: easeOut(prog(frame, d.bodyAt + 14, 12)), transform: `scale(${1 + 0.12 * (1 - easeOut(prog(frame, d.bodyAt + 14, 12)))})`, display: "block", position: "absolute", left: 0, right: 0, textShadow: `0 0 30px ${alpha(hlColor, 0.8)}` }}>&nbsp;</span>
-            </div>
-          )}
         </>
       )}
       {chars.length > 0 && frame >= d.bodyAt + 12 && frame < d.bodyAt + 26 && (
@@ -155,6 +149,9 @@ export const OneThreeBeat = tpl<D>({
   id: "op-three-beat",
   name: "模板 · 三拍子（实景 → 反转金句 → 正文首句）",
   hook: "三拍子",
+  minSec: 5,
+  maxSec: 8,
+  sec: 6,
   desc: "第一拍演处境：一个身份 + 反复循环的动作图标 + 一直累加的计数（2 秒内连滚三次）；第二拍整幅定格压暗，反转金句从 1.6 倍砸到正中、强调词烧成暖色，下方补一句小字；第三拍正文第一句用主题条从底部推进接住，重点词单独点亮",
   use: "脚本第一句是「先演一个具体处境 → 再一句反转 → 然后进正文」的三连拍写法（行业选题卡基本都是这个结构）；代替单拍开场",
   techniques: ["处境循环动作", "计数器累加", "定格压暗", "反转句砸入", "逐字弹出+强调色", "主题条底部推进", "闪白+冲击音"],

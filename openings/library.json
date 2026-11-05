@@ -1,7 +1,8 @@
 {
   "rules": {
     "bounce2sMax": 0.35,
-    "finish5sMin": 0.5
+    "finish5sMin": 0.5,
+    "finish10sMin": null
   },
   "openings": [
     {
@@ -14,7 +15,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 从评论区挖掘爆款选题",
@@ -34,7 +36,11 @@
         "褪色抖动",
         "5 次形态变化"
       ],
-      "preview": "openings/previews/opening-comment-mining.mp4"
+      "preview": "openings/previews/opening-comment-mining.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-ai-tool-4steps",
@@ -46,7 +52,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 20 分钟用 AI 做出你的第一个小软件",
@@ -66,7 +73,11 @@
         "大材小用小卡",
         "真人2秒全屏后收进小窗",
         "5 次形态变化"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-model-arena",
@@ -78,7 +89,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 用 AI 挖出你身上的隐藏资产",
@@ -100,19 +112,22 @@
         "扫描线+高亮带",
         "人脸回归",
         "收进舞台"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "op-t01-question",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 反问质疑（问号砸下 + 红章答案）",
@@ -129,19 +144,22 @@
         "红章答案",
         "抖动"
       ],
-      "preview": "openings/previews/op-t01-question.mp4"
+      "preview": "openings/previews/op-t01-question.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t02-number",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 数字冲击（计数狂滚 + 定格砸下）",
@@ -158,19 +176,22 @@
         "推镜头",
         "逐字弹出"
       ],
-      "preview": "openings/previews/op-t02-number.mp4"
+      "preview": "openings/previews/op-t02-number.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t03-myth",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 反常识（常识被划掉 → 真相砸入）",
@@ -186,19 +207,22 @@
         "真相砸入",
         "强调色"
       ],
-      "preview": "openings/previews/op-t03-myth.mp4"
+      "preview": "openings/previews/op-t03-myth.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t04-pain",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 痛点扎心（黑白画面 + 痛点气泡围攻）",
@@ -214,19 +238,22 @@
         "大字点名",
         "红色强调"
       ],
-      "preview": "openings/previews/op-t04-pain.mp4"
+      "preview": "openings/previews/op-t04-pain.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t05-suspense",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 悬念锁（马赛克遮挡 + 锁头晃动）",
@@ -242,19 +269,22 @@
         "riser 悬念音",
         "看到最后提示"
       ],
-      "preview": "openings/previews/op-t05-suspense.mp4"
+      "preview": "openings/previews/op-t05-suspense.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t06-callout",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 身份点名（瞄准框锁定 + 人群标签）",
@@ -270,19 +300,22 @@
         "擦出结论",
         "人脸推近"
       ],
-      "preview": "openings/previews/op-t06-callout.mp4"
+      "preview": "openings/previews/op-t06-callout.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t07-before-after",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 前后对比（画面劈开 BEFORE/AFTER）",
@@ -298,19 +331,22 @@
         "箭头冲击",
         "钩子句"
       ],
-      "preview": "openings/previews/op-t07-before-after.mp4"
+      "preview": "openings/previews/op-t07-before-after.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t08-warning",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 警告禁止（红色警报 + 禁止牌）",
@@ -326,19 +362,22 @@
         "禁止牌砸下",
         "强抖动"
       ],
-      "preview": "openings/previews/op-t08-warning.mp4"
+      "preview": "openings/previews/op-t08-warning.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t09-reveal",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 爆料揭秘（绝密档案撕封条）",
@@ -354,19 +393,22 @@
         "大字弹出",
         "推镜头"
       ],
-      "preview": "openings/previews/op-t09-reveal.mp4"
+      "preview": "openings/previews/op-t09-reveal.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t10-countdown",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 倒计时紧迫（巨型倒数 + 燃烧进度条）",
@@ -382,19 +424,22 @@
         "归零爆字",
         "闪白"
       ],
-      "preview": "openings/previews/op-t10-countdown.mp4"
+      "preview": "openings/previews/op-t10-countdown.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t11-money",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 金钱收益（金币雨 + 到账通知）",
@@ -410,19 +455,22 @@
         "收钱音",
         "推镜头"
       ],
-      "preview": "openings/previews/op-t11-money.mp4"
+      "preview": "openings/previews/op-t11-money.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t12-rewind",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 结果先行（定格 + VHS 倒带）",
@@ -438,19 +486,22 @@
         "扫描噪点",
         "问句砸出"
       ],
-      "preview": "openings/previews/op-t12-rewind.mp4"
+      "preview": "openings/previews/op-t12-rewind.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t13-versus",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 对决 VS（两方冲撞 + VS 爆炸）",
@@ -466,19 +517,22 @@
         "闪白",
         "问句砸出"
       ],
-      "preview": "openings/previews/op-t13-versus.mp4"
+      "preview": "openings/previews/op-t13-versus.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t14-list",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 清单预告（卡片扇形甩出 + 最后一张最狠）",
@@ -494,19 +548,22 @@
         "暗化其余",
         "钩子句"
       ],
-      "preview": "openings/previews/op-t14-list.mp4"
+      "preview": "openings/previews/op-t14-list.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t15-chat",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 聊天截图（私信气泡逐条弹出）",
@@ -522,19 +579,22 @@
         "手机震动",
         "自己回复钩子"
       ],
-      "preview": "openings/previews/op-t15-chat.mp4"
+      "preview": "openings/previews/op-t15-chat.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t16-crowd",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 人群对比（百人方阵 → 只剩 1 个发光）",
@@ -550,19 +610,22 @@
         "放大聚焦",
         "结论烧色"
       ],
-      "preview": "openings/previews/op-t16-crowd.mp4"
+      "preview": "openings/previews/op-t16-crowd.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t17-news",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 新闻快讯（BREAKING 红条 + 滚动字幕）",
@@ -578,19 +641,22 @@
         "滚动字幕",
         "主播推镜"
       ],
-      "preview": "openings/previews/op-t17-news.mp4"
+      "preview": "openings/previews/op-t17-news.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t18-magnify",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 放大镜聚焦（画面里的关键物）",
@@ -605,19 +671,22 @@
         "箭头标注",
         "擦出结论"
       ],
-      "preview": "openings/previews/op-t18-magnify.mp4"
+      "preview": "openings/previews/op-t18-magnify.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t19-bet",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 挑战打赌（筹码砸桌 + 承诺盖章）",
@@ -633,19 +702,22 @@
         "承诺盖章",
         "剧烈抖动"
       ],
-      "preview": "openings/previews/op-t19-bet.mp4"
+      "preview": "openings/previews/op-t19-bet.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "op-t20-glitch",
       "date": "2026-09-30",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 故障闯入（信号撕裂 → 真人闯出）",
@@ -661,7 +733,11 @@
         "信号恢复推镜",
         "钩子逐字"
       ],
-      "preview": "openings/previews/op-t20-glitch.mp4"
+      "preview": "openings/previews/op-t20-glitch.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "opening-never-from-zero",
@@ -673,7 +749,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 别再让AI每次从零开始（常识被划掉 → 复利砸入）",
@@ -690,19 +767,22 @@
         "否定红字",
         "真相砸入",
         "强调色"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "op-three-beat",
       "date": "2026-10-01",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "模板 · 三拍子（实景 → 反转金句 → 正文首句）",
@@ -718,19 +798,31 @@
         "逐字弹出+强调色",
         "主题条底部推进",
         "闪白+冲击音"
-      ]
+      ],
+      "sec": 6,
+      "minSec": 5,
+      "maxSec": 8,
+      "template": true,
+      "draft": false,
+      "previews": [
+        {
+          "input": "D:\\qord\\neurocast-ai\\input.json",
+          "title": "怎样用AI控制AI？我搭了一个人公司指挥舱",
+          "path": "openings/previews/op-three-beat-69f648914755.mp4"
+        }
+      ],
+      "preview": "openings/previews/op-three-beat-69f648914755.mp4"
     },
     {
       "id": "trick-01-zoom-suspense",
       "date": "2026-10-01",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "第1招 · 慢慢放大 + 做悬疑",
@@ -743,19 +835,22 @@
         "逐字弹出",
         "强调色",
         "不给答案"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "trick-02-morph-rhythm",
       "date": "2026-10-01",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "第2招 · 出其不意 + 按节奏变形",
@@ -768,19 +863,22 @@
         "卡语音节奏",
         "闪白+震动",
         "强调句"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "trick-03-mask-focus",
       "date": "2026-10-01",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "第3招 · 蒙版缩圈 + 开篇主题",
@@ -793,19 +891,22 @@
         "强制聚焦",
         "主题预告",
         "叮音点亮"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "trick-04-title-behind",
       "date": "2026-10-01",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "第4招 · 身后飞个大标题 + 抠像 + 副标题",
@@ -818,19 +919,22 @@
         "标题从身后飞入",
         "副标题补位",
         "推镜"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "trick-05-info-first",
       "date": "2026-10-01",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "第5招 · 文字干货先出现，再露脸",
@@ -843,7 +947,11 @@
         "人物延后入画",
         "逐条弹出",
         "淡入"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "opening-cost-bill",
@@ -855,7 +963,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 成本账单（首帧90%大字 → 4份钱账单 → 90→10 计数器）",
@@ -870,7 +979,11 @@
         "数字滚动",
         "盖章",
         "价值承诺前置"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-workbuddy-pay",
@@ -882,7 +995,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 收益先行（首帧能收钱大字 → 4+4数字牌 → 几十分钟 → 已到账盖章）",
@@ -899,7 +1013,11 @@
         "冲击环+ding",
         "收益承诺前置"
       ],
-      "preview": "openings/previews/opening-workbuddy-pay.mp4"
+      "preview": "openings/previews/opening-workbuddy-pay.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-opus55-4things",
@@ -911,7 +1029,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 数字悬念（首帧不会告诉你 → 四张小卡 → 475滚动 → 收藏盖章）",
@@ -926,7 +1045,11 @@
         "数字滚动",
         "真实素材铺底",
         "盖章+冲击环+ding"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-workbuddy-10tips",
@@ -938,7 +1061,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 插话痛点反问（想补充两句→怕打断→划掉翻案→10 个→盖章）",
@@ -953,7 +1077,11 @@
         "数字滚动",
         "盖章+冲击环+ding"
       ],
-      "preview": "openings/previews/opening-workbuddy-10tips.mp4"
+      "preview": "openings/previews/opening-workbuddy-10tips.mp4",
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-codex-100x",
@@ -965,7 +1093,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 大字对比钩子f0砸出+100倍大数字→划掉甩出→Codex 官方图标单独镜头→真人全屏2秒→代码窗口锁50%",
@@ -979,7 +1108,11 @@
         "单独镜头砸图标",
         "代码窗口打字",
         "进度条锁50%"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-webppt-now",
@@ -991,7 +1124,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 首帧大字压在真实演示视频上+加分项/扣分项盖章评分",
@@ -1008,42 +1142,56 @@
         "光环+叮",
         "盖章抖动灰化",
         "甩出退场"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 9,
+      "template": false,
+      "draft": false
     },
     {
       "id": "pro-01-dolly-suspense",
       "date": "2026-10-08",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "PRO 01 · 慢推悬疑",
       "file": "src/openings/pro/nc.tsx",
-      "desc": "镜头从黑里推出、加速推近人脸，心跳越来越快、画面越来越暗越冷；悬疑句逐字浮现、答案用发光色块遮住；揭晓时上扬音戛然而止 → 闪白 + 咚 + 冲击环 + 火花，答案巨字砸出发光（第1招 慢慢放大 + 做悬疑。专有字段：kicker 顶小字 · line 悬疑句（▇▇ = 被遮住的答案）· reveal 答案 · sub · revealAt 揭晓（秒/锚点）· zoomTo）",
+      "desc": "镜头从黑里推出、加速推近人脸，心跳越来越快、画面越来越暗越冷；悬疑句逐字浮现、答案用发光色块遮住；揭晓时上扬音戛然而止 → 闪白 + 咚 + 冲击环 + 火花，答案巨字砸出发光（第1招 慢慢放大 + 做悬疑。专有字段：kicker 顶小字 · line 悬疑句（▇▇ = 被遮住的答案）· reveal 答案 · sub · revealAt 揭晓（秒/锚点）· zoomTo · personAt 真人第几秒才出场（0=第 0 帧就在）· pre 出场前那几秒铺的背景图 · center 悬疑句垂直居中（真人出场那一下滑回下方））",
       "script": "template",
       "hook": "悬念 / 揭露",
       "techniques": [
         "第1招 慢慢放大 + 做悬疑"
       ],
-      "sec": 3.6
+      "sec": 3.6,
+      "minSec": 2.5,
+      "maxSec": 4,
+      "template": true,
+      "draft": false,
+      "previews": [
+        {
+          "input": "D:\\qord\\neurocast-codex-1-7-jihui\\input.json",
+          "title": "为什么说这是普通人的机会",
+          "path": "openings/previews/pro-01-dolly-suspense-f6278e50eac0.mp4"
+        }
+      ],
+      "preview": "openings/previews/pro-01-dolly-suspense-f6278e50eac0.mp4"
     },
     {
       "id": "pro-02-shatter-morph",
       "date": "2026-10-08",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "PRO 02 · 碎屏突变",
@@ -1054,19 +1202,22 @@
       "techniques": [
         "第2招 出其不意 + 按节奏变形"
       ],
-      "sec": 3.4
+      "sec": 3.4,
+      "minSec": 2.5,
+      "maxSec": 4,
+      "template": true,
+      "draft": false
     },
     {
       "id": "pro-03-iris-title",
       "date": "2026-10-08",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "PRO 03 · 光圈片名",
@@ -1077,19 +1228,30 @@
       "techniques": [
         "第3招 蒙版缩圈 + 开篇主题"
       ],
-      "sec": 3.4
+      "sec": 3.4,
+      "minSec": 2.5,
+      "maxSec": 4,
+      "template": true,
+      "draft": false,
+      "previews": [
+        {
+          "input": "D:\\qord\\neurocast-codex-1-8-chazai\\input.json",
+          "title": "ChatGPT、智能体、Codex 差在哪",
+          "path": "openings/previews/pro-03-iris-title-a80d1ba2488e.mp4"
+        }
+      ],
+      "preview": "openings/previews/pro-03-iris-title-a80d1ba2488e.mp4"
     },
     {
       "id": "pro-04-depth-title",
       "date": "2026-10-08",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "PRO 04 · 身后巨字",
@@ -1100,19 +1262,30 @@
       "techniques": [
         "第4招 身后飞个大标题 + 抠像 + 副标题"
       ],
-      "sec": 3.2
+      "sec": 3.2,
+      "minSec": 2.5,
+      "maxSec": 4,
+      "template": true,
+      "draft": false,
+      "previews": [
+        {
+          "input": "D:\\qord\\neurocast-codex-1-5-luxian\\input.json",
+          "title": "一张自学路线图——四个台阶四条心法",
+          "path": "openings/previews/pro-04-depth-title-4e71f5971ded.mp4"
+        }
+      ],
+      "preview": "openings/previews/pro-04-depth-title-4e71f5971ded.mp4"
     },
     {
       "id": "pro-05-info-first",
       "date": "2026-10-08",
       "status": "trial",
-      "usedBy": [
-        "template"
-      ],
+      "usedBy": [],
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "PRO 05 · 干货先行",
@@ -1123,7 +1296,19 @@
       "techniques": [
         "第5招 文字干货先出现，找好节奏再露脸 + 闪白叮"
       ],
-      "sec": 3.4
+      "sec": 3.4,
+      "minSec": 2.5,
+      "maxSec": 4,
+      "template": true,
+      "draft": false,
+      "previews": [
+        {
+          "input": "D:\\qord\\neurocast-codex-1-9-xingtai\\input.json",
+          "title": "四种形态，你该怎么选",
+          "path": "openings/previews/pro-05-info-first-1dc87826da51.mp4"
+        }
+      ],
+      "preview": "openings/previews/pro-05-info-first-1dc87826da51.mp4"
     },
     {
       "id": "opening-dbs-shatter",
@@ -1135,7 +1320,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 碎屏居中大字→真人全屏两侧动效→收窗",
@@ -1148,7 +1334,11 @@
         "碎屏重组",
         "两侧胶囊",
         "收藏盖章"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-aiconsole-info",
@@ -1160,7 +1350,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 全息指挥台大字先行→工作台录屏全屏→真人揭幕→盖章收窗",
@@ -1176,7 +1367,11 @@
         "要点逐条",
         "闪白揭幕",
         "盖章"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-aiconsole-explainer",
@@ -1188,7 +1383,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 紫色指挥台大字先行→痛点实录→工作台实录→真人揭幕→盖章",
@@ -1206,7 +1402,11 @@
         "要点逐条",
         "闪白揭幕",
         "盖章"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-codex-vs-wb",
@@ -1218,7 +1418,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · Codex 与 WorkBuddy 双真图标 VS",
@@ -1231,7 +1432,11 @@
         "真图标对峙",
         "VS 盖章",
         "爆闪交棒"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
     },
     {
       "id": "opening-ai-computer-use",
@@ -1243,7 +1448,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 《AI控制电脑》（骨架，待定制）",
@@ -1256,7 +1462,11 @@
         "逐字 kicker",
         "金色重音",
         "承诺第二行"
-      ]
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": true
     },
     {
       "id": "opening-junior-jobs-vanish",
@@ -1268,7 +1478,8 @@
       "metrics": {
         "plays": null,
         "bounce2s": null,
-        "finish5s": null
+        "finish5s": null,
+        "finish10s": null
       },
       "notes": "",
       "name": "开场 · 《初级岗位正在消失》（骨架，待定制）",
@@ -1281,7 +1492,354 @@
         "逐字 kicker",
         "金色重音",
         "承诺第二行"
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": true
+    },
+    {
+      "id": "op-result-first",
+      "date": "2026-10-17",
+      "status": "trial",
+      "usedBy": [],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "开场 · 结果先行 → 细节举证 → 第一步",
+      "file": "src/openings/templates/retention.tsx",
+      "desc": "先展示真实成品或录屏；2秒放大证据细节（可给 proof2 换第二件证据，同一素材位先后两张真图）；兑现时缩为左侧实物，右侧给具体第一步；暗绿展台，无闪白砸字。",
+      "script": "template",
+      "hook": "结果先行",
+      "techniques": [
+        "真实结果",
+        "局部聚焦",
+        "分屏教学"
+      ],
+      "sec": 8,
+      "minSec": 6,
+      "maxSec": 10,
+      "template": true,
+      "draft": false,
+      "signature": {
+        "visual": "result-focus-split",
+        "sound": "foley"
+      },
+      "beats": {
+        "proof": "proofAt",
+        "payoff": "payoffAt"
+      },
+      "requiredData": [
+        "hook",
+        "proof",
+        "payoff",
+        "result.src"
       ]
+    },
+    {
+      "id": "op-quiet-question",
+      "date": "2026-10-17",
+      "status": "trial",
+      "usedBy": [],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "开场 · 留白反问 → 关系解释 → 行动",
+      "file": "src/openings/templates/retention.tsx",
+      "desc": "纸色编辑排版，首帧问题和大留白；问号让位给关系线；绕路收成直达路径，底部第一步接住；默认只留人声。",
+      "script": "template",
+      "hook": "冷开场反问",
+      "techniques": [
+        "纸色留白",
+        "关系线示意",
+        "行动条"
+      ],
+      "sec": 8,
+      "minSec": 6,
+      "maxSec": 10,
+      "template": true,
+      "draft": false,
+      "signature": {
+        "visual": "editorial-path",
+        "sound": "quiet"
+      },
+      "beats": {
+        "proof": "proofAt",
+        "payoff": "payoffAt"
+      },
+      "requiredData": [
+        "hook",
+        "proof",
+        "payoff"
+      ],
+      "preview": "openings/previews/op-quiet-question-bee125ca69ee.mp4"
+    },
+    {
+      "id": "op-proof-compare",
+      "date": "2026-10-17",
+      "status": "trial",
+      "usedBy": [],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "开场 · 实物对照 → 差别揭示 → 复现",
+      "file": "src/openings/templates/retention.tsx",
+      "desc": "真实前后画面由滑动分割线揭示；2秒展开同条件比较，5秒收高为复现步骤腾位；低频悬念，无盖章。",
+      "script": "template",
+      "hook": "可见差别",
+      "techniques": [
+        "滑动比较",
+        "同条件举证",
+        "复现步骤"
+      ],
+      "sec": 8,
+      "minSec": 6,
+      "maxSec": 10,
+      "template": true,
+      "draft": false,
+      "signature": {
+        "visual": "comparison-slider",
+        "sound": "pulse"
+      },
+      "beats": {
+        "proof": "proofAt",
+        "payoff": "payoffAt"
+      },
+      "requiredData": [
+        "hook",
+        "proof",
+        "payoff",
+        "before.src",
+        "after.src"
+      ]
+    },
+    {
+      "id": "opening-ai-siceng",
+      "date": "2026-10-16",
+      "status": "trial",
+      "usedBy": [
+        "neurocast-ai"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "开场 · 《AI软件为什么收钱》（骨架，待定制）",
+      "file": "src/openings/2026-10-16-ai-siceng/Opening.tsx",
+      "desc": "第 0 帧 kicker 逐字弹出 + 钩子大字砸下（${d.hot} 烧金色）；${d.promiseAt} 帧第二行承诺缩放入场",
+      "script": "neurocast-ai",
+      "hook": "首帧大字+第二行承诺",
+      "techniques": [
+        "首帧大字",
+        "逐字 kicker",
+        "金色重音",
+        "承诺第二行"
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": true
+    },
+    {
+      "id": "opening-council4-collage",
+      "date": "2026-10-19",
+      "status": "trial",
+      "usedBy": [
+        "../../../council4"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "开场 · 大佬照片剪贴画墙→真人全屏两侧名字胶囊→盖章收窗",
+      "file": "src/openings/2026-10-19-council4-collage/Opening.tsx",
+      "desc": "0~2.8s 不透明拼贴墙：四张真实大佬照片做成卡纸剪贴画（胶带+倾角）逐张砸上墙，居中两行大字第 0 帧在场，闪白+双冲击环+速度线；2.8s 起拼贴墙淡出揭幕真人全屏，四个名字按配音词时左右交替弹出（带圆形照片缩略），锚「做成了」左下金章「四人 AI 参谋团」盖章；到 presenter.full 收右上小窗",
+      "script": "../../../council4",
+      "hook": "名人悬念 + 照片剪贴画 + 真人两侧动效",
+      "techniques": [
+        "剪贴画墙",
+        "居中大字",
+        "两侧名字胶囊",
+        "盖章收窗"
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
+    },
+    {
+      "id": "opening-skill-upgrade",
+      "date": "2026-10-21",
+      "status": "trial",
+      "usedBy": [
+        "../../../skills7"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "开场 · 真人全屏+居中两行大字+右侧 7 枚 skill 胶囊窜入",
+      "file": "src/openings/2026-10-21-skill-upgrade/Opening.tsx",
+      "desc": "0~3s 真人不切、不铺背景：底部居中两行大字「AI 剪辑 skill / 又升级了」第 0 帧砸出，右侧 7 枚 skill 名字胶囊按拍逐枚窜入；闪白+双冲击环+速度线+三处抖动；2.6s 元素向两侧飞走，2.95s 真人收进右上小窗",
+      "script": "../../../skills7",
+      "hook": "升级反常识 + 真人在场 + 7 个名字先亮",
+      "techniques": [
+        "居中两行大字",
+        "右侧名字胶囊",
+        "闪白冲击环",
+        "收窗"
+      ],
+      "minSec": 2,
+      "maxSec": 4,
+      "template": false,
+      "draft": false
+    },
+    {
+      "id": "opening-trae",
+      "date": "2026-10-24",
+      "status": "trial",
+      "usedBy": [
+        "../../../neurocast-trae"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "开场 · 真人全屏两侧动效→白描边真人杂志页→品牌序列→TRAE 收束",
+      "file": "src/openings/2026-10-24-trae/Opening.tsx",
+      "desc": "0~1s 真人全屏、动效只在人物两侧（左＝绿色 TRAE 图标+标题小字，右＝问句大字），闪白转场；1~4.3s 深紫环境光杂志页，绿色 TRAE 图标带冲击环与回弹重击揭示、垫在白描边真人身后；4.6~6.1s 字节跳动/抖音/豆包 三张真标识卡按配音词时依次飞入左栏；7~8.5s 卡片与真人退场，绿色 TRAE 飞到正中再次重击落版 + 红章「战略级产品」收束",
+      "script": "../../../neurocast-trae",
+      "hook": "真人两侧动效 + 白描边真人 + 绿色 TRAE",
+      "techniques": [
+        "真人全屏",
+        "闪白转场",
+        "白描边真人",
+        "绿色标识序列",
+        "红章收束"
+      ],
+      "minSec": 4,
+      "maxSec": 11,
+      "template": false,
+      "draft": false
+    },
+    {
+      "id": "opening-personal-agent",
+      "date": "2026-10-25",
+      "status": "trial",
+      "usedBy": [
+        "../../../../agent/ai培训/neurocast-personal-agent",
+        "AI 新词 → PERSONAL AGENT 图形冲击 → 五家大厂图标环绕 → 一户一苏培盛"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "Personal Agent · 三段式强钩子开场",
+      "file": "src/openings/2026-10-25-personal-agent/Opening.tsx",
+      "script": "AI 新词 → PERSONAL AGENT 图形冲击 → 五家大厂图标环绕 → 一户一苏培盛",
+      "hook": "纯图形冲击开头，不露人",
+      "techniques": [
+        "2.4秒纯图形冲击",
+        "五图标环形爆开",
+        "大字盖章",
+        "紫色新闻HUD"
+      ],
+      "minSec": 8,
+      "maxSec": 15,
+      "template": false,
+      "draft": false,
+      "signature": {
+        "visual": "巨型PERSONAL AGENT + 五图标环形",
+        "sound": "无（单音源口播）"
+      }
+    },
+    {
+      "id": "opening-wb-5settings",
+      "date": "2026-11-06",
+      "status": "trial",
+      "usedBy": [
+        "../../../neurocast-wb-5settings"
+      ],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "开场 · 真身图标砸下（WorkBuddy logo 自由落体 + 冲击环 + 收角成徽标）",
+      "file": "src/openings/2026-11-06-wb-5settings/Opening.tsx",
+      "desc": "第 0 帧 WorkBuddy 真标识从画布外 2.4× 自由落体砸下：闪白 + impact + 速度线 + 冲击环 + 地面光带 + 屏幕抖动；金字「WorkBuddy」砸在图标下方，「下载之后直接就用」擦出；1.0s 图标缩到左上角成徽标（和真人收窗同一刻，画面一次形态突变）",
+      "script": "../../../neurocast-wb-5settings",
+      "hook": "真身图标砸下+落地冲击+收角",
+      "techniques": [
+        "首帧真 logo 砸下",
+        "冲击环+速度线+压痕",
+        "图标收角成徽标",
+        "大字居中"
+      ],
+      "minSec": 2,
+      "maxSec": 3,
+      "template": false,
+      "draft": false
+    },
+    {
+      "id": "op-tunnel",
+      "date": "2026-11-05",
+      "status": "trial",
+      "usedBy": [],
+      "metrics": {
+        "plays": null,
+        "bounce2s": null,
+        "finish5s": null,
+        "finish10s": null
+      },
+      "notes": "",
+      "name": "模板 · 章节隧道（代码雨通道 → 3D 标题）",
+      "file": "src/openings/templates/t22-tunnel.tsx",
+      "desc": "代码雨从画面中心向外冲成一条透视通道，章节编号/标题在通道尽头由远及近、最后落定成可读的大字；自带深色舞台，2~3 秒后交出正片",
+      "script": "template",
+      "hook": "章节过场",
+      "techniques": [
+        "代码雨透视通道",
+        "中心压暗",
+        "3D 标题推近",
+        "章节编号",
+        "落地音效"
+      ],
+      "sec": 2.6,
+      "minSec": 2.2,
+      "maxSec": 4,
+      "template": true,
+      "draft": false,
+      "preview": "openings/previews/op-tunnel.mp4"
     }
   ]
 }

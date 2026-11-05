@@ -16,6 +16,16 @@ export const BRANDS: Brand[] = [
   ]
  },
  {
+  "key": "claude-code",
+  "label": "Claude Code",
+  "file": "claude.svg",
+  "aliases": [
+   "claude-code",
+   "claude code",
+   "claudecode"
+  ]
+ },
+ {
   "key": "chatgpt",
   "label": "ChatGPT",
   "file": "chatgpt.svg",
@@ -26,6 +36,16 @@ export const BRANDS: Brand[] = [
    "openai",
    "gpt-4",
    "gpt4"
+  ]
+ },
+ {
+  "key": "codex",
+  "label": "Codex",
+  "file": "codex.png",
+  "aliases": [
+   "codex",
+   "codex",
+   "codex cli"
   ]
  },
  {
@@ -49,12 +69,42 @@ export const BRANDS: Brand[] = [
   ]
  },
  {
+  "key": "qoder",
+  "label": "Qoder",
+  "file": "qoder.png",
+  "aliases": [
+   "qoder",
+   "qoder"
+  ]
+ },
+ {
+  "key": "workbuddy",
+  "label": "Workbuddy",
+  "file": "workbuddy.svg",
+  "aliases": [
+   "workbuddy",
+   "workbuddy",
+   "工作搭子"
+  ]
+ },
+ {
   "key": "cursor",
   "label": "Cursor",
   "file": "cursor.svg",
   "aliases": [
    "cursor",
    "cursor"
+  ]
+ },
+ {
+  "key": "vscode",
+  "label": "VS Code",
+  "file": "vscode.svg",
+  "aliases": [
+   "vscode",
+   "vscode",
+   "visualstudiocode",
+   "vscode编辑器"
   ]
  },
  {
@@ -76,6 +126,26 @@ export const BRANDS: Brand[] = [
   ]
  },
  {
+  "key": "jianying",
+  "label": "剪映",
+  "file": "jianying.png",
+  "aliases": [
+   "jianying",
+   "剪映",
+   "capcut"
+  ]
+ },
+ {
+  "key": "premiere",
+  "label": "Premiere",
+  "file": "premiere.svg",
+  "aliases": [
+   "premiere",
+   "premiere",
+   "pr 剪辑"
+  ]
+ },
+ {
   "key": "davinci",
   "label": "DaVinci Resolve",
   "file": "davinci.svg",
@@ -86,12 +156,42 @@ export const BRANDS: Brand[] = [
   ]
  },
  {
+  "key": "feishu",
+  "label": "飞书",
+  "file": "feishu.png",
+  "aliases": [
+   "feishu",
+   "飞书",
+   "lark"
+  ]
+ },
+ {
   "key": "notion",
   "label": "Notion",
   "file": "notion.svg",
   "aliases": [
    "notion",
    "notion"
+  ]
+ },
+ {
+  "key": "yuque",
+  "label": "语雀",
+  "file": "yuque.png",
+  "aliases": [
+   "yuque",
+   "语雀"
+  ]
+ },
+ {
+  "key": "wecom",
+  "label": "企业微信",
+  "file": "wecom.png",
+  "aliases": [
+   "wecom",
+   "企业微信",
+   "企微",
+   "wechatwork"
   ]
  },
  {
@@ -168,6 +268,15 @@ export const BRANDS: Brand[] = [
   ]
  },
  {
+  "key": "midjourney",
+  "label": "Midjourney",
+  "file": "midjourney.svg",
+  "aliases": [
+   "midjourney",
+   "midjourney"
+  ]
+ },
+ {
   "key": "suno",
   "label": "Suno",
   "file": "suno.svg",
@@ -195,6 +304,16 @@ export const BRANDS: Brand[] = [
   ]
  },
  {
+  "key": "wps",
+  "label": "WPS / Excel",
+  "file": "wps.png",
+  "aliases": [
+   "wps",
+   "wps",
+   "excel"
+  ]
+ },
+ {
   "key": "taobao",
   "label": "淘宝",
   "file": "taobao.svg",
@@ -202,6 +321,15 @@ export const BRANDS: Brand[] = [
    "taobao",
    "淘宝",
    "天猫"
+  ]
+ },
+ {
+  "key": "jd",
+  "label": "京东",
+  "file": "jd.png",
+  "aliases": [
+   "jd",
+   "京东"
   ]
  },
  {
@@ -214,6 +342,24 @@ export const BRANDS: Brand[] = [
   ]
  },
  {
+  "key": "remotion",
+  "label": "Remotion",
+  "file": "remotion.svg",
+  "aliases": [
+   "remotion",
+   "remotion"
+  ]
+ },
+ {
+  "key": "motionface",
+  "label": "Motion Face",
+  "file": "motionface.svg",
+  "aliases": [
+   "motionface",
+   "motionface"
+  ]
+ },
+ {
   "key": "twitter",
   "label": "X / 推特",
   "file": "twitter.svg",
@@ -222,6 +368,36 @@ export const BRANDS: Brand[] = [
    "推特",
    "twitter",
    "x平台"
+  ]
+ },
+ {
+  "key": "doubao",
+  "label": "豆包",
+  "file": "doubao.svg",
+  "aliases": [
+   "doubao",
+   "豆包",
+   "doubao"
+  ]
+ },
+ {
+  "key": "trae",
+  "label": "TRAE",
+  "file": "trae.svg",
+  "aliases": [
+   "trae",
+   "trae"
+  ]
+ },
+ {
+  "key": "bytedance",
+  "label": "字节跳动",
+  "file": "bytedance.svg",
+  "aliases": [
+   "bytedance",
+   "字节跳动",
+   "字节",
+   "bytedance"
   ]
  }
 ];

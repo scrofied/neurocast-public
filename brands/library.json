@@ -1,332 +1,411 @@
 {
- "rules": {
-  "dir": "public/brands/",
-  "howToAdd": "1) 把真图标文件放进 public/brands/（svg 或 200px 以上的 png，透明底最佳）2) 在下面 brands 里补一条（label 显示名 / file 文件名 / aliases 文案里会出现的叫法）3) node scripts/brands.mjs sync —— 只有文件真的存在才会进组件",
-  "whyGenerated": "组件在浏览器里没法列目录，所以 src/lib/brands.generated.ts 由 sync 从这份 json + 磁盘上的实际文件生成；没放文件的牌子上屏会让 Remotion 报缺静态文件",
-  "note": "aliases 用你文案里的真实叫法（中英、简称、俗称都要写），匹配是「去掉空格和连字符后的小写包含」",
-  "alias_policy": "别名匹配走「精确优先，其次包含」；裸短 ASCII（<=2 字符）和通用中文词（仓库/广场/表格）不要当别名，会把知识仓库这种词误判成产品"
- },
- "brands": {
-  "claude": {
-   "label": "Claude",
-   "file": "claude.svg",
-   "aliases": [
-    "claude",
-    "克劳德",
-    "anthropic",
-    "opus"
-   ],
-   "si": "claude",
-   "hex": "D97757"
+  "rules": {
+    "dir": "public/brands/",
+    "howToAdd": "1) 把真图标文件放进 public/brands/（svg 或 200px 以上的 png，透明底最佳）2) 在下面 brands 里补一条（label 显示名 / file 文件名 / aliases 文案里会出现的叫法）3) node scripts/brands.mjs sync —— 只有文件真的存在才会进组件",
+    "whyGenerated": "组件在浏览器里没法列目录，所以 src/lib/brands.generated.ts 由 sync 从这份 json + 磁盘上的实际文件生成；没放文件的牌子上屏会让 Remotion 报缺静态文件",
+    "note": "aliases 用你文案里的真实叫法（中英、简称、俗称都要写），匹配是「去掉空格和连字符后的小写包含」",
+    "alias_policy": "别名匹配走「精确优先，其次包含」；裸短 ASCII（<=2 字符）和通用中文词（仓库/广场/表格）不要当别名，会把知识仓库这种词误判成产品",
+    "source_policy": "logo 只从官方应用图标/官网/CC0 图标库取；记录 src 和 license，禁止手绘或拿近似的通用图标冒充；文件丢失时 brands.mjs sync 会把它挡在生成表外"
   },
-  "chatgpt": {
-   "label": "ChatGPT",
-   "file": "chatgpt.svg",
-   "aliases": [
-    "chatgpt",
-    "gpt",
-    "openai",
-    "gpt-4",
-    "gpt4"
-   ],
-   "si": "openai",
-   "hex": "412991"
-  },
-  "gemini": {
-   "label": "Gemini",
-   "file": "gemini.svg",
-   "aliases": [
-    "gemini",
-    "谷歌ai"
-   ],
-   "si": "googlegemini",
-   "hex": "8E75B2"
-  },
-  "deepseek": {
-   "label": "DeepSeek",
-   "file": "deepseek.svg",
-   "aliases": [
-    "deepseek",
-    "深度求索"
-   ],
-   "si": "deepseek",
-   "hex": "5786FE"
-  },
-  "qoder": {
-   "label": "Qoder",
-   "file": "qoder.svg",
-   "aliases": [
-    "qoder"
-   ]
-  },
-  "workbuddy": {
-   "label": "Workbuddy",
-   "file": "workbuddy.svg",
-   "aliases": [
-    "workbuddy",
-    "工作搭子"
-   ]
-  },
-  "cursor": {
-   "label": "Cursor",
-   "file": "cursor.svg",
-   "aliases": [
-    "cursor"
-   ],
-   "si": "cursor",
-   "hex": "000000"
-  },
-  "vscode": {
-   "label": "VS Code",
-   "file": "vscode.svg",
-   "aliases": [
-    "vscode",
-    "visualstudiocode",
-    "vscode编辑器"
-   ]
-  },
-  "figma": {
-   "label": "Figma",
-   "file": "figma.svg",
-   "aliases": [
-    "figma"
-   ],
-   "si": "figma",
-   "hex": "F24E1E"
-  },
-  "canva": {
-   "label": "Canva",
-   "file": "canva.svg",
-   "aliases": [
-    "canva"
-   ],
-   "si": "canva",
-   "hex": "00C4CC"
-  },
-  "jianying": {
-   "label": "剪映",
-   "file": "jianying.svg",
-   "aliases": [
-    "剪映",
-    "capcut"
-   ]
-  },
-  "premiere": {
-   "label": "Premiere",
-   "file": "premiere.svg",
-   "aliases": [
-    "premiere",
-    "pr 剪辑"
-   ]
-  },
-  "davinci": {
-   "label": "DaVinci Resolve",
-   "file": "davinci.svg",
-   "aliases": [
-    "davinci",
-    "达芬奇"
-   ],
-   "si": "davinciresolve",
-   "hex": "233A51"
-  },
-  "feishu": {
-   "label": "飞书",
-   "file": "feishu.svg",
-   "aliases": [
-    "飞书",
-    "lark"
-   ]
-  },
-  "notion": {
-   "label": "Notion",
-   "file": "notion.svg",
-   "aliases": [
-    "notion"
-   ],
-   "si": "notion",
-   "hex": "000000"
-  },
-  "yuque": {
-   "label": "语雀",
-   "file": "yuque.svg",
-   "aliases": [
-    "语雀"
-   ]
-  },
-  "wecom": {
-   "label": "企业微信",
-   "file": "wecom.svg",
-   "aliases": [
-    "企业微信",
-    "企微",
-    "wechatwork"
-   ]
-  },
-  "wechat": {
-   "label": "微信",
-   "file": "wechat.svg",
-   "aliases": [
-    "微信",
-    "公众号",
-    "视频号",
-    "微信群"
-   ],
-   "si": "wechat",
-   "hex": "07C160"
-  },
-  "douyin": {
-   "label": "抖音",
-   "file": "douyin.svg",
-   "aliases": [
-    "抖音",
-    "douyin",
-    "tiktok"
-   ],
-   "si": "tiktok",
-   "hex": "000000"
-  },
-  "xiaohongshu": {
-   "label": "小红书",
-   "file": "xiaohongshu.svg",
-   "aliases": [
-    "小红书",
-    "小红书笔记"
-   ],
-   "si": "xiaohongshu",
-   "hex": "FF2442"
-  },
-  "bilibili": {
-   "label": "哔哩哔哩",
-   "file": "bilibili.svg",
-   "aliases": [
-    "b站",
-    "哔哩哔哩",
-    "bilibili"
-   ],
-   "si": "bilibili",
-   "hex": "00A1D6"
-  },
-  "youtube": {
-   "label": "YouTube",
-   "file": "youtube.svg",
-   "aliases": [
-    "youtube",
-    "油管"
-   ],
-   "si": "youtube",
-   "hex": "FF0000"
-  },
-  "github": {
-   "label": "GitHub",
-   "file": "github.svg",
-   "aliases": [
-    "github"
-   ],
-   "si": "github",
-   "hex": "181717"
-  },
-  "huggingface": {
-   "label": "Hugging Face",
-   "file": "huggingface.svg",
-   "aliases": [
-    "huggingface",
-    "hf 镜像"
-   ],
-   "si": "huggingface",
-   "hex": "FFD21E"
-  },
-  "midjourney": {
-   "label": "Midjourney",
-   "file": "midjourney.svg",
-   "aliases": [
-    "midjourney"
-   ]
-  },
-  "suno": {
-   "label": "Suno",
-   "file": "suno.svg",
-   "aliases": [
-    "suno"
-   ],
-   "si": "suno",
-   "hex": "000000"
-  },
-  "n8n": {
-   "label": "n8n",
-   "file": "n8n.svg",
-   "aliases": [
-    "n8n"
-   ],
-   "si": "n8n",
-   "hex": "EA4B71"
-  },
-  "dify": {
-   "label": "Dify",
-   "file": "dify.svg",
-   "aliases": [
-    "dify"
-   ],
-   "si": "dify",
-   "hex": "0033FF"
-  },
-  "wps": {
-   "label": "WPS / Excel",
-   "file": "wps.svg",
-   "aliases": [
-    "wps",
-    "excel"
-   ]
-  },
-  "taobao": {
-   "label": "淘宝",
-   "file": "taobao.svg",
-   "aliases": [
-    "淘宝",
-    "天猫"
-   ],
-   "si": "taobao",
-   "hex": "E94F20"
-  },
-  "jd": {
-   "label": "京东",
-   "file": "jd.svg",
-   "aliases": [
-    "京东"
-   ]
-  },
-  "meituan": {
-   "label": "美团",
-   "file": "meituan.svg",
-   "aliases": [
-    "美团"
-   ],
-   "si": "meituan",
-   "hex": "FFD100"
-  },
-  "remotion": {
-   "label": "Remotion",
-   "file": "remotion.svg",
-   "aliases": [
-    "remotion"
-   ]
-  },
-  "motionface": {
-   "label": "Motion Face",
-   "file": "motionface.svg",
-   "aliases": [
-    "motionface"
-   ]
-  },
-  "twitter": {
-   "label": "X / 推特",
-   "file": "twitter.svg",
-   "aliases": [
-    "推特",
-    "twitter",
-    "x平台"
-   ],
-   "si": "x",
-   "hex": "000000"
+  "brands": {
+    "claude": {
+      "label": "Claude",
+      "file": "claude.svg",
+      "aliases": [
+        "claude",
+        "克劳德",
+        "anthropic",
+        "opus"
+      ],
+      "si": "claude",
+      "hex": "D97757"
+    },
+    "claude-code": {
+      "label": "Claude Code",
+      "file": "claude.svg",
+      "aliases": [
+        "claude code",
+        "claudecode"
+      ],
+      "si": "claude",
+      "hex": "D97757"
+    },
+    "chatgpt": {
+      "label": "ChatGPT",
+      "file": "chatgpt.svg",
+      "aliases": [
+        "chatgpt",
+        "gpt",
+        "openai",
+        "gpt-4",
+        "gpt4"
+      ],
+      "si": "openai",
+      "hex": "412991"
+    },
+    "codex": {
+      "label": "Codex",
+      "file": "codex.png",
+      "aliases": [
+        "codex",
+        "codex cli"
+      ],
+      "src": "OpenAI Codex 官方应用图标（云形 + 终端提示符），与系列片已用的 codex_icon.png 同一文件",
+      "license": "官方标识（品牌识别用）"
+    },
+    "gemini": {
+      "label": "Gemini",
+      "file": "gemini.svg",
+      "aliases": [
+        "gemini",
+        "谷歌ai"
+      ],
+      "si": "googlegemini",
+      "hex": "8E75B2"
+    },
+    "deepseek": {
+      "label": "DeepSeek",
+      "file": "deepseek.svg",
+      "aliases": [
+        "deepseek",
+        "深度求索"
+      ],
+      "si": "deepseek",
+      "hex": "5786FE"
+    },
+    "qoder": {
+      "label": "Qoder",
+      "file": "qoder.png",
+      "aliases": [
+        "qoder"
+      ],
+      "src": "Qoder 桌面版 resources/application-icons/qoder-light.png",
+      "license": "官方应用图标（品牌识别用）"
+    },
+    "workbuddy": {
+      "label": "Workbuddy",
+      "file": "workbuddy.svg",
+      "aliases": [
+        "workbuddy",
+        "工作搭子"
+      ],
+      "src": "Iconify thesvg-color:workbuddy",
+      "license": "品牌标识（品牌识别用）"
+    },
+    "cursor": {
+      "label": "Cursor",
+      "file": "cursor.svg",
+      "aliases": [
+        "cursor"
+      ],
+      "si": "cursor",
+      "hex": "000000"
+    },
+    "vscode": {
+      "label": "VS Code",
+      "file": "vscode.svg",
+      "aliases": [
+        "vscode",
+        "visualstudiocode",
+        "vscode编辑器"
+      ],
+      "src": "Iconify logos:visual-studio-code（gilbarbara/logos，CC0）",
+      "license": "CC0 1.0"
+    },
+    "figma": {
+      "label": "Figma",
+      "file": "figma.svg",
+      "aliases": [
+        "figma"
+      ],
+      "si": "figma",
+      "hex": "F24E1E"
+    },
+    "canva": {
+      "label": "Canva",
+      "file": "canva.svg",
+      "aliases": [
+        "canva"
+      ],
+      "si": "canva",
+      "hex": "00C4CC"
+    },
+    "jianying": {
+      "label": "剪映",
+      "file": "jianying.png",
+      "aliases": [
+        "剪映",
+        "capcut"
+      ],
+      "src": "Apple App Store 剪映官方应用图标（Shenzhen Lianmeng）",
+      "license": "官方应用图标（品牌识别用）"
+    },
+    "premiere": {
+      "label": "Premiere",
+      "file": "premiere.svg",
+      "aliases": [
+        "premiere",
+        "pr 剪辑"
+      ],
+      "src": "Iconify logos:adobe-premiere（gilbarbara/logos，CC0）",
+      "license": "CC0 1.0"
+    },
+    "davinci": {
+      "label": "DaVinci Resolve",
+      "file": "davinci.svg",
+      "aliases": [
+        "davinci",
+        "达芬奇"
+      ],
+      "si": "davinciresolve",
+      "hex": "233A51"
+    },
+    "feishu": {
+      "label": "飞书",
+      "file": "feishu.png",
+      "aliases": [
+        "飞书",
+        "lark"
+      ],
+      "src": "Apple App Store 飞书官方应用图标（Beijing Feishu Technology）",
+      "license": "官方应用图标（品牌识别用）"
+    },
+    "notion": {
+      "label": "Notion",
+      "file": "notion.svg",
+      "aliases": [
+        "notion"
+      ],
+      "si": "notion",
+      "hex": "000000"
+    },
+    "yuque": {
+      "label": "语雀",
+      "file": "yuque.png",
+      "aliases": [
+        "语雀"
+      ],
+      "src": "Apple App Store 语雀官方应用图标（Ant Financial）",
+      "license": "官方应用图标（品牌识别用）"
+    },
+    "wecom": {
+      "label": "企业微信",
+      "file": "wecom.png",
+      "aliases": [
+        "企业微信",
+        "企微",
+        "wechatwork"
+      ],
+      "src": "Apple App Store 企业微信官方应用图标（Tencent）",
+      "license": "官方应用图标（品牌识别用）"
+    },
+    "wechat": {
+      "label": "微信",
+      "file": "wechat.svg",
+      "aliases": [
+        "微信",
+        "公众号",
+        "视频号",
+        "微信群"
+      ],
+      "si": "wechat",
+      "hex": "07C160"
+    },
+    "douyin": {
+      "label": "抖音",
+      "file": "douyin.svg",
+      "aliases": [
+        "抖音",
+        "douyin",
+        "tiktok"
+      ],
+      "si": "tiktok",
+      "hex": "000000"
+    },
+    "xiaohongshu": {
+      "label": "小红书",
+      "file": "xiaohongshu.svg",
+      "aliases": [
+        "小红书",
+        "小红书笔记"
+      ],
+      "si": "xiaohongshu",
+      "hex": "FF2442"
+    },
+    "bilibili": {
+      "label": "哔哩哔哩",
+      "file": "bilibili.svg",
+      "aliases": [
+        "b站",
+        "哔哩哔哩",
+        "bilibili"
+      ],
+      "si": "bilibili",
+      "hex": "00A1D6"
+    },
+    "youtube": {
+      "label": "YouTube",
+      "file": "youtube.svg",
+      "aliases": [
+        "youtube",
+        "油管"
+      ],
+      "si": "youtube",
+      "hex": "FF0000"
+    },
+    "github": {
+      "label": "GitHub",
+      "file": "github.svg",
+      "aliases": [
+        "github"
+      ],
+      "si": "github",
+      "hex": "181717"
+    },
+    "huggingface": {
+      "label": "Hugging Face",
+      "file": "huggingface.svg",
+      "aliases": [
+        "huggingface",
+        "hf 镜像"
+      ],
+      "si": "huggingface",
+      "hex": "FFD21E"
+    },
+    "midjourney": {
+      "label": "Midjourney",
+      "file": "midjourney.svg",
+      "aliases": [
+        "midjourney"
+      ],
+      "src": "Iconify logos:midjourney（gilbarbara/logos，CC0）；深色底改为白色",
+      "license": "CC0 1.0"
+    },
+    "suno": {
+      "label": "Suno",
+      "file": "suno.svg",
+      "aliases": [
+        "suno"
+      ],
+      "si": "suno",
+      "hex": "000000"
+    },
+    "n8n": {
+      "label": "n8n",
+      "file": "n8n.svg",
+      "aliases": [
+        "n8n"
+      ],
+      "si": "n8n",
+      "hex": "EA4B71"
+    },
+    "dify": {
+      "label": "Dify",
+      "file": "dify.svg",
+      "aliases": [
+        "dify"
+      ],
+      "si": "dify",
+      "hex": "0033FF"
+    },
+    "wps": {
+      "label": "WPS / Excel",
+      "file": "wps.png",
+      "aliases": [
+        "wps",
+        "excel"
+      ],
+      "src": "Apple App Store WPS Office 官方应用图标（Kingsoft）",
+      "license": "官方应用图标（品牌识别用）"
+    },
+    "taobao": {
+      "label": "淘宝",
+      "file": "taobao.svg",
+      "aliases": [
+        "淘宝",
+        "天猫"
+      ],
+      "si": "taobao",
+      "hex": "E94F20"
+    },
+    "jd": {
+      "label": "京东",
+      "file": "jd.png",
+      "aliases": [
+        "京东"
+      ],
+      "src": "jd.com 官网页头标识裁出京东狗（jingdong）",
+      "license": "官方标识（品牌识别用）"
+    },
+    "meituan": {
+      "label": "美团",
+      "file": "meituan.svg",
+      "aliases": [
+        "美团"
+      ],
+      "si": "meituan",
+      "hex": "FFD100"
+    },
+    "remotion": {
+      "label": "Remotion",
+      "file": "remotion.svg",
+      "aliases": [
+        "remotion"
+      ],
+      "src": "Iconify thesvg-color:remotion",
+      "license": "品牌标识（品牌识别用）"
+    },
+    "motionface": {
+      "label": "Motion Face",
+      "file": "motionface.svg",
+      "aliases": [
+        "motionface"
+      ],
+      "src": "motionface.cc 官方 favicon",
+      "license": "官方标识（品牌识别用）"
+    },
+    "twitter": {
+      "label": "X / 推特",
+      "file": "twitter.svg",
+      "aliases": [
+        "推特",
+        "twitter",
+        "x平台"
+      ],
+      "si": "x",
+      "hex": "000000"
+    },
+    "doubao": {
+      "label": "豆包",
+      "file": "doubao.svg",
+      "aliases": [
+        "豆包",
+        "doubao"
+      ],
+      "src": "Iconify thesvg-color:doubao",
+      "license": "品牌标识（品牌识别用）"
+    },
+    "trae": {
+      "label": "TRAE",
+      "file": "trae.svg",
+      "aliases": [
+        "trae"
+      ],
+      "si": "trae",
+      "src": "Simple Icons 官方 TRAE 图标",
+      "license": "CC0 1.0"
+    },
+    "bytedance": {
+      "label": "字节跳动",
+      "file": "bytedance.svg",
+      "aliases": [
+        "字节跳动",
+        "字节",
+        "bytedance"
+      ],
+      "si": "bytedance",
+      "src": "Simple Icons 官方 ByteDance 图标",
+      "license": "CC0 1.0"
+    }
   }
- }
 }

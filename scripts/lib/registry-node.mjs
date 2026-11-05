@@ -38,6 +38,11 @@ export const validateShot = (reg, type, data) => {
   const def = reg.byId[type];
   if (!def) return { ok: false, issues: [`未知组件 "${type}"（可用：${Object.keys(reg.byId).join(", ")}）`] };
   const r = def.schema.safeParse(data ?? {});
-  if (r.success) return { ok: true, data: r.data, def };
+  if (r.success) {
+    // opening 是引擎保留键（镜级开场），不是每个组件 schema 都声明它；
+    // 不能在这里被 zod 的「未知键静默丢弃」吃掉，否则 shot.data.opening 永远进不了 timeline。
+    if (data && typeof data === "object" && data.opening) r.data.opening = data.opening;
+    return { ok: true, data: r.data, def };
+  }
   return { ok: false, issues: r.error.issues.map(fmtIssue), def };
 };

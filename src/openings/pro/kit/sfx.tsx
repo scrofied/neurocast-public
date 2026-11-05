@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from "react";
 import { Audio, Sequence, staticFile, useVideoConfig } from "remotion";
+import { useSfxEnabled } from "../../../lib/sfx";
 
 // ── 资源路径 + 音效 ──────────────────────────────────────────────────
 // 资源都在 public/pro/ 下（sfx/、demo/、jobs/）。
@@ -49,7 +50,8 @@ export const Sfx: React.FC<{ name: ProSfxName; at: number; vol?: number }> = ({ 
   const { fps } = useVideoConfig();
   const s = useContext(SfxCtx);
   const asset = useAsset();
-  if (!s.on || !Number.isFinite(at) || at < 0) return null;
+  const enabled = useSfxEnabled();
+  if (!enabled || !s.on || !Number.isFinite(at) || at < 0) return null;
   return (
     <Sequence from={Math.round(at * fps)} durationInFrames={Math.ceil(PRO_SFX[name] * fps) + 2} layout="none" name={`sfx:${name}`}>
       <Audio src={asset(`sfx/${name}.wav`)} volume={Math.min(1, vol * s.vol)} />

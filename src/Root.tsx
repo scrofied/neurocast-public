@@ -10,11 +10,13 @@ const FPS = 30;
 // single-shot preview timeline for every asset in the library (Studio > Gallery)
 const galleryTimeline = (id: string, example: any, sec: number, variant: number, skin: string): Timeline => {
   const dur = Math.round(sec * FPS);
+  const isOpening = REGISTRY.find((c) => c.id === id)?.layer === "opening";
   return {
+    ...(isOpening ? { opening: { type: id, at: 0, until: dur, data: example } } : {}),
     meta: { title: id, seed: 7, skin, font: "yahei", world: "grid", fps: FPS, width: 1920, height: 1080, mirror: false, showCaptions: false },
     durationInFrames: dur,
     chapters: [{ title: id, start: 0, end: dur }],
-    shots: [{ id: "g", type: id, variant, start: 0, dur, chapter: 0, text: "", data: example, transition: "fly" }],
+    shots: [{ id: "g", type: isOpening ? "narration" : id, variant, start: 0, dur, chapter: 0, text: "", data: isOpening ? { keywords: [" "] } : example, transition: isOpening ? "cut" : "fly" }],
     captions: [],
   };
 };
@@ -37,7 +39,7 @@ export const RemotionRoot: React.FC = () => (
     <Folder name="Gallery">
       {REGISTRY.filter((c) => !c.noGallery).flatMap((c) =>
         new Array(Math.max(1, c.variants)).fill(0).map((_, v) => {
-          const sec = Math.min(c.maxSec, Math.max(c.minSec, 6));
+          const sec = c.opening?.sec ?? Math.min(c.maxSec, Math.max(c.minSec, 6));
           return (
             <Composition
               key={`${c.id}-${v}`}

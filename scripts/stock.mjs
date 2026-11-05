@@ -6,6 +6,8 @@
 //   node scripts/stock.mjs icons --emit                             只重扫本地图标，生成 src/lib/icons.generated.tsx
 //   node scripts/stock.mjs search <站> <关键词> [--type video] [--n 12] [--landscape] [--min 1920]
 //   node scripts/stock.mjs get <站:id | 直链> [--res 1080] [--as 名字] [--tags 城市,凌晨]  下载到 public/assets/stock/ 并记出处
+//   node scripts/stock.mjs tag <文件…> --tags 城市,凌晨               给已下载的素材补/换标签（自动分镜靠它挑画面）
+//   node scripts/stock.mjs restore [--only-missing] [--dry]          按 assets/stock-index.json 重下被 gitignore 的库存文件
 //   node scripts/stock.mjs license [关键词]                          查库存素材的署名义务（出片前核对）
 //
 // 三条硬规矩（都是被驳回换来的，别绕过）：
@@ -436,6 +438,7 @@ const runIcons = async () => {
   fs.mkdirSync(ICON_DIR, { recursive: true });
   const idx = readJson(path.join(ROOT, "assets", "icons-index.json"), {});
   const done = [];
+  let ccby = 0;
   for (const raw of names) {
     const name = raw.toLowerCase();
     const body = all[name]?.body ?? all[aliases[name]?.alias]?.body;
@@ -447,7 +450,10 @@ const runIcons = async () => {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">${body.replaceAll("currentColor", `#${color}`)}</svg>`;
     const rel = `assets/icons/${collection}-${name}.svg`;
     fs.writeFileSync(path.join(PUB, rel), svg, "utf8");
-    idx[rel] = { site: "iconify", collection, name, color, license: ICON_LICENSE[collection] || "见合集仓库", attribution: /CC BY/i.test(ICON_LICENSE[collection] || ""), bytes: svg.length, fetchedAt: new Date().toISOString().slice(0, 10) };
+    const lic = ICON_LICENSE[collection] || "见合集仓库";
+    const attribution = /CC BY/i.test(lic);
+    if (attribution) ccby++;
+    idx[rel] = { site: "iconify", collection, name, color, license: lic, attribution, bytes: svg.length, fetchedAt: new Date().toISOString().slice(0, 10) };
     done.push(rel);
     console.log(`  ✓ ${rel}${color === "currentColor" ? "（保留 currentColor）" : ` 落盘色 #${color} → 内联时仍会转成 currentColor`}`);
   }
@@ -455,6 +461,7 @@ const runIcons = async () => {
   if (done.length) {
     console.log("");
     emitIcons(); // 下载完立刻进渲染层，别让图标躺在 public/ 里没人能引用
+    if (ccby) console.log(`\n⚠ 这批有 ${ccby} 个图标是 CC BY：上屏必须在画面/片尾署名（例如「图标：${collection} / ${ICON_LICENSE[collection]}」）。--plan-only 会再提醒；不想署名就换 tabler / lucide / ph（MIT / ISC）。`);
   }
 };
 
@@ -679,6 +686,102 @@ const runGet = async () => {
   console.log(`  讲稿里写：[氛围: ${rel} | 大标题 | 一句说明]；分镜里写 stock-broll 的 src: "${rel}"。make.mjs 会拷进 job、量比例、进台账，台账里带 stock 标记。`);
 };
 
+// ---------------------------------------------------------------- tag / restore
+
+// 允许三种写法：assets/stock/...、public/assets/stock/...、public 下的绝对路径。
+const stockRel = (p) => {
+  let s = String(p).replace(/\\/g, "/").replace(/^\.\//, "");
+  if (path.isAbsolute(s)) s = path.relative(PUB, s).replace(/\\/g, "/");
+  else if (s.startsWith("public/")) s = s.slice(7);
+  if (!s.startsWith("assets/stock/")) die(`不是库存素材路径：${p}\n  要写 assets/stock/<站>/<文件>（或 public/ 下的完整路径）`);
+  return s;
+};
+
+const runTag = () => {
+  const files = positional.filter((p) => !/^--/.test(p));
+  if (!files.length) die("用法：node scripts/stock.mjs tag <文件…> --tags 城市,凌晨\n  文件写 assets/stock/<站>/<名字> 或 public/assets/stock/...；--tags 传空字符串可清空标签");
+  const raw = val("tags", null);
+  if (raw === null) die("缺 --tags（要清空写 --tags \"\"）");
+  const tags = raw.split(/[,，、;；|]+/).map((t) => t.trim()).filter(Boolean);
+  const j = loadIndex();
+  let changed = 0;
+  const missing = [];
+  for (const f of files) {
+    const rel = stockRel(f);
+    const a = j.items[rel];
+    if (!a) {
+      missing.push(rel);
+      continue;
+    }
+    if (tags.length) a.tags = tags;
+    else delete a.tags;
+    changed++;
+    console.log(`✓ ${rel}  ${tags.length ? `标签：${tags.join("、")}` : "已清空标签"}`);
+  }
+  if (changed) saveIndex(j);
+  if (missing.length) {
+    console.log(`\n⚠ 台账里没有这几条（先 get 下载并记账）：\n  ${missing.join("\n  ")}`);
+    process.exit(1);
+  }
+};
+
+const runRestore = async () => {
+  const j = loadIndex();
+  const keys = Object.keys(j.items);
+  if (!keys.length) return console.log("assets/stock-index.json 里没有素材，无需 restore");
+  const onlyMissing = flag("only-missing");
+  const dry = flag("dry");
+  let restored = 0;
+  let skipped = 0;
+  let failed = 0;
+  const failures = [];
+  for (const rel of keys) {
+    const a = j.items[rel];
+    const abs = path.join(PUB, rel);
+    const exists = fs.existsSync(abs) && fs.statSync(abs).size > 0;
+    if (onlyMissing && exists) {
+      skipped++;
+      continue;
+    }
+    if (!a.url) {
+      failed++;
+      failures.push(`${rel}（台账里没有 url，只能人工补）`);
+      continue;
+    }
+    if (dry) {
+      console.log(`  ${exists ? "重下" : "缺文件"} ${rel}  ← ${a.site} ${a.kind || ""}`);
+      restored++;
+      continue;
+    }
+    const r = await req(a.url, { binary: true, timeout: 300000 });
+    if (!r.ok || !r.buf?.length) {
+      failed++;
+      failures.push(`${rel}（${r.error || "下载内容为空"}）`);
+      continue;
+    }
+    fs.mkdirSync(path.dirname(abs), { recursive: true });
+    fs.writeFileSync(abs, r.buf);
+    const hash = md5(r.buf);
+    const dims = probeDims(abs, a.kind === "video");
+    const oldHash = a.md5;
+    a.bytes = r.buf.length;
+    a.md5 = hash;
+    a.restoredAt = new Date().toISOString().slice(0, 10);
+    if (dims.width) a.width = dims.width;
+    if (dims.height) a.height = dims.height;
+    if (dims.duration) a.duration = dims.duration;
+    if (oldHash && oldHash !== hash) console.log(`  ⚠ ${rel} 的 md5 和台账不一致（文件可能换过源）`);
+    restored++;
+    console.log(`  ✓ ${rel}  ${(r.buf.length / 1048576).toFixed(1)}MB`);
+  }
+  if (!dry && restored) saveIndex(j);
+  console.log(`\n${dry ? "（--dry 没落盘）" : ""}恢复 ${restored} 条 · 跳过 ${skipped} 条 · 失败 ${failed} 条 · 台账共 ${keys.length} 条`);
+  if (failures.length) {
+    console.log(`失败清单：\n  ${failures.join("\n  ")}`);
+    process.exit(1);
+  }
+};
+
 // ---------------------------------------------------------------- license / sites
 
 const runLicense = () => {
@@ -713,6 +816,8 @@ if (cmd === "brands") await runBrands();
 else if (cmd === "icons") await runIcons();
 else if (cmd === "search") await runSearch();
 else if (cmd === "get") await runGet();
+else if (cmd === "tag") runTag();
+else if (cmd === "restore") await runRestore();
 else if (cmd === "license") runLicense();
 else if (cmd === "sites") runSites();
-else die(`未知命令 ${cmd}（可用：sites / brands / icons / search / get / license）`);
+else die(`未知命令 ${cmd}（可用：sites / brands / icons / search / get / tag / restore / license）`);
