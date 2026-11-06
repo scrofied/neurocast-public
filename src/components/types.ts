@@ -13,7 +13,7 @@ export type CompProps<D = any> = {
 // metaphor: 抽象概念隐喻 · info: 信息图 · story: 叙事场景 · product: 产品/工具演示
 // screen: 截图录屏 · structure: 结构镜头 · overlay: 侧栏/叠加小组件（可放进口播舞台两侧）
 // opening: 每条视频专属的开场（透明画布，叠在真人画面上层；src/openings/<日期-主题>/）
-export type Layer = "metaphor" | "info" | "story" | "product" | "screen" | "structure" | "overlay" | "fx" | "opening";
+export type Layer = "metaphor" | "info" | "story" | "product" | "screen" | "structure" | "overlay" | "fx" | "oasis" | "opening";
 
 // camera moves an opening applies to the person layer underneath it (zoom punch, shake, grade).
 // clip = CSS clip-path (遮罩收圈 / 文字蒙版 / 形态突变), radius = container shape, opacity = 延后入画.

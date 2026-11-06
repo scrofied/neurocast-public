@@ -13,10 +13,12 @@ const rngOf = (seed) => {
 };
 
 const SKINS = ["aurora", "violet", "amber", "matrix", "arctic"];
+const EXTRA_SKINS = ["oasis"];
+const ALL_SKINS = [...SKINS, ...EXTRA_SKINS];
 const FONTS = ["yahei", "noto", "deng"];
 const WORLDS = ["grid", "tunnel", "stars"];
-// matrix 是需要显式点名的强风格世界：不参与 seed 随机，避免每条片都变成黑客帝国。
-const EXTRA_WORLDS = ["matrix"];
+// matrix / oasis 是需要显式点名的强风格世界：不参与 seed 随机，避免每条片都变成黑客帝国/绿洲。
+const EXTRA_WORLDS = ["matrix", "oasis", "none"];
 const ALL_WORLDS = [...WORLDS, ...EXTRA_WORLDS];
 // 随机转场池：cut（无入场硬切）留给开场与分镜的显式声明，不参与随机——
 // 随机硬切会让节奏失控。池子 = motion.mjs 的 TRANSITIONS 去掉 cut 与 matrix，渲染层加一种它就自动多一种
@@ -185,9 +187,11 @@ export const styleFor = (input) => {
   return {
     seed,
     r,
-    skin: input.skin && SKINS.includes(input.skin) ? input.skin : SKINS[seed % SKINS.length],
+    skin: input.skin && ALL_SKINS.includes(input.skin) ? input.skin : SKINS[seed % SKINS.length],
     font: FONTS[Math.floor(r() * FONTS.length)],
-    world: input.world && ALL_WORLDS.includes(input.world) ? input.world : WORLDS[Math.floor(r() * WORLDS.length)],
+    world: input.world && ALL_WORLDS.includes(input.world)
+      ? input.world
+      : (input.skin === "oasis" ? "oasis" : WORLDS[Math.floor(r() * WORLDS.length)]),
     mirror: r() < 0.35,
     transitions: [...RANDOM_TRANSITIONS].sort(() => r() - 0.5).slice(0, 4),
     variantOffset: Math.floor(r() * 6),

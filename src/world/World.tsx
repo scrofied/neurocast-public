@@ -6,6 +6,7 @@ import { rng, noise1 } from "../lib/anim";
 import { useTheme } from "../lib/theme";
 import type { Shot } from "../types";
 import { MatrixRain } from "./MatrixRain";
+import { OasisBackdrop } from "./OasisBackdrop";
 
 // camera travel: slow drift + a speed burst at every shot boundary (the "flight" transition)
 const useTravel = (shots: Shot[], frame: number) => {
@@ -120,8 +121,14 @@ export const World: React.FC<{ shots: Shot[]; seed: number; variant: string }> =
   const sway = noise1(frame / 140, seed) * 0.05;
   const bob = noise1(frame / 170, seed + 5) * 0.03;
   const matrix = variant === "matrix";
+  // 组件自带 Stage3D 时用 world:"none" 关掉全局背景，避免两个 WebGL 画布同时渲染。
+  if (variant === "none") return null;
   return (
     <ThreeCanvas width={width} height={height} camera={{ fov: 60, near: 1, far: 5000, position: [0, 0, 400] }} style={{ position: "absolute", inset: 0 }}>
+      {variant === "oasis" ? (
+        <OasisBackdrop travel={travel} seed={seed} />
+      ) : (
+        <>
       <fog attach="fog" args={[t.bg, 600, 3200]} />
       <group rotation={[bob, sway, 0]}>
         {!matrix && (
@@ -162,6 +169,8 @@ export const World: React.FC<{ shots: Shot[]; seed: number; variant: string }> =
         )}
         {!matrix && <Floaters seed={seed} color={t.primary} travel={travel} frame={frame} />}
       </group>
+        </>
+      )}
     </ThreeCanvas>
   );
 };

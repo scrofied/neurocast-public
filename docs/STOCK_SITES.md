@@ -97,7 +97,7 @@ key 的处理：先做零 key 那批（Mixkit 视频 + Iconify 图标 + Simple I
 | 自动署名 | 分镜里 `stock-broll` 不写 `source` → `timeline.json` 落 `source: { kind: "stock", platform: "Pexels", author: "cottonbro studio", url: "…/6153734/" }`，日志「库存素材自动署名：1 处」 |
 | 角标文案 | 静帧实拍：右下角「示意画面 \| Pexels · cottonbro studio · pexels.com/video/6153734/」，虚线灰框、无「采集」字样 |
 | 三种版式 | `full`（铺满 + 居中大字）/ `card`（居中开窗）/ `split`（右块 + 左大字，标题按左半宽度自动缩）各出一张 QA 拼图核对 |
-| 管线 | `tsc --noEmit` 干净；`catalog.mjs` 191 组件（2026-11-06 复核）；`motion-audit.mjs` `✓ stock-broll` |
+| 管线 | `tsc --noEmit` 干净；`catalog.mjs` 193 组件（2026-11-07 复核）；`motion-audit.mjs` `✓ stock-broll` |
 
 ## 七、素材资产闭环（2026-10-17）
 

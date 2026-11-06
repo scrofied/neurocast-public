@@ -14,7 +14,7 @@ const ledger = loadUsage();
 const recMap = recentOf(ledger);
 const uo = (id) => statsOf(id, { ledger, rec: recMap });
 
-const LAYER = { structure: "结构", info: "信息图", story: "叙事场景", product: "产品/工具演示", metaphor: "概念隐喻", screen: "截图录屏", overlay: "叠加", fx: "特效", opening: "开场（按机制选型，草稿不可出片）" };
+const LAYER = { structure: "结构", info: "信息图", story: "叙事场景", product: "产品/工具演示", metaphor: "概念隐喻", screen: "截图录屏", overlay: "叠加", fx: "特效", oasis: "OASIS 3D", opening: "开场（按机制选型，草稿不可出片）" };
 const isCue = (k) => k === "at" || k === "until" || /[a-z]At$/.test(k);
 
 const typeOf = (s, key = "") => {

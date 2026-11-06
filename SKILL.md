@@ -80,8 +80,8 @@ node scripts/new-video.mjs 我的新片 my-new-video    # 中文名必须另给 
 | `opening` | — | 整片开场写在 **storyboard.json 顶层**（与 `shots` 并列）：`{ "type": "op-…", "at": 0, "until": "…", "data": {…} }`；章节过场写在该镜头 `data.opening`（引擎保留键，任何组件都认，见 `op-tunnel`）。TTS / 无真人口播时用它；口播原声用 `talking-head-stage.data.opening`，两者只能选一种 |
 | `title` | 否 | 视频标题（口播标题条、HUD） |
 | `seed` | 否 | 换 seed = 换一套配色/3D 背景/字体/转场组合 |
-| `skin` | 否 | aurora / violet / amber / matrix / arctic |
-| `world` | 否 | 3D 背景：`grid` / `tunnel` / `stars`；`matrix` 是显式点名的 3D 代码雨世界（不参与 seed 随机，避免每条片都变成黑客帝国） |
+| `skin` | 否 | aurora / violet / amber / matrix / arctic / oasis |
+| `world` | 否 | 3D 背景：`grid` / `tunnel` / `stars`；`matrix` 是显式点名的 3D 代码雨世界、`oasis` 是霓虹赛博巨城（两者都不参与 seed 随机，避免每条片都被强风格吃掉）；`none` = 关掉全局 3D 背景，给自带 Stage3D 的组件用，避免两个 WebGL 画布同时渲染 |
 | `keywords` | 否 | 字幕里要高亮的词（数字、英文词自动高亮） |
 | `cta` / `outroTitle` | 否 | 自动模式结尾用 |
 | `captions` | 否 | `false` 关字幕 |
@@ -341,14 +341,26 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
 - 组件：`stock-broll`（库存视频/静帧当氛围垫底，`layout: full/card/split`、静帧也能 `move: push/pan`、素材比镜头短自动慢放铺满、长则裁掉用不到的尾巴）。讲稿里用 `[氛围: 路径 | 标题 | 说明]` 点名（`示意`/`空镜` 同义），storyboard 里直接写 `stock-broll`。凡是讲步骤、讲数据、引用模型回复的句子别用它。
 - 沿用既有红线：**真人姓名/形象一律不上屏**（平台连驳两次），库存视频里带清晰正脸说话人的也别选。
 
+## OASIS 3D 世界（赛博朋克 /《头号玩家》）
+
+`"skin": "oasis"` + `"world": "oasis"` 是给 AI/科技拆解类片子的一套强风格：霓虹网格地面、粉紫地平线、程序化赛博巨城、空气中的尘埃，相机缓慢漂移。背景是实时 shader，不是视频循环；颜色吃 `oasis` 皮肤的青/品红/金。
+
+- 背景实现：`src/world/OasisBackdrop.tsx`（Sky + NeonGrid + Skyline + Dust），`World.tsx` 的 `variant === "oasis"` 分支。
+- 完整方法论（为什么好看、五层结构、相机语言、3D 道具、HUD、场景骨架、性能/验收、踩坑）：**`docs/OASIS_CODE_ANIMATION.md`**。
+- 阶段 B 已接：`src/oasis/` 提供 `Stage3D`（相机/`camKeys`/Bloom/CA/Vignette）、`Objects`（BotCube/GlowRing/Pad/Crystal/Beam/Coins/NeonBox/Line）、`Hud`（HudBox/HoloMedia/ItemCard/Achievement/Rolling/Meter/Tag/Scanlines/GlitchText）。
+- 两个通用组件：`oasis-brief`（3D 舞台 + BotCube + HUD 任务面板）、`holo-evidence`（3D 舞台 + 真实截图/录屏全息面板 + 来源角标）。
+- 这两个组件自带不透明舞台；整片都用它们时把 `world` 写 `"none"`，避免全局 World 和组件 Stage3D 两个 WebGL 画布同时渲染。
+- 任何 3D 背景都只是风格层，不是证据：真实截图/录屏/头像仍要走素材台账和来源角标。
+
 ## 组件资产库
 
 
 
 - 全部组件、字段、适用场景：**`CATALOG.md`**（由 `node scripts/catalog.mjs` 从 registry 自动生成，不要手改）。
 - **开场模板库**：真实结果 / 留白反问 / 实物对照三套长编排，PRO 短舞台，`op-t01`~`op-t20` 透明叠层，`op-tunnel` 章节隧道，`op-three-beat` 与 `trick-*`。按前 2/5/10 秒语义换机制，具体选型见 `openings/TEMPLATES.md`，实时库存见 `openings.mjs list`。
-- 组件涵盖结构、信息图、概念隐喻、叙事场景、叠加、产品及截图录屏；开场单独列在 `src/openings/`。**当前数量和参数以 `node scripts/catalog.mjs` 生成的 CATALOG.md 为准**。最新加入的两批：
+- 组件涵盖结构、信息图、概念隐喻、叙事场景、叠加、产品及截图录屏；开场单独列在 `src/openings/`。**当前数量和参数以 `node scripts/catalog.mjs` 生成的 CATALOG.md 为准**。最新加入的三批：
   - **opus-5-5-motion-gallery 片库移植（2026-10，8 个）**：gear-train（齿比咬合，转速是算出来的）、attn-weights（注意力弧线六段式）、wave-cancel（反相抵消 + 抵消锋面）、kanban-sort（一堆杂乱条目自动归位）、beat-wall（卡点词墙 + iris 炸底）、text-structure（文字搭地板）、formula-drive（公式驱动全画面读数）、form-morph（一个形体一路变形）。逐个机制的出处与改动理由在 `docs/OPUS55_ANIMATIONS.md` 一·c；**挑它们先看下面的「语境 → 组件」表**，字段里要填的数必须是真数。
+  - **OASIS 3D（2026-11 阶段 B）**：`oasis-brief`（赛博任务简报：3D 霓虹巨城 + 黑盒方块 + HUD 面板）、`holo-evidence`（真实截图/录屏装进全息斜面板 + SourceBadge）。方法论在 `docs/OASIS_CODE_ANIMATION.md`；两者自带 Stage3D，整片使用时 `world:"none"`。
   - **真标识**：logo-wall（品牌墙，牌子上过 `public/brands/` 的真 svg，查不到退成通用图标）、brand-quote-card（引用官方原话 + 真地址 + 采集时间，逐字打出来）。
   - **真凭据**：citation-strip（出处清单：真 url + 真日期 + 可选截图缩略，写不出地址的条目直接不收）、evidence-zoom（在真截图上圈一个点放大，坐标来自 OCR 或人量的，不猜）。
   - **真界面**：real-doc-scroll（长文档/表格逐页滚动 + 当前行高亮 + 进度轨）、screen-versus（两三张真结果并排，各自标来源与采集时间）。
@@ -379,6 +391,8 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
 | 「XX 是地板 / 地基 / 门槛」「先撑住它才谈得上别的」 | `text-structure` | 全是文案词（`hang / floor / pillars / beam / verdict`），没有数字，最适合按台词逐句填 |
 | 「一个旋钮带着所有数一起变」「这个量随那个量怎么变」「临界点在哪儿」 | `formula-drive` | `readouts[].expr` 是**真公式**（`checkFormula` 会验），`driver.keys` 是关键帧真值；画面上的数字全是现算的，所以只要公式对就不会自相矛盾 |
 | 「同一个东西一路变成 A、B、C」「形态切换不切镜」 | `form-morph` | 这是代码画的**假界面**：只用来讲形态/交互逻辑。真操作、真产品必须换 `screen-morph` + 真录屏 |
+| 「这件事本质是个黑盒 / 数字资产」「用一局游戏讲一个判断」 | `oasis-brief` | `title` 和 `items` 必须是这条片的真结论/真指标；它自带 OASIS 舞台，别拿它做纯口播背景，也别每片都用 |
+| 「这是官方页面 / 真实后台 / 真录屏」，且想包装成“从游戏世界调出的档案” | `holo-evidence` | `src` 必须是真文件、`source` 必须填平台/采集时间；代码画的界面不能冒充，来源角标不能省 |
 
 这 8 个**故意没写进 `scripts/lib/detect.mjs` 的自动检测器**：它们的画面全靠真数字，从文案里正则猜出来的数就是编的。自动模式（`--beats`）不碰它们，由写分镜那一步按上表挑、并填实数。
 
@@ -389,7 +403,7 @@ Pexels / Pixabay / Mixkit 抓来的现成画面、Iconify / Simple Icons 抽来�
 
 **怎么做**：
 
-1. 复制最接近的组件（如 `src/components/info/BulletCards.tsx`）到 `src/components/<layer>/Xxx.tsx`，layer：structure / info / story / product / metaphor / screen。
+1. 复制最接近的组件（如 `src/components/info/BulletCards.tsx`）到 `src/components/<layer>/Xxx.tsx`，layer：structure / info / story / product / metaphor / screen / oasis；3D 舞台类组件先读 `src/oasis/`，不要自己从零搭 WebGL。
 2. 导出一个 `CompDef`：`id`（kebab-case，唯一）、`name`、`layer`、`variants`、`minSec`/`maxSec`、`tags`、**`desc`（画面是什么）**、**`use`（什么内容用它，讲语义）**、`schema`（zod，字段用 `.describe()` 写中文说明）、`example`、`C`；可选 `panel: true`（能放口播侧栏）、`hideCaptions: true`（画面即台词）。
 3. 规范（review 时逐条检查）：
    - 正片颜色用 `useTheme()`，不写死色值；自带舞台开场可使用独立美术调色（如纸白/暗绿/对照蓝），不得混作侧栏组件。
@@ -534,6 +548,13 @@ public/pro/                 PRO 模板的音效（sfx/*.wav）与字体（fonts/
 vendor/sound/               猫学长 sound skill 的上游 clone（不进 git；node scripts/sound-setup.mjs 拉取）
 src/world/World.tsx         3D 世界壳：grid / tunnel / stars / matrix
 src/world/MatrixRain.tsx    matrix 世界的 3D 代码雨（Three.js Points + 字形图集 shader）
+src/world/OasisBackdrop.tsx oasis 世界的霓虹网格 / 天空 / 巨城 / 尘埃
+src/oasis/Stage3D.tsx       场景级 3D 相机 / camKeys / project / Bloom·CA·Vignette
+src/oasis/World.tsx         场景级 OasisWorld：天空 + 巨城 + 网格 + 尘埃
+src/oasis/Objects.tsx       BotCube / GlowRing / Pad / Crystal / Beam / Coins / Neon 几何
+src/oasis/Hud.tsx           HudBox / HoloMedia / ItemCard / Achievement / Rolling / Meter
+src/oasis/time.ts           OASIS 场景的 easing / 锚点 / 抖动 / 金币喷泉
+src/components/oasis/        oasis-brief（3D 任务简报）/ holo-evidence（全息证据）
 src/lib/cine/               开场电影感工具包（砸字、闪白、抖动、推镜头…）
 openings/library.json       开场库：钩子、手法、预览、数据、保留/淘汰
 openings/previews/          开场预览 mp4：<开场id>-<input hash>.mp4（不进 git）
@@ -550,6 +571,7 @@ src/lib/                    theme / box / cue / sfx / icons / ui / anim / enter�
 CATALOG.md                  组件目录（自动生成）
 docs/OPUS55_ANIMATIONS.md   外部动画移植台账：一、prompt 语料的机制移植；一·b、opus-video-skills 真代码移植（含 MIT + John Heibel 双版权署名）；一·c、opus-5-5-motion-gallery 片库 8 个组件（逐条机制对照 + 原作者署名）
 docs/STOCK_SITES.md         免费素材站调研（每个站实测过什么、license/署名口径、为什么这么接）
+docs/OASIS_CODE_ANIMATION.md 赛博朋克 / OASIS 代码动画方法论：五层结构、相机、3D 道具、HUD、场景骨架
 examples/comment-mining/    完整示例：文案.md、storyboard.json、input.json、口播和配音
 <工作区>/neurocast-<片名>/   不在这个目录里：每条视频自己的文案/素材/成片都在这里（见「一条视频 = 一个独立项目目录」）
 _deprecated/                旧版不可用的脚本和文档（仅留档）

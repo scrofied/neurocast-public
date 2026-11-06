@@ -136,6 +136,7 @@ import { HeadPip } from "./structure/HeadPip";
 import { TypoArch } from "./structure/TypoArch";
 import { InfiniteZoom } from "./structure/InfiniteZoom";
 import { OPENINGS } from "../openings";
+import { OASIS_COMPONENTS } from "./oasis";
 
 // The asset library. Every entry is one reusable animated component; add new ones here
 // (see SKILL.md · 扩展组件资产) and they become available to storyboards, the auto planner and the Gallery.
@@ -280,6 +281,8 @@ export const REGISTRY: CompDef[] = [
   DemoReel,
   AssetFull,
   FootageStage,
+  // oasis 3D stages
+  ...OASIS_COMPONENTS,
   // per-script openings
   ...OPENINGS,
 ];

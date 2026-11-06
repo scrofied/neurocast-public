@@ -19,6 +19,7 @@ export const SKINS: Record<string, Skin> = {
   amber: { name: "amber", bg: "#070402", bg2: "#2a1606", primary: "#ffb547", secondary: "#ff5e3a", accent: "#5eead4", text: "#fff5e8", dim: "#b39a7f", glass: "rgba(44,26,10,0.55)", line: "rgba(255,181,71,0.36)" },
   matrix: { name: "matrix", bg: "#010805", bg2: "#032418", primary: "#3dffa8", secondary: "#22d3ee", accent: "#e5ff55", text: "#e9fff4", dim: "#7fb39a", glass: "rgba(6,36,24,0.55)", line: "rgba(61,255,168,0.34)" },
   arctic: { name: "arctic", bg: "#030611", bg2: "#0c1c3d", primary: "#8fd3ff", secondary: "#5b7cff", accent: "#ffd166", text: "#f2f7ff", dim: "#8ea3c4", glass: "rgba(16,30,60,0.55)", line: "rgba(143,211,255,0.36)" },
+  oasis: { name: "oasis", bg: "#03040a", bg2: "#070b18", primary: "#36f1ff", secondary: "#ff2fd1", accent: "#ffc83d", text: "#eaf6ff", dim: "#8a93a6", glass: "rgba(6,10,24,0.55)", line: "rgba(54,241,255,0.35)" },
 };
 
 export const FONTS: Record<string, { title: string; body: string; mono: string }> = {
